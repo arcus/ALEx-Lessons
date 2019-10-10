@@ -1,0 +1,23 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1570653311555.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "1540004308",
+    "id" : "FD147E68",
+    "lastKnownWriteTime" : 1570742789,
+    "last_content_update" : 1570742789304,
+    "path" : "~/Documents/GitHub/a-MESS Lessons/Two-Sample-T-Test/two-sample-t-test.Rmd",
+    "project_path" : "Two-Sample-T-Test/two-sample-t-test.Rmd",
+    "properties" : {
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_markdown"
+}
