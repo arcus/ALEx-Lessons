@@ -5,13 +5,14 @@
     "dirty" : false,
     "encoding" : "UTF-8",
     "folds" : "",
-    "hash" : "127160754",
+    "hash" : "2241924670",
     "id" : "7AAA2C95",
-    "lastKnownWriteTime" : 1570650579,
-    "last_content_update" : 1570650579,
+    "lastKnownWriteTime" : 1571056685,
+    "last_content_update" : 1571056685294,
     "path" : "~/Documents/GitHub/a-MESS Lessons/Chi-Square-Test-of-Goodness-of-Fit/chi-square-test-of-goodness-of-fit.Rmd",
     "project_path" : "Chi-Square-Test-of-Goodness-of-Fit/chi-square-test-of-goodness-of-fit.Rmd",
     "properties" : {
+        "docOutlineVisible" : "1"
     },
     "read_only" : false,
     "read_only_alternatives" : [

@@ -60,20 +60,20 @@ forage$upper.ci[forage$ Value == "Expected"] = 0
 
 ```
 
-## Background
+## The Purpose of this Lesson
 
-This section is based with thanks on the works of John H. McDonald ([Handbook of Biological Statistics](http://www.biostathandbook.com/chigof.html)) and Salvatore S. Mangiafico ([R Companion to the Biostats Handbook](https://rcompanion.org/rcompanion/b_03.html)).
+This lesson is both a reference and a tutorial. It contains all the code samples you need to perform a chi square test of goodness-of-fit. Use the headings to the left to find what you need. You can also learn to understand and perform a chi square test of goodness-of-fit by working through the lesson from start to finish. 
 
-### Variables
+## Variables
 
 >One [nominal variable](http://www.biostathandbook.com/variabletypes.html#nominal)    
 
-### Null and Alternative Hypotheses
+## Null and Alternative Hypotheses
 
 > **H<sub>0</sub>**: The nominal variable of interest's cateogory (a.k.a. "level") proportions _are not different_ from theoretical proportions.       
 **H<sub>A</sub>** (which is 2-sided): The nominal variable of interest's category proportions _are different_ from theoretical proportions.         
 
-### Examples of the Null and Alternative Hypotheses
+## Examples of the Null and Alternative Hypotheses
 
 >**Example H<sub>0</sub>**: "The number of times a flipped coin lands on its head *is not different* from 50% of the total number of tosses."    
 **Example H<sub>A</sub>** (2-sided): "The number of times a flipped coin lands on its head *is different* from 50% of the total number of tosses."     
@@ -91,7 +91,7 @@ question("You might use a chi-square goodness-of-fit test to examine which of th
 )
 ```
 
-### Why use it? 
+## Why use this test? 
 
 Use a chi-square test to compare a categorical (a.k.a. "nominal") variable's category proportions to theoretical proportions. People are usually familiar with them, so if you have enough members in each of your nominal variable's categories, this test is the best choice. 
 
@@ -116,58 +116,6 @@ question("When would you NOT use a chi-square goodness-of-fit test?",
 )
 ```
 
-### How it Works
-
-Unlike the [exact test of goodness-of-fit](http://www.biostathandbook.com/exactgof.html), when you do a chi-square test you do not directly calculate the probability of obtaining the observed results or something more extreme. Instead, like almost all statistical tests, the chi-square test has an intermediate step: it uses the data to calculate a test statistic that measures how far the observed data is from the null _expectation_. You then use a mathematical relationship, in this case the chi-square distribution, to estimate the probability of obtaining that value of the test statistic (i.e., that value for chi squared).
-
-You calculate chi squared by taking the cateogory's observed count (O for "Observed"), subtracting its theoretical or "expected" count (E), then squaring this difference. The larger the deviation from the null hypothesis, the larger is the difference between observed and expected. You square the differences to make them all positive. 
-
-```{r a-2, echo=FALSE}
-question("You square the difference between what and what when you calculate a chi-square test statistic?",
-         answer("The first category and the second category, then the first and the third categories, and so on"),
-         answer("What you hoped to have for dinner and what was actually on offer"),
-         answer("The value of a scalar variable for one group and for another group"),
-         answer("The observed and the expected numbers", correct = TRUE)
-)
-```
-
-
-The next step is to divide each difference by the expected number; then you add up these "standardized differences". 
-
-The test statistic is approximately equal to the log-likelihood ratio used in the G–test. It is conventionally called a "chi-square" statistic, although this is somewhat confusing because it's just one of many test statistics that follows the theoretical chi-square distribution. The equation is
-
-$\displaystyle \chi^{2} = ∑\frac{(O−E)^{2}}{E}$.
-
-As with most test statistics, the larger the difference between observed and expected, the larger the test statistic becomes. 
-
-To give an example, let's say your null hypothesis is a 3:1 ratio of smooth wings to wrinkled wings in offspring from a bunch of Drosophila crosses. You observe 770 flies with smooth wings and 230 flies with wrinkled wings; the expected values are 750 smooth-winged and 250 wrinkled-winged flies. Entering these numbers into the equation, the chi-square value is 2.13. If you had observed 760 smooth-winged flies and 240 wrinkled-wing flies, which is closer to the null hypothesis, your chi-square value would have been smaller, at 0.53; if you'd observed 800 smooth-winged and 200 wrinkled-wing flies, which is further from the null hypothesis, your chi-square value would have been 13.33.
-
-```{r b, echo=FALSE}
-question("Which leads to a rejected null hypothesis for a chi-square calculation?",
-         answer("A large difference between the observed and expected values", correct = TRUE),
-         answer("A small or no difference between the observed and expected values"),
-         answer("A large number of categories in the variable being examined"),
-         answer("A low value for p")
-)
-```
-
-The distribution of the test statistic under the null hypothesis is approximately the same as the theoretical chi-square distribution. This means that once you know the chi-square value and the number of degrees of freedom, you can calculate the probability of getting that value of chi-square using the chi-square distribution. The number of degrees of freedom is the number of categories minus one, so for our example there is one degree of freedom.
-
-The shape of the chi-square distribution depends on the number of degrees of freedom. For an extrinsic null hypothesis (the much more common situation, where you know the proportions predicted by the null hypothesis before collecting the data), the number of degrees of freedom is simply the number of values of the variable, minus one. Thus if you are testing a null hypothesis of a 1:1 flipped coin ratio, there are two possible values (heads and tails), and therefore one degree of freedom. This is because once you know how many of the total are heads (a number which is "free" to vary from 0 to the sample size), the number of tails is determined. If there are three values of the variable (such as red, pink, and white), there are two degrees of freedom, and so on.
-
-```{r c, echo=FALSE}
-question("For an extrinsic null hypothesis analysis, how many degrees of freedom are there when you expect 200 smooth-winged and 50 wrinkled-winged flies?",
-         answer("199 + 49 - 1 = 247 because for an extrinsic null, you want n - 1 as the degrees of freedom"),
-         answer("2 - 1 = 1 because for an extrinsic null, you want n - 1 (groups) as the degrees of freedom", correct = TRUE),
-         answer("199 + 49 - 2 groups = 246 because for an extrinsic null, you want n - 1 (per group) as the degrees of freedom"),
-         answer("You can't measure freedom")
-)
-```
-
-An intrinsic null hypothesis is one where you estimate one or more parameters _from the data_ in order to get the numbers for your null hypothesis. One example is [Hardy-Weinberg proportions](https://www.khanacademy.org/science/biology/her/heredity-and-genetics/v/hardy-weinberg), which has to do with, for instance, [allele frequency](https://www.khanacademy.org/science/biology/her/heredity-and-genetics/v/allele-frequency). For an intrinsic null hypothesis, the number of degrees of freedom is calculated by taking the number of values of the variable, subtracting 1 for each parameter estimated from the data, then subtracting 1 more. 
-
-Thus for Hardy-Weinberg proportions with two alleles and three genotypes, there are three values of the variable (the three genotypes); you subtract one for the parameter estimated from the data (the allele frequency, p); and then you subtract one more, yielding one degree of freedom. There are other statistical issues involved in testing fit to Hardy-Weinberg expectations, so if you need to do this, see Engels (2009) and the older references he cites.
-
 ## Practice
 
 The following code chunk checks to see if you have the required packages and, if you don't, installs them to your R environment. You can copy and paste this code into your local copy of RStudio or run it from here to see what happens. 
@@ -179,7 +127,7 @@ if(!require(ggplot2)){install.packages("ggplot2")}
 if(!require(rcompanion)){install.packages("rcompanion")}
 ```
 
-#### Drosophila Example
+### Drosophila Example
 
 Try the chi-square goodness-of-fit code using the function `chisq.test`. Let's use McDonald's Drosophila example. Since we need only counts and not data points, we can run the command without having first to load a data set. Here is the information you need:
 
@@ -239,7 +187,7 @@ Shivrain et al. (2006) crossed clearfield rice, which are resistant to the herbi
 
 ```
 ```{r rice-solution}
-observe <- c(772, 1611, 737)
+observed <- c(772, 1611, 737)
 expected <- c(0.25, 0.50, 0.25)
 
 chisq.test(x = observed,
@@ -292,7 +240,7 @@ question("Why?",
 )
 ```
 
-We can't use `chisq.test` because of its faulty assumption about the degrees of freedom. Let's calculate a variable `chi2` manually by plugging the correct values into the formula noted above and repeated here for your convenience:
+We can't use `chisq.test` because of its faulty assumption about the degrees of freedom. Let's calculate a variable `chi2` manually by plugging the correct values into the formula for a chi square test:
 
 $\displaystyle \chi^{2} = ∑\frac{(O−E)^{2}}{E}$,
 
@@ -492,7 +440,7 @@ ggplot(forage,
                  values = c('grey80', 'grey30'), 
                  labels = c("Observed value", 
                             "Expected value"))  +
-       geom_errorbar(position=position_dodge(width=e0.7), 
+       geom_errorbar(position=position_dodge(width = 0.7), 
                      width=0.0, size=0.5, color="black")  +
        labs(x = "Tree species", 
             y = "Foraging proportion")  +
@@ -550,6 +498,58 @@ pwr.chisq.test(
 ```
 
 If you got `N = 963.4689` or thereabouts, you did it right!
+
+## But I _like_ math. Where's the math?
+
+Unlike the [exact test of goodness-of-fit](http://www.biostathandbook.com/exactgof.html), when you do a chi-square test you do not directly calculate the probability of obtaining the observed results or something more extreme. Instead, like almost all statistical tests, the chi-square test has an intermediate step: it uses the data to calculate a test statistic that measures how far the observed data is from the null _expectation_. You then use a mathematical relationship, in this case the chi-square distribution, to estimate the probability of obtaining that value of the test statistic (i.e., that value for chi squared).
+
+You calculate chi squared by taking the cateogory's observed count (O for "Observed"), subtracting its theoretical or "expected" count (E), then squaring this difference. The larger the deviation from the null hypothesis, the larger is the difference between observed and expected. You square the differences to make them all positive. 
+
+```{r a-2, echo=FALSE}
+question("You square the difference between what and what when you calculate a chi-square test statistic?",
+         answer("The first category and the second category, then the first and the third categories, and so on"),
+         answer("What you hoped to have for dinner and what was actually on offer"),
+         answer("The value of a scalar variable for one group and for another group"),
+         answer("The observed and the expected numbers", correct = TRUE)
+)
+```
+
+
+The next step is to divide each difference by the expected number; then you add up these "standardized differences". 
+
+The test statistic is approximately equal to the log-likelihood ratio used in the G–test. It is conventionally called a "chi-square" statistic, although this is somewhat confusing because it's just one of many test statistics that follows the theoretical chi-square distribution. The equation is
+
+$\displaystyle \chi^{2} = ∑\frac{(O−E)^{2}}{E}$.
+
+As with most test statistics, the larger the difference between observed and expected, the larger the test statistic becomes. 
+
+To give an example, let's say your null hypothesis is a 3:1 ratio of smooth wings to wrinkled wings in offspring from a bunch of Drosophila crosses. You observe 770 flies with smooth wings and 230 flies with wrinkled wings; the expected values are 750 smooth-winged and 250 wrinkled-winged flies. Entering these numbers into the equation, the chi-square value is 2.13. If you had observed 760 smooth-winged flies and 240 wrinkled-wing flies, which is closer to the null hypothesis, your chi-square value would have been smaller, at 0.53; if you'd observed 800 smooth-winged and 200 wrinkled-wing flies, which is further from the null hypothesis, your chi-square value would have been 13.33.
+
+```{r b, echo=FALSE}
+question("Which leads to a rejected null hypothesis for a chi-square calculation?",
+         answer("A large difference between the observed and expected values", correct = TRUE),
+         answer("A small or no difference between the observed and expected values"),
+         answer("A large number of categories in the variable being examined"),
+         answer("A low value for p")
+)
+```
+
+The distribution of the test statistic under the null hypothesis is approximately the same as the theoretical chi-square distribution. This means that once you know the chi-square value and the number of degrees of freedom, you can calculate the probability of getting that value of chi-square using the chi-square distribution. The number of degrees of freedom is the number of categories minus one, so for our example there is one degree of freedom.
+
+The shape of the chi-square distribution depends on the number of degrees of freedom. For an extrinsic null hypothesis (the much more common situation, where you know the proportions predicted by the null hypothesis before collecting the data), the number of degrees of freedom is simply the number of values of the variable, minus one. Thus if you are testing a null hypothesis of a 1:1 flipped coin ratio, there are two possible values (heads and tails), and therefore one degree of freedom. This is because once you know how many of the total are heads (a number which is "free" to vary from 0 to the sample size), the number of tails is determined. If there are three values of the variable (such as red, pink, and white), there are two degrees of freedom, and so on.
+
+```{r c, echo=FALSE}
+question("For an extrinsic null hypothesis analysis, how many degrees of freedom are there when you expect 200 smooth-winged and 50 wrinkled-winged flies?",
+         answer("199 + 49 - 1 = 247 because for an extrinsic null, you want n - 1 as the degrees of freedom"),
+         answer("2 - 1 = 1 because for an extrinsic null, you want n - 1 (groups) as the degrees of freedom", correct = TRUE),
+         answer("199 + 49 - 2 groups = 246 because for an extrinsic null, you want n - 1 (per group) as the degrees of freedom"),
+         answer("You can't measure freedom")
+)
+```
+
+An intrinsic null hypothesis is one where you estimate one or more parameters _from the data_ in order to get the numbers for your null hypothesis. One example is [Hardy-Weinberg proportions](https://www.khanacademy.org/science/biology/her/heredity-and-genetics/v/hardy-weinberg), which has to do with, for instance, [allele frequency](https://www.khanacademy.org/science/biology/her/heredity-and-genetics/v/allele-frequency). For an intrinsic null hypothesis, the number of degrees of freedom is calculated by taking the number of values of the variable, subtracting 1 for each parameter estimated from the data, then subtracting 1 more. 
+
+Thus for Hardy-Weinberg proportions with two alleles and three genotypes, there are three values of the variable (the three genotypes); you subtract one for the parameter estimated from the data (the allele frequency, p); and then you subtract one more, yielding one degree of freedom. There are other statistical issues involved in testing fit to Hardy-Weinberg expectations, so if you need to do this, see Engels (2009) and the older references he cites.
 
 ## References
 
