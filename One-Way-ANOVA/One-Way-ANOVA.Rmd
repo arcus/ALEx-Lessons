@@ -230,3 +230,5 @@ pwr.anova.test(k = 5,
                sig.level = 0.05, power = 0.80)
 
 ```
+
+See also: [Kruskall Wallis test](../Kruskal-Wallis/).
