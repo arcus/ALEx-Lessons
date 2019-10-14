@@ -12,15 +12,19 @@
 111,Stats,One-Way ANOVA,/One-Way-ANOVA/
 112,Stats,Data Cleaning with OpenRefine,/Basic-Building-Blocks/
 113,Stats,Exact Test of Goodness-of-Fit,/Exact-Test-of-Goodness-of-Fit/
+130,Stats,Chi Square Test of Goodness-of-Fit/Chi-Square-Test-of-Goodness-of-Fit/
 114,Stats,Kruskal-Wallis,/Kruskal-Wallis/
 115,Basics,vapply and tapply,/vapply-and-tapply/
 116,Basics,Looking at Data,Looking-at-Data/
 117,Basics,Simulation,/Simulation/
-118,Basics,Dates and Times,dates-and-times/
-119,Basics,Base Graphics,/base-graphics/
-120,Stats,Introduction to Bayes's Theorem,/introduction-to-bayes-theorem/
-121,Stats,Variables,/variables/
-122,Stats,Exploratory Graphs,/exploratory-graphs/
-123,Stats,General Linear Models,/general-linear-models/
-124,Stats,bioconductor,/bioconductor/
-126,Basics,Set up R,/set-up-R/
+118,Basics,Dates and Times,/Dates-and-Times/
+119,Basics,Base Graphics,/Base-Graphics/
+120,Stats,Introduction to Bayes's Theorem,/Introduction-to-Bayes-Theorem/
+121,Stats,Variables,/Variables/
+122,Stats,Exploratory Graphs,/Exploratory-Graphs/
+123,Stats,General Linear Models,/General-Linear-Models/
+124,Stats,Bioconductor,/Bioconductor/
+126,Basics,Set up R,/Set-up-R/
+127,Basics,Piping and Summarizing,/Piping-and-Summarizing/
+129,Stats,One-Sample t Test,/One-Sample-T-Test/
+128,Stats,Two-Sample t Test,/Two-Sample-T-Test/
