@@ -6,6 +6,7 @@ runtime: shiny_prerendered
 
 ```{r setup, include=FALSE}
 library(learnr)
+library(scales)
 #' Assign some global variables 
 prevalence <- 1 / 2500
 sensitivity <- .962
