@@ -1,0 +1,28 @@
+---
+title: "Moc Data"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r}
+charge.type <- c("mouse rat", "cat dog", "DOD", NA, NA)
+v5 <- c("DOD", "DOD", "DOD", NA, NA)
+```
+
+```{r mutate}
+stuff <- df %>%
+    mutate(research = ifelse(charge.type == "mouse rat" | 
+                               charge.type == "cat dog", 
+                            as.character(charge.type), NA)) 
+stuff
+```
+
+
+```{r label}
+
+```
+

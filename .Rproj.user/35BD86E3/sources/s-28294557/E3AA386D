@@ -1,0 +1,24 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1571310867685.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "1368401963",
+    "id" : "E3AA386D",
+    "lastKnownWriteTime" : 1571324347,
+    "last_content_update" : 1571324347748,
+    "path" : "~/Documents/GitHub/a-MESS Lessons/Correlation-and-Linear-Regression/Correlation and Linear Regression.Rmd",
+    "project_path" : "Correlation-and-Linear-Regression/Correlation and Linear Regression.Rmd",
+    "properties" : {
+        "docOutlineVisible" : "0"
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_markdown"
+}
