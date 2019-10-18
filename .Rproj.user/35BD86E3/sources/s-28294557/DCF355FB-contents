@@ -1,4 +1,0 @@
-df <- data.frame(x=c("a", "b", " ", " "), 
-                 y=c(" ", " ", "q", " "), 
-                 z=c(" ", " ", " ", "p"), 
-                 stringsAsFactors = FALSE)

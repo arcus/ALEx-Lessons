@@ -1,0 +1,45 @@
+---
+title: "lm output under a microscope"
+author: "Sheila Braun, CHOP"
+date: "10/18/2019"
+output: html_document
+---
+
+### `coefficients`
+
+What happens when you look at `egg_fit$coefficients`?
+
+```{r egg_fit-coefficients, exercise = TRUE, exercise.lines = 8}
+
+```
+```{r egg_fit-coefficients-solution}
+egg_fit$coefficients
+```
+
+There we find the information related to our best-fit line. We now know that the line is $\displaystyle Eggs = 12.7 + 1.6 * Weight$. If we know `Weight`, we can predict `Eggs`. To a certain degree. Let's look at the rest of the output. 
+
+### `effects`
+
+We are now using `ln_egg_fit` instead of `egg_fit`. If you don't know why, scroll up a little. 
+
+```{r log-egg-fit-effects, exercise = TRUE, exercise.lines = 8}
+
+```
+```{r log-egg-fit-effects-solution}
+ln_egg_fit$effects
+```
+
+`effects` is an $\displaystyle n$-long vector of orthogonal single-degree-of-freedom effects. These are computed using the formula $\displaystyle t(Q) %*% Y$: Transpose the matrix, then multiply it by $\displaystyle Y$. `%*%` is a multiplication operator for a matrix. The first rank of effects correspond to non-aliased coeffcients (coefficients without collinearity). 
+
+Here's a sandbox so you can play with that concept a bit using the data in this lesson. 
+
+```{r sandbox-3, exercise = TRUE, exercise.lines = 15}
+
+```
+```{r sandbox-3-solution}
+
+```
+
+### `rank`
+
+
