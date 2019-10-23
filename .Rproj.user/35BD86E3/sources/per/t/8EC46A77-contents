@@ -8,26 +8,29 @@ runtime: shiny_prerendered
 library(learnr)
 library(data.table)
 library(dplyr)
-load("flags.Rdata")
+flags <- read.csv("/Users/braunsb/Documents/GitHub/a-MESS Lessons/lapply-and-sapply/flags.csv")
 flag_colors <- flags[, 11:17]
 flag_shapes <- flags[, 19:23]
 shape_mat <- sapply(flag_shapes, range)
 unique_vals <- lapply(flags, unique)
 knitr::opts_chunk$set(echo = FALSE)
+N <- nrow(flags)
+cls_list <- lapply(flags, class)
+cls_vect <- sapply(cls_list, class)
 ```
 
 
-## Loop Functions in R: the `*apply`s
+## Loop Functions in R: the *`apply`s
 
 In this lesson, you'll learn how to use `lapply()` and `sapply()`, the two most important members of R's *`apply` family of functions, also known as loop functions.
 
 These powerful functions, along with their close relatives (`vapply()` and `tapply()`, among others) offer a concise and convenient means of implementing the Split-Apply-Combine strategy for data analysis.
 
-Each of the *`apply` functions will __SPLIT__ up some data into smaller pieces, __APPLY__ a function to each piece, then __COMBINE__ the results. A more detailed discussion of this strategy is found in Hadley Wickham's _Journal of Statistical Software_ paper titled "The Split-Apply-Combine Strategy for Data Analysis."
+Each of the *`apply` functions will __SPLIT__ up some data into smaller pieces, __APPLY__ a function to each piece, then __COMBINE__ the results. [Hadley Wickham's _Journal of Statistical Software_ paper, "The Split-Apply-Combine Strategy for Data Analysis"](https://www.jstatsoft.org/article/view/v040i01), contains a more detailed discussion of this strategy.
 
-Throughout this lesson, we'll use the Flags dataset from the UCI Machine Learning Repository. This dataset contains details of various nations and their flags. More information may be found here: http://archive.ics.uci.edu/ml/datasets/Flags.
+Throughout this lesson, we'll use the `flags` dataset from the UCI Machine Learning Repository. This dataset contains details of various nations and their flags. More information may be found here: http://archive.ics.uci.edu/ml/datasets/Flags.
 
-I've stored the dataset in a variable called flags. Type `head(flags)` to preview the first six lines (i.e. the 'head') of the dataset. You may need to scroll up to see all of the output. 
+I've stored the dataset in a variable called `flags`. Type `head(flags)` to preview the first six lines (i.e. the 'head') of the dataset. You may need to scroll up to see all of the output. 
 
 ```{r a, exercise=TRUE}
 
@@ -45,16 +48,7 @@ Now, let's check out the dimensions of the dataset using `dim(flags)`.
 dim(flags)
 ```
 
-This tells us that there are 194 rows, or observations, and 30 columns, or variables. Each observation is a country and each variable describes some characteristic of that country or its flag. 
-
-To open a more complete description of the dataset in a separate text file, type `viewinfo()`.
-
-```{r c, exercise = TRUE}
-
-```
-```{r c-solution}
-viewinfo()
-```
+This tells us that there are `r N` flags, or observations, and 30 columns, or variables. Each observation is a country and each variable describes some characteristic of that country or its flag. 
 
 As with any dataset, we'd like to know in what format the variables have been stored. In other words, what is the 'class' of each variable? What happens if we do `class(flags)`? Try it out.
 
@@ -71,7 +65,7 @@ Sounds like a loop!
 
 The `lapply()` function takes a list as input, applies a function to each element of the list, then returns a list of the same length as the original one. Since a data frame is really just a list of vectors (you can see this with `as.list(flags)`), we can use `lapply()` to apply the `class()` function to each column of the `flags` dataset. Let's see it in action!
 
-Type `cls_list <- lapply(flags, class)` to apply the `class()` function to each column of the flags dataset and store the result in a variable called `cls_list`. (Note that you just supply the name of the function you want to apply (i.e. class), without the usual parentheses after it.)
+Type `cls_list <- lapply(flags, class)` to apply the `class()` function to each column of the `flags` dataset and store the result in a variable called `cls_list`. (Note that you just supply the name of the function you want to apply (i.e. `class`), without the usual parentheses after it.)
 
 ```{r e, exercise = TRUE}
 
@@ -122,7 +116,7 @@ In general, if the result is a list where every element is of length 1, then `sa
 
 Let's practice using `lapply()` and `sapply()` some more.
 
-Columns 11 through 17 of our dataset are indicator variables, each representing a different color. The value of the indicator variable is `1` if the color is present in a country's flag and `0` otherwise.
+Columns `11` through `17` of our dataset are indicator variables, each representing a different color. The value of the indicator variable is `1` if the color is present in a country's flag and `0` otherwise.
 
 Therefore, if we want to know the total number of countries (in our dataset) with, for example, the color orange on their flag, we can just add up all of the 1s and 0s in the `orange` column. Try `sum(flags$orange)` to see this.
 
