@@ -57,7 +57,7 @@ To load `dplyr` into the library, type `library(dplyr)`. You don't need quotatio
 library(dplyr)
 ```
 
-## Download Data for this Tutorial: Mammals Sleep
+## Mammals Sleep Data
 
 The `msleep` (mammals sleep) data set contains the sleep times and weights for a set of mammals and is available in the dagdata repository on GitHub. This data set contains 83 rows and 11 variables.  
 

@@ -10,7 +10,7 @@
 
 
 
-<meta name="progressive" content="false" />
+<meta name="progressive" content="true" />
 <meta name="allow-skip" content="false" />
 
 <title>Introduction to the Tidyverse: dplyr</title>
@@ -76,8 +76,8 @@ if (window.hljs && document.readyState && document.readyState === "complete") {
 <pre class="text"><code>library(dplyr)</code></pre>
 </div>
 </div>
-<div id="section-download-data-for-this-tutorial-mammals-sleep" class="section level2">
-<h2>Download Data for this Tutorial: Mammals Sleep</h2>
+<div id="section-mammals-sleep-data" class="section level2">
+<h2>Mammals Sleep Data</h2>
 <p>The <code>msleep</code> (mammals sleep) data set contains the sleep times and weights for a set of mammals and is available in the dagdata repository on GitHub. This data set contains 83 rows and 11 variables.</p>
 <p>Download the <code>msleep</code> data set in CSV format from <a href="https://raw.githubusercontent.com/genomicsclass/dagdata/master/inst/extdata/msleep_ggplot2.csv">here</a>, and then load into R. I’ve provided the code for you. Note that there is an interesting function, <code>basename</code>, that extracts the file name from a url. We’re storing that in <code>msleep_filename</code>. Add <code>head(msleep)</code> to the bottom of the code in the code chunk here, then run the code to see the top of the <code>msleep</code> data.</p>
 <div class="tutorial-exercise" data-label="c" data-caption="Code" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="10">
@@ -263,14 +263,14 @@ head(sleepData)</code></pre>
     head</code></pre>
 </div>
 
-<div id="htmlwidget-1c0331497e4cdf92a1f9" style="width:100%;height:auto;", class = "quiz html-widget">
+<div id="htmlwidget-ba56b4b3c7051f2e9ada" style="width:100%;height:auto;", class = "quiz html-widget">
 <div class="panel panel-default">
 <div class="panel-body quizArea">
 </div>
 </div>
 </div>
 
-<script type="application/json" data-for="htmlwidget-1c0331497e4cdf92a1f9">{"x":{"question":"What was your output?","answers":[{"option":"The first six lines of <code>name<\/code> and <code>sleep_total<\/code> from <code>msleep<\/code>.","correct":true,"message":null},{"option":"The first six lines of <code>msleep<\/code>.","correct":false,"message":null},{"option":"An <code>Error<\/code> message.","correct":false,"message":null}],"label":"u","skipStartButton":true,"perQuestionResponseAnswers":true,"perQuestionResponseMessaging":true,"preventUnanswered":true,"displayQuestionCount":false,"displayQuestionNumber":false,"disableRanking":true,"nextQuestionText":"","checkAnswerText":"Submit Answer","allowRetry":true,"randomSortAnswers":true,"json":{"info":{"name":"","main":""},"questions":[{"q":"What was your output?","a":[{"option":"The first six lines of <code>name<\/code> and <code>sleep_total<\/code> from <code>msleep<\/code>.","correct":true,"message":null},{"option":"The first six lines of <code>msleep<\/code>.","correct":false,"message":null},{"option":"An <code>Error<\/code> message.","correct":false,"message":null}],"correct":"Correct!","incorrect":"Incorrect."}]}},"evals":[],"jsHooks":[]}</script>
+<script type="application/json" data-for="htmlwidget-ba56b4b3c7051f2e9ada">{"x":{"question":"What was your output?","answers":[{"option":"The first six lines of <code>name<\/code> and <code>sleep_total<\/code> from <code>msleep<\/code>.","correct":true,"message":null},{"option":"The first six lines of <code>msleep<\/code>.","correct":false,"message":null},{"option":"An <code>Error<\/code> message.","correct":false,"message":null}],"label":"u","skipStartButton":true,"perQuestionResponseAnswers":true,"perQuestionResponseMessaging":true,"preventUnanswered":true,"displayQuestionCount":false,"displayQuestionNumber":false,"disableRanking":true,"nextQuestionText":"","checkAnswerText":"Submit Answer","allowRetry":true,"randomSortAnswers":true,"json":{"info":{"name":"","main":""},"questions":[{"q":"What was your output?","a":[{"option":"The first six lines of <code>name<\/code> and <code>sleep_total<\/code> from <code>msleep<\/code>.","correct":true,"message":null},{"option":"The first six lines of <code>msleep<\/code>.","correct":false,"message":null},{"option":"An <code>Error<\/code> message.","correct":false,"message":null}],"correct":"Correct!","incorrect":"Incorrect."}]}},"evals":[],"jsHooks":[]}</script>
 <p>You will soon see how useful the pipe operator is when we start to combine many functions rather than just a few. Keep in mind what that code would look like <em>without</em> a pipe function.</p>
 <p>Now that you know about the pipe operator (%&gt;%), we will use it throughout the rest of this tutorial.</p>
 </div>
@@ -304,14 +304,14 @@ head(sleepData)</code></pre>
     filter(sleep_total &gt;= 16)</code></pre>
 </div>
 
-<div id="htmlwidget-eeee0fe410601af6ac95" style="width:100%;height:auto;", class = "quiz html-widget">
+<div id="htmlwidget-ced365915db9ac9c9fd9" style="width:100%;height:auto;", class = "quiz html-widget">
 <div class="panel panel-default">
 <div class="panel-body quizArea">
 </div>
 </div>
 </div>
 
-<script type="application/json" data-for="htmlwidget-eeee0fe410601af6ac95">{"x":{"question":"Should the call to <code>filter<\/code> come before or after the call to <code>select<\/code>?","answers":[{"option":"Before, because then the data set will be smaller so the <code>arrange<\/code> call will take less time.","correct":false,"message":null},{"option":"After, because then the data set will be smaller so the <code>filter<\/code> call will take less time.","correct":false,"message":null},{"option":"It depends on your data set and resources","correct":true,"message":null},{"option":"It doesn&#39;t matter","correct":false,"message":null}],"label":"w","skipStartButton":true,"perQuestionResponseAnswers":true,"perQuestionResponseMessaging":true,"preventUnanswered":true,"displayQuestionCount":false,"displayQuestionNumber":false,"disableRanking":true,"nextQuestionText":"","checkAnswerText":"Submit Answer","allowRetry":true,"randomSortAnswers":true,"json":{"info":{"name":"","main":""},"questions":[{"q":"Should the call to <code>filter<\/code> come before or after the call to <code>select<\/code>?","a":[{"option":"Before, because then the data set will be smaller so the <code>arrange<\/code> call will take less time.","correct":false,"message":null},{"option":"After, because then the data set will be smaller so the <code>filter<\/code> call will take less time.","correct":false,"message":null},{"option":"It depends on your data set and resources","correct":true,"message":null},{"option":"It doesn&#39;t matter","correct":false,"message":null}],"correct":"Correct!","incorrect":"Incorrect."}]}},"evals":[],"jsHooks":[]}</script>
+<script type="application/json" data-for="htmlwidget-ced365915db9ac9c9fd9">{"x":{"question":"Should the call to <code>filter<\/code> come before or after the call to <code>select<\/code>?","answers":[{"option":"Before, because then the data set will be smaller so the <code>arrange<\/code> call will take less time.","correct":false,"message":null},{"option":"After, because then the data set will be smaller so the <code>filter<\/code> call will take less time.","correct":false,"message":null},{"option":"It depends on your data set and resources","correct":true,"message":null},{"option":"It doesn&#39;t matter","correct":false,"message":null}],"label":"w","skipStartButton":true,"perQuestionResponseAnswers":true,"perQuestionResponseMessaging":true,"preventUnanswered":true,"displayQuestionCount":false,"displayQuestionNumber":false,"disableRanking":true,"nextQuestionText":"","checkAnswerText":"Submit Answer","allowRetry":true,"randomSortAnswers":true,"json":{"info":{"name":"","main":""},"questions":[{"q":"Should the call to <code>filter<\/code> come before or after the call to <code>select<\/code>?","a":[{"option":"Before, because then the data set will be smaller so the <code>arrange<\/code> call will take less time.","correct":false,"message":null},{"option":"After, because then the data set will be smaller so the <code>filter<\/code> call will take less time.","correct":false,"message":null},{"option":"It depends on your data set and resources","correct":true,"message":null},{"option":"It doesn&#39;t matter","correct":false,"message":null}],"correct":"Correct!","incorrect":"Incorrect."}]}},"evals":[],"jsHooks":[]}</script>
 <p>Now do the same thing you just did, but <code>arrange</code> the rows in the <code>sleep_total</code> column in a descending order by wrapping <code>sleep_total</code> with the function <code>desc</code>. Yes, it’s a bit of nesting in a bit of piping; you sometimes pass functions to <code>arrange</code> to affect its output.</p>
 <div class="tutorial-exercise" data-label="p" data-caption="Code" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="8">
 <script type="application/json" data-opts-chunk="1">{"fig.width":6.5,"fig.height":4,"fig.retina":2,"fig.align":"default","fig.keep":"high","fig.show":"asis","out.width":624,"warning":true,"error":false,"message":true,"exercise.df_print":"paged","exercise.checker":"NULL"}</script>
@@ -387,7 +387,7 @@ head(sleepData)</code></pre>
 </div>
 <div id="section-parting-adviceor-not-parting-advice" class="section level2">
 <h2>Parting Advice—or Not Parting Advice</h2>
-Now that you’ve done this tutorial, I recommend you do the exercises in it again, this time without making use of the Solution button. There is this tiny “start over” text below the table of contents. Be brave: click on it and fill things out. You’ll do much better the second time around, and the practice will anchor the ideas in your mind, making you a more fluent R user. 
+Now that you’ve done this tutorial, I recommend you do the exercises in it again, this time without making use of the Solution button. There is this tiny “Start Over” text below the table of contents. Be brave: click on it and fill things out. You’ll do much better the second time around, and the practice will anchor the ideas in your mind, making you a more fluent R user. 
 <script type="application/shiny-prerendered" data-context="server-start">
 options(digits = 3, scipen = 9999)
 if(!require(learnr)){install.packages("learnr")}
