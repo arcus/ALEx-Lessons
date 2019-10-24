@@ -53,7 +53,7 @@ Let’s start by indexing with logical vectors. One common scenario when working
 ```{r c, echo=FALSE}
 question("What do you think `x[is.na(x)]` will give you?",
          answer("A vector with no `NA`s", message = "You might get that if you added a '!' somewhere. Try again."),
-         answer("A vector of `TRUE`s and `FALSE`s", message = "Remember that using logical results within square brackets identifies the actual elements in a vector (or data frame, or matrix, but that's another story), not the logical result of the statement within the brackets."),
+         answer("A vector of `TRUE`s and `FALSE`s", message = "Remember that using logical results within square brackets identifies the actual elements in a vector that correspond to the `TRUE`s, not the logical results of the statement within the brackets."),
          answer("A vector of length 0", message  = "That would be correct if there were no `NA`s in the vector."),
          answer("A vector of all `NA`s", correct = TRUE, message = "You are amazing!"),
          random_answer_order = TRUE,
@@ -81,81 +81,116 @@ y <- x[!is.na(x)]
 
 Print y to the console.
 
+```{r f, exercise = TRUE, exercise.lines = 8}
+
+```
+```{r f-solution}
 y
-##  [1]  0.1627  0.5131  0.1247 -0.4921  1.9294  0.3389 -1.6339  0.3675
-##  [9] -1.7354  1.1884 -0.1795  1.3702  0.3767 -0.7018  0.3158 -0.1838
-## [17]  0.5553  0.1399  0.5629  2.1166
-Now that we’ve isolated the non-missing values of x and put them in y, we can subset y as we please.
+```
 
-Recall that the expression y > 0 will give us a vector of logical values the same length as y, with TRUEs corresponding to values of y that are greater than zero and FALSEs corresponding to values of y that are less than or equal to zero. What do you think y[y > 0] will give you?
+Now that we’ve isolated the non-missing values of `x` and put them in `y`, we can subset `y` as we please.
 
-A vector of all the positive elements of y
-A vector of all the negative elements of y
-A vector of all NAs
-A vector of length 0
-A vector of TRUEs and FALSEs
-A vector of all the positive elements of y
+Recall that the expression `y > 0` will give us a vector of logical values the same length as `y`, with `TRUE`s corresponding to values of `y` that are greater than zero and `FALSE`s corresponding to values of `y` that are less than or equal to zero. 
 
-Type y[y > 0] to see that we get all of the positive elements of y, which are also the positive elements of our original vector x.
+```{r g, echo=FALSE}
+question("What do you think `y[y > 0]` will give you?",
+         answer("A vector of all the positive elements of `y`", correct = TRUE, message = "Well done."),
+         answer("A vector of all the negative elements of `y`", message = "That would be `y < 0`."),
+         answer("A vector of all `NA`s", message = "That was the answer to the last question."),
+         answer("A vector of length 0", message = "That would be right only if there were no elements in `y` greater than 0."),
+         answer("A vector of `TRUE`s and `FALSE`s", message = "Remember that using logical results within square brackets identifies the actual elements in a vector that correspond to the `TRUE`s, not the logical results of the statement within the brackets."),
+         random_answer_order = TRUE,
+         allow_retry = TRUE
+)
+```
 
+Type `y[y > 0]` to see that we get all of the positive elements of `y`, which are also the positive elements of our original vector `x`.
+
+```{r h, exercise = TRUE, exercise.lines = 8}
+
+```
+```{r h-solution}
 y[y > 0]
-##  [1] 0.1627 0.5131 0.1247 1.9294 0.3389 0.3675 1.1884 1.3702 0.3767 0.3158
-## [11] 0.5553 0.1399 0.5629 2.1166
-You might wonder why we didn’t just start with x[x > 0] to isolate the positive elements of x. Try that now to see why.
+```
 
+You might wonder why we didn’t just start with `x[x > 0]` to isolate the positive elements of `x`. Try that now to see why.
+
+```{r i, exercise = TRUE, exercise.lines = 8}
+
+```
+```{r i-solution}
 x[x > 0]
-##  [1]     NA     NA     NA 0.1627     NA 0.5131     NA     NA 0.1247     NA
-## [11]     NA     NA 1.9294     NA     NA 0.3389     NA     NA 0.3675     NA
-## [21]     NA 1.1884 1.3702 0.3767     NA 0.3158 0.5553     NA     NA 0.1399
-## [31]     NA 0.5629     NA 2.1166
-Since NA is not a value, but rather a placeholder for an unknown quantity, the expression NA > 0 evaluates to NA. Hence we get a bunch of NAs mixed in with our positive numbers when we do this.
+```
 
-Combining our knowledge of logical operators with our new knowledge of subsetting, we could do this – x[!is.na(x) & x > 0]. Try it out.
+Since `NA` is not a value, but rather a placeholder for an unknown quantity, the expression `NA > 0` evaluates to `NA`. Hence we get a bunch of `NA`s mixed in with our positive numbers when we do this.
 
+Combining our knowledge of logical operators with our new knowledge of subsetting, we could do this – `x[!is.na(x) & x > 0]`. Try it out.
+
+```{r j, exercise = TRUE, exercise.lines = 8}
+
+```
+```{r j-solution}
 x[!is.na(x) & x > 0]
-##  [1] 0.1627 0.5131 0.1247 1.9294 0.3389 0.3675 1.1884 1.3702 0.3767 0.3158
-## [11] 0.5553 0.1399 0.5629 2.1166
-In this case, we request only values of x that are both non-missing AND greater than zero.
+```
 
-I’ve already shown you how to subset just the first ten values of x using x[1:10]. In this case, we’re providing a vector of positive integers inside of the square brackets, which tells R to return only the elements of x numbered 1 through 10.
+In this case, we request only values of `x` that are both non-missing AND greater than zero.
+
+I’ve already shown you how to subset just the first ten values of `x` using `x[1:10]`. In this case, we’re providing a vector of positive integers inside of the square brackets, which tells R to return only the elements of `x` numbered 1 through 10.
 
 Many programming languages use what’s called ‘zero-based indexing’, which means that the first element of a vector is considered element 0. R uses ‘one-based indexing’, which (you guessed it!) means the first element of a vector is considered element 1.
 
-Can you figure out how we’d subset the 3rd, 5th, and 7th elements of x? Hint – Use the c() function to specify the element numbers as a numeric vector.
+Can you figure out how we’d subset the 3rd, 5th, and 7th elements of `x`? Hint – Use the `c()` function to specify the element numbers as a numeric vector.
 
+```{r k, exercise = TRUE, exercise.lines = 8}
+
+```
+```{r k-solution}
 x[c(3, 5, 7)]
-## [1] NA NA NA
-It’s important that when using integer vectors to subset our vector x, we stick with the set of indexes {1, 2, …, 40} since x only has 40 elements. What happens if we ask for the zeroth element of x (i.e. x[0])? Give it a try.
+```
 
+It’s important that when using integer vectors to subset our vector `x`, we stick with the set of indexes {1, 2, …, 40} since `x` has only 40 elements. What happens if we ask for the zeroth element of `x` (i.e. `x[0]`)? Give it a try.
+
+```{r l, exercise = TRUE, exercise.lines = 8}
+
+```
+```{r l-solution}
 x[0]
-## numeric(0)
-As you might expect, we get nothing useful. Unfortunately, R doesn’t prevent us from doing this. What if we ask for the 3000th element of x? Try it out.
+```
 
+As you might expect, we get nothing useful. Unfortunately, R doesn’t prevent us from doing this. What if we ask for the 3000th element of `x`? Try it out.
+
+```{r m, exercise = TRUE, exercise.lines = 8}
+
+```
+```{r m-solution}
 x[3000]
-## [1] NA
+```
+
 Again, nothing useful, but R doesn’t prevent us from asking for it. This should be a cautionary tale. You should always make sure that what you are asking for is within the bounds of the vector you’re working with.
 
-What if we’re interested in all elements of x EXCEPT the 2nd and 10th? It would be pretty tedious to construct a vector containing all numbers 1 through 40 EXCEPT 2 and 10.
+What if we’re interested in all elements of `x` EXCEPT the 2nd and 10th? It would be pretty tedious to construct a vector containing all numbers 1 through 40 EXCEPT 2 and 10.
 
-Luckily, R accepts negative integer indexes. Whereas x[c(2, 10)] gives us ONLY the 2nd and 10th elements of x, x[c(-2, -10)] gives us all elements of x EXCEPT for the 2nd and 10 elements. Try x[c(-2, -10)] now to see this.
+Luckily, R accepts negative integer indexes. Whereas `x[c(2, 10)]` gives us ONLY the 2nd and 10th elements of `x`, `x[c(-2, -10)]` gives us all elements of `x` EXCEPT for the 2nd and 10 elements. Try `x[c(-2, -10)]` now to see this.
 
+```{r n, exercise = TRUE, exercise.lines = 8}
+
+```
+```{r n-solution}
 x[c(-2, -10)]
-##  [1]      NA      NA  0.1627      NA  0.5131      NA      NA  0.1247
-##  [9]      NA      NA -0.4921  1.9294      NA      NA  0.3389      NA
-## [17] -1.6339      NA  0.3675      NA -1.7354      NA  1.1884 -0.1795
-## [25]  1.3702  0.3767      NA -0.7018  0.3158 -0.1838  0.5553      NA
-## [33]      NA  0.1399      NA  0.5629      NA  2.1166
-A shorthand way of specifying multiple negative numbers is to put the negative sign out in front of the vector of positive numbers. Type x[-c(2, 10)] to get the exact same result.
+```
 
+A shorthand way of specifying multiple negative numbers is to put the negative sign out in front of the vector of positive numbers. Type `x[-c(2, 10)]` to get the exact same result.
+
+```{r o, exercise = TRUE, exercise.lines = 8}
+
+```
+```{r o-solution}
 x[-c(2, 10)]
-##  [1]      NA      NA  0.1627      NA  0.5131      NA      NA  0.1247
-##  [9]      NA      NA -0.4921  1.9294      NA      NA  0.3389      NA
-## [17] -1.6339      NA  0.3675      NA -1.7354      NA  1.1884 -0.1795
-## [25]  1.3702  0.3767      NA -0.7018  0.3158 -0.1838  0.5553      NA
-## [33]      NA  0.1399      NA  0.5629      NA  2.1166
+```
+
 So far, we’ve covered three types of index vectors – logical, positive integer, and negative integer. The only remaining type requires us to introduce the concept of ‘named’ elements.
 
-Create a numeric vector with three named elements using vect <- c(foo = 11, bar = 2, norf = NA).
+Create a numeric vector with three named elements using `vect <- c(foo = 11, bar = 2, norf = NA)`.
 
 vect <- c(foo = 11, bar = 2, norf = NA)
 When we print vect to the console, you’ll see that each element has a name. Try it out.
