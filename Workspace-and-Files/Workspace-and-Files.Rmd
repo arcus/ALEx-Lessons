@@ -1,6 +1,8 @@
 ---
 title: "Workspace and Files"
-output: learnr::tutorial
+output: 
+ learnr::tutorial:
+      progressive: true
 runtime: shiny_prerendered
 ---
 
@@ -11,14 +13,12 @@ knitr::opts_chunk$set(echo = FALSE)
 ```
 
 # Workspace and Files
-In this lesson, you'll learn how to examine your local workspace in R and begin to explore the relationship between your
-workspace and the file system of your machine.
 
-Because different operating systems have different conventions with regards to things like file paths, the outputs of these
-commands may vary across machines.
+In this lesson, you'll learn how to examine your local workspace in R and begin to explore the relationship between your workspace and the file system of your machine.
 
-However it's important to note that R provides a common API (a common set of commands) for interacting with files, that way
-your code will work across different kinds of computers.
+Because different operating systems have different conventions with regards to things like file paths, the outputs of these commands may vary across machines.
+
+However it's important to note that R provides a common API (a common set of commands) for interacting with files, that way syour code will work across different kinds of computers.
 
 Let's jump right in so you can get a feel for how these special functions work!
 

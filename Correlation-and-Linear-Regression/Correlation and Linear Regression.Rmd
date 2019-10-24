@@ -1029,7 +1029,7 @@ slef$df
 
 ## Graph Results
 
-As previously noted, plot easily using plain old `plot` and giving it the variables you have in the data set. Try this with the `diverse` data. 
+As previously noted, plot easily using plain old `plot` and giving it your data set (if you have only a few variables) to see what it makes of it. Try this now with `diversity`. 
 
 ```{r t, exercise = TRUE, exercise.lines = 8}
 
