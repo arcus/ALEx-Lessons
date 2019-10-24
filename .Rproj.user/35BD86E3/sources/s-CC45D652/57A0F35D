@@ -1,0 +1,23 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1571939442329.000,
+    "dirty" : true,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "3400872514",
+    "id" : "57A0F35D",
+    "lastKnownWriteTime" : 1571951351,
+    "last_content_update" : 1571951496328,
+    "path" : "~/Documents/GitHub/a-MESS Lessons/subsetting-vectors/Subseting-Vectors.Rmd",
+    "project_path" : "subsetting-vectors/Subseting-Vectors.Rmd",
+    "properties" : {
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 4,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_markdown"
+}

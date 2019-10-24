@@ -815,8 +815,17 @@ In general, what's good enough for a correlation is good enough for a single pre
 
 ## Perform the Analysis
 
-We have already performed various correlation and linear regression analyses throughout the tutorial; let's perform another linear regression analysis and add an additional step. 
-You've done it before: Call `lm` and pass it the formula `Eggs ~ Weight` (which is $\displaystyle Y$ ~ $\displaystyle X$) and the data, `egg`. Save it to the variable `egg_fit`, then pass `egg_fit` to `summary`. 
+We have already performed various correlation and linear regression analyses throughout this tutorial; these are slightly more complex and generalizable. 
+
+### Correlation
+
+
+
+
+### Linear Regression
+
+Let's perform another linear regression analysis and add an additional step. 
+As before, call `lm` and pass it the formula `Eggs ~ Weight` (which is $\displaystyle Y$ ~ $\displaystyle X$) and the data, `egg`. Save it to the variable `egg_fit`, then pass `egg_fit` to `summary`. 
 
 ```{r egg_fit_again, exercise = TRUE, exercise.lines = 8}
 
