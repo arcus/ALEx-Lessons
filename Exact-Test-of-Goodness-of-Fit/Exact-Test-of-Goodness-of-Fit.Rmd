@@ -1,6 +1,8 @@
 ---
 title: "Exact Test of Goodness-of-Fit"
-output: learnr::tutorial
+output: 
+ learnr::tutorial:
+      progressive: true
 runtime: shiny_prerendered
 ---
 

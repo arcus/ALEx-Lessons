@@ -1,11 +1,12 @@
 ---
 title: "Base Plotting System"
-output: learnr::tutorial
+output: 
+ learnr::tutorial:
+      progressive: true
 runtime: shiny_prerendered
 ---
 
 ```{r setup, include=FALSE}
-setwd("/Users/braunsb/Documents/Arcus Learning Plan Generator/Lessons")
 library(learnr)
 library(datasets)
 ```

@@ -1,5 +1,5 @@
 ﻿lesson_key,group,title,url
-101,Basics,Basic Building Blocks,/Basic-Building-Blocks/
+101,Basics,Basic Building Blocks,/swirl-basic-building-blocks/
 102,Basics,Workspace and Files,/Basic-Building-Blocks/
 103,Basics,Sequences of Numbers,/Sequence-of-Numbers/
 104,Basics,Vectors,/Vectors/
@@ -18,7 +18,7 @@
 116,Basics,Looking at Data,Looking-at-Data/
 117,Basics,Simulation,/Simulation/
 118,Basics,Dates and Times,/Dates-and-Times/
-119,Basics,Base Graphics,/Base-Graphics/
+119,Basics,swirl Base Graphics,/swirl-base-graphics/
 120,Stats,Introduction to Bayes's Theorem,/Introduction-to-Bayes-Theorem/
 121,Stats,Variables,/Variables/
 122,Stats,Exploratory Graphs,/Exploratory-Graphs/
