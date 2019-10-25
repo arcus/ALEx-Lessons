@@ -169,8 +169,12 @@ Instructor       Grade   Weight  Calories Sodium  Score
 diet = read.table(textConnection(Input),header=TRUE)
 rm(Input)
 
+ex_fit <- summary(lm(Pulse ~ Speed,
+                     data = exercise))
+
 egg_fit <- lm(Eggs ~ Weight,
                data = egg)
+egg_sum <- summary(egg_fit)
 diverse_fit <- lm(Species ~ Latitude,
                   data = diversity)
 
@@ -180,6 +184,10 @@ my_cor_pwr <- pwr.r.test(n = NULL,
                          power = 0.80, 
                          alternative = "two.sided")
 
+egg$ln_Weight <- log(egg$Weight)
+ln_egg_fit <- lm(Eggs ~ ln_Weight, data = egg)
+sef <- summary(egg_fit)
+slef <- summary(ln_egg_fit)
 ```
 
 ## Background
@@ -327,7 +335,7 @@ question("True or false: You have just proven that there is no relationship betw
 
 ### 2. Find the Strength of any Association
 
-The strength of the association between two variables is typically expressed with $\displaystyle r^2$, which ranges from -1 (a perfect negative correlation) to 1 (a perfect positive correlation), or with $\displaystyle r^2$, which ranges from 0 (no relationship) to 1 (a perfect correlation).
+The strength of the association between two variables is typically expressed with $\displaystyle r$, which ranges from -1 (a perfect negative correlation) to 1 (a perfect positive correlation), or with $\displaystyle r^2$, which ranges from 0 (no relationship) to 1 (a perfect correlation).
 
 Let's perform a correlation on the two variables in `exercise`. Store the results in `corex`.
 
@@ -341,7 +349,7 @@ Let's perform a correlation on the two variables in `exercise`. Store the result
                    conf.level = 0.95))
 ```
 
-For the exercise data, you'd want to know whether pulse rate was significantly higher with higher speeds. $\displaystyle p$ is `r corex$p.value` (or as good as), but the relationship is so obvious from the graph (scroll up to see it again), and so biologically unsurprising (of course one's pulse rate goes up when one exercises harder!), that the hypothesis test wouldn't be a very interesting part of the analysis. It is slightly more interesting to note, however, that the strength of the relationship, , is `r corex$estimate[[1]]`: a very strong positive correlation that is, still, not terribly surprising.
+For the exercise data, you'd want to know whether pulse rate was significantly higher with higher speeds. $\displaystyle p$ is `r corex$p.value` (or almost as good as), but the relationship is so obvious from the graph (scroll up to see it again), and so biologically unsurprising (of course one's pulse rate goes up when one exercises harder!), that the hypothesis test wouldn't be a very interesting part of the analysis. It is slightly more interesting to note, however, that the strength of the relationship, , is `r corex$estimate[[1]]`: a very strong positive correlation that is, still, not terribly surprising.
 
 ### 3. Determine the Equation of a Line that Goes Through the Cloud of Points
 
@@ -365,9 +373,9 @@ lm(formula = Pulse ~ Speed,
    data = exercise)
 ```
 
-The equation is $\displaystyle \hat{Y} = 63.5 + 3.75X$. This predicts that McDonald's pulse would be 63.5 when the speed of the elliptical machine was 0 kph, and his pulse would go up by 3.75 beats per minute for every 1 kph increase in speed. 
+The equation is $\displaystyle \hat{Y} =$ `r ex_fit$coefficients[1]` $\displaystyle +$ `r ex_fit$coefficients[2]` . This predicts that McDonald's pulse would be 63.5 when the speed of the elliptical machine was 0 kph, and his pulse would go up by 3.75 beats per minute for every 1 kph increase in speed. 
 
-This is probably the most useful part of the analysis for the `exercise` data; if I wanted to exercise with a particular level of effort, as measured by pulse rate, I could use the equation to predict the speed I should use. 
+This is probably the most useful part of the analysis for the `exercise` data; if McDonald wants to exercise with a particular level of effort, as measured by pulse rate, he can use the equation to predict the speed he should use. 
 
 Perform an `lm` with the `diversity` data set. The dependent variable $\displaystyle \hat{Y}$ is `Species` and the independent variable is `Latitude`. Store the output in `diverse_fit`, then find its `p.value` by summarizing the fit using `summary(diverse_fit)`.
 
@@ -401,7 +409,7 @@ egg_fit <- lm(Eggs ~ Weight,
 summary(egg_fit)
 ```
 
-For the egg data, the equation is $\displaystyle \hat{Y} = 12.7 + 1.60X$. For most purposes, knowing a mother being heavier predicts more eggs (the hypothesis test) would be more interesting than knowing the equation of the line, but it depends on the goals of your experiment. You can find $\displaystyle p$, as usual, in the summary of the fit.
+For the egg data, the equation is $\displaystyle \hat{Y} =$ `r egg_sum$coefficients[1]` + `r egg_sum$coefficients[2]`. For most purposes, knowing that a mother is heavier allows you to predict more eggs (the hypothesis test) is more interesting than knowing the equation of the line; but it depends on the goals of your experiment. You can find $\displaystyle p$, as usual, in the summary of the fit.
 
 ```{r q-cor-form, echo=FALSE}
 question("What is the intercept for the correlation between Weight and Eggs?",
@@ -807,8 +815,17 @@ In general, what's good enough for a correlation is good enough for a single pre
 
 ## Perform the Analysis
 
-We have already performed various correlation and linear regression analyses throughout the tutorial; let's perform another linear regression analysis and add an additional step. 
-You've done it before: Call `lm` and pass it the formula `Eggs ~ Weight` (which is $\displaystyle Y$ ~ $\displaystyle X$) and the data, `egg`. Save it to the variable `egg_fit`, then pass `egg_fit` to `summary`. 
+We have already performed various correlation and linear regression analyses throughout this tutorial; these are slightly more complex and generalizable. 
+
+### Correlation
+
+
+
+
+### Linear Regression
+
+Let's perform another linear regression analysis and add an additional step. 
+As before, call `lm` and pass it the formula `Eggs ~ Weight` (which is $\displaystyle Y$ ~ $\displaystyle X$) and the data, `egg`. Save it to the variable `egg_fit`, then pass `egg_fit` to `summary`. 
 
 ```{r egg_fit_again, exercise = TRUE, exercise.lines = 8}
 
@@ -827,11 +844,11 @@ Now, to get a little more information, pass the best-fit model (`egg_fit`) to `a
 anova(egg_fit)
 ```
 
-As you can see from the output, we now have a different test statistic, $\displaystyle F$. We can see how many degrees of freedom there were and we have a different $\displaystyle p$ value. If you want to know more about this output, download [Arcus's one-way ANOVA lesson](https://storage.googleapis.com/public-braunsb-media/Arcus-Education-Assets/Lessons/One-Way-ANOVA.Rmd)]. Then just open it in RStudio and click "Run Document" in the top bar of the tab. Get tea, because as a relatively non-interactive stats lesson, it can put you to sleep. We will fix that as soon as we have the rest of the more interactive stats lessons available for your use. 
+As you can see from the output, we now have a different test statistic, $\displaystyle F$. We can see how many degrees of freedom there were and we have a different $\displaystyle p$ value. If you want to know more about this output, download [Arcus's one-way ANOVA lesson](https://storage.googleapis.com/public-braunsb-media/Arcus-Education-Assets/Lessons/One-Way-ANOVA.Rmd). Then just open it in RStudio and click "Run Document" in the top bar of the tab. Get tea, because as a relatively non-interactive stats lesson, it can put you to sleep. We will fix that as soon as we have the rest of the more interactive stats lessons available for your use. 
 
 ### Interpret the Output
 
-In R, everything is an object. Use `str` (short for "structure"--and so many other things, but here all we care about is "structure") to find out what the linear regression best-fit output `egg_fit` looks like to R. Do the same for the correlation output you made earlier, `coregg`. 
+In R, everything is an object. Use `str` (short for "structure"---and so many other things, but here all we care about is "structure") to find out what the linear regression best-fit output `egg_fit` looks like to R. Do the same for the correlation output you made earlier, `coregg`. 
 
 ```{r object_appearance, exercise = TRUE, exercise.setup = "prepare-height_ttest"}
 
@@ -857,27 +874,39 @@ You can use output very nicely in your [reproducible Markdown text](https://educ
 
 To learn more about the ouptut, let's look at each element and find out what it is. This section is not necessarily something you need to know to run a simple analysis, but these explanations are here if you need them. 
 
-First, give yourself a list of all the put outted (outputted?) objects. Call `names`, and pass it the concatenation of our two outputs, `c(egg_fit, coregg)`. 
+First, give yourself a list of all the put outted (outputted?) objects. Call `names`, and pass it the concatenation of our two outputs, `c(summary(egg_fit), coregg))`.
+
+Also, give yourself a simple way to type `summary(egg_fit)` by assigning it to `sef`.
 
 ```{r all-names-together, exercise = TRUE, exercise.lines = 8}
 
 ```
 ```{r all-names-together-solution}
-names(c(egg_fit, coregg))
+names(c(summary(egg_fit), coregg))
+sef <- summary(egg_fit)
 ```
 
-### `coefficients`
+### `call`
 
-What happens when you look at `egg_fit$coefficients`?
-
-```{r egg_fit-coefficients, exercise = TRUE, exercise.lines = 8}
+```{r lm-call, exercise = TRUE, exercise.lines = 8}
 
 ```
-```{r egg_fit-coefficients-solution}
-egg_fit$coefficients
+```{r lm-call-solution}
+sef$call
 ```
 
-There we find the information related to our best-fit line. We now know that the line is $\displaystyle Eggs = 12.7 + 1.6 * Weight$. If we know `Weight`, we can predict `Eggs`. To a certain degree. Let's look at the rest of the output. 
+This is the original formula you passed to `lm`. 
+
+### `terms`
+
+```{r lm-terms, exercise = TRUE, exercise.lines = 8}
+
+```
+```{r lm-terms-solution}
+sef$terms
+```
+
+This is metadata about the variables you passed to `lm`.
 
 ### `residuals`
 
@@ -885,35 +914,140 @@ There we find the information related to our best-fit line. We now know that the
 
 ```
 ```{r residuals-solution}
-egg_fit$residuals
+sef$residuals
 ```
 
-These are the residuals that we discussed when we were looking at assumptions. Let's play with them a little bit. What's their distribution? We wanted it to be normal. Is it? Type `qqnorm(egg_fit$residuals)` to find out. Then use `qqline` to make a red straight line of `egg_fit$residuals`.
+These are the residuals that we discussed when we were looking at assumptions. Let's play with them a bit. What's their distribution? We wanted it to be normal. Is it? Type `qqnorm(egg_fit$residuals)` to find out. Then use `qqline` to make a red straight line of `egg_fit$residuals`. 
 
 ```{r hist-resids, exercise = TRUE, exercise.lines = 8}
 
 ```
 ```{r hist-resids-solution}
-qqnorm(egg_fit$residuals)
-qqline(egg_fit$residuals, col = "red")
+qqnorm(sef$residuals)
+qqline(sef$residuals, col = "red")
 ```
 
-### `p.value`
+Create an object called `egg_ass` by testing the assumptions upon which `egg_fit` rests. Test the assumptions by passing `egg_fit` to `gvlma`. Have a look at `egg_ass`.
 
+```{r one-more, exercise = TRUE, exercise.lines = 8}
 
+```
+```{r one-more-solution}
+(egg_ass <- gvlma(egg_fit))
+```
 
-### Confidence Interval
+Skewness assumptions NOT satisfied! With an exclamation point! You can see the skewness on the `qqnorm` residuals plot above: It's represented by the dots in the upper right skewing off away from the red line. That's what skewness looks like on that kind of plot. Let's see it in a histogram. Call `hist` and pass it `egg_fit$residuals`.
 
+```{r hist-skewness, exercise = TRUE, exercise.lines = 8}
 
+```
+```{r hist-skewness-solution}
+hist(egg_ass$residuals)
+```
+
+Note the $\displaystyle X$ axis. See how it goes from -5 to 10?  The skewness is to the right. The data looks sort of normal, and it might be if the axis was from -5 to 5.
+
+There is a simple solution to this problem, and I really should put it in a lesson all by itself, but we're here now so here it is: To fix skewness, create a new variable for your independent variable which is the natural log of the original data.
+
+1. Call `log`, pass it `egg$Weight`, and save the result in `egg$ln_Weight`. 
+2. Re-run `lm` using the formula `Eggs ~ ln_Weight` and data `egg`. Save that in `ln_egg_fit`. 
+3. Now check the assumptions again: send `ln_egg_fit` to `gvlma`. 
+
+```{r label, exercise = TRUE, exercise.lines = 8}
+
+```
+```{r label-solution}
+egg$ln_Weight <- log(egg$Weight)
+ln_egg_fit <- lm(Eggs ~ ln_Weight, data = egg)
+gvlma(ln_egg_fit)
+```
+
+```{r logged_ass, echo=FALSE}
+question("Are all assumptions satisfied now?",
+         answer("Yes", correct = TRUE),
+         answer("No"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE
+)
+```
+
+### `coefficients`
+
+We are now using `ln_egg_fit` instead of `egg_fit`. If you don't know why, scroll up a little. Give yourself the gift of a short way to type `summary(ln_egg_fit)` by assigning it to `slef`. We'll be using it a lot. (Are you starting to see why code can quickly become unreadable?)
+
+```{r lm-coeffs, exercise = TRUE, exercise.lines = 8}
+
+```
+```{r lm-coeffs-solution}
+slef <- summary(ln_egg_fit)
+slef$coefficients
+```
+
+```{r coeff-q, echo=FALSE}
+question("What is _b_ in the best fit line formula with ln_Weight as the predictor?",
+         answer("4.63"),
+         answer("9.96", correct = TRUE),
+         answer("9.074"),
+         answer("1.6"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE
+)
+```
+
+### `aliased`
+
+```{r aliased-lm, exercise = TRUE, exercise.lines = 8}
+
+```
+```{r aliased-lm-solution}
+slef$aliased
+```
+
+Neither variable is collinear. 
+
+### `sigma`
+
+```{r sigma-lm, exercise = TRUE, exercise.lines = 8}
+
+```
+```{r sigma-lm-solution}
+slef$sigma
+```
+
+This is the standard deviation of the coefficients, rounded to 1/10th. Test it by adding `round(sd(slef$coefficients[1:2]), 1)`. That is, get the standard deviation of the coefficients and round it to the nearest 1/10th. 
+
+```{r sigma-lm2, exercise = TRUE, exercise.lines = 8}
+
+```
+```{r sigma-lm2-solution}
+round(sd(slef$coefficients[1:2]), 1)
+```
+
+It's close enough to `sigma` to say the differences are due to rounding in the guts of the calculations. 
+
+### `df`
+
+This will be degrees of freedom. 
+
+```{r df-lm, exercise = TRUE, exercise.lines = 8}
+
+```
+```{r df-lm-solution}
+slef$df
+```
 
 ## Graph Results
+
+As previously noted, plot easily using plain old `plot` and giving it your data set (if you have only a few variables) to see what it makes of it. Try this now with `diversity`. 
 
 ```{r t, exercise = TRUE, exercise.lines = 8}
 
 ```
 ```{r t-solution}
-
+plot(diversity)
 ```
+
+That is a great way to start looking at a data set. You can look at each plot and decide whether any of the images make you think there might be correlations between the two variables involved. For instance, on the bottom row, second from the right, is an interesting image that may or may not show a correlation. This initial plot helps you decide how to proceed. 
 
 ## How do Correlation and Regression Work?
 
@@ -983,6 +1117,9 @@ Not all statisticians agree on a definition for the bivariate normal distributio
 Here is a sandbox where you can test these assertions. Create samples (bivariate normal or not) and see if the assertions hold true (or false) where they should. Here and in any sandboxes in our system, there is no right answer. Play. 
 
 ```{r sandbox, exercise = TRUE, exercise.lines = 8}
+
+
+
 
 ```
 

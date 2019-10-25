@@ -197,6 +197,7 @@ Before concluding this lesson, I’d like to show you a time-saving trick.
 Let’s pretend you’d like to view the contents of a variable that you created earlier, but you can’t seem to remember if you named it my_div or myDiv. You could try both and see what works, or…
 
 You can type the first two letters of the variable name, then hit the Tab key (possibly more than once). Most programming environments will provide a list of variables that you’ve created that begin with ‘my’. This is called auto-completion and can be quite handy when you have many variables in your workspace. Give it a try. (If auto-completion doesn’t work for you, just type my_div and press Enter.)
+
 ```{r prepare-t}
 x <- 5 + 7
 y <- x - 3
