@@ -54,7 +54,7 @@ NOTES
 * If your lesson has supporting data, just plunk it into the folder that contains the lesson and use the name of the file alone as pathname from within your lesson document. 
 * If what your lesson links to calls supporting data, you may keep that data whereever you like, provided that it is a public link that any leaner-instructor may access even if they don't have CHOP credentials. 
 
-Thank you for adding to the list of lessons we can offer learner-instructors!
+Thank you for adding to the list of lessons we can offer!
 
 
 ### Note about this Repo's History
