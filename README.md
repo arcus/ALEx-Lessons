@@ -39,13 +39,14 @@ Our editors will check your lesson and add it to the list of options available t
 If you have created a lesson that you would like to make available to instructors as they create curricula for individuals or for groups, please follow these steps:
 
 1. Fork this repo.
-2. Create a folder under "Lessons" with the lesson name with hyphens instead of spaces and no uppercase letters. In the past folders had uppercase letters, but we are changing our policy to use all lowercase letters so there is never any doubt about letter case in folder names. 
-3. Put your lesson in the folder. Your lessons should be in .md or .Rmd format. If your actual lesson is in another format (for instance, is a Python notebook), please place a .md or .Rmd file in the folder that contains a link to your otherwise-formatted lesson. 
-4. Add your lesson to the bottom of the ModuleTable.csv file. 
+2. In your local Lessons environment, create a folder under "Lessons" called the lesson name with hyphens instead of spaces and *no uppercase letters*. Our system is case sensitive for folder names.
+3. Put your lesson in the folder. Your lessons should be in .md or .Rmd format. If your actual lesson is in another format (for instance, if it is a Python notebook), please place a .md or .Rmd file in the folder that contains a link to your otherwise-formatted lesson. 
+4. Add your lesson's information to the bottom of the ModuleTable.csv file. Choose a unique unit number and lesson name, then place the folder name in the next column formatted like this: /my-folder-name/
+5. Save the module table file as a csv (don't change it to an xlsx file)
 5. Push your forked version of the repo to GitHub.
-6. Open a Pull request. If you have rights in this repo, go ahead and accept the pull request. If not, we'll respond as quickly as we can. 
-7. Send an email to Ian Campbell telling him that you have added a lesson. 
-8. When you hear back from Ian that the lesson has been added to the lesson plan generator, you will see it in the list of lessons the next time you create a web site for someone's use. :)
+6. Open a Pull request. If you have rights in the main Lessons repo, go ahead and accept the pull request. If you don't have rights, we'll respond as quickly as we can.
+7. Send an email to Ian Campbell at campbellim@email.chop.edu telling him that you added a lesson. 
+8. Ian will notify you when you can see your new lesson in the list of lessons available for curriculum web sites. :)
 
 NOTES
 
@@ -53,7 +54,7 @@ NOTES
 * If your lesson has supporting data, just plunk it into the folder that contains the lesson and use the name of the file alone as pathname from within your lesson document. 
 * If what your lesson links to calls supporting data, you may keep that data whereever you like, provided that it is a public link that any leaner-instructor may access even if they don't have CHOP credentials. 
 
-Thank you for adding to the list of lessons we can offer learner-instructors!
+Thank you for adding to the list of lessons we can offer!
 
 
 ### Note about this Repo's History
