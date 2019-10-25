@@ -1,0 +1,1128 @@
+---
+title: "Correlation and Linear Regression"
+output: 
+  learnr::tutorial:
+    progressive: true
+    allow_skip: true
+runtime: shiny_prerendered
+---
+
+```{r setup, include=FALSE}
+options(digits = 3, scipen = 9999)
+if(!require(learnr)){install.packages("learnr")}
+library(learnr)
+if(!require(psych)){install.packages("psych")}
+if(!require(gvlma)){install.packages("gvlma")}
+if(!require(PerformanceAnalytics)){install.packages("PerformanceAnalytics")}
+if(!require(ggplot2)){install.packages("ggplot2")}
+if(!require(rcompanion)){install.packages("rcompanion")}
+if(!require(pwr)){install.packages("pwr")}
+### --------------------------------------------------------------
+### Correlation and linear regression, species diversity example
+### pp. 207–208 from Biostats Handbook
+### --------------------------------------------------------------
+
+Input = ("
+Town                  State  Latitude  Species
+'Bombay Hook'          DE     39.217    128
+'Cape Henlopen'        DE     38.800    137
+'Middletown'           DE     39.467    108
+'Milford'              DE     38.958    118
+'Rehoboth'             DE     38.600    135
+'Seaford-Nanticoke'    DE     38.583     94
+'Wilmington'           DE     39.733    113
+'Crisfield'            MD     38.033    118
+'Denton'               MD     38.900     96
+'Elkton'               MD     39.533     98
+'Lower Kent County'    MD     39.133    121
+'Ocean City'           MD     38.317    152
+'Salisbury'            MD     38.333    108
+'S Dorchester County'  MD     38.367    118
+'Cape Charles'         VA     37.200    157
+'Chincoteague'         VA     37.967    125
+'Wachapreague'         VA     37.667    114
+")
+diversity <- read.table(textConnection(Input), header = TRUE)
+rm(Input)
+
+Input = ("
+Speed   Pulse
+0       57
+1.6     69
+3.1     78
+4       80
+5       85
+6       87
+6.9     90
+7.7     92
+8.7     97
+12.4    108
+15.3    119
+")
+exercise <- read.table(textConnection(Input), header = TRUE)
+rm(Input)
+
+Input = ("
+Weight  Eggs
+5.38	29
+7.36	23
+6.13	22
+4.75	20
+8.10	25
+8.62	25
+6.30	17
+7.44	24
+7.26	20
+7.17	27
+7.78	24
+6.23	21
+5.42	22
+7.87	22
+5.25	23
+7.37	35
+8.01	27
+4.92	23
+7.03	25
+6.45	24
+5.06	19
+6.72	21
+7.00	20
+9.39	33
+6.49	17
+6.34	21
+6.16	25
+5.74	22
+")
+egg <- read.table(textConnection(Input), header = TRUE)
+rm(Input)
+
+coramph <- cor.test(~ Species + Latitude,
+                    data = diversity,
+                    method = "pearson",
+                    conf.level = 0.95)
+
+
+coregg <- cor.test(~ Weight + Eggs,
+                  data = egg,
+                  method = "pearson",
+                  conf.level = 0.95)
+
+corex <- cor.test(~ Pulse + Speed,
+                  data = exercise,
+                  method = "pearson",
+                  conf.level = 0.95)
+
+(cordiv <- cor.test(~ Species + Latitude,
+                   data = diversity,
+                   method = "pearson",
+                   conf.level = 0.95))
+
+Input = ("
+Instructor       Grade   Weight  Calories Sodium  Score
+'Brendon Small'     6      43     2069    1287      77
+'Brendon Small'     6      41     1990    1164      76
+'Brendon Small'     6      40     1975    1177      76
+'Brendon Small'     6      44     2116    1262      84
+'Brendon Small'     6      45     2161    1271      86
+'Brendon Small'     6      44     2091    1222      87
+'Brendon Small'     6      48     2236    1377      90
+'Brendon Small'     6      47     2198    1288      78
+'Brendon Small'     6      46     2190    1284      89
+'Jason Penopolis'   7      45     2134    1262      76
+'Jason Penopolis'   7      45     2128    1281      80
+'Jason Penopolis'   7      46     2190    1305      84
+'Jason Penopolis'   7      43     2070    1199      68
+'Jason Penopolis'   7      48     2266    1368      85
+'Jason Penopolis'   7      47     2216    1340      76
+'Jason Penopolis'   7      47     2203    1273      69
+'Jason Penopolis'   7      43     2040    1277      86
+'Jason Penopolis'   7      48     2248    1329      81
+'Melissa Robins'    8      48     2265    1361      67
+'Melissa Robins'    8      46     2184    1268      68
+'Melissa Robins'    8      53     2441    1380      66
+'Melissa Robins'    8      48     2234    1386      65
+'Melissa Robins'    8      52     2403    1408      70
+'Melissa Robins'    8      53     2438    1380      83
+'Melissa Robins'    8      52     2360    1378      74
+'Melissa Robins'    8      51     2344    1413      65
+'Melissa Robins'    8      51     2351    1400      68
+'Paula Small'       9      52     2390    1412      78
+'Paula Small'       9      54     2470    1422      62
+'Paula Small'       9      49     2280    1382      61
+'Paula Small'       9      50     2308    1410      72
+'Paula Small'       9      55     2505    1410      80
+'Paula Small'       9      52     2409    1382      60
+'Paula Small'       9      53     2431    1422      70
+'Paula Small'       9      56     2523    1388      79
+'Paula Small'       9      50     2315    1404      71
+'Coach McGuirk'    10      52     2406    1420      68
+'Coach McGuirk'    10      58     2699    1405      65
+'Coach McGuirk'    10      57     2571    1400      64
+'Coach McGuirk'    10      52     2394    1420      69
+'Coach McGuirk'    10      55     2518    1379      70
+'Coach McGuirk'    10      52     2379    1393      61
+'Coach McGuirk'    10      59     2636    1417      70
+'Coach McGuirk'    10      54     2465    1414      59
+'Coach McGuirk'    10      54     2479    1383      61
+")
+
+diet = read.table(textConnection(Input),header=TRUE)
+rm(Input)
+
+ex_fit <- summary(lm(Pulse ~ Speed,
+                     data = exercise))
+
+egg_fit <- lm(Eggs ~ Weight,
+               data = egg)
+egg_sum <- summary(egg_fit)
+diverse_fit <- lm(Species ~ Latitude,
+                  data = diversity)
+
+my_cor_pwr <- pwr.r.test(n = NULL, 
+                         r = 0.500, 
+                         sig.level = 0.05, 
+                         power = 0.80, 
+                         alternative = "two.sided")
+
+egg$ln_Weight <- log(egg$Weight)
+ln_egg_fit <- lm(Eggs ~ ln_Weight, data = egg)
+sef <- summary(egg_fit)
+slef <- summary(ln_egg_fit)
+```
+
+## Background
+
+This lesson is both a reference and a tutorial. It contains all the code samples you need to perform correlations and regressions on your own data as well as background information such as how to interpret output and which graphs you might want to use to demonstrate results (and in some cases which graphs _not_ to use). 
+
+You can also learn to understand and perform a correlation and linear regression by working through the lesson from start to finish. I avoid hard math everywhere except in the section "I _like_ Math. Where's the Math?" (where angels fear to tread).
+
+## What kinds of Variables work with Correlation and Regression
+
+>* Two or more [scalar (a.k.a. "measurement") variables](http://www.biostathandbook.com/variabletypes.html#measurement). A proportion (as with binary variables) operates as a scalar variable in correlations and linear regressions. 
+
+Use linear regression or correlation when you want to know whether one measurement variable is associated with another measurement variable; where you want to measure the strength of an association (_r_<sup>2</sup>); or you want an equation that decribes the relationship and (with caution) can be used to predict unknown values.
+
+```{r nolinregorcor, echo=FALSE}
+question("Select any questions that can be answered using correlation or linear regression",
+         answer("Is there a relationship between my dog's food intake and the amount of exercise she gets?", correct = TRUE),
+         answer("What is the strength of the relationship between calories and amount of sodium in an athlete's diet?", correct = TRUE),
+         answer("Can I predict how many eggs an amphipod carries by weighing her?", correct = TRUE),
+         random_answer_order = TRUE,
+         allow_retry = TRUE
+)
+```
+
+## Null and Alternative Hypotheses
+
+>* **H<sub>0</sub>**: The slope of the best fit line is equal to zero; in other words, as the _X_ variable gets higher, the associated _Y_ variable gets neither higher nor lower.      
+* **H<sub>A</sub>**: The slop of the best fit line is not equal to zero; in other words, as the _X_ variable gets higher, the associated _Y_ variable changes by getting larger (showing a positive relationship) or smaller (showing a negative relationship.    
+* **H<sub>A</sub>** (1-sided): "The slope of the best fit line is a positive number."        
+* **H<sub>A</sub>** (1-sided): "The slope of the best fit line is a negative number."
+
+
+
+```{r bb, echo=FALSE}
+question("What are NOT examples of a correlation or linear regression null hypothesis?",
+         answer("My electric bill is always high.", correct = TRUE),
+         answer("My electric bill is high no matter how much television I watch."),
+         answer("My electric bill is low no matter how much television I watch"),
+         answer("I watch a lot of television.", correct = TRUE),
+         allow_retry = TRUE,
+         random_answer_order = TRUE
+)
+```
+
+## Example of the Null and Alternative Hypotheses
+
+The null hypothesis and alternatives in the previous question are
+
+>* **Example H<sub>0</sub>**: "The slope of the best fit line between time watching television and my electric bill total is zero."     
+* **Example H<sub>A</sub>** (2-sided): "The slope of the best fit line between time watching television and my electric bill total is not zero."    
+* **Example H<sub>A</sub>** (1-sided): "The slope of the best fit line between time watching television and my electric bill is a positive number."    
+* **Example H<sub>A</sub>** (1-sided): "The slope of the best fit line between time watching television and my electric bill is a negative number."
+
+## R Packages
+
+Use the following code to install the packages used in this lesson:
+
+```{r corregpackages}
+if(!require(psych)){install.packages("psych")}
+if(!require(PerformanceAnalytics)){install.packages("PerformanceAnalytics")}
+if(!require(ggplot2)){install.packages("ggplot2")}
+if(!require(rcompanion)){install.packages("rcompanion")}
+if(!require(gvlma)){install.packages("gvlma")}
+if(!require(pwr)){install.packages("pwr")}
+```
+
+## Background
+
+One of the most common graphs in science plots one measurement variable on the $\displaystyle X$ (horizontal) axis vs. another on the $\displaystyle Y$ (vertical) axis. For example, let's make two graphs. For the first, John McDonald dusted off the elliptical machine in his basement and measured his pulse after one minute of ellipticizing at various speeds. I've loaded this data for you as `exercise`. Have a look at it.
+
+```{r exercise, exercise = TRUE, exercise.lines = 8}
+
+```
+```{r exercise-solution}
+exercise
+```
+
+Now to make the plot, simply pass the data to the `plot` function.
+
+```{r passpulse, exercise = TRUE, exercise.lines = 8}
+
+```
+```{r passpulse-solution}
+plot(exercise)
+```
+
+The other data set is based on McDonald (1989). McDonald collected the amphipod crustacean _Platorchestia platensis_ on a beach near Stony Brook, Long Island, in April 1987, removed and counted the number of eggs each female was carrying, then freeze-dried and weighed the mothers. Look at the data in `egg`, then pass the data to `plot`.
+
+```{r egg, exercise = TRUE, exercise.lines = 8}
+
+```
+```{r egg-solution}
+egg
+plot(egg)
+```
+
+There are three things you can do with this kind of data. 
+
+### 1. Test a Hypothesis
+
+I have loaded another data set for you called `diversity`. Plot it using `plot` and passing it the formula `Species ~ Latitude`, `data` equal to the name of the data set, and `pch` equal to 16. 
+
+```{r plotdiversity, exercise = TRUE, exercise.lines = 8}
+
+```
+```{r plotdiversity-solution}
+plot(Species ~ Latitude,
+     data = diversity,
+     pch = 16)
+```
+
+Does the number of species vary with latitude? You would use a hypothesis test to answer that question; in other words, as the $\displaystyle X$ variable (Latitude) goes up, does the $\displaystyle Y$ variable (number of Species) tend to change (either up or down)? Use the function `cor.test` from the `stats` package to find out. Start by looking at the help for `cor.test`.
+
+```{r helpcortest, exercise = TRUE, exercise.lines = 8}
+
+```
+```{r helpcortest-solution}
+?cor.test
+```
+
+Using the instructions in the help, perform a correlation analysis between the number of `Species` and `Latitude` using `~` to create a formula including the two variables (it's a bit of an odd constuction for a formula, so I'll give it to you: `~ Species + Latitude`. Set the parameter `data` equal to `diversity`, of coures, then choose a method. There are a number of different methods for performing a correlation analysis, the most common of which is "pearson". Use that. then ask for a confidence level of 0.95. If you don't know how to set that, look at the help under `conf.level`. Lastly, assign the output to the variable `cor` and put parentheses around the entire call so you can see the output and store it in a variable at the same time. 
+
+>Tip: There are certain types of characters, like `'`, `"`, `_`, `[`, and `(` that appear with their matched characters on both sides of blocked text. Try that here to put parentheses around the command: After constructing your function call and the assignment to the variable, select everything in the code box, then press `(` and see what happens.
+
+```{r cordiversity, exercise = TRUE, exercise.lines = 8}
+
+```
+```{r cordiversity-solution}
+(cordiv <- cor.test(~ Species + Latitude,
+                   data = diversity,
+                   method = "pearson",
+                   conf.level = 0.95))
+```
+
+For a hypothesis test, you'll look at $\displaystyle p$, which here is `r cordiv$p.value`. Since alpha is (as usual) .05, we are on the wrong side of .05 to reject the null. You'll notice also that the confidence level ranges from `r cordiv$conf.int[1]` to `r cordiv$conf.int[2]`: a range which includes 0. We cannot reject the null in these circumstances.
+
+```{r tf_proof, echo=FALSE}
+question("True or false: You have just proven that there is no relationship between the two variables.",
+         answer("True because _p_ > .05"),
+         answer("False because failing to reject the null is not the same as accepting it", correct = TRUE),
+         random_answer_order = TRUE,
+         allow_retry = TRUE
+)
+```
+
+### 2. Find the Strength of any Association
+
+The strength of the association between two variables is typically expressed with $\displaystyle r$, which ranges from -1 (a perfect negative correlation) to 1 (a perfect positive correlation), or with $\displaystyle r^2$, which ranges from 0 (no relationship) to 1 (a perfect correlation).
+
+Let's perform a correlation on the two variables in `exercise`. Store the results in `corex`.
+
+```{r pulsecor, exercise = TRUE, exercise.lines = 8}
+
+```
+```{r pulsecor-solution}
+(corex <- cor.test(~ Pulse + Speed,
+                   data = exercise,
+                   method = "pearson",
+                   conf.level = 0.95))
+```
+
+For the exercise data, you'd want to know whether pulse rate was significantly higher with higher speeds. $\displaystyle p$ is `r corex$p.value` (or almost as good as), but the relationship is so obvious from the graph (scroll up to see it again), and so biologically unsurprising (of course one's pulse rate goes up when one exercises harder!), that the hypothesis test wouldn't be a very interesting part of the analysis. It is slightly more interesting to note, however, that the strength of the relationship, , is `r corex$estimate[[1]]`: a very strong positive correlation that is, still, not terribly surprising.
+
+### 3. Determine the Equation of a Line that Goes Through the Cloud of Points
+
+The final goal is to determine the equation of a line that goes through the cloud of points. The equation of a line is given in the form 
+
+$\displaystyle \hat{Y} = a + bX$,
+
+where 
+
+* $\displaystyle \hat{Y}$ is the value of $\displaystyle Y$ predicted for a given value of $\displaystyle X$    
+* $\displaystyle a$ is the $\displaystyle Y$ intercept (the value of $\displaystyle Y$ when $\displaystyle X$ is zero)    
+* $\displaystyle b$ is the slope of the line (the change in $\displaystyle \hat{Y}$ for a change in $\displaystyle X$ of one unit).
+
+For the exercise data, you find the line by performing a linear regression using the `stats` function `lm` and passing it the formula `Pulse ~ Speed` and the name of the data set (`exercise`). Try it now.
+
+```{r lmexer, exercise = TRUE, exercise.lines = 8}
+
+```
+```{r lmexer-solution}
+lm(formula = Pulse ~ Speed, 
+   data = exercise)
+```
+
+The equation is $\displaystyle \hat{Y} =$ `r ex_fit$coefficients[1]` $\displaystyle +$ `r ex_fit$coefficients[2]` . This predicts that McDonald's pulse would be 63.5 when the speed of the elliptical machine was 0 kph, and his pulse would go up by 3.75 beats per minute for every 1 kph increase in speed. 
+
+This is probably the most useful part of the analysis for the `exercise` data; if McDonald wants to exercise with a particular level of effort, as measured by pulse rate, he can use the equation to predict the speed he should use. 
+
+Perform an `lm` with the `diversity` data set. The dependent variable $\displaystyle \hat{Y}$ is `Species` and the independent variable is `Latitude`. Store the output in `diverse_fit`, then find its `p.value` by summarizing the fit using `summary(diverse_fit)`.
+
+```{r diverse_lm, exercise = TRUE, exercise.lines = 8}
+
+```
+```{r diverse_lm-solution}
+(diverse_fit <- lm(Species ~ Latitude,
+                  data = diversity))
+summary(diverse_fit)
+```
+```{r plainInterp, echo=FALSE}
+question("In plain English, what should you decide about the hypothesis?",
+         answer("Since _p_ is above .05, I will not reject the null hypothesis.", correct = TRUE),
+         answer("This is just too hard. I'm going to bag it."),
+         answer("Since _p_ is above .05, I will reject the null hypothesis."),
+         answer("The data isn't fit for hypothesis tests."),
+         random_answer_order = TRUE,
+         allow_retry = TRUE
+)
+```
+
+Perform an `lm` on the `egg` data, with `Eggs` as the dependent variable and `Weight` as the independent variable. Store the results in `egg_fit`, then summarize them.
+
+```{r eggfit, exercise = TRUE, exercise.lines = 8}
+
+```
+```{r eggfit-solution}
+egg_fit <- lm(Eggs ~ Weight,
+               data = egg)
+summary(egg_fit)
+```
+
+For the egg data, the equation is $\displaystyle \hat{Y} =$ `r egg_sum$coefficients[1]` + `r egg_sum$coefficients[2]`. For most purposes, knowing that a mother is heavier allows you to predict more eggs (the hypothesis test) is more interesting than knowing the equation of the line; but it depends on the goals of your experiment. You can find $\displaystyle p$, as usual, in the summary of the fit.
+
+```{r q-cor-form, echo=FALSE}
+question("What is the intercept for the correlation between Weight and Eggs?",
+         answer("1.60"),
+         answer("63.5"),
+         answer("12.7", correct = TRUE),
+         answer("0"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE
+)
+```
+
+```{r interpret, echo=FALSE}
+question("Interpret the meaning of _b_ in the regression formula for Eggs and Weight.",
+         answer("For every 1 unit increase in weight, we expect 3.75 more eggs."),
+         answer("For every 3.75 change in latitude we expect the number of species to be 1 more."),
+         answer("For every 1 unit increase in weight, we expect an increase of 1.60 eggs.", correct = TRUE),
+         answer("For every additional mg in weight, we expect 1.60 more eggs."),
+         random_answer_order = TRUE,
+         allow_retry = TRUE
+)
+```
+```{r pegg, echo=FALSE}
+question("What is the value of _p_ for the linear regression of Eggs and Weight?",
+         answer("3.74"),
+         answer(".206"),
+         answer(".175"),
+         answer(".0154", correct = TRUE),
+         random_answer_order = TRUE,
+         allow_retry = TRUE
+)
+```
+
+## Correlation vs. Linear Regression
+
+The statistical tools used for hypothesis testing---describing the closeness of the association and drawing a line through the points---are correlation and linear regression. We find the descriptions of correlation and regression in most textbooks to be unnecessarily confusing. Some statistics textbooks have correlation and linear regression in separate chapters, and make it seem as if it is always important to pick one technique or the other. I think this overemphasizes the differences between them. Other books muddle correlation and regression together without really explaining what the difference is.
+
+There are real differences between correlation and linear regression, but fortunately, they usually don't matter. Correlation and linear regression give the exact same $\displaystyle p$ value for the hypothesis test, and for most biological experiments, that's the only really important result. So if you're mainly interested in the $\displaystyle p$ value, you don't need to worry about the difference between correlation and regression.
+
+```{r tfdiffs, echo=FALSE}
+question("True or false: There are real differences between correlation and linear regression",
+         answer("True", correct = TRUE),
+         answer("False"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE
+)
+```
+```{r tfdiffsmatter, echo=FALSE}
+question("True or false: The differences between correlation and linear regression matter a great deal in every data set",
+         answer("True"),
+         answer("False", correct = TRUE),
+         random_answer_order = TRUE,
+         allow_retry = TRUE
+)
+```
+
+For the most part, we will treat correlation and linear regression as different aspects of a single analysis, and you can consider correlation-linear regression to be a single statistical test. Be aware that this approach is probably different from what you'll see elsewhere.
+
+The main difference between correlation and regression is that in correlation, you sample both measurement variables randomly from a population, while in regression you choose the values of the independent ($\displaystyle X$) variable. 
+
+```{r maindiff, echo=FALSE}
+question("Which of the following are NOT differences between correlation and regression?",
+         answer("In regression, you choose an independent variable's values"),
+         answer("In correlation, you choose both variables' values", correct = TRUE),
+         answer("In regression, you sample both measurement variables randomly from a population", correct = TRUE),
+         answer("In correlation, you sample both measurement variables from a population"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE
+)
+```
+
+
+For example, let's say you're a forensic anthropologist, interested in the relationship between foot length and body height in humans. If you find a severed foot at a crime scene, you'd like to be able to estimate the height of the person it was severed from. You measure the foot length and body height of a random sample of humans, get a significant $\displaystyle p$ value, and calculate $\displaystyle r^2$ to be 0.72. This is a correlation, because you took measurements of both variables on a random sample of people. The $\displaystyle r^2$ is therefore a meaningful estimate of the strength of the association between foot length and body height in humans, and you can compare it to other $\displaystyle r^2$ values. You might want to see if the $\displaystyle r^2$ for feet and height is larger or smaller than the $\displaystyle r^2$ for hands and height, for example.
+
+```{r whycorr, echo=FALSE}
+question("Why is the foot and height example a correlation and not a regression?",
+         answer("Because it is a meaningful estimate of the strength of the association between two variables"),
+         answer("Because you took measurements of both variables from a random sample", correct = TRUE),
+         answer("Because you can't compare the strength of this association with the strengths of associations between other variables"),
+         answer("Because _p_ is significant"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE
+)
+```
+
+Let's say you've decided forensic anthropology is too disgusting, so now you're interested in the effect of air temperature on running speed in lizards. You put some lizards in a temperature chamber set to 10°C, chase them, and record how fast they run. You do the same for 10 different temperatures, ranging up to 30°C. This is a regression, because you decided which temperatures to use. You'll probably still want to calculate $\displaystyle r^2$, just because high values are more impressive. 
+
+```{r whyreg, echo=FALSE}
+question("Why is this analysis correctly run as a regression rather than as a correlation?",
+         answer("Because you find forensic anthropology to be disgusting"),
+         answer("Because you decided which temperatures to use", correct = TRUE),
+         answer("Because temperature is a dependent variable"),
+         answer("Because you don't have to calculate the strength of the relationship"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE
+)
+```
+
+But it's not a very meaningful estimate of anything about lizards. This is because the $\displaystyle r^2$ depends on the values of the independent variable that you chose. For the exact same relationship between temperature and running speed, a narrower range of temperatures would give a smaller $\displaystyle r^2$. Here are three graphs showing some simulated data, with the same scatter (standard deviation) of $\displaystyle Y$ values at each value of $\displaystyle X$. 
+
+```{r, out.width = "600px", echo = FALSE}
+knitr::include_graphics("https://storage.googleapis.com/public-braunsb-media/Arcus-Education-Assets/Lessons/images/three-graphs-of-simulated-data.png")
+```
+
+As you can see, with a narrower range of $\displaystyle X$ values, the $\displaystyle r^2$ gets smaller. If you did another experiment on humidity and running speed in your lizards and got a lower $\displaystyle r^2$, you couldn't say that running speed is more strongly associated with temperature than with humidity; if you had chosen a narrower range of temperatures and a broader range of humidities, humidity might have had a larger $\displaystyle r^2$ than temperature.
+
+```{r tflizards, echo=FALSE}
+question("True or false: A wider range of values tends to cause the relationship between two variables to become stronger.",
+         answer("True", correct = TRUE),
+         answer("False"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE
+)
+```
+
+If you try to classify every experiment as either regression or correlation, you'll quickly find that there are many experiments that don't clearly fall into one category. For example, let's say that you study air temperature and running speed in lizards. You go out to the desert every Saturday for the eight months of the year that your lizards are active, measure the air temperature, then chase lizards and measure their speed. You haven't deliberately chosen the air temperature, just taken a sample of the natural variation in air temperature, so is it a correlation? But you didn't take a sample of the entire year, just those eight months, and you didn't pick days at random, just Saturdays, so is it a regression?
+
+If you are mainly interested in using the _p_ value for hypothesis testing, to see whether there is a relationship between the two variables, it doesn't matter whether you call the statistical test a regression or correlation. If you are interested in comparing the strength of the relationship ($\displaystyle r^2$) to the strength of other relationships, you are doing a correlation and should design your experiment so that you measure $\displaystyle X$ and $\displaystyle Y$ on a random sample of individuals. If you determine the $\displaystyle X$ values before you do the experiment, you are doing a regression and shouldn't interpret the $\displaystyle r^2$ as an estimate of something general about the population you've observed.
+
+```{r whichregcor, echo=FALSE}
+question("Which of the following MUST be a regression?",
+         answer("You go out to the desert every Saturday for eight months and measure air temperature and lizard running speed"),
+         answer("You want to see whether there is a relationship between two variables"),
+         answer("You want to compare the strength of the relationship between two variables with the strength of other relationships"),
+         answer("You first determing your X values, then do the experiment to see what the Y values turn out to be", correct = TRUE),
+         random_answer_order = TRUE,
+         allow_retry = TRUE
+)
+```
+
+## Correlation and Causation
+
+You have probably heard people warn you, "Correlation does not imply causation." This is a reminder that when you are sampling natural variation in two variables, there is also natural variation in a lot of possible confounding variables that could cause the association between $\displaystyle A$ and $\displaystyle B$. So if you see a significant association between $\displaystyle A$ and $\displaystyle B$, it doesn't necessarily mean that variation in $\displaystyle A$ _causes_ variation in $\displaystyle B$; there may be some other variable, $\displaystyle C$, that affects both of them. 
+
+```{r possible-reasons, echo=FALSE}
+question("Which of the following might be true if you find a correlation between two variables?",
+         answer("The first causes the second", correct = TRUE),
+         answer("The second causes the first", correct = TRUE),
+         answer("They are unrelated but are both caused to change by a third variable", correct = TRUE),
+         answer("They are unrelated and you are seeing a random occurence of correlation", correct = TRUE),
+         random_answer_order = TRUE,
+         allow_retry = TRUE
+)
+```
+
+For example, let's say you went to an elementary school, found 100 random students, measured how long it took them to tie their shoes, and measured the length of their thumbs. I'm pretty sure you'd find a strong association between the two variables, with longer thumbs associated with shorter shoe-tying times. I'm sure you could come up with a clever, sophisticated biomechanical explanation for why having longer thumbs causes children to tie their shoes faster, complete with force vectors and moment angles and equations and 3-D modeling. However, that would be silly; your sample of 100 random students has natural variation in another variable, age, and older students have bigger thumbs and take less time to tie their shoes.
+
+So what if you make sure all your student volunteers are the same age, and you still see a significant association between shoe-tying time and thumb length? 
+
+```{r corcauseshoes, echo=FALSE}
+question("Can we now conclude that longer thumbs make you tie your shoes faster?",
+         answer("Yes, because we got rid of the confounding age variable."),
+         answer("No, because reasons.", correct = TRUE),
+         random_answer_order = TRUE,
+         allow_retry = TRUE
+)
+```
+
+Think of why different children have different length thumbs:
+
+* Some people are genetically larger than others; could the genes that affect overall size also affect fine motor skills? Maybe.    
+* Nutrition affects size, and family economics affects nutrition; could poor children have smaller thumbs due to poor nutrition, and also have slower shoe-tying times because their parents were too overworked to teach them to tie their shoes, or because they were so poor that they didn't get their first shoes until they reached school age? Maybe.    
+* Maybe some kids spend so much time sucking their thumb that the thumb actually gets longer, and having a slimy spit-covered thumb makes it harder to grip a shoelace. 
+
+There would be multiple plausible explanations for the association between thumb length and shoe-tying time, and it would be incorrect to conclude "Longer thumbs make you tie your shoes faster."
+
+Since it's possible to think of multiple explanations for an association between two variables, does that mean you should cynically sneer "Correlation does not imply causation!" and dismiss any correlation studies of naturally occurring variation? 
+
+No. 
+
+For one thing, observing a correlation between two variables suggests that there's _something_ interesting going on, something you may want to investigate further. For example, studies have shown a correlation between eating more fresh fruits and vegetables and lower blood pressure. It's possible that the correlation is because people with more money, who can afford fresh fruits and vegetables, have less stressful lives than poor people, and it's the difference in stress that affects blood pressure; it's also possible that people who are concerned about their health eat more fruits and vegetables and exercise more, and it's the exercise that affects blood pressure. But the correlation suggests that eating fruits and vegetables may reduce blood pressure. 
+
+```{r sneer, echo=FALSE}
+question("Should we dismiss correlations without further evidence?",
+         answer("No, because they are an indication that something, known or unknown, may be going on that should be investigated further", correct = TRUE),
+         answer("Yes, because some correlations are not causations"),
+         answer("Yes, because correlation is not causation"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE
+)
+```
+
+You'd want to test the hypothesis about fruit and vegetables reducing blood pressure further by looking for the correlation in samples of people with similar socioeconomic status and levels of exercise; by statistically controlling for possible confounding variables using techniques such as multiple regression; by doing animal studies; or by giving human volunteers controlled diets with different amounts of fruits and vegetables. If your initial correlation study hadn't found an association of blood pressure with fruits and vegetables, you wouldn't have a reason to do these further studies. Correlation may not imply causation, but it tells you that something interesting is going on.
+
+```{r selectallhelpfulthings, echo=FALSE}
+question("Which strategies help to prevent misunderstanding the fruit & veg leading to lower blood pressure hypothesis?",
+         answer("Control for socioeconomic variables", correct = TRUE),
+         answer("Use multiple regression to control statistically for confounders", correct = TRUE),
+         answer("Perform animal studies to see if the original hypothesis holds true with them in a highly controlled environment", correct = TRUE),
+         answer("Perfrom a clinical trial", correct = TRUE),
+         random_answer_order = TRUE,
+         allow_retry = TRUE
+)
+```
+
+In a regression study, you set the values of the independent variable, and you control or randomize all of the possible confounding variables. For example, if you are investigating the relationship between blood pressure and fruit and vegetable consumption, you might think that it's the potassium in the fruits and vegetables that lowers blood pressure. You could investigate this by getting a bunch of volunteers of the same sex, age, and socioeconomic status. You randomly choose the potassium intake for each person, give them the appropriate pills, have them take the pills for a month, then measure their blood pressure. All of the possible confounding variables are either controlled (age, sex, income) or randomized (occupation, psychological stress, exercise, diet), so if you see an association between potassium intake and blood pressure, the only possible cause would be that potassium affects blood pressure. So if you've designed your experiment correctly, regression does imply causation.
+
+```{r what-elements-for-regression, echo=FALSE}
+question("Which of the following elements are part of a good regression design?",
+         answer("control for sex, age, and socioeconomic status", correct = TRUE),
+         answer("randomly choose treatment level for each participant", correct = TRUE),
+         answer("have participants follow a protocol for a given time", correct = TRUE),
+         answer("measure the dependent variable after the treatment protocol is complete", correct = TRUE),
+         random_answer_order = TRUE,
+         allow_retry = TRUE
+)
+```
+
+## Assumptions
+
+Every statistical test relies upon assumptions about the data you give it. Fortunately, there are at least three ways to calculate correlation (Pearson's, Kendall's, and Spearman's) and ways to make a linear regression more robust. Use this list to decide which analysis your data requires:
+
+* For a **Pearson correlation**, two interval (a.k.a. "measurement" a.k.a. "scalar") or ratio (ratio of one value for a binary variable) variables. Together the data in the variables is [bivariate normal](https://www.statisticshowto.datasciencecentral.com/bivariate-normal-distribution/). The relationship between the two variables is linear. Outliers can detrimentally affect results.    
+* For a **Kendall correlation**, two variables of scalar or ordinal type.    
+* For a **Spearman correlation**, two variables of scalar or ordinal type.    
+* For a **linear regression**, two scalar or ratio variables. The relationship between the two variables is linear. Residuals are normal, independent, and homoscedastic.  Outliers can affect the results unless robust methods are used.
+
+```{r good_pearsons, echo=FALSE}
+question("Which of the following need to be true for accurate results from a Pearson correlation? (Please select ALL that apply)",
+         answer("Both varibles must be either scalar or ratio, because ratios are like scalar varibles", correct = TRUE),
+         answer("The two variables, taken together, must be bivariate normal", correct = TRUE),
+         answer("No outliers", correct = TRUE),
+         allow_retry = TRUE,
+         random_answer_order = TRUE
+)
+```
+```{r good_kendall, echo=FALSE}
+question("Which of the following need to be true for accurate results from a Kendall correlation? (Please select ALL that apply)",
+         answer("The variables must be either scalar or ordinal", correct = TRUE),
+         answer("The two variables, taken together, must be bivariate normal"),
+         answer("No outliers"),
+         allow_retry = TRUE,
+         random_answer_order = TRUE
+)
+```
+```{r good_spearman, echo=FALSE}
+question("Which of the following need to be true for accurate results from a Spearman correlation? (Please select ALL that apply)",
+         answer("The variables must be either scalar or ordinal", correct = TRUE),
+         answer("The two variables, taken together, must be bivariate normal"),
+         answer("No outliers"),
+         allow_retry = TRUE,
+         random_answer_order = TRUE
+)
+```
+```{r good_lm, echo=FALSE}
+question("Which of the following need to be true for accurate results in a linear model? (Please select ALL that apply)",
+         answer("The variables must be either scalar or ordinal", correct = TRUE),
+         answer("The relationship between the variables must be linear", correct = TRUE),
+         answer("The bivariate distribution of the variables must be normal", correct = FALSE),
+         answer("The variables must be independent", correct = FALSE),
+         answer("The variables must be homoscedastic", correct = FALSE),
+         answer("The distributions of the residuals must be normal", correct = TRUE),
+         answer("The residuals must be independent", correct = TRUE),
+         answer("The residuals must be homoscedastic", correct = TRUE),
+         answer("Outliers must be treated with robust linear regression methods", correct = TRUE),
+         allow_retry = TRUE,
+         random_answer_order = TRUE
+)
+```
+
+## Independent vs. Dependent Variables
+
+When you test a cause-effect relationship, the variable that causes the relationship is called the _independent variable_ and you plot it on the $\displaystyle X$ axis, while the effect is called the _dependent variable_ and you plot it on the $\displaystyle Y$ axis. In some experiments, you set the independent variable to values that you have chosen; for example, if you're interested in the effect of temperature on the calling rate of frogs, you might put frogs in temperature chambers set to 10°C, 15°C, 20°C, etc. In other cases, both variables exhibit natural variation, but any cause-effect relationship would be in one way; if you measure the air temperature and frog calling rate at a pond on several different nights, both the air temperature and the calling rate would display natural variation, but if there's a cause-effect relationship, it's temperature affecting calling rate; the rate at which frogs call does not affect the air temperature.
+
+```{r xaxis, echo=FALSE}
+question("Which goes on the X axis?",
+         answer("the dependent variable"),
+         answer("an independent variable", correct = TRUE),
+         random_answer_order = TRUE,
+         allow_retry = TRUE
+)
+```
+```{r yaxis, echo=FALSE}
+question("Which goes on the Y axis?",
+         answer("the dependent variable", correct = TRUE),
+         answer("an independent variable"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE
+)
+```
+
+Sometimes it's not clear which is the independent variable and which is the dependent, even if you think there may be a cause-effect relationship. For example, if you are testing whether salt content in food affects blood pressure, you might measure the salt content of people's diets and their blood pressure, and treat salt content as the independent variable. But if you were testing the idea that high blood pressure causes people to crave high-salt foods, you'd make blood pressure the independent variable and salt intake the dependent variable.
+
+Sometimes, you're not looking for a cause-effect relationship at all, you just want to see if two variables are related. For example, if you measure the range of motion of the hip and the shoulder, you're not trying to see whether more flexible hips cause more flexible shoulders, or more flexible shoulders cause more flexible hips; instead, you're just trying to see if people with more flexible hips also tend to have more flexible shoulders, presumably due to some factor (age, diet, exercise, genetics) that affects overall flexibility. In this case, it would be completely arbitrary which variable you put on the $\displaystyle X$ axis and which you put on the $\displaystyle Y$ axis.
+
+Fortunately, the _p_ value and the $\displaystyle r^2$ are not affected by which variable you call $\displaystyle X$ and which you call $\displaystyle Y$; you'll get mathematically identical values either way. The least-squares regression line (more about that later) does depend on which variable is $\displaystyle X$ and which is $\displaystyle Y$; the two lines can be quite different if $\displaystyle r^2$ is low. 
+
+If you're truly interested only in whether two variables _covary_ (i.e., "vary with each other"), and you are not trying to infer a cause-effect relationship, you may want to avoid using the linear regression line as decoration on your graph, as it implies a causative relationship.
+
+Researchers in a few fields traditionally put the independent variable on the $\displaystyle Y$ axis. Oceanographers, for example, often plot depth on the Y axis (with 0 at the top) and a variable that is directly or indirectly affected by depth, such as chlorophyll concentration, on the $\displaystyle X$ axis. I wouldn't recommend this unless it's a really strong tradition in your field, as it could lead to confusion about which variable you're considering the independent variable in a linear regression.
+
+```{r paying-attention, echo=FALSE}
+question("That was a long chunk of text with no review questions. Are you still paying attention?",
+         answer("Yes", correct = TRUE),
+         answer("No", correct = TRUE),
+         random_answer_order = TRUE,
+         allow_retry = TRUE
+)
+```
+
+## Before you Practice Correlation and Regression Analyses
+
+I would love to have been able to plunk a code chunk here for you so you could perform this test without being confused with too many facts. In fact, you can scroll down to "Perform the Analysis" if you want to keep things that simple. And some of the time you'll be fine if you do that. 
+
+However, you have a reputation to protect (as do I), which means you need to make sure that all of this is true:
+
+* you haven't made any faulty assumptions about the data that would render your analysis meaningless    
+* you have established what a meaningful effect size is in the real world    
+* you have sufficient power to find an effect if one exists    
+* once you have run the test, you accurately understand the output
+
+That's why the "Practice" section of this lesson isn't just a few lines of code.
+
+```{r to_skip_or_not_to_skip, echo=FALSE}
+question("What do you want to do?",
+         answer("Skip to 'Perform the Analysis'"),
+         answer("Find out how to do ethical research and set myself up for success", correct = TRUE),
+         random_answer_order = TRUE,
+         allow_retry = TRUE
+)
+```
+
+## First Test the Assumptions
+
+Just when I was dusting off my textbooks to look up which analyses test which assumptions for which other analyses, I came across [this blog post lauding the gvlma package](https://joshualoong.com/2019/09/20/Appreciating-R-The-Ease-of-Testing-Linear-Model-Assumptions/). It is used to test all the assumptions of linear models (among which are correlation and linear regression), providing all the output you need to test whether you should proceed with your data.
+
+Let's try it with the `egg` data. Remember to put `gvlma` in the library. Then pass it `egg_fit`, the model you created earlier. Wrap all of that in a call to `summary`. Then, on the next line, put `plot(gvlma(egg_fit))`.
+
+```{r gvlma_egg,  fig.dim = c(7, 7), exercise = TRUE, exercise.lines = 8}
+
+```
+```{r gvlma_egg-solution}
+summary(gvlma(egg_fit))
+plot(gvlma(egg_fit))
+```
+
+Thinga beauty.
+
+Now do the same using `diverse_fit`.
+
+```{r div_fit_gvlma,  fig.dim = c(7, 7), exercise = TRUE, exercise.lines = 8}
+
+```
+```{r div_fit_gvlma-solution}
+summary(gvlma(diverse_fit))
+plot(gvlma(diverse_fit))
+```
+ 
+```{r which_model_meets_assumptions, echo=FALSE}
+question("Which of the two models passes all necessary assumptions for linear regression?",
+         answer("`egg_fit`"),
+         answer("`diverse_fit`", correct = TRUE),
+         answer("A model airplane"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE
+)
+``` 
+
+If you cranked a whole lot of data through the model expressed in `egg_fit`, you would get inaccurate predictions. You'll also get inaccurate predictions with `diverse_fit`, but not as many. In fact, according to the parameter we have set as acceptable ($\displaystyle p < .05$), the formula $\displaystyle Species = 585 -12*Latitude$ is a "good enough" predictor. As data scientists frequently tell one another (and anyone who will listen),
+
+>All models are wrong. Some models are useful.
+
+## Effect Size: How much of a Difference do we Care About?
+
+In correlation and regression, effect size is represented by $\displaystyle r^2$ (or, in some cases, just plain $\displaystyle r$). Different areas of study will have different standards for meaningful effect sizes. If you are a research psychologist, a correlation of $\displaystyle r = .80$ between variables such as `daily_laughter_frequency` and `job_satisfaction` might be reason for a party; but if you are an engineer and you correlate a drill bit size with the size of the hole it makes, $\displaystyle r = .80$ would cause concern. You, the content expert, must decide what is an interesting result and what is not. 
+
+## Power Analysis
+
+The code for performing power analysis is slightly different for correlation and linear regression. 
+
+### For Correlation
+
+First, put the package `pwr` in the library. Then construct a call to `pwr.r.test`, passing to it every parameter for a power analysis _except_ the one you want to find the value for, which you should set to NULL. In our case, we want to know $\displaystyle n$, so pass that equal to NULL. Set $\displaystyle r$ equal to 0.50 because we want to be able to find all significant instances of at least that number. Our `sig.level` is, as usual, 0.05. `power` is the usual 0.80, and we are interested in the "two.sided" `alternative`. Give it a try. 
+
+```{r pwr-correlation, exercise = TRUE, exercise.lines = 8}
+
+```
+```{r pwr-correlation-solution}
+library(pwr)
+pwr.r.test(n = NULL, 
+           r = 0.500, 
+           sig.level = 0.05, 
+           power = 0.80, 
+           alternative = "two.sided")
+```
+
+The output tells us that we need `r round(my_cor_pwr$n, 2)` samples in each variable to find $\displaystyle r$ of at least 0.50 for a two-sided study in which alpha is .05 and the desired power is .80. 
+
+Find out how many samples you have in the `egg` data set.
+
+```{r how_many_egg, exercise = TRUE, exercise.lines = 8}
+
+```
+```{r how_many_egg-solution}
+nrow(egg)
+```
+
+Close enough. We have sufficient power in `egg` for a correlation. 
+
+### Power analysis for a Linear Regression
+
+In general, what's good enough for a correlation is good enough for a single predictor-outcome variable linear regression. When you have multiple predictors, however, you would use `pwr.f2.test(u =, v = , f2 = , sig.level = , power = )`, where $\displaystyle u$ and $\displaystyle v$ are numerator and denominator degrees of freedom. That whole discussion is a bit more complicated, so we'll save it for the lesson about general linear models. 
+
+## Perform the Analysis
+
+We have already performed various correlation and linear regression analyses throughout this tutorial; these are slightly more complex and generalizable. 
+
+### Correlation
+
+
+
+
+### Linear Regression
+
+Let's perform another linear regression analysis and add an additional step. 
+As before, call `lm` and pass it the formula `Eggs ~ Weight` (which is $\displaystyle Y$ ~ $\displaystyle X$) and the data, `egg`. Save it to the variable `egg_fit`, then pass `egg_fit` to `summary`. 
+
+```{r egg_fit_again, exercise = TRUE, exercise.lines = 8}
+
+```
+```{r egg_fit_again-solution}
+egg_fit <- lm(Eggs ~ Weight, data = egg)
+summary(egg_fit)
+```
+
+Now, to get a little more information, pass the best-fit model (`egg_fit`) to `anova`.
+
+```{r anova-best-fit, exercise = TRUE, exercise.lines = 8}
+
+```
+```{r anova-best-fit-solution}
+anova(egg_fit)
+```
+
+As you can see from the output, we now have a different test statistic, $\displaystyle F$. We can see how many degrees of freedom there were and we have a different $\displaystyle p$ value. If you want to know more about this output, download [Arcus's one-way ANOVA lesson](https://storage.googleapis.com/public-braunsb-media/Arcus-Education-Assets/Lessons/One-Way-ANOVA.Rmd). Then just open it in RStudio and click "Run Document" in the top bar of the tab. Get tea, because as a relatively non-interactive stats lesson, it can put you to sleep. We will fix that as soon as we have the rest of the more interactive stats lessons available for your use. 
+
+### Interpret the Output
+
+In R, everything is an object. Use `str` (short for "structure"---and so many other things, but here all we care about is "structure") to find out what the linear regression best-fit output `egg_fit` looks like to R. Do the same for the correlation output you made earlier, `coregg`. 
+
+```{r object_appearance, exercise = TRUE, exercise.setup = "prepare-height_ttest"}
+
+```
+```{r object_appearance-solution}
+str(egg_fit)
+str(coregg)
+```
+
+That's interesting. What looked like paragraphs of output when we originally ran the functions was actually lists! Let's compare the ouputs of the two functions by passing each object to `names`. 
+
+```{r access_method, exercise = TRUE, exercise.setup = "prepare-height_ttest"}
+
+```
+```{r access_method-solution}
+names(egg_fit)
+names(coregg)
+```
+
+You can use output very nicely in your [reproducible Markdown text](https://education.arcus.chop.edu/scripted-analysis/) by calling it within text while you write a Markdown document. For instance, you might write, "My statistic is " or "My residuals are " and then type a tic-mark ("`", likely your lowercase "~", in the upper left corner of your keyboard, not to be confused with a single quote), then the text "r coregg\$statistic" (or "r egg_fit\$residuals") without quotation marks, and finally, a closing tic-mark. The rendered (knitted) output would be 
+
+>My statistic is `r coregg$statistic`. My residuals are `r egg_fit$residuals`. 
+
+To learn more about the ouptut, let's look at each element and find out what it is. This section is not necessarily something you need to know to run a simple analysis, but these explanations are here if you need them. 
+
+First, give yourself a list of all the put outted (outputted?) objects. Call `names`, and pass it the concatenation of our two outputs, `c(summary(egg_fit), coregg))`.
+
+Also, give yourself a simple way to type `summary(egg_fit)` by assigning it to `sef`.
+
+```{r all-names-together, exercise = TRUE, exercise.lines = 8}
+
+```
+```{r all-names-together-solution}
+names(c(summary(egg_fit), coregg))
+sef <- summary(egg_fit)
+```
+
+### `call`
+
+```{r lm-call, exercise = TRUE, exercise.lines = 8}
+
+```
+```{r lm-call-solution}
+sef$call
+```
+
+This is the original formula you passed to `lm`. 
+
+### `terms`
+
+```{r lm-terms, exercise = TRUE, exercise.lines = 8}
+
+```
+```{r lm-terms-solution}
+sef$terms
+```
+
+This is metadata about the variables you passed to `lm`.
+
+### `residuals`
+
+```{r residuals, exercise = TRUE, exercise.lines = 8}
+
+```
+```{r residuals-solution}
+sef$residuals
+```
+
+These are the residuals that we discussed when we were looking at assumptions. Let's play with them a bit. What's their distribution? We wanted it to be normal. Is it? Type `qqnorm(egg_fit$residuals)` to find out. Then use `qqline` to make a red straight line of `egg_fit$residuals`. 
+
+```{r hist-resids, exercise = TRUE, exercise.lines = 8}
+
+```
+```{r hist-resids-solution}
+qqnorm(sef$residuals)
+qqline(sef$residuals, col = "red")
+```
+
+Create an object called `egg_ass` by testing the assumptions upon which `egg_fit` rests. Test the assumptions by passing `egg_fit` to `gvlma`. Have a look at `egg_ass`.
+
+```{r one-more, exercise = TRUE, exercise.lines = 8}
+
+```
+```{r one-more-solution}
+(egg_ass <- gvlma(egg_fit))
+```
+
+Skewness assumptions NOT satisfied! With an exclamation point! You can see the skewness on the `qqnorm` residuals plot above: It's represented by the dots in the upper right skewing off away from the red line. That's what skewness looks like on that kind of plot. Let's see it in a histogram. Call `hist` and pass it `egg_fit$residuals`.
+
+```{r hist-skewness, exercise = TRUE, exercise.lines = 8}
+
+```
+```{r hist-skewness-solution}
+hist(egg_ass$residuals)
+```
+
+Note the $\displaystyle X$ axis. See how it goes from -5 to 10?  The skewness is to the right. The data looks sort of normal, and it might be if the axis was from -5 to 5.
+
+There is a simple solution to this problem, and I really should put it in a lesson all by itself, but we're here now so here it is: To fix skewness, create a new variable for your independent variable which is the natural log of the original data.
+
+1. Call `log`, pass it `egg$Weight`, and save the result in `egg$ln_Weight`. 
+2. Re-run `lm` using the formula `Eggs ~ ln_Weight` and data `egg`. Save that in `ln_egg_fit`. 
+3. Now check the assumptions again: send `ln_egg_fit` to `gvlma`. 
+
+```{r label, exercise = TRUE, exercise.lines = 8}
+
+```
+```{r label-solution}
+egg$ln_Weight <- log(egg$Weight)
+ln_egg_fit <- lm(Eggs ~ ln_Weight, data = egg)
+gvlma(ln_egg_fit)
+```
+
+```{r logged_ass, echo=FALSE}
+question("Are all assumptions satisfied now?",
+         answer("Yes", correct = TRUE),
+         answer("No"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE
+)
+```
+
+### `coefficients`
+
+We are now using `ln_egg_fit` instead of `egg_fit`. If you don't know why, scroll up a little. Give yourself the gift of a short way to type `summary(ln_egg_fit)` by assigning it to `slef`. We'll be using it a lot. (Are you starting to see why code can quickly become unreadable?)
+
+```{r lm-coeffs, exercise = TRUE, exercise.lines = 8}
+
+```
+```{r lm-coeffs-solution}
+slef <- summary(ln_egg_fit)
+slef$coefficients
+```
+
+```{r coeff-q, echo=FALSE}
+question("What is _b_ in the best fit line formula with ln_Weight as the predictor?",
+         answer("4.63"),
+         answer("9.96", correct = TRUE),
+         answer("9.074"),
+         answer("1.6"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE
+)
+```
+
+### `aliased`
+
+```{r aliased-lm, exercise = TRUE, exercise.lines = 8}
+
+```
+```{r aliased-lm-solution}
+slef$aliased
+```
+
+Neither variable is collinear. 
+
+### `sigma`
+
+```{r sigma-lm, exercise = TRUE, exercise.lines = 8}
+
+```
+```{r sigma-lm-solution}
+slef$sigma
+```
+
+This is the standard deviation of the coefficients, rounded to 1/10th. Test it by adding `round(sd(slef$coefficients[1:2]), 1)`. That is, get the standard deviation of the coefficients and round it to the nearest 1/10th. 
+
+```{r sigma-lm2, exercise = TRUE, exercise.lines = 8}
+
+```
+```{r sigma-lm2-solution}
+round(sd(slef$coefficients[1:2]), 1)
+```
+
+It's close enough to `sigma` to say the differences are due to rounding in the guts of the calculations. 
+
+### `df`
+
+This will be degrees of freedom. 
+
+```{r df-lm, exercise = TRUE, exercise.lines = 8}
+
+```
+```{r df-lm-solution}
+slef$df
+```
+
+## Graph Results
+
+As previously noted, plot easily using plain old `plot` and giving it your data set (if you have only a few variables) to see what it makes of it. Try this now with `diversity`. 
+
+```{r t, exercise = TRUE, exercise.lines = 8}
+
+```
+```{r t-solution}
+plot(diversity)
+```
+
+That is a great way to start looking at a data set. You can look at each plot and decide whether any of the images make you think there might be correlations between the two variables involved. For instance, on the bottom row, second from the right, is an interesting image that may or may not show a correlation. This initial plot helps you decide how to proceed. 
+
+## How do Correlation and Regression Work?
+
+```{r, out.width = "400px", echo = FALSE}
+knitr::include_graphics("https://storage.googleapis.com/public-braunsb-media/Arcus-Education-Assets/Lessons/images/best-fit-line.png")
+```
+
+Linear regression finds the line that best fits the data points. There are actually a number of different definitions of "best fit," and therefore a number of different methods of linear regression that fit somewhat different lines. By far the most common is "ordinary least-squares regression"; when someone just says "least-squares regression" or "linear regression" or "regression," they mean ordinary least-squares regression.
+
+```{r othernames, echo=FALSE}
+question("Which are alternate ways of saying you will find the 'best fit line'?",
+         answer("ordinary least squares regression", correct = TRUE),
+         answer("least-squares regression", correct = TRUE),
+         answer("linear regression", correct = TRUE),
+         answer("multiple regression"),
+         answer("regression", correct = TRUE),
+         random_answer_order = TRUE,
+         allow_retry = TRUE
+)
+```
+
+In ordinary least-squares regression, the "best" fit is defined as the line that minimizes the squared vertical distances between the data points and the line. For a data point with an $\displaystyle X$ value of $\displaystyle X_1$ and a $\displaystyle Y$ value of $\displaystyle Y_1$, the difference between $\displaystyle Y$ and $\displaystyle \hat{Y}_1$ (the predicted value of $\displaystyle Y$ at $\displaystyle X_1$) is calculated, then squared. This squared deviate is calculated for each data point, and the sum of these squared deviates measures how well a line fits the data. The regression line is the one for which this sum of squared deviates is smallest. We'll leave out the math that is used to find the slope and intercept of the best-fit line; you have more important things to think about.
+
+```{r best-fit-line-definition, echo=FALSE}
+question("What is the definition of a best fit line?",
+         answer("The line of your silhouette when your clothes are perfect"),
+         answer("The line that minimizes the squared vertical distances between the data points and the line", correct = TRUE),
+         answer("The line that maximizes the squared horizontal distance between the data points and the line"),
+         answer("A line with an intercept"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE
+)
+```
+
+The equation for the regression line is usually expressed as 
+
+>$\displaystyle \hat{Y} = a + \beta X$
+
+where a is the Y intercept and b is the slope. Once you know a and b, you can use this equation to predict the value of Y for a given value of X. For example, the equation for the heart rate-speed experiment is rate=63.357+3.749×speed. I could use this to predict that for a speed of 10 kph, my heart rate would be 100.8 bpm. You should do this kind of prediction within the range of X values found in the original data set (interpolation). Predicting Y values outside the range of observed values (extrapolation) is sometimes interesting, but it can easily yield ridiculous results if you go far outside the observed range of X. In the frog example below, you could mathematically predict that the inter-call interval would be about 16 seconds at −40°C. Actually, the inter-calling interval would be infinity at that temperature, because all the frogs would be frozen solid.
+
+Sometimes you want to predict X from Y. The most common use of this is constructing a standard curve. For example, you might weigh some dry protein and dissolve it in water to make solutions containing 0, 100, 200 … 1000 µg protein per ml, add some reagents that turn color in the presence of protein, then measure the light absorbance of each solution using a spectrophotometer. Then when you have a solution with an unknown concentration of protein, you add the reagents, measure the light absorbance, and estimate the concentration of protein in the solution.
+
+There are two common methods to estimate X from Y. One way is to do the usual regression with X as the independent variable and Y as the dependent variable; for the protein example, you'd have protein as the independent variable and absorbance as the dependent variable. You get the usual equation, Ŷ=a+bX, then rearrange it to solve for X, giving you X̂=(Y−a)/b. This is called "classical estimation."
+
+The other method is to do linear regression with Y as the independent variable and X as the dependent variable, also known as regressing X on Y. For the protein standard curve, you would do a regression with absorbance as the X variable and protein concentration as the Y variable. You then use this regression equation to predict unknown values of X from Y. This is known as "inverse estimation."
+
+Several simulation studies have suggested that inverse estimation gives a more accurate estimate of X than classical estimation (Krutchkoff 1967, Krutchkoff 1969, Lwin and Maritz 1982, Kannan et al. 2007), so that is what I recommend. However, some statisticians prefer classical estimation (Sokal and Rohlf 1995, pp. 491-493). If the r2 is high (the points are close to the regression line), the difference between classical estimation and inverse estimation is pretty small. When you're construction a standard curve for something like protein concentration, the r2 is usually so high that the difference between classical and inverse estimation will be trivial. But the two methods can give quite different estimates of X when the original points were scattered around the regression line. For the exercise and pulse data, with an r2 of 0.98, classical estimation predicts that to get a pulse of 100 bpm, I should run at 9.8 kph, while inverse estimation predicts a speed of 9.7 kph. 
+
+The amphipod data has a much lower r2 of 0.25, so the difference between the two techniques is bigger; if I want to know what size amphipod would have 30 eggs, classical estimation predicts a size of 10.8 mg, while inverse estimation predicts a size of 7.5 mg.
+Sometimes your goal in drawing a regression line is not predicting Y from X, or predicting X from Y, but instead describing the relationship between two variables. If one variable is the independent variable and the other is the dependent variable, you should use the least-squares regression line. However, if there is no cause-and-effect relationship between the two variables, the least-squares regression line is inappropriate. This is because you will get two different lines, depending on which variable you pick to be the independent variable. For example, if you want to describe the relationship between thumb length and big toe length, you would get one line if you made thumb length the independent variable, and a different line if you made big-toe length the independent variable. The choice would be completely arbitrary, as there is no reason to think that thumb length causes variation in big-toe length, or vice versa.
+
+A number of different lines have been proposed to describe the relationship between two variables with a symmetrical relationship (where neither is the independent variable). The most common method is reduced major axis regression (also known as standard major axis regression or geometric mean regression). It gives a line that is intermediate in slope between the least-squares regression line of Y on X and the least-squares regression line of X on Y; in fact, the slope of the reduced major axis line is the geometric mean of the two least-squares regression lines.
+
+While reduced major axis regression gives a line that is in some ways a better description of the symmetrical relationship between two variables (McArdle 2003, Smith 2009), you should keep two things in mind. One is that you shouldn't use the reduced major axis line for predicting values of X from Y, or Y from X; you should still use least-squares regression for prediction. The other thing to know is that you cannot test the null hypothesis that the slope of the reduced major axis line is zero, because it is mathematically impossible to have a reduced major axis slope that is exactly zero. Even if your graph shows a reduced major axis line, your P value is the test of the null that the least-square regression line has a slope of zero.
+
+Here are explanations and formulae that explain certain concepts upon which we touched briefly in the "how-to" explanation and practice above.
+
+### Bivariate Normal Distribution
+
+Not all statisticians agree on a definition for the bivariate normal distribution. Here are some aspects upon which most agree, taken from [Statistics How To](https://www.statisticshowto.datasciencecentral.com/bivariate-normal-distribution/):
+
+* Random variables $\displaystyle X$ & $\displaystyle Y$ are bivariate normal if $\displaystyle aX + bY$ has a normal distribution for all $\displaystyle a, b \in R$ (e.g., where $\displaystyle a$ $\displaystyle b$ are within the set of real numbers.
+* From [Bertsikas and TsiTsikles (2002)](https://vfu.bg/en/e-Learning/Math--Bertsekas_Tsitsiklis_Introduction_to_probability.pdf), we say that two random variables X and Y have a bivariate normal distribution if there are two independent normal random variables $\displaystyle U$ and $\displaystyle V$ and some scalars $\displaystyle a, b, c, d,$, such that $\displaystyle X = aU + bV, Y = cU+dV$.    
+* If $\displaystyle a$ and $\displaystyle b$ are non-zero constants, $\displaystyle aX + bY$ has a normal distribution (Johnson & Kotz, 1972).
+* If $\displaystyle X – aY$ and $\displaystyle Y$ are independent and if $\displaystyle Y – bx$ and $\displaystyle X$ are independent for all $\displaystyle a,b$ (such that $\displaystyle ab ≠ 0$ or $\displaystyle 1$), then $\displaystyle (X,Y)$ has a normal distribution (Rao, 1975).
+
+Here is a sandbox where you can test these assertions. Create samples (bivariate normal or not) and see if the assertions hold true (or false) where they should. Here and in any sandboxes in our system, there is no right answer. Play. 
+
+```{r sandbox, exercise = TRUE, exercise.lines = 8}
+
+
+
+
+```
+
+## References
+
+This lesson is heavily based with thanks on the works of John H. McDonald ([Handbook of Biological Statistics](http://www.biostathandbook.com/chigof.html)) and Salvatore S. Mangiafico ([R Companion to the Biostats Handbook](https://rcompanion.org/rcompanion/b_03.html)).

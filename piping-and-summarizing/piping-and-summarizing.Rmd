@@ -1,0 +1,87 @@
+---
+title: "A Simple Aggregation Exercise: Piping and Summarizing"
+output: learnr::tutorial
+runtime: shiny_prerendered
+---
+
+```{r setup, include=FALSE}
+options(digits = 3, scipen = 9999)
+if(!require(learnr)){install.packages("learnr")}
+library(learnr)
+this_Input =("
+Group Value
+2pm    69    
+2pm    70    
+2pm    66    
+2pm    63    
+2pm    68    
+2pm    70    
+2pm    69    
+2pm    67    
+2pm    62    
+2pm    63    
+2pm    76    
+2pm    59    
+2pm    62    
+2pm    62    
+2pm    75    
+2pm    62    
+2pm    72     
+2pm    63    
+5pm    68
+5pm    62
+5pm    67
+5pm    68
+5pm    69
+5pm    67
+5pm    61
+5pm    59
+5pm    62
+5pm    61
+5pm    69
+5pm    66
+5pm    62
+5pm    62
+5pm    61
+5pm    70
+")
+ht = read.table(textConnection(this_Input),header=TRUE)
+names(ht) <- c("section", "inches")
+tt_height <- t.test(inches ~ section, 
+                    data =ht,
+                    var.equal = TRUE,
+                    conf.level = 0.95)
+p_height <- round(tt_height$p.value, 2)
+```
+
+Let's pipe and summarize using simple example data. It's already loaded for you: a dataset with two variables, `section` and `inches`, that contains the heights of undergraduates in two of John McDonald's Biostatics sections, the 2 pm one and the 5 pm one.  
+
+First, find out what the means are for the two groups. We'll group the data and summarize it. Make sure you have `dplyr` in the library. It's a very good data manipulation package. Also put `magrittr` in the library so we can use `%>%` for piping ([What's piping?](https://www.datacamp.com/community/tutorials/pipe-r-tutorial) Unless you're in interested in the history of R, control- or command-f the phrase "Why use it?" and start reading from there).
+
+Group the data by `section` using `group_by`. Let's also using the `magrittr` package's piping (`%>%`) for the commands so we can stack them on each other one by one. 
+
+We will derive a new dataset from `ht` called `by_section`. Assign to it `ht`, then add  `%>%` to pipe `ht` to a few commands. The first one is `dplyr::group_by` (we're specifying the package `dplyr` to call `group_by` to avoid confusion in case we have any other packages loaded with similar commands that do different things. This is good coding practice and I don't do it enough). Since `ht` is at the start of the pipeline, you don't have to tell `group_by` which data you're using. Just pass it the grouping variable, here `section`. Thats the end of that command. Add also a command to have a look at `by_section`, using whatever method you like (just type the name `by_section` or use `head`).
+
+```{r group_by, exercise = TRUE}
+
+
+
+```
+```{r group_by-solution}
+library(dplyr)
+library(magrittr)
+class(ht$inches)
+by_section <- ht %>% 
+   dplyr::group_by(section) %>%
+   dplyr::summarise(
+      ht_sd = sd(inches),
+      ht_mean = mean(inches),
+      ht_n = n()
+   )
+by_section
+```
+
+Now revise the code above, adding a `%>%` on the same line, after the `group_by` command. On the next line, call `dplyr::summarise`, passing it a three arguments: `ht_sd = sd(inches)` to get the standard deviation of `inches`, `ht_mean = mean(inches)` to get the mean of `inches`, and `ht_n = n()` to get the count in each section. Execute the code chunk, not deleting whatever method you used to look at `by_section` as a separate command (i.e., don't pipe to it). 
+
+You've just aggregated data using the `dplyr` and `magrittr` packages. Well done!
+
