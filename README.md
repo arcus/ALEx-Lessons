@@ -47,6 +47,12 @@ If you have created a lesson that you would like to make available to instructor
 7. Send an email to Ian Campbell telling him that you have added a lesson. 
 8. When you hear back from Ian that the lesson has been added to the lesson plan generator, you will see it in the list of lessons the next time you create a web site for someone's use. :)
 
+NOTES
+
+* I found out the hard way that adding any other detritus (files, etc.) to the root directory "Lessons" results in the learning plan generator breaking.     
+* If your lesson has supporting data, just plunk it into the folder that contains the lesson and use the name of the file alone as pathname from within your lesson document. 
+* If what your lesson links to calls supporting data, you may keep that data whereever you like, provided that it is a public link that any leaner-instructor may access even if they don't have CHOP credentials. 
+
 Thank you for adding to the list of lessons we can offer learner-instructors!
 
 
