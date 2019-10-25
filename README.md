@@ -34,6 +34,22 @@ These are our requirements for a lesson:
 
 Our editors will check your lesson and add it to the list of options available to learners if we believe it is in line with our mission to educate learners at CHOP. 
 
+## For our Instructors: How to Add a Lesson
+
+If you have created a lesson that you would like to make available to instructors as they create curricula for individuals or for groups, please follow these steps:
+
+1. Fork this repo
+2. Create a folder with the lesson name and hyphens instead of spaces and no uppercase letters. In the past folders had uppercase letters, but we are changing to all lowercase so there is never any doubt about case in folder names. 
+3. Put your lesson in the folder. Your lessons should be in .md or .Rmd format, and may contain only a link to your lesson if you don't want to work in .Rmd or .md format. 
+4. Add your lesson to the bottom of the ModuleTable.csv file. 
+5. Push your forked version of the repo to GitHub.
+6. Open a Pull request. If you have rights in this repo, go ahead and accept the pull request. If not, we'll respond as quickly as we can. 
+7. Send an email to Ian Campbell telling him that you have added a lesson. 
+8. When you hear back from Ian that the lesson has been added to the lesson plan generator, you will see it in the list of lessons the next time you create a web site for someone's use. :)
+
+Thank you for adding to the list of lessons we can offer learner-instructors!
+
+
 ### Note about this Repo's History
 
 Related to the repo inside CHOP's enterprise GitHub. 
