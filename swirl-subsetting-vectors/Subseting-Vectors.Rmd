@@ -14,6 +14,7 @@ y <- x[!is.na(x)]
 vect <- c(foo = 11, bar = 2, norf = NA)
 vect2 <- c(11, 2, NA)
 ```
+
 TIP: If you can't figure out what to type, click on the "Hints" or "Solution" buttons at the top of a code input chunk.    
 OTHER TIP: If you have a red "x" next to your code and you submit it anyway, the lesson might freeeze. If that happens to you, use your browser to reload it and try again. 
 
