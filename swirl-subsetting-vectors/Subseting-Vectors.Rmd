@@ -11,7 +11,11 @@ knitr::opts_chunk$set(echo = FALSE)
 set.seed(11)
 x <- sample(c(rnorm(20),rep(NA,20)),replace = FALSE)
 y <- x[!is.na(x)]
+vect <- c(foo = 11, bar = 2, norf = NA)
+vect2 <- c(11, 2, NA)
 ```
+TIP: If you can't figure out what to type, click on the "Hints" or "Solution" buttons at the top of a code input chunk.    
+OTHER TIP: If you have a red "x" next to your code and you submit it anyway, the lesson might freeeze. If that happens to you, use your browser to reload it and try again. 
 
 # Subsetting Vectors
 
@@ -61,7 +65,7 @@ question("What do you think `x[is.na(x)]` will give you?",
 )
 ```
 
-Prove it to yourself by typing x[is.na(x)].
+Prove it to yourself by typing `x[is.na(x)]`.
 
 ```{r d, exercise = TRUE, exercise.lines = 5}
 
@@ -72,16 +76,23 @@ x[is.na(x)]
 
 Recall that `!` gives us the negation of a logical expression, so `!is.na(x)` can be read as ‘is not `NA`’. Therefore, if we want to create a vector called `y` that contains all of the non-`NA` values from `x`, we can use `y <- x[!is.na(x)]`. Give it a try.
 
-```{r e, exercise = TRUE, exercise.lines = 8}
+```{r e, exercise = TRUE, exercise.lines = 5}
 
 ```
 ```{r e-solution}
-y <- x[!is.na(x)]
+(y <- x[!is.na(x)])
+```
+```{r e-hint}
+#' You shouldn't see anything happen because the result
+#' is being stored in a variable rather than being
+#' printed to the screen. If you want it to do both,
+#' place parentheses around the entire statement 
+#' as I did in the next (and final) hint.
 ```
 
 Print y to the console.
 
-```{r f, exercise = TRUE, exercise.lines = 8}
+```{r f, exercise = TRUE, exercise.lines = 5}
 
 ```
 ```{r f-solution}
@@ -104,9 +115,9 @@ question("What do you think `y[y > 0]` will give you?",
 )
 ```
 
-Type `y[y > 0]` to see that we get all of the positive elements of `y`, which are also the positive elements of our original vector `x`.
+Type `y[y > 0]` to see that we get all of the positive elements of `y`, which are also the positive elements of our original vector `x`. You would say this code, "All why where why is greater than zero."
 
-```{r h, exercise = TRUE, exercise.lines = 8}
+```{r h, exercise = TRUE, exercise.lines = 5}
 
 ```
 ```{r h-solution}
@@ -115,7 +126,7 @@ y[y > 0]
 
 You might wonder why we didn’t just start with `x[x > 0]` to isolate the positive elements of `x`. Try that now to see why.
 
-```{r i, exercise = TRUE, exercise.lines = 8}
+```{r i, exercise = TRUE, exercise.lines = 5}
 
 ```
 ```{r i-solution}
@@ -126,14 +137,16 @@ Since `NA` is not a value, but rather a placeholder for an unknown quantity, the
 
 Combining our knowledge of logical operators with our new knowledge of subsetting, we could do this – `x[!is.na(x) & x > 0]`. Try it out.
 
-```{r j, exercise = TRUE, exercise.lines = 8}
+```{r j, exercise = TRUE, exercise.lines = 5}
 
 ```
 ```{r j-solution}
 x[!is.na(x) & x > 0]
 ```
 
-In this case, we request only values of `x` that are both non-missing AND greater than zero.
+You would say that code, "Ex where ex is not missing and where ex is greater than zero."
+
+We request only values of `x` that are both non-missing AND greater than zero.
 
 I’ve already shown you how to subset just the first ten values of `x` using `x[1:10]`. In this case, we’re providing a vector of positive integers inside of the square brackets, which tells R to return only the elements of `x` numbered 1 through 10.
 
@@ -141,7 +154,7 @@ Many programming languages use what’s called ‘zero-based indexing’, which 
 
 Can you figure out how we’d subset the 3rd, 5th, and 7th elements of `x`? Hint – Use the `c()` function to specify the element numbers as a numeric vector.
 
-```{r k, exercise = TRUE, exercise.lines = 8}
+```{r k, exercise = TRUE, exercise.lines = 5}
 
 ```
 ```{r k-solution}
@@ -150,7 +163,7 @@ x[c(3, 5, 7)]
 
 It’s important that when using integer vectors to subset our vector `x`, we stick with the set of indexes {1, 2, …, 40} since `x` has only 40 elements. What happens if we ask for the zeroth element of `x` (i.e. `x[0]`)? Give it a try.
 
-```{r l, exercise = TRUE, exercise.lines = 8}
+```{r l, exercise = TRUE, exercise.lines = 5}
 
 ```
 ```{r l-solution}
@@ -159,7 +172,7 @@ x[0]
 
 As you might expect, we get nothing useful. Unfortunately, R doesn’t prevent us from doing this. What if we ask for the 3000th element of `x`? Try it out.
 
-```{r m, exercise = TRUE, exercise.lines = 8}
+```{r m, exercise = TRUE, exercise.lines = 5}
 
 ```
 ```{r m-solution}
@@ -172,7 +185,7 @@ What if we’re interested in all elements of `x` EXCEPT the 2nd and 10th? It wo
 
 Luckily, R accepts negative integer indexes. Whereas `x[c(2, 10)]` gives us ONLY the 2nd and 10th elements of `x`, `x[c(-2, -10)]` gives us all elements of `x` EXCEPT for the 2nd and 10 elements. Try `x[c(-2, -10)]` now to see this.
 
-```{r n, exercise = TRUE, exercise.lines = 8}
+```{r n, exercise = TRUE, exercise.lines = 5}
 
 ```
 ```{r n-solution}
@@ -181,7 +194,7 @@ x[c(-2, -10)]
 
 A shorthand way of specifying multiple negative numbers is to put the negative sign out in front of the vector of positive numbers. Type `x[-c(2, 10)]` to get the exact same result.
 
-```{r o, exercise = TRUE, exercise.lines = 8}
+```{r o, exercise = TRUE, exercise.lines = 5}
 
 ```
 ```{r o-solution}
@@ -192,43 +205,111 @@ So far, we’ve covered three types of index vectors – logical, positive integ
 
 Create a numeric vector with three named elements using `vect <- c(foo = 11, bar = 2, norf = NA)`.
 
-vect <- c(foo = 11, bar = 2, norf = NA)
-When we print vect to the console, you’ll see that each element has a name. Try it out.
+```{r p, exercise = TRUE, exercise.lines = 5}
 
+```
+```{r p-solution}
+(vect <- c(foo = 11, bar = 2, norf = NA))
+```
+```{r p-hint}
+#' You shouldn't see anything happen because the result
+#' is being stored in a variable rather than being
+#' printed to the screen. If you want it to do both,
+#' place parentheses around the entire statement 
+#' as I did in the next (and final) hint.
+```
+
+When we print `vect` to the console, you’ll see that each element has a name. Try it out.
+
+```{r q, exercise = TRUE, exercise.lines = 5}
+
+```
+```{r q-solution}
 vect
-##  foo  bar norf 
-##   11    2   NA
-We can also get the names of vect by passing vect as an argument to the names() function. Give that a try.
+```
+vect
 
+We can also get the names of `vect` by passing `vect` as an argument to the `names` function. Give that a try.
+
+```{r r, exercise = TRUE, exercise.lines = 5}
+
+```
+```{r r-solution}
 names(vect)
-## [1] "foo"  "bar"  "norf"
-Alternatively, we can create an unnamed vector vect2 with c(11, 2, NA). Do that now.
+```
 
-vect2 <- c(11, 2, NA)
-Then, we can add the names attribute to vect2 after the fact with names(vect2) <- c(“foo”, “bar”, “norf”). Go ahead.
+Alternatively, we can create an unnamed vector `vect2` with `c(11, 2, NA)`. Do that now.
 
+```{r s, exercise = TRUE, exercise.lines = 5}
+
+```
+```{r s-solution}
+(vect2 <- c(11, 2, NA))
+```
+```{r s-hint}
+#' You shouldn't see anything happen because the result
+#' is being stored in a variable rather than being
+#' printed to the screen. If you want it to do both,
+#' place parentheses around the entire statement 
+#' as I did in the next (and final) hint.
+```
+
+Then, we can add the `names` attribute to `vect2` after the fact with `names(vect2) <- c(“foo”, “bar”, “norf”)`. Go ahead.
+
+```{r t, exercise = TRUE, exercise.lines = 5}
+
+```
+```{r t-solution}
 names(vect2) <- c("foo", "bar", "norf")
-Now, let’s check that vect and vect2 are the same by passing them as arguments to the identical() function.
+```
 
+Now, let’s check that `vect` and `vect2` are the same by passing them as arguments to the `identical` function.
+
+```{r u, exercise = TRUE, exercise.lines = 5}
+
+```
+```{r u-solution}
 identical(vect, vect2)
-## [1] TRUE
-Indeed, vect and vect2 are identical named vectors.
+```
 
-Now, back to the matter of subsetting a vector by named elements. Which of the following commands do you think would give us the second element of vect?
 
-vect[“bar”]
-vect[bar]
-vect[“2”]
-vect[“bar”]
+Indeed, `vect` and `vect2` are identical named vectors.
+
+Now, back to the matter of subsetting a vector by named elements. 
+
+```{r v, echo=FALSE}
+question("Which of the following commands do you think would give us the second element of `vect`?",
+         answer('vect["bar"]', correct = TRUE,
+                message = "Good job!"),
+         answer("vect[bar]",
+                message = "You'll get `Error: object 'bar' not found` if you try that."),
+         answer("vect[“2”]",
+                message = "R doesn't get along nicely with auto-formatted quotation marks."),
+         answer("vect[“bar”]", 
+                message = "R doesn't get along nicely with auto-formatted quotation marks."),
+         random_answer_order = TRUE,
+         allow_retry = TRUE
+)
+```
 
 Now, try it out.
 
-vect["bar"]
-## bar 
-##   2
-Likewise, we can specify a vector of names with vect[c(“foo”, “bar”)]. Try it out.
+```{r w, exercise = TRUE, exercise.lines = 5}
 
+```
+```{r w-solution}
+vect["bar"]
+```
+
+Likewise, we can specify a vector of names with `vect[c(“foo”, “bar”)]`. Try it out.
+
+```{r x, exercise = TRUE, exercise.lines = 5}
+
+```
+```{r x-solution}
 vect[c("foo", "bar")]
-## foo bar 
-##  11   2
-Now you know all four methods of subsetting data from vectors. Different approaches are best in different scenarios and when in doubt, try it out!
+```
+
+Now you know all four methods of subsetting data from vectors. 
+
+>Different approaches are best in different scenarios. When in doubt, try it out!
