@@ -628,7 +628,7 @@ Every statistical test relies upon assumptions about the data you give it. Fortu
 
 ```{r good_pearsons, echo=FALSE}
 question("Which of the following need to be true for accurate results from a Pearson correlation? (Please select ALL that apply)",
-         answer("Both varibles must be either scalar or ratio, because ratios are like scalar varibles", correct = TRUE),
+         answer("Both variables must be either scalar or ratio, because ratios are like scalar variables", correct = TRUE),
          answer("The two variables, taken together, must be bivariate normal", correct = TRUE),
          answer("No outliers", correct = TRUE),
          allow_retry = TRUE,
