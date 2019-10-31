@@ -36,17 +36,7 @@ Our editors will check your lesson and add it to the list of options available t
 
 ## For Arcus Education Instructors: How to Add a Lesson
 
-If you have created a lesson that you would like to make available to instructors as they create curricula for individuals or for groups, please follow these steps:
-
-1. Fork this repo.
-2. In your local Lessons environment, create a folder under "Lessons" called the lesson name with hyphens instead of spaces and *no uppercase letters*. Our system is case sensitive for folder names.
-3. Put your lesson in the folder. Your lessons should be in .md or .Rmd format. If your actual lesson is in another format (for instance, if it is a Python notebook), please place a .md or .Rmd file in the folder that contains a link to your otherwise-formatted lesson. 
-4. Add your lesson's information to the bottom of the ModuleTable.csv file. Choose a unique unit number and lesson name, then place the folder name in the next column formatted like this: /my-folder-name/
-5. Save the module table file as a csv (don't change it to an xlsx file)
-5. Push your forked version of the repo to GitHub.
-6. Open a Pull request. If you have rights in the main Lessons repo, go ahead and accept the pull request. If you don't have rights, we'll respond as quickly as we can.
-7. Send an email to Ian Campbell at campbellim@email.chop.edu telling him that you added a lesson. 
-8. Ian will notify you when you can see your new lesson in the list of lessons available for curriculum web sites. :)
+Ian Campbell has provided [documentation in a wiki](https://github.com/ianmcampbell/Arcus-Modular-Education-Support-System/wiki). Check it out!
 
 NOTES
 
