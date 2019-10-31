@@ -5,8 +5,11 @@ runtime: shiny_prerendered
 ---
 
 ```{r setup, include=FALSE}
+options(digits = 3, scipen = 9999)
 library(learnr)
 library(scales)
+library(psych)
+library(spatstat.utils)
 #' Assign some global variables 
 prevalence <- 1 / 2500
 sensitivity <- .962
@@ -19,7 +22,7 @@ all_pos <- true_pos + false_pos
 conditional_probability <- (sensitivity * prevalence) / all_pos
 ```
 
-
+## Rationale and Setup
 
 The following example shows why a Bayesian approach to probability might be interesting to a medical researcher.
 
@@ -31,13 +34,13 @@ First, set up some variables.
 
 ### Prevalence
 
-We know that 1 out of every 2500 live births involves a baby with cystic fibrosis. That's prevalence. Assign 1/2500 to the variable `prevalence`.
+We know that 1 out of every 2500 live births involves a baby with cystic fibrosis. That's prevalence. Assign 1/2500 to the variable `prevalence`. You won't see any output unless you surround the statement with `()`. 
 
 ```{r a, exercise=TRUE}
 
 ```
 ```{r a-solution}
-prevalence <- 1 / 2500
+(prevalence <- 1 / 2500)
 ```
 
 ### Specificity
@@ -86,7 +89,7 @@ Why does prevalence matter? Let's break it down.
 
 ### Bayes's Theorem
 
-There is a famous formula for answering our main question, the likelihood of having cystic fibrosis (or any disease) given elevated IRT (or any positive result to a screening test for a disease) called the Bayes's Theorem.
+There is a famous formula for answering our main question, the likelihood of having cystic fibrosis (or any disease) given elevated IRT (or any positive result to a screening test for a disease) called "Bayes's Theorem."
 
 In sentence form, 
 
@@ -102,7 +105,7 @@ The vertical lines in this formula mean "given." When you read the formula, ther
 
 The probability of `A` given `B` is the `sensitivity` of the test. The probability of `A` is the `prevalence`. The probability of `B` is the probability of getting a positive test result---regardless of whether or not one has the disease.
 
-Let's map these variables to the concepts we have been discussion. 
+Let's map these variables to the concepts we have been discussing. 
 
 ```{r f, echo=FALSE}
 question("What is P(A)",
@@ -156,6 +159,8 @@ In order to calculate the false positive rate, we're going to need a variable fo
 ```{r k-solution}
 (cf_neg <- 1 - prevalence)
 ```
+
+R's rounding makes it seem like a complete certainty, but it's not. Let's keep going. 
 
 We know that specificity is the rate at which the test correctly identifies those without the disease. So what is `1 - specificity`? Is that the false positive rate? 
 
@@ -211,9 +216,9 @@ Now we have all the values we need to fill out Bayes's Theorem and get our answe
 
 We can now plug in all the elements of Bayes's Theorem and get the answer to our question.
 
-* We have mapped P(B|A), the probability of testing positive given that the disease is present, to the variable sensitivity.    
-* We have mapped P(A), the probability of having cystic fibrosis, to the variable prevalence.    
-* We have mapped P(B), the odds of testing positive whether or not the disease is present, to all_pos.    
+* We have mapped P(B|A), the probability of testing positive given that the disease is present, to the variable `sensitivity`.    
+* We have mapped P(A), the probability of having cystic fibrosis, to the variable `prevalence`.    
+* We have mapped P(B), the odds of testing positive whether or not the disease is present, to `all_pos`.    
 
 >Remember that Bayes's Theorem is P(A|B) = (P(B|A) * P(A)) / P(B).
 

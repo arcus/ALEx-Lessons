@@ -154,7 +154,7 @@ chisq.test(x = observed,
 
 European crossbills (_Loxia curvirostra_) have the tip of the upper bill either right or left of the lower bill. Their crossed bills help them extract seeds from pine cones. Some researchers have hypothesized that frequency-dependent selection would keep the number of right and left-billed birds at a 1:1 ratio. Groth (1992) observed 1752 right-billed and 1895 left-billed crossbills.
 
-Calculate the expected frequency of right-billed birds by multiplying the total sample size (3647) by the expected proportion (0.5) to yield 1823.5. Do the same for left-billed birds. The number of degrees of freedom when an for an extrinsic hypothesis is the number of classes minus one. In this case, there are two classes (right and left), so there is one degree of freedom.
+Calculate the expected frequency of right-billed birds by multiplying the total sample size (3647) by the expected proportion (0.5) to yield 1823.5. Do the same for left-billed birds. The number of degrees of freedom for an extrinsic hypothesis is the number of classes minus one. In this case, there are two classes (right and left), so there is one degree of freedom.
 
 ```{r red-cross-bills, exercise = TRUE}
 
@@ -164,7 +164,8 @@ Calculate the expected frequency of right-billed birds by multiplying the total 
 #' You can do this many ways. Here is one wordier example that arrives at the 
 #' correct output. Sometimes you might want to make your code more wordy
 #' if you have few concerns about memory or about computation time and if 
-#' it is very important that the code be readable.
+#' it is very important that the code be readable. Err on the side of 
+#' readability when you can. 
 
 # Set up values
 obs_right <- 1752 #right-crossed

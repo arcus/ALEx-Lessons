@@ -214,8 +214,8 @@ question("Select any questions that can be answered using correlation or linear 
 
 ## Null and Alternative Hypotheses
 
->* **H<sub>0</sub>**: The slope of the best fit line is equal to zero; in other words, as the _X_ variable gets higher, the associated _Y_ variable gets neither higher nor lower.      
-* **H<sub>A</sub>**: The slop of the best fit line is not equal to zero; in other words, as the _X_ variable gets higher, the associated _Y_ variable changes by getting larger (showing a positive relationship) or smaller (showing a negative relationship.    
+>* **H<sub>0</sub>**: "The slope of the best fit line is equal to zero; in other words, as the _X_ variable gets higher, the associated _Y_ variable gets neither higher nor lower."      
+* **H<sub>A</sub>**: "The slope of the best fit line is not equal to zero; in other words, as the _X_ variable gets higher, the associated _Y_ variable changes by getting larger (showing a positive relationship) or smaller (showing a negative relationship)."    
 * **H<sub>A</sub>** (1-sided): "The slope of the best fit line is a positive number."        
 * **H<sub>A</sub>** (1-sided): "The slope of the best fit line is a negative number."
 
@@ -308,7 +308,7 @@ Does the number of species vary with latitude? You would use a hypothesis test t
 ?cor.test
 ```
 
-Using the instructions in the help, perform a correlation analysis between the number of `Species` and `Latitude` using `~` to create a formula including the two variables (it's a bit of an odd constuction for a formula, so I'll give it to you: `~ Species + Latitude`. Set the parameter `data` equal to `diversity`, of coures, then choose a method. There are a number of different methods for performing a correlation analysis, the most common of which is "pearson". Use that. then ask for a confidence level of 0.95. If you don't know how to set that, look at the help under `conf.level`. Lastly, assign the output to the variable `cor` and put parentheses around the entire call so you can see the output and store it in a variable at the same time. 
+Using the instructions in the help, perform a correlation analysis between the number of `Species` and `Latitude` using `~` to create a formula including the two variables (it's a bit of an odd constuction for a formula, so I'll give it to you: `~ Species + Latitude`). Set the parameter `data` equal to `diversity`, of course, then choose a method. There are a number of different methods for performing a correlation analysis, the most common of which is "pearson". Use that. then ask for a confidence level of 0.95. If you don't know how to set that, look at the help under `conf.level`. Lastly, assign the output to the variable `cor` and put parentheses around the entire call so you can see the output and store it in a variable at the same time. 
 
 >Tip: There are certain types of characters, like `'`, `"`, `_`, `[`, and `(` that appear with their matched characters on both sides of blocked text. Try that here to put parentheses around the command: After constructing your function call and the assignment to the variable, select everything in the code box, then press `(` and see what happens.
 
@@ -349,7 +349,7 @@ Let's perform a correlation on the two variables in `exercise`. Store the result
                    conf.level = 0.95))
 ```
 
-For the exercise data, you'd want to know whether pulse rate was significantly higher with higher speeds. $\displaystyle p$ is `r corex$p.value` (or almost as good as), but the relationship is so obvious from the graph (scroll up to see it again), and so biologically unsurprising (of course one's pulse rate goes up when one exercises harder!), that the hypothesis test wouldn't be a very interesting part of the analysis. It is slightly more interesting to note, however, that the strength of the relationship, , is `r corex$estimate[[1]]`: a very strong positive correlation that is, still, not terribly surprising.
+For the `exercise` data, you'd want to know whether pulse rate was significantly higher with higher speeds. $\displaystyle p$ is `r corex$p.value` (or almost as good as), but the relationship is so obvious from the graph (scroll up to see it again), and so biologically unsurprising (of course one's pulse rate goes up when one exercises harder!), that the hypothesis test wouldn't be a very interesting part of the analysis. It is slightly more interesting to note, however, that the strength of the relationship is `r corex$estimate[[1]]`: a very strong positive correlation that is, still, not terribly surprising.
 
 ### 3. Determine the Equation of a Line that Goes Through the Cloud of Points
 

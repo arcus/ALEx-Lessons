@@ -10,10 +10,9 @@ runtime: shiny_prerendered
 library(learnr)
 library(datasets)
 ```
-
-## Base Plotting System
-
 (Slides for this and other Data Science courses may be found at github [https://github.com/DataScienceSpecialization/courses/](https://github.com/DataScienceSpecialization/courses/). If you care to use them, they must be downloaded as a zip file and viewed locally. This lesson corresponds to 04_ExploratoryAnalysis/PlottingBase.)
+
+# Base Plotting System
 
 In this lesson, we'll focus on the base plotting system and talk about how you can exploit all its many parameters to get the plot you want.  We'll focus on using the base plotting system to create graphics on the screen device rather than another graphics device (such as a document).
 
