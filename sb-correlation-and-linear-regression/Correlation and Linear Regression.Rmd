@@ -10,7 +10,6 @@ runtime: shiny_prerendered
 ```{r setup, include=FALSE}
 options(digits = 3, scipen = 9999)
 if(!require(learnr)){install.packages("learnr")}
-library(learnr)
 if(!require(psych)){install.packages("psych")}
 if(!require(gvlma)){install.packages("gvlma")}
 if(!require(PerformanceAnalytics)){install.packages("PerformanceAnalytics")}
