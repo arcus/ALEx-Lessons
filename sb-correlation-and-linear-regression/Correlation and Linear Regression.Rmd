@@ -349,7 +349,7 @@ Let's perform a correlation on the two variables in `exercise`. Store the result
                    conf.level = 0.95))
 ```
 
-For the `exercise` data, you'd want to know whether pulse rate was significantly higher with higher speeds. $\displaystyle p$ is `r corex$p.value` (or almost as good as), but the relationship is so obvious from the graph (scroll up to see it again), and so biologically unsurprising (of course one's pulse rate goes up when one exercises harder!), that the hypothesis test wouldn't be a very interesting part of the analysis. It is slightly more interesting to note, however, that the strength of the relationship is `r corex$estimate[[1]]`: a very strong positive correlation that is, still, not terribly surprising.
+For the `exercise` data, you'd want to know whether pulse rate was significantly higher with higher speeds. $\displaystyle p$ is `r corex$p.value` (or almost as good as), but the relationship is so obvious from the graph (scroll up to see it again), and so biologically unsurprising (of course one's pulse rate goes up when one exercises harder!), that the hypothesis test wouldn't be a very interesting part of the analysis. It is slightly more interesting to note, however, that the strength of the relationship is `r corex$estimate[[1]]`: a very strong positive correlation that is nonetheless not terribly surprising.
 
 ### 3. Determine the Equation of a Line that Goes Through the Cloud of Points
 
