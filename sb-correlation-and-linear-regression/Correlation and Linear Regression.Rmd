@@ -4,6 +4,8 @@ output:
   learnr::tutorial:
     progressive: true
     allow_skip: true
+fig_width: 8
+fig_height: 6
 runtime: shiny_prerendered
 ---
 
@@ -833,7 +835,7 @@ head(mtcars)
 str(mtcars)
 ```
 
-The dataset has help that you can access using `?mtcars`. Here is some metadata supplied in the help:
+Use `?mtcars` to find out more about the individual variables. Here is some metadata:
 
 * [, 1]	mpg	Miles/(US) gallon       
 * [, 2]	cyl	Number of cylinders       
@@ -864,8 +866,6 @@ Note that `rcorr` uses pairwise deletion to take care of any missing values.
 #### Visualizing Correlations
 
 `corrgram`, `pairs`, and `splom` all create useful visualizations of correlation matrices.
-
-##### `corrgram`
 
 Use `corrgram` to produce a correlogram, again using `mtcars`. First put `corrgram` in the library, then pass it `mtcars`, using all the `corrgram` function's default values. 
 
@@ -976,8 +976,6 @@ corrgram(mtcars,
 
 You can do much more with the correlograms. Check out the [Correlogram Graph Gallery](https://www.r-graph-gallery.com/correlogram) to learn more and to decide how you want to portray the correlations in your data.
 
-##### `pairs`
-
 Some people start their interaction with a data set by sending it to `pairs`. Let's see what happens when we do that with the `diet` data set. Then try it with `mtcars`.
 
 ```{r pairsdivers, exercise = TRUE, exercise.lines = 5}
@@ -990,7 +988,7 @@ pairs(mtcars)
 
 Scan the `pairs` output for what may be interesting relationships between variables in the `mtcars` data set.
 
-```{r scanpairs, echo=FALSE}
+```{r scanpairs, echo = FALSE}
 question("Which relationships from the `mtcars` data set might be strongly correlated?",
          answer("`disp` and `hp`", correct = TRUE),
          answer("`drat` and `vs`"),
@@ -1001,11 +999,29 @@ question("Which relationships from the `mtcars` data set might be strongly corre
 )
 ```
 
+`splom` stands for "scatter plot matrices". The function draws conditional scatter plot matrices and parallel coordinate plots. Here is an example with the `iris` dataset.
+
+```{r splom, exercise = TRUE, exercise.lines = 5}
+
+```
+```{r splom-solution}
+super.sym <- trellis.par.get("superpose.symbol")
+splom(~iris[1:4], groups = Species, data = iris,
+      panel = panel.superpose,
+      key = list(title = "Three Varieties of Iris",
+                 columns = 3, 
+                 points = list(pch = super.sym$pch[1:3],
+                 col = super.sym$col[1:3]),
+                 text = list(c("Setosa", "Versicolor", "Virginica"))))
+```
+
+This plot uses color to divide the scatterplots by iris varieties, providing an information-dense representation of the correlations among varibles in the `iris` data set. 
+
+We could create an entire detailed lesson about `splom`, but for now, it's good that you know it exists and have some example code to follow should you ever want to use it. 
 
 ### Linear Regression
 
-Let's perform another linear regression analysis and add an additional step. 
-As before, call `lm` and pass it the formula `Eggs ~ Weight` (which is $\displaystyle Y$ ~ $\displaystyle X$) and the data, `egg`. Save it to the variable `egg_fit`, then pass `egg_fit` to `summary`. 
+We have done a number of liinear regressions in earlier sections. Let's perform another linear regression analysis and add an additional step. As before, call `lm` and pass it the formula `Eggs ~ Weight` (which is $\displaystyle Y$ ~ $\displaystyle X$) and the data, `egg`. Save it to the variable `egg_fit`, then pass `egg_fit` to `summary`. 
 
 ```{r egg_fit_again, exercise = TRUE, exercise.lines = 8}
 
@@ -1026,16 +1042,15 @@ anova(egg_fit)
 
 As you can see from the output, we now have a different test statistic, $\displaystyle F$. We can see how many degrees of freedom there were and we have a different $\displaystyle p$ value. If you want to know more about this output, download [Arcus's one-way ANOVA lesson](https://storage.googleapis.com/public-braunsb-media/Arcus-Education-Assets/Lessons/One-Way-ANOVA.Rmd). Then just open it in RStudio and click "Run Document" in the top bar of the tab. Get tea, because as a relatively non-interactive stats lesson, it can put you to sleep. We will fix that as soon as we have the rest of the more interactive stats lessons available for your use. 
 
-### Interpret the Output
+## Interpret the `lm` Output
 
-In R, everything is an object. Use `str` (short for "structure"---and so many other things, but here all we care about is "structure") to find out what the linear regression best-fit output `egg_fit` looks like to R. Do the same for the correlation output you made earlier, `coregg`. 
+In R, everything is an object. Use `str` (short for "structure"---and so many other things, but here all we care about is "structure") to find out what the linear regression best-fit output `egg_fit` looks like to R.
 
 ```{r object_appearance, exercise = TRUE, exercise.setup = "prepare-height_ttest"}
 
 ```
 ```{r object_appearance-solution}
 str(egg_fit)
-str(coregg)
 ```
 
 That's interesting. What looked like paragraphs of output when we originally ran the functions was actually lists! Let's compare the ouputs of the two functions by passing each object to `names`. 
@@ -1045,28 +1060,41 @@ That's interesting. What looked like paragraphs of output when we originally ran
 ```
 ```{r access_method-solution}
 names(egg_fit)
-names(coregg)
 ```
 
-You can use output very nicely in your [reproducible Markdown text](https://education.arcus.chop.edu/scripted-analysis/) by calling it within text while you write a Markdown document. For instance, you might write, "My statistic is " or "My residuals are " and then type a tic-mark ("`", likely your lowercase "~", in the upper left corner of your keyboard, not to be confused with a single quote), then the text "r coregg\$statistic" (or "r egg_fit\$residuals") without quotation marks, and finally, a closing tic-mark. The rendered (knitted) output would be 
+So after we run an `lm`, R gives us an object that contains the details of the analysis. We will look at the details in a minute, but first note that you can use output very nicely in your [reproducible Markdown text](https://education.arcus.chop.edu/scripted-analysis/) by calling it within text while you write a Markdown document. 
+
+For instance, you might write, "My statistic is " or "My residuals are " and then type a tic-mark ("`", likely your lowercase "~", in the upper left corner of your keyboard, not to be confused with a single quote), then the text "r coregg\$statistic" (or "r egg_fit\$residuals") without quotation marks, and finally, a closing tic-mark. The rendered (knitted) output would be 
 
 >My statistic is `r coregg$statistic`. My residuals are `r egg_fit$residuals`. 
 
-To learn more about the ouptut, let's look at each element and find out what it is. This section is not necessarily something you need to know to run a simple analysis, but these explanations are here if you need them. 
+Now let's look at elements of R's output. This may be more detail than you want, so feel free to skip it. But if you have ever wondered what linear model output actually *means*, take a little time to work through the rest of these exercises. You can also use this lesson as a reference tool by looking up the elements as you find you need to know what they are.
 
-First, give yourself a list of all the put outted (outputted?) objects. Call `names`, and pass it the concatenation of our two outputs, `c(summary(egg_fit), coregg))`.
+To examine the objects in a best fit model or correlation, start by making a list of all the put outted (outputted?) objects. Call `names`, and pass `summary(egg_fit)`.
 
-Also, give yourself a simple way to type `summary(egg_fit)` by assigning it to `sef`.
+Also, either before or after you do that, give yourself a simple way to type `summary(egg_fit)` by assigning it to `sef`.
 
 ```{r all-names-together, exercise = TRUE, exercise.lines = 8}
 
 ```
 ```{r all-names-together-solution}
-names(c(summary(egg_fit), coregg))
+names(summary(egg_fit))
 sef <- summary(egg_fit)
 ```
 
+We've made ourselves a to-do list! Let's go through the objects one by one.
+
+To review how we got here:
+
+1. You put the `egg` linear regression output in `egg_fit`    
+2. You looked at the summary of that output by calling `summary(egg_fit)`    
+3. You stored `summary(egg_fit)` in a variable, `sef`. 
+
+Now you can look at each variable within `sef` to find the details of the linear model you created with your original call to `lm`. In fact, the first object we'll look at is where R stored the information about that call.  
+
 ### `call`
+
+Simply type sef$call to see the original formula you passed to `lm`. 
 
 ```{r lm-call, exercise = TRUE, exercise.lines = 8}
 
@@ -1074,8 +1102,6 @@ sef <- summary(egg_fit)
 ```{r lm-call-solution}
 sef$call
 ```
-
-This is the original formula you passed to `lm`. 
 
 ### `terms`
 
@@ -1183,7 +1209,7 @@ question("What is _b_ in the best fit line formula with ln_Weight as the predict
 slef$aliased
 ```
 
-Neither variable is collinear. 
+What this means: `ln_Weight` is not collinear with `egg$Eggs`. 
 
 ### `sigma`
 
@@ -1215,6 +1241,41 @@ This will be degrees of freedom.
 ```{r df-lm-solution}
 slef$df
 ```
+
+### `r.squared` and `adj.r.squared`
+
+The amount of variance in the data that the model explains. 
+
+```{r r-squared-lm, exercise = TRUE, exercise.lines = 8}
+
+```
+```{r r-squared-lm-solution}
+slef$r.squared
+```
+
+
+### `fstatistic`
+
+Linear regression and ANOVAs use an _F_ statistic to calculate _p_ values. You should report this statistic with any reference to your model, along with the degrees of freedom stored with it. 
+
+```{r fstat-lm, exercise = TRUE, exercise.lines = 5}
+
+```
+```{r fstat-lm-solution}
+slef$fstatistic
+```
+
+### `cov.unscaled`
+
+A correlation is a standardized or scaled measure of the strength of the relationship between two variables. Covariance is the same thing, but in the original units of measure for the variables. It is reported in a table format. 
+
+```{r cov-unscaled-lm, exercise = TRUE, exercise.lines = 5}
+
+```
+```{r cov-unscaled-lm-solution}
+slef$cov.unscaled
+```
+
 
 ## Graph Results
 
