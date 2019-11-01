@@ -16,6 +16,8 @@ if(!require(PerformanceAnalytics)){install.packages("PerformanceAnalytics")}
 if(!require(ggplot2)){install.packages("ggplot2")}
 if(!require(rcompanion)){install.packages("rcompanion")}
 if(!require(pwr)){install.packages("pwr")}
+if(!require(Hmisc)){install.packages("Hmisc")}
+if(!require(corrgram)){install.packages("corrgram")}
 ### --------------------------------------------------------------
 ### Correlation and linear regression, species diversity example
 ### pp. 207–208 from Biostats Handbook
@@ -733,7 +735,7 @@ question("What do you want to do?",
 
 ## First Test the Assumptions
 
-Just when I was dusting off my textbooks to look up which analyses test which assumptions for which other analyses, I came across [this blog post lauding the gvlma package](https://joshualoong.com/2019/09/20/Appreciating-R-The-Ease-of-Testing-Linear-Model-Assumptions/). It is used to test all the assumptions of linear models (among which are correlation and linear regression), providing all the output you need to test whether you should proceed with your data.
+Just when I was dusting off my textbooks to look up which analyses test which assumptions for which other analyses, I came across [this blog post lauding the gvlma package](https://joshualoong.com/2019/09/20/Appreciating-R-The-Ease-of-Testing-Linear-Model-Assumptions/). Use `gvlma` to test all the assumptions of linear models---among which are correlation and linear regression---providing all the output you need to test whether you should proceed with your data.
 
 Let's try it with the `egg` data. Remember to put `gvlma` in the library. Then pass it `egg_fit`, the model you created earlier. Wrap all of that in a call to `summary`. Then, on the next line, put `plot(gvlma(egg_fit))`.
 
@@ -745,9 +747,9 @@ summary(gvlma(egg_fit))
 plot(gvlma(egg_fit))
 ```
 
-Thinga beauty.
+Thinga beauty. 
 
-Now do the same using `diverse_fit`.
+Now do the same using `diverse_fit`. Copy and paste your code from above and replace the model name `egg_fit` with `diverse_fit`.
 
 ```{r div_fit_gvlma,  fig.dim = c(7, 7), exercise = TRUE, exercise.lines = 8}
 
@@ -767,13 +769,13 @@ question("Which of the two models passes all necessary assumptions for linear re
 )
 ``` 
 
-If you cranked a whole lot of data through the model expressed in `egg_fit`, you would get inaccurate predictions. You'll also get inaccurate predictions with `diverse_fit`, but not as many. In fact, according to the parameter we have set as acceptable ($\displaystyle p < .05$), the formula $\displaystyle Species = 585 -12*Latitude$ is a "good enough" predictor. As data scientists frequently tell one another (and anyone who will listen),
+If you cranked a whole lot of data through the model expressed in `egg_fit`, you would get inaccurate predictions. Using `diverse_fit` with `diversity` data, you'd also get inaccurate predictions, but not as many. In fact, according to the parameter we have set as acceptable ($\displaystyle p < .05$), the formula $\displaystyle Species = 585 -12*Latitude$ is a "good enough" predictor. As data scientists frequently tell one another (and anyone who will listen),
 
 >All models are wrong. Some models are useful.
 
 ## Effect Size: How much of a Difference do we Care About?
 
-In correlation and regression, effect size is represented by $\displaystyle r^2$ (or, in some cases, just plain $\displaystyle r$). Different areas of study will have different standards for meaningful effect sizes. If you are a research psychologist, a correlation of $\displaystyle r = .80$ between variables such as `daily_laughter_frequency` and `job_satisfaction` might be reason for a party; but if you are an engineer and you correlate a drill bit size with the size of the hole it makes, $\displaystyle r = .80$ would cause concern. You, the content expert, must decide what is an interesting result and what is not. 
+In correlation and regression, effect size is represented by $\displaystyle r^2$ (or, in some cases, just plain $\displaystyle r$). Different areas of study will have different standards for meaningful effect sizes. If you are a research psychologist, a correlation of $\displaystyle r = .80$ between variables such as `daily_laughter_frequency` and `job_satisfaction` might be reason for a party; but if you are an engineer and you correlate a drill bit sizes with the sizes of the holes they make, $\displaystyle r = .80$ would cause concern. You, the content expert, must decide what is an interesting result and what is not. 
 
 ## Power Analysis
 
@@ -818,6 +820,103 @@ We have already performed various correlation and linear regression analyses thr
 
 ### Correlation
 
+We have used `cor.test` to look at correlations between individual variables. Let's use `Hmisc`'s `rcorr` to take a matrix as input and produce not only the $\displaystyle r$ values but also the $\displaystyle p$ values. 
+
+Put `Hmisc` in the library. We'll use one of R's prepackaged data sets as input, `mtcars`. We have to pass `mtcars` to `rcorr` as a matrix, not as a data frame. Nest a call to `as.matrix` with input `mtcars` within a call to `rcorr`. You don't have to pass `rcorr` anything else. 
+
+```{r rcorr, exercise = TRUE, exercise.lines = 5}
+
+```
+```{r rcorr-solution}
+rcorr(as.matrix(mtcars))
+```
+
+Note that `rcorr` uses pairwise deletion to take care of any missing values.
+
+#### Visualizing Correlations
+
+`corrgram`, `pairs`, and `splom` all create useful visualizations of correlation matrices.
+
+Use `corrgram` to produce a correlogram, again using `mtcars`. First put `corrgram` in the library, then pass it `mtcars`, using all the `corrgram` function's default values. 
+
+```{r corrgram, exercise = TRUE, exercise.lines = 5}
+
+```
+```{r corrgram-solution}
+library(corrgram)
+corrgram(mtcars)
+```
+
+You are seeing the strength of the correlations between each pair of variables. Find one variable name in the diagonal line of variable names, then find the second variable of interest, and go look across the row of the lower one until you find the cell below the upper one. That is the cell that represents their correlation.
+
+```{r whatcolor, echo=FALSE}
+question("What color is the cell that shows the correlation between `wt` and `gear` in the `corrgram` output you just made?",
+         answer("pale blue"),
+         answer("pink"),
+         answer("medium red"),
+         answer("red", correct = TRUE),
+         random_answer_order = TRUE,
+         allow_retry = TRUE
+)
+```
+
+```{r whatcolor2, echo=FALSE}
+question("What color is the correlation between `cyl` and `hp`",
+         answer("pale blue"),
+         answer("dark blue", correct = TRUE),
+         answer("pink"),
+         answer("red"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE
+)
+```
+
+Let's polish our output. `corrgram` is extremely flexible and has a lot of parameters, which you can learn about by typing `?corrgram`. Let's add one new parameter at a time. First add `order = TRUE`.
+
+```{r corrgram2, exercise = TRUE, exercise.lines = 5}
+
+```
+```{r corrgram2-solution}
+corrgram(mtcars, 
+         order = TRUE)
+```
+
+Okay, the order shifted, but to what? `corrgram` allows you to select orders. I won't go into all of them here, but I will note that my favorite is PCA order: the order that captures for you what clusters of correlations there might be in the data set. One might look at a principle components analysis as a way of finding clusters of correlations. That is what the `order` parameter gives you as a default.
+
+You'll notice, if you look carefully, that a correlation matrix contains repeated output: one set in the upper right and the other set in the lower left. We can use this fact to our advantage by asking for different formats in each of the panels---or by simply showing just one panel. Let's try that first by adding `upper.panel = NULL` to the code you've been using. Copy your code from above and add to it.
+
+```{r uppernull, exercise = TRUE, exercise.lines = 5}
+
+```
+```{r uppernull-solution}
+corrgram(mtcars, 
+         order = TRUE,
+         upper.panel = NULL)
+```
+
+Now remove the line that nullifies the upper panel and put in its stead `upper.panel = panel.pie`. 
+
+```{r mtcarsupperpie, exercise = TRUE, exercise.lines = 5}
+
+```
+```{r mtcarsupperpie-solution}
+corrgram(mtcars, 
+         order = TRUE,
+         upper.panel = panel.pie)
+```
+
+More information! Not only do you have colors, you have a key to their meaning: the more of a pie that's filled in, the stronger the correlation---and the color. You can also see that the pies are dialed from the negative or positive direction, which shows that the red correlations are negative and the blues are positive. 
+
+```{r interpcorrcol, echo=FALSE}
+question("What does a dark red pie indicate in a correlogram?",
+         answer("A strong positive correlation"),
+         answer("A strong negative correlation", correct = TRUE),
+         answer("A weak negative correlation"),
+         answer("A weak positive correlation"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE
+)
+```
 
 
 
