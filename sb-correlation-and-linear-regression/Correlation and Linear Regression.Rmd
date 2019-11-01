@@ -822,12 +822,40 @@ We have already performed various correlation and linear regression analyses thr
 
 We have used `cor.test` to look at correlations between individual variables. Let's use `Hmisc`'s `rcorr` to take a matrix as input and produce not only the $\displaystyle r$ values but also the $\displaystyle p$ values. 
 
-Put `Hmisc` in the library. We'll use one of R's prepackaged data sets as input, `mtcars`. We have to pass `mtcars` to `rcorr` as a matrix, not as a data frame. Nest a call to `as.matrix` with input `mtcars` within a call to `rcorr`. You don't have to pass `rcorr` anything else. 
+Put `Hmisc` in the library. We'll use one of R's prepackaged data sets as input, `mtcars`, a data frame with 32 observations on 11 (numeric) variables. Let's first get to know the data set a bit using `names`, `head`, and `str`. 
+
+```{r gettoknwmtcars, exercise = TRUE, exercise.lines = 5}
+
+```
+```{r gettoknwmtcars-solution}
+names(mtcars)
+head(mtcars)
+str(mtcars)
+```
+
+The dataset has help that you can access using `?mtcars`. Here is some metadata supplied in the help:
+
+* [, 1]	mpg	Miles/(US) gallon       
+* [, 2]	cyl	Number of cylinders       
+* [, 3]	disp	Displacement (cu.in.)       
+* [, 4]	hp	Gross horsepower       
+* [, 5]	drat	Rear axle ratio       
+* [, 6]	wt	Weight (1000 lbs)       
+* [, 7]	qsec	1/4 mile time       
+* [, 8]	vs	Engine (0 = V-shaped, 1 = straight)       
+* [, 9]	am	Transmission (0 = automatic, 1 = manual)       
+* [,10]	gear	Number of forward gears       
+* [,11]	carb	Number of carburetors
+
+Remember how indexing works from from the most basic `swirl` lesson? If not, [take time for a quick review](http://www.a-mess.org/swirl-basic-building-blocks/). Going through these lessons is like practicing a musical instrument. It's best to practice repeatedly.
+
+We have to pass `mtcars` to `rcorr` as a matrix, not as a data frame. Nest a call to `as.matrix` with input `mtcars` within a call to `rcorr`. You don't have to pass `rcorr` anything else. 
 
 ```{r rcorr, exercise = TRUE, exercise.lines = 5}
 
 ```
 ```{r rcorr-solution}
+library(Hmisc)
 rcorr(as.matrix(mtcars))
 ```
 
@@ -836,6 +864,8 @@ Note that `rcorr` uses pairwise deletion to take care of any missing values.
 #### Visualizing Correlations
 
 `corrgram`, `pairs`, and `splom` all create useful visualizations of correlation matrices.
+
+##### `corrgram`
 
 Use `corrgram` to produce a correlogram, again using `mtcars`. First put `corrgram` in the library, then pass it `mtcars`, using all the `corrgram` function's default values. 
 
@@ -847,7 +877,7 @@ library(corrgram)
 corrgram(mtcars)
 ```
 
-You are seeing the strength of the correlations between each pair of variables. Find one variable name in the diagonal line of variable names, then find the second variable of interest, and go look across the row of the lower one until you find the cell below the upper one. That is the cell that represents their correlation.
+You are seeing the strength and direction of the correlations between each pair of variables. Find one variable name in the diagonal line of variable names, then find the second variable of interest, and go look across the row of the lower one until you find the cell below the upper one. That is the cell that represents their correlation.
 
 ```{r whatcolor, echo=FALSE}
 question("What color is the cell that shows the correlation between `wt` and `gear` in the `corrgram` output you just made?",
@@ -861,7 +891,7 @@ question("What color is the cell that shows the correlation between `wt` and `ge
 ```
 
 ```{r whatcolor2, echo=FALSE}
-question("What color is the correlation between `cyl` and `hp`",
+question("What color is the correlation between `cyl` and `hp`?",
          answer("pale blue"),
          answer("dark blue", correct = TRUE),
          answer("pink"),
@@ -894,7 +924,7 @@ corrgram(mtcars,
          upper.panel = NULL)
 ```
 
-Now remove the line that nullifies the upper panel and put in its stead `upper.panel = panel.pie`. 
+Now remove the code that nullifies the upper panel and put in its stead `upper.panel = panel.pie`. 
 
 ```{r mtcarsupperpie, exercise = TRUE, exercise.lines = 5}
 
@@ -918,6 +948,58 @@ question("What does a dark red pie indicate in a correlogram?",
 )
 ```
 
+Now add another parameter to the call to `corrgram`: `main = "Car Mileage Correlations in PCA Order"` to see what happens. 
+
+```{r panel.text, exercise = TRUE, exercise.lines = 5}
+
+```
+```{r panel.text-solution}
+corrgram(mtcars, 
+         order = TRUE,
+         upper.panel = panel.pie,
+         main = "Car Mileage Correlations in PCA Order")
+```
+
+Using `?corrgram` (or by peeking at the Solution), see if you can put dot plots in the upper panel, minimum and maximum values for each variable next to the variable names, and ellipses in the lower panel. Also add the title, "Car Mileage Correlations in PCA Order".
+
+```{r interesting, exercise = TRUE, exercise.lines = 5}
+
+```
+```{r interesting-solution}
+corrgram(mtcars, 
+         order = TRUE, 
+         lower.panel = panel.ellipse,
+         upper.panel = panel.pts, 
+         diag.panel = panel.minmax,
+         main = "Car Mileage Correlations in PCA Order")
+```
+
+You can do much more with the correlograms. Check out the [Correlogram Graph Gallery](https://www.r-graph-gallery.com/correlogram) to learn more and to decide how you want to portray the correlations in your data.
+
+##### `pairs`
+
+Some people start their interaction with a data set by sending it to `pairs`. Let's see what happens when we do that with the `diet` data set. Then try it with `mtcars`.
+
+```{r pairsdivers, exercise = TRUE, exercise.lines = 5}
+
+```
+```{r pairsdivers-solution}
+pairs(diet)
+pairs(mtcars)
+```
+
+Scan the `pairs` output for what may be interesting relationships between variables in the `mtcars` data set.
+
+```{r scanpairs, echo=FALSE}
+question("Which relationships from the `mtcars` data set might be strongly correlated?",
+         answer("`disp` and `hp`", correct = TRUE),
+         answer("`drat` and `vs`"),
+         answer("`qsec` and `hp`", correct = TRUE),
+         answer("`carb` and `mpg`", correct = TRUE),
+         random_answer_order = TRUE,
+         allow_retry = TRUE
+)
+```
 
 
 ### Linear Regression
