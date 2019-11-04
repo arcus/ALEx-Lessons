@@ -1065,12 +1065,11 @@ question("What elements of a fit can be found by summarizing it?",
          allow_retry = TRUE
 )
 ```
-
-```{r anovaeggwhat, echo=FALSE}
-question("What elements of the fit can be found by passing it to an `anova` function?",
+```{r whateles, echo=FALSE}
+question("What elements of the fit can you find by passing it to the anova function?",
          answer("the call"),
          answer("the response variable", correct = TRUE),
-         answer("the predictor"), correct = TRUE,
+         answer("the predictor", correct = TRUE),
          answer("the coefficients"),
          answer("the overall _p_ value for the fit", correct = TRUE),
          random_answer_order = TRUE,
