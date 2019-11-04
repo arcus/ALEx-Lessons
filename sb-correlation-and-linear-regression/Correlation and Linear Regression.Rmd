@@ -1044,7 +1044,41 @@ As you can see from the output, we now have a different test statistic, $\displa
 
 ## Interpret the `lm` Output
 
-In R, everything is an object. Use `str` (short for "structure"---and so many other things, but here all we care about is "structure") to find out what the linear regression best-fit output `egg_fit` looks like to R.
+You can find out most of what you need to know about your new model by summarizing the fit `lm` returns and passing it to `anova` for the _p_ value. Try that now with the `egg_fit` you made. 
+
+```{r sumegg_fit, exercise = TRUE, exercise.lines = 5}
+
+```
+```{r sumegg_fit-solution}
+summary(egg_fit)
+anova(egg_fit)
+```
+
+```{r summeggwhat, echo=FALSE}
+question("What elements of a fit can be found by summarizing it?",
+         answer("the call", correct = TRUE),
+         answer("the coefficients", correct = TRUE),
+         answer("_p_ for the coefficients", correct = TRUE),
+         answer("the y intercept", correct = TRUE),
+         answer("the overall _p_ value for the fit", correct = TRUE),
+         random_answer_order = TRUE,
+         allow_retry = TRUE
+)
+```
+
+```{r anovaeggwhat, echo=FALSE}
+question("What elements of the fit can be found by passing it to an `anova` function?",
+         answer("the call"),
+         answer("the response variable", correct = TRUE),
+         answer("the predictor"), correct = TRUE,
+         answer("the coefficients"),
+         answer("the overall _p_ value for the fit", correct = TRUE),
+         random_answer_order = TRUE,
+         allow_retry = TRUE
+)
+```
+
+However, there is much more that you can find out about the fit if you wish to take the trouble. In R, everything is an object. Use `str` (short for "structure"---and so many other things, but here all we care about is "structure") to find out what the linear regression best-fit output `egg_fit` looks like to R.
 
 ```{r object_appearance, exercise = TRUE, exercise.setup = "prepare-height_ttest"}
 
@@ -1053,233 +1087,28 @@ In R, everything is an object. Use `str` (short for "structure"---and so many ot
 str(egg_fit)
 ```
 
-That's interesting. What looked like paragraphs of output when we originally ran the functions was actually lists! Let's compare the ouputs of the two functions by passing each object to `names`. 
+What looked like paragraphs of output when we originally ran the functions was actually lists! Let's compare the ouputs of the two functions by passing each object to `names`. 
 
 ```{r access_method, exercise = TRUE, exercise.setup = "prepare-height_ttest"}
 
 ```
 ```{r access_method-solution}
 names(egg_fit)
+names(summary(egg_fit))
+names(anova(egg_fit))
 ```
 
-So after we run an `lm`, R gives us an object that contains the details of the analysis. We will look at the details in a minute, but first note that you can use output very nicely in your [reproducible Markdown text](https://education.arcus.chop.edu/scripted-analysis/) by calling it within text while you write a Markdown document. 
+So after we run an `lm`, R gives us an object that contains the details of the analysis. We can acquire further details by summarizing the fit; we can find even more details by passing it to `anova`. 
 
-For instance, you might write, "My statistic is " or "My residuals are " and then type a tic-mark ("`", likely your lowercase "~", in the upper left corner of your keyboard, not to be confused with a single quote), then the text "r coregg\$statistic" (or "r egg_fit\$residuals") without quotation marks, and finally, a closing tic-mark. The rendered (knitted) output would be 
+We will look at the details in a minute, but first note that you can use output very nicely in your [reproducible Markdown text](https://education.arcus.chop.edu/scripted-analysis/) by calling it within text while you write a Markdown document. 
+
+For instance, outside of an R code chunk you might write, "My statistic is " or "My residuals are " and then type a tic-mark ("`", likely your lowercase "~", in the upper left corner of your keyboard, not to be confused with a single quote), then the text "r coregg\$statistic" (or "r egg_fit\$residuals") without quotation marks, and finally, a closing tic-mark. The rendered (knitted) output would be 
 
 >My statistic is `r coregg$statistic`. My residuals are `r egg_fit$residuals`. 
 
-Now let's look at elements of R's output. This may be more detail than you want, so feel free to skip it. But if you have ever wondered what linear model output actually *means*, take a little time to work through the rest of these exercises. You can also use this lesson as a reference tool by looking up the elements as you find you need to know what they are.
-
-To examine the objects in a best fit model or correlation, start by making a list of all the put outted (outputted?) objects. Call `names`, and pass `summary(egg_fit)`.
-
-Also, either before or after you do that, give yourself a simple way to type `summary(egg_fit)` by assigning it to `sef`.
-
-```{r all-names-together, exercise = TRUE, exercise.lines = 8}
-
-```
-```{r all-names-together-solution}
-names(summary(egg_fit))
-sef <- summary(egg_fit)
-```
-
-We've made ourselves a to-do list! Let's go through the objects one by one.
-
-To review how we got here:
-
-1. You put the `egg` linear regression output in `egg_fit`    
-2. You looked at the summary of that output by calling `summary(egg_fit)`    
-3. You stored `summary(egg_fit)` in a variable, `sef`. 
-
-Now you can look at each variable within `sef` to find the details of the linear model you created with your original call to `lm`. In fact, the first object we'll look at is where R stored the information about that call.  
-
-### `call`
-
-Simply type sef$call to see the original formula you passed to `lm`. 
-
-```{r lm-call, exercise = TRUE, exercise.lines = 8}
-
-```
-```{r lm-call-solution}
-sef$call
-```
-
-### `terms`
-
-```{r lm-terms, exercise = TRUE, exercise.lines = 8}
-
-```
-```{r lm-terms-solution}
-sef$terms
-```
-
-This is metadata about the variables you passed to `lm`.
-
-### `residuals`
-
-```{r residuals, exercise = TRUE, exercise.lines = 8}
-
-```
-```{r residuals-solution}
-sef$residuals
-```
-
-These are the residuals that we discussed when we were looking at assumptions. Let's play with them a bit. What's their distribution? We wanted it to be normal. Is it? Type `qqnorm(egg_fit$residuals)` to find out. Then use `qqline` to make a red straight line of `egg_fit$residuals`. 
-
-```{r hist-resids, exercise = TRUE, exercise.lines = 8}
-
-```
-```{r hist-resids-solution}
-qqnorm(sef$residuals)
-qqline(sef$residuals, col = "red")
-```
-
-Create an object called `egg_ass` by testing the assumptions upon which `egg_fit` rests. Test the assumptions by passing `egg_fit` to `gvlma`. Have a look at `egg_ass`.
-
-```{r one-more, exercise = TRUE, exercise.lines = 8}
-
-```
-```{r one-more-solution}
-(egg_ass <- gvlma(egg_fit))
-```
-
-Skewness assumptions NOT satisfied! With an exclamation point! You can see the skewness on the `qqnorm` residuals plot above: It's represented by the dots in the upper right skewing off away from the red line. That's what skewness looks like on that kind of plot. Let's see it in a histogram. Call `hist` and pass it `egg_fit$residuals`.
-
-```{r hist-skewness, exercise = TRUE, exercise.lines = 8}
-
-```
-```{r hist-skewness-solution}
-hist(egg_ass$residuals)
-```
-
-Note the $\displaystyle X$ axis. See how it goes from -5 to 10?  The skewness is to the right. The data looks sort of normal, and it might be if the axis was from -5 to 5.
-
-There is a simple solution to this problem, and I really should put it in a lesson all by itself, but we're here now so here it is: To fix skewness, create a new variable for your independent variable which is the natural log of the original data.
-
-1. Call `log`, pass it `egg$Weight`, and save the result in `egg$ln_Weight`. 
-2. Re-run `lm` using the formula `Eggs ~ ln_Weight` and data `egg`. Save that in `ln_egg_fit`. 
-3. Now check the assumptions again: send `ln_egg_fit` to `gvlma`. 
-
-```{r label, exercise = TRUE, exercise.lines = 8}
-
-```
-```{r label-solution}
-egg$ln_Weight <- log(egg$Weight)
-ln_egg_fit <- lm(Eggs ~ ln_Weight, data = egg)
-gvlma(ln_egg_fit)
-```
-
-```{r logged_ass, echo=FALSE}
-question("Are all assumptions satisfied now?",
-         answer("Yes", correct = TRUE),
-         answer("No"),
-         random_answer_order = TRUE,
-         allow_retry = TRUE
-)
-```
-
-### `coefficients`
-
-We are now using `ln_egg_fit` instead of `egg_fit`. If you don't know why, scroll up a little. Give yourself the gift of a short way to type `summary(ln_egg_fit)` by assigning it to `slef`. We'll be using it a lot. (Are you starting to see why code can quickly become unreadable?)
-
-```{r lm-coeffs, exercise = TRUE, exercise.lines = 8}
-
-```
-```{r lm-coeffs-solution}
-slef <- summary(ln_egg_fit)
-slef$coefficients
-```
-
-```{r coeff-q, echo=FALSE}
-question("What is _b_ in the best fit line formula with ln_Weight as the predictor?",
-         answer("4.63"),
-         answer("9.96", correct = TRUE),
-         answer("9.074"),
-         answer("1.6"),
-         random_answer_order = TRUE,
-         allow_retry = TRUE
-)
-```
-
-### `aliased`
-
-```{r aliased-lm, exercise = TRUE, exercise.lines = 8}
-
-```
-```{r aliased-lm-solution}
-slef$aliased
-```
-
-What this means: `ln_Weight` is not collinear with `egg$Eggs`. 
-
-### `sigma`
-
-```{r sigma-lm, exercise = TRUE, exercise.lines = 8}
-
-```
-```{r sigma-lm-solution}
-slef$sigma
-```
-
-This is the standard deviation of the coefficients, rounded to 1/10th. Test it by adding `round(sd(slef$coefficients[1:2]), 1)`. That is, get the standard deviation of the coefficients and round it to the nearest 1/10th. 
-
-```{r sigma-lm2, exercise = TRUE, exercise.lines = 8}
-
-```
-```{r sigma-lm2-solution}
-round(sd(slef$coefficients[1:2]), 1)
-```
-
-It's close enough to `sigma` to say the differences are due to rounding in the guts of the calculations. 
-
-### `df`
-
-This will be degrees of freedom. 
-
-```{r df-lm, exercise = TRUE, exercise.lines = 8}
-
-```
-```{r df-lm-solution}
-slef$df
-```
-
-### `r.squared` and `adj.r.squared`
-
-The amount of variance in the data that the model explains. 
-
-```{r r-squared-lm, exercise = TRUE, exercise.lines = 8}
-
-```
-```{r r-squared-lm-solution}
-slef$r.squared
-```
-
-
-### `fstatistic`
-
-Linear regression and ANOVAs use an _F_ statistic to calculate _p_ values. You should report this statistic with any reference to your model, along with the degrees of freedom stored with it. 
-
-```{r fstat-lm, exercise = TRUE, exercise.lines = 5}
-
-```
-```{r fstat-lm-solution}
-slef$fstatistic
-```
-
-### `cov.unscaled`
-
-A correlation is a standardized or scaled measure of the strength of the relationship between two variables. Covariance is the same thing, but in the original units of measure for the variables. It is reported in a table format. 
-
-```{r cov-unscaled-lm, exercise = TRUE, exercise.lines = 5}
-
-```
-```{r cov-unscaled-lm-solution}
-slef$cov.unscaled
-```
-
-
 ## Graph Results
 
-As previously noted, plot easily using plain old `plot` and giving it your data set (if you have only a few variables) to see what it makes of it. Try this now with `diversity`. 
+To graph the results of a correlation or regression, use scatterplots. As previously noted, plot easily using plain old `plot` and giving it your data set (if you have only a few variables) to see what it makes of it. Try this now with `diversity`. 
 
 ```{r t, exercise = TRUE, exercise.lines = 8}
 
@@ -1288,13 +1117,17 @@ As previously noted, plot easily using plain old `plot` and giving it your data 
 plot(diversity)
 ```
 
-That is a great way to start looking at a data set. You can look at each plot and decide whether any of the images make you think there might be correlations between the two variables involved. For instance, on the bottom row, second from the right, is an interesting image that may or may not show a correlation. This initial plot helps you decide how to proceed. 
+Plain old `plot` is a great way to start looking at a data set. You can look at each plot and decide whether any of the images make you think there might be correlations between the two variables involved. For instance, on the bottom row, second from the right, is an interesting image that may or may not show a correlation. This initial plot helps you decide how to proceed. 
 
-## How do Correlation and Regression Work?
+Of course you can do many and varied things with plots. Rather than trying to do something better than has already been done excellently, I recommend you start with [this wonderful `ggplot2` tutorial](http://r-statistics.co/ggplot2-Tutorial-With-R.html).
+
+## I_like_ Math. Where's the Math? How Correlations and Linear Regressions Work
 
 ```{r, out.width = "400px", echo = FALSE}
 knitr::include_graphics("https://storage.googleapis.com/public-braunsb-media/Arcus-Education-Assets/Lessons/images/best-fit-line.png")
 ```
+
+### The Best Fit Line
 
 Linear regression finds the line that best fits the data points. There are actually a number of different definitions of "best fit," and therefore a number of different methods of linear regression that fit somewhat different lines. By far the most common is "ordinary least-squares regression"; when someone just says "least-squares regression" or "linear regression" or "regression," they mean ordinary least-squares regression.
 
@@ -1325,28 +1158,82 @@ question("What is the definition of a best fit line?",
 
 The equation for the regression line is usually expressed as 
 
->$\displaystyle \hat{Y} = a + \beta X$
+>$\displaystyle \hat{Y} = a + bX$
 
 where a is the Y intercept and b is the slope. Once you know a and b, you can use this equation to predict the value of Y for a given value of X. For example, the equation for the heart rate-speed experiment is rate = 63.357 + 3.749 × speed. I could use this to predict that for a speed of 10 kph, my heart rate would be 100.8 bpm. You should do this kind of prediction within the range of X values found in the original data set (interpolation). Predicting Y values outside the range of observed values (extrapolation) is sometimes interesting, but it can easily yield ridiculous results if you go far outside the observed range of X. In the frog example below, you could mathematically predict that the inter-call interval would be about 16 seconds at −40°C. Actually, the inter-calling interval would be infinity at that temperature, because all the frogs would be frozen solid.
 
-Sometimes you want to predict X from Y. The most common use of this is constructing a standard curve. For example, you might weigh some dry protein and dissolve it in water to make solutions containing 0, 100, 200 … 1000 µg protein per ml, add some reagents that turn color in the presence of protein, then measure the light absorbance of each solution using a spectrophotometer. Then when you have a solution with an unknown concentration of protein, you add the reagents, measure the light absorbance, and estimate the concentration of protein in the solution.
+### Reversing the Formula: Predicting $\displaystyle X$ from $\displaystyle Y$
 
-There are two common methods to estimate X from Y. One way is to do the usual regression with X as the independent variable and Y as the dependent variable; for the protein example, you'd have protein as the independent variable and absorbance as the dependent variable. You get the usual equation, Ŷ=a+bX, then rearrange it to solve for X, giving you X̂=(Y−a)/b. This is called "classical estimation."
+Sometimes you want to predict $\displaystyle X$ from $\displaystyle Y$. For example, you might weigh some dry protein and dissolve it in water to make solutions containing 0, 100, 200 … 1000 µg `protein` per ml, add some reagents that turn color in the presence of protein, then measure the light `absorbance` of each solution using a spectrophotometer. Then when you have a solution with an unknown concentration of `protein`, you add the reagents, measure the light `absorbance`, and estimate the concentration of `protein` in the solution.
 
-The other method is to do linear regression with Y as the independent variable and X as the dependent variable, also known as regressing X on Y. For the protein standard curve, you would do a regression with absorbance as the X variable and protein concentration as the Y variable. You then use this regression equation to predict unknown values of X from Y. This is known as "inverse estimation."
+There are two common methods to estimate $\displaystyle X$ from $\displaystyle Y$. One way is to do the usual regression with $\displaystyle X$ as the independent variable and  $\displaystyle Y$ as the dependent variable; for the protein example, you'd have `protein` as the independent variable and `absorbance` as the dependent variable. You get the usual equation, $\displaystyle \hat{Y} = a + bX$, then with some algebra rearrange it to solve for $\displaystyle X$, giving you $\displaystyle \hat{X} = (Y−a) / b$. This is called "classical estimation."
 
-Several simulation studies have suggested that inverse estimation gives a more accurate estimate of X than classical estimation (Krutchkoff 1967, Krutchkoff 1969, Lwin and Maritz 1982, Kannan et al. 2007), so that is what I recommend. However, some statisticians prefer classical estimation (Sokal and Rohlf 1995, pp. 491-493). If the r2 is high (the points are close to the regression line), the difference between classical estimation and inverse estimation is pretty small. When you're construction a standard curve for something like protein concentration, the r2 is usually so high that the difference between classical and inverse estimation will be trivial. But the two methods can give quite different estimates of X when the original points were scattered around the regression line. For the exercise and pulse data, with an r2 of 0.98, classical estimation predicts that to get a pulse of 100 bpm, I should run at 9.8 kph, while inverse estimation predicts a speed of 9.7 kph. 
+The other method is to do linear regression with $\displaystyle Y$ as the independent variable and $\displaystyle X$ as the dependent variable, also known as regressing $\displaystyle X$ on $\displaystyle Y$. For the `protein` standard curve, you would do a regression with `absorbance` as the $\displaystyle X$ variable and `protein` concentration as the $\displaystyle Y$ variable. You then use this regression equation to predict unknown values of $\displaystyle X$ from $\displaystyle Y$. This is known as "inverse estimation."
 
-The amphipod data has a much lower r2 of 0.25, so the difference between the two techniques is bigger; if I want to know what size amphipod would have 30 eggs, classical estimation predicts a size of 10.8 mg, while inverse estimation predicts a size of 7.5 mg.
-Sometimes your goal in drawing a regression line is not predicting Y from X, or predicting X from Y, but instead describing the relationship between two variables. If one variable is the independent variable and the other is the dependent variable, you should use the least-squares regression line. However, if there is no cause-and-effect relationship between the two variables, the least-squares regression line is inappropriate. This is because you will get two different lines, depending on which variable you pick to be the independent variable. For example, if you want to describe the relationship between thumb length and big toe length, you would get one line if you made thumb length the independent variable, and a different line if you made big-toe length the independent variable. The choice would be completely arbitrary, as there is no reason to think that thumb length causes variation in big-toe length, or vice versa.
+```{r estimatingxfromy, echo=FALSE}
+question("What are two ways to estimate _X_ from _Y_?",
+         answer("classical estimation"),
+         answer("inverse estimation"),
+         answer("reverse estimation"),
+         answer("linear estimation"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE
+)
+```
 
-A number of different lines have been proposed to describe the relationship between two variables with a symmetrical relationship (where neither is the independent variable). The most common method is reduced major axis regression (also known as standard major axis regression or geometric mean regression). It gives a line that is intermediate in slope between the least-squares regression line of Y on X and the least-squares regression line of X on Y; in fact, the slope of the reduced major axis line is the geometric mean of the two least-squares regression lines.
+Several simulation studies have suggested that inverse estimation gives a more accurate estimate of $\displaystyle X$ than classical estimation (Krutchkoff 1967, Krutchkoff 1969, Lwin and Maritz 1982, Kannan et al. 2007), so that is what John McDonald (the author of much of our material in these stats tutorials) recommends. However, some statisticians prefer classical estimation (Sokal and Rohlf 1995, pp. 491-493). If the $\displaystyle r^2$ is high (the points are close to the regression line), the difference between classical estimation and inverse estimation is pretty small. When you're constructing a standard curve for something like protein concentration, the $\displaystyle r^2$ is usually so high that the difference between classical and inverse estimation will be trivial. But the two methods can give quite different estimates of $\displaystyle X$ when the original points were scattered widely around the regression line. For the exercise and pulse data, with an $\displaystyle r^2$ of 0.98, classical estimation predicts that to get a pulse of 100 bpm, you should run at 9.8 kph, while inverse estimation predicts a speed of 9.7 kph. 
 
-While reduced major axis regression gives a line that is in some ways a better description of the symmetrical relationship between two variables (McArdle 2003, Smith 2009), you should keep two things in mind. One is that you shouldn't use the reduced major axis line for predicting values of X from Y, or Y from X; you should still use least-squares regression for prediction. The other thing to know is that you cannot test the null hypothesis that the slope of the reduced major axis line is zero, because it is mathematically impossible to have a reduced major axis slope that is exactly zero. Even if your graph shows a reduced major axis line, your P value is the test of the null that the least-square regression line has a slope of zero.
+The amphipod data has a much lower $\displaystyle r^2$ of 0.25, so the difference between the two techniques is bigger; if you want to know what size amphipod would have 30 eggs, classical estimation predicts a size of 10.8 mg, while inverse estimation predicts a size of 7.5 mg.
+
+```{r whatmakesonebetter, echo=FALSE}
+question("When might you choose inverse estimation rather than classical estimate to estimate _X_ from _Y_? (choose all that apply)",
+         answer("when the relationship between _X_ and _Y_ is weak", correct = TRUE),
+         answer("when the relationship between _X_ and _Y_ is strong"),
+         answer("when the original points are scattered widely around the regression line", correct = TRUE),
+         random_answer_order = TRUE,
+         allow_retry = TRUE
+)
+```
+
+### When you'd rather Describe than Predict
+
+Sometimes your goal in drawing a regression line is not predicting $\displaystyle Y$ from $\displaystyle X$, or predicting $\displaystyle X$ from $\displaystyle Y$, but instead describing the relationship between two variables. If one variable is the independent variable and the other is the dependent variable, you should use the least-squares regression line. However, if there is no cause-and-effect relationship between the two variables, the least-squares regression line is inappropriate. This is because you will get two different lines, depending on which variable you pick to be the independent variable. 
+
+```{r notleastsquare, echo=FALSE}
+question("Why should you NOT use the least-squares regression line to describe the relationship between two variables?",
+         answer("when one variable is independent and the other is dependent"),
+         answer("when there is no cause-and-effect relationship between the two variables", correct = TRUE),
+         random_answer_order = TRUE,
+         allow_retry = TRUE
+)
+```
+
+For example, if you want to describe the relationship between thumb length and big toe length, you would get one line if you made thumb length the independent variable, and a different line if you made big-toe length the independent variable. The choice would be completely arbitrary, as there is no reason to think that thumb length causes variation in big-toe length, or vice versa.
+
+### Going a Step Further: The Major Axis Regression
+
+A number of different lines have been proposed to describe the relationship between two variables with a symmetrical relationship (where neither is the independent variable). The most common method is _reduced major axis regression_ (also known as "standard major axis regression" or "geometric mean regression"). It gives a line that is intermediate in slope between the least-squares regression line of $\displaystyle Y$ on $\displaystyle X$ and the least-squares regression line of $\displaystyle X$ on $\displaystyle Y$; in fact, the slope of the reduced major axis line is the geometric mean of the two least-squares regression lines.
+
+```{r whatisreducedmajoraxisregression, echo=FALSE}
+question("How would you calculate the reduced major axis regression line? (please select all that apply)",
+         answer("use each variable as both dependent and independent and find the geometric mean of the two least-squares regression lines you'd get", correct = TRUE),
+         answer("find the standard major axis regression", correct = TRUE),
+         answer("find the geometric mean regression", correct = TRUE),
+         answer("look it up", correct = TRUE),
+         random_answer_order = TRUE,
+         allow_retry = TRUE
+)
+```
+
+While reduced major axis regression gives a line that is in some ways a better description of the symmetrical relationship between two variables (McArdle 2003, Smith 2009), you should keep two things in mind. 
+
+One is that you shouldn't use the reduced major axis line for predicting values of $\displaystyle X$ from $\displaystyle Y$, or $\displaystyle Y$ from $\displaystyle X$; you should still use least-squares regression for those predictions.
+
+The other thing to know is that you cannot test the null hypothesis that the slope of the reduced major axis line is zero, because it is mathematically impossible to have a reduced major axis slope that is exactly zero. Even if your graph shows a reduced major axis line, your _p_ value is the test of the null that the least-square regression line has a slope of zero.
 
 Here are explanations and formulae that explain certain concepts upon which we touched briefly in the "how-to" explanation and practice above.
 
-### Bivariate Normal Distribution
+### The Bivariate Normal Distribution
 
 Not all statisticians agree on a definition for the bivariate normal distribution. Here are some aspects upon which most agree, taken from [Statistics How To](https://www.statisticshowto.datasciencecentral.com/bivariate-normal-distribution/):
 
