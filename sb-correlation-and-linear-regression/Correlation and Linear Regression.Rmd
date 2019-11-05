@@ -259,7 +259,7 @@ if(!require(pwr)){install.packages("pwr")}
 
 ## Background
 
-One of the most common graphs in science plots one measurement variable on the $\displaystyle X$ (horizontal) axis vs. another on the $\displaystyle Y$ (vertical) axis. For example, let's make two graphs. For the first, John McDonald dusted off the elliptical machine in his basement and measured his pulse after one minute of ellipticizing at various speeds. I've loaded this data for you as `exercise`. Have a look at it.
+One of the most common graphs in science plots one measurement variable on the $\displaystyle X$ (horizontal) axis vs. another on the $\displaystyle Y$ (vertical) axis. For example, let's make two graphs. For the first, John McDonald dusted off the elliptical machine in his basement and measured his pulse after one minute of ellipticizing at various speeds. I've loaded this data for you as `exercise`. Have a look at the data set by typing in its name.
 
 ```{r exercise, exercise = TRUE, exercise.lines = 8}
 
@@ -277,7 +277,7 @@ Now to make the plot, simply pass the data to the `plot` function.
 plot(exercise)
 ```
 
-The other data set is based on McDonald (1989). McDonald collected the amphipod crustacean _Platorchestia platensis_ on a beach near Stony Brook, Long Island, in April 1987, removed and counted the number of eggs each female was carrying, then freeze-dried and weighed the mothers. Look at the data in `egg`, then pass the data to `plot`.
+The other data set is based on McDonald (1989). McDonald collected the amphipod crustacean _Platorchestia platensis_ on a beach near Stony Brook, Long Island, in April 1987, removed and counted the number of eggs each female was carrying, then freeze-dried and weighed the mothers. Look at the data in `egg` by typing `egg`; then pass `egg` to `plot`.
 
 ```{r egg, exercise = TRUE, exercise.lines = 8}
 
@@ -1118,9 +1118,9 @@ plot(diversity)
 
 Plain old `plot` is a great way to start looking at a data set. You can look at each plot and decide whether any of the images make you think there might be correlations between the two variables involved. For instance, on the bottom row, second from the right, is an interesting image that may or may not show a correlation. This initial plot helps you decide how to proceed. 
 
-Of course you can do many and varied things with plots. Rather than trying to do something better than has already been done excellently, I recommend you start with [this wonderful `ggplot2` tutorial](http://r-statistics.co/ggplot2-Tutorial-With-R.html).
+Of course you can do many and varied things with plots. Rather than trying to do something better than has already been done excellently, I recommend you start with [this wonderful `ggplot2` tutorial](http://r-statistics.co/ggplot2-Tutorial-With-R.html). For a simpler approach, check out the [interactive base plotting system lesson](), which is also based on the work of others, the wonderful people at [swirl.org]().
 
-## I_like_ Math. Where's the Math? How Correlations and Linear Regressions Work
+## I _like_ Math. Where's the Math? How Correlations and Linear Regressions Work
 
 ```{r, out.width = "400px", echo = FALSE}
 knitr::include_graphics("https://storage.googleapis.com/public-braunsb-media/Arcus-Education-Assets/Lessons/images/best-fit-line.png")
@@ -1159,11 +1159,13 @@ The equation for the regression line is usually expressed as
 
 >$\displaystyle \hat{Y} = a + bX$
 
-where a is the Y intercept and b is the slope. Once you know a and b, you can use this equation to predict the value of Y for a given value of X. For example, the equation for the heart rate-speed experiment is rate = 63.357 + 3.749 × speed. I could use this to predict that for a speed of 10 kph, my heart rate would be 100.8 bpm. You should do this kind of prediction within the range of X values found in the original data set (interpolation). Predicting Y values outside the range of observed values (extrapolation) is sometimes interesting, but it can easily yield ridiculous results if you go far outside the observed range of X. In the frog example below, you could mathematically predict that the inter-call interval would be about 16 seconds at −40°C. Actually, the inter-calling interval would be infinity at that temperature, because all the frogs would be frozen solid.
+where $\displaystyle a$ is the $\displaystyle Y$ intercept and b is the slope. Once you know a and b, you can use this equation to predict the value of $\displaystyle Y$ for a given value of $\displaystyle X$. For example, the equation for the heart rate-speed experiment is `rate` = 63.357 + 3.749 × `speed`. I could use this to predict that for a `speed` of 10 kph, my heart `rate` would be 100.8 bpm. 
+
+You should do this kind of prediction within the range of $\displaystyle X$ values found in the original data set (interpolation). Predicting $\displaystyle Y$ values outside the range of observed values (extrapolation) is sometimes interesting, but it can easily yield ridiculous results if you go far outside the observed range of $\displaystyle X$. In the frog example below, you could mathematically predict that the inter-call interval would be about 16 seconds at −40°C. Actually, the inter-calling interval would be infinity at that temperature, because all the frogs would be frozen solid.
 
 ### Reversing the Formula: Predicting $\displaystyle X$ from $\displaystyle Y$
 
-Sometimes you want to predict $\displaystyle X$ from $\displaystyle Y$. For example, you might weigh some dry protein and dissolve it in water to make solutions containing 0, 100, 200 … 1000 µg `protein` per ml, add some reagents that turn color in the presence of protein, then measure the light `absorbance` of each solution using a spectrophotometer. Then when you have a solution with an unknown concentration of `protein`, you add the reagents, measure the light `absorbance`, and estimate the concentration of `protein` in the solution.
+Sometimes you want to predict $\displaystyle X$ from $\displaystyle Y$. For example, you might weigh some dry `protein` and dissolve it in water to make solutions containing 0, 100, 200 … 1000 µg `protein` per ml, add some reagents that turn color in the presence of protein, then measure the light `absorbance` of each solution using a spectrophotometer. Then when you have a solution with an unknown concentration of `protein`, you add the reagents, measure the light `absorbance`, and estimate the concentration of `protein` in the solution.
 
 There are two common methods to estimate $\displaystyle X$ from $\displaystyle Y$. One way is to do the usual regression with $\displaystyle X$ as the independent variable and  $\displaystyle Y$ as the dependent variable; for the protein example, you'd have `protein` as the independent variable and `absorbance` as the dependent variable. You get the usual equation, $\displaystyle \hat{Y} = a + bX$, then with some algebra rearrange it to solve for $\displaystyle X$, giving you $\displaystyle \hat{X} = (Y−a) / b$. This is called "classical estimation."
 

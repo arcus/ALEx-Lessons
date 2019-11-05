@@ -218,7 +218,8 @@ str(xNa)
 summary(xNa)
 ```
 
-Use the function `plotNormalHistogram` from the `rcompanion` package to see if the data is approximately normally distributed. All the function requires is the variable with the sodium levels, `Sodium`. Make sure to put `rcompanion` into the library before calling `plotNormalHistogram`.
+Use the function `plotNormalHistogram` from the `rcompanion` package to see if the data is approximately normally distributed. All the function requires is the variable with the sodium levels, `Sodium`.
+
 
 ```{r g, exercise = TRUE}
 
@@ -264,7 +265,7 @@ A bunch of text and numbers. What does it all mean?
 * It tells you which variable you passed it (in this case, `sodium$Sodium`)    
 * It provides specific statistics: 
      * _t_ is -4.9053, which is where within a _t_ distribution our data mean would appear. Locations within the _t_ distribution dictate P's value
-     * P is close to 0 (0.00009825)    
+     * _p_ is close to 0 (0.00009825)    
 * Then the function tells you in plain English what to do with the information it just provided. Here, it says to reject the null hypothesis in favor of the alternative hypothesis that the "true mean is not equal to 1500."     
 * Going one step further (because we asked it to), `t.test` provides the 95% confidence interval, the interval within which 95% of samples like this one's mean sodium would fall. That's between 1196.83 and 1378.17 with our data.     
 * Finally, it gives us the sample estimate of the true population mean ("population" meaning the underlying population represented by our sample of students): 1287.5 grams of sodium.    
@@ -354,7 +355,7 @@ The first problem is that small, medium, and large effect sizes mean different t
 
 ### Cohen's _d_
 
-Cohen’s _d_ can be used as an effect size statistic for a one-sample _t_ test.  Calculate Cohen's _d_ by taking the difference between the mean of the data (like 55.3125 wpm or 1287.5 grams of sodium) and $\normalsize \mu$, the default value or population estimate of the mean (like 40 wpm or 1500 grams of sodium), all divided by the standard deviation of the data (which you can get by using `sd(xwpm)` or `sd(xNa)` :
+Cohen’s _d_ can be used as an effect size statistic for a one-sample _t_ test.  Calculate Cohen's _d_ by taking the difference between the mean of the data (like 55.3125 wpm or 1287.5 grams of sodium) and $\normalsize \mu$, the default value or population estimate of the mean (like 40 wpm or 1500 grams of sodium), all divided by the standard deviation of the data (which you can get by using `sd(xwpm)` or `sd(xNa)`:
 
 >$\large d = \frac{| \bar{x} - \mu |}{\sigma}$ 
 

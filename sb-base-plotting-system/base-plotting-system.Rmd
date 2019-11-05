@@ -18,7 +18,7 @@ In this lesson, we'll focus on the base plotting system and talk about how you c
 
 The core plotting and graphics engine in R is encapsulated in two packages. The first is the `graphics` package, which contains plotting functions for the "base" system. The functions in this package include `plot`, `hist`, `boxplot`, `barplot`, etc. The second package is `grDevices`, which contains all the code implementing the various graphics devices, including `X11`, `PDF`, `PostScript`, `PNG`, etc.
 
-Base graphics are often constructed piecemeal, with each aspect of the plot handled separately through a particular function call. Usually you start with a plot function (such as `plot`, `hist`, or `boxplot`), then you use annotation functions (`text`, `abline`, `points`) to add to or modify your plot.
+Base graphics are often constructed piecemeal, with each aspect of the plot handled separately through a particular function call. Usually you start with a `plot` function (such as `plot`, `hist`, or `boxplot`), then you use annotation functions (`text`, `abline`, `points`) to add to or modify your plot.
 
 Before making a plot you have to determine where the plot will appear and what it will be used for.  Is there a large amount of data going into the plot? Or is it just a few points? Do you need to be able to resize the graphic dynamically?
 
@@ -27,13 +27,15 @@ question("What do you think is a disadvantage of the Base Plotting System?",
          answer("It's intuitive and exploratory"),
          answer("It mirrors how we think of building plots and analyzing data"),
          answer("You can't go back once a plot has started", correct = TRUE),
-         answer("A complicated plot is a series of simple R commands")
+         answer("A complicated plot is a series of simple R commands"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE
 )
 ```
 
 Yes! The base system is very intuitive and easy to use. You can't go backwards, though, say, if you need to readjust margins or have misspelled a caption. A finished plot will be a series of R commands, so it's difficult to translate a finished plot into a different system.
 
-Calling a basic routine such as `plot(x, y)` or `hist(x)` launches a graphics device such as the plots viewer in RStudio, if one is not already open, and draws a new plot on the device. If the arguments to plot or hist are not of some special class, then the default method is called.
+Calling a basic routine such as `plot(x, y)` or `hist(x)` launches a graphics device such as the plots viewer in RStudio, if one is not already open, and draws a new plot on the device. If the arguments to `plot` or `hist` are not of some special class, then the default method is called.
 
 As you'll see, most of the base plotting functions have many arguments, for example, setting the title, the labels of axes, or the plot character. Some of the parameters can be set when you call the function or they can be added later in a separate function call.
 
@@ -48,7 +50,7 @@ Use the R command `head` with `airquality` as an argument to see what the data l
 head(airquality)
 ```
 
-We see the dataset contains 6 columns of data. Run the command `range` with two arguments. The first is the ozone column of `airquality`, specified by `airquality$Ozone`, and the second is the boolean `na.rm` set equal to `TRUE`. If you don't specify this second argument, you won't get a meaningful result.
+We see the dataset contains 6 columns of data. Run the command `range` with two arguments. The first is the `ozone` column of `airquality`, specified by `airquality$Ozone`, and the second is the boolean `na.rm` set equal to `TRUE`. If you don't specify this second argument, you won't get a meaningful result.
 
 ```{r c, exercise = TRUE}
 
@@ -77,7 +79,9 @@ question("What is the most frequent count?",
          answer("More than 150"),
          answer("More than 100"),
          answer("Less than 25", correct = TRUE),
-         answer("Between 60 and 75")
+         answer("Between 60 and 75"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE
 )
 ```
 
@@ -194,7 +198,9 @@ question("What do you think these two numbers represent?",
          answer("Plot dimensions in inches", correct = TRUE),
          answer("Coordinates of the center of the plot window"),
          answer("A confidence interval"),
-         answer("Random numbers")
+         answer("Random numbers"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE
 )
 ```
 
@@ -210,22 +216,26 @@ par()$fg
 It gave you a color, right? 
 
 ```{r q, echo=FALSE}
-question("Since par()$fg specifies foreground color, what do you think par()$bg specifies?",
+question("Since `par()$fg` specifies foreground color, what do you think `par()$bg` specifies?",
          answer("Better color"),
          answer("blue-green"),
          answer("Background color", correct = TRUE),
-         answer("Beautiful color")
+         answer("Beautiful color"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE
 )
 ```
 
 Many base plotting functions share a set of parameters. We'll go through some of the more commonly used ones now. See if you can tell what they do from their names.
 
 ```{r r, echo=FALSE}
-question("What do you think the graphical parameter pch controls?",
+question("What do you think the graphical parameter `pch` controls?",
          answer("picture characteristics"),
          answer("point control height"),
          answer("pc help"),
-         answer("plot character", correct = TRUE)
+         answer("plot character", correct = TRUE),
+         random_answer_order = TRUE,
+         allow_retry = TRUE
 )
 ```
 
@@ -241,12 +251,13 @@ par("pch")
 So 1 is the code for the open circle.
 
 ```{r t, echo=FALSE}
-question("What do you think the graphical parameters lty and lwd control
-| respectively?",
+question("What do you think the graphical parameters `lty` and `lwd` control, respectively?",
          answer("line slope and intercept"),
          answer("line length and width"),
          answer("line width and type"),
-         answer("line type and width", correct = TRUE)
+         answer("line type and width", correct = TRUE),
+         random_answer_order = TRUE,
+         allow_retry = TRUE
 )
 ```
 
@@ -264,13 +275,15 @@ So the default line type is solid, but it can be dashed, dotted, etc. Once again
 We've seen a lot of examples of `col`, the plotting color, specified as a number, string, or hex code; the `colors()` function gives you a vector of colors by name.
 
 ```{r v, echo=FALSE}
-question("What do you think the graphical parameters xlab and ylab control respectively?",
+question("What do you think the graphical parameters `xlab` and `ylab` control, respectively?",
          answer("labels for the x- and y-axes", correct = TRUE),
-         answer("labels for the y- and x-axes")
+         answer("labels for the y- and x-axes"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE
 )
 ```
 
-The `par()` function is used to specify global graphics parameters that affect all plots in an R session. (Use `dev.off` or `plot.new` to reset to the defaults.) These parameters can be overridden when specified as arguments to specific plotting functions. These include `las` (the orientation of the axis labels on the plot), `bg` (background color), `mar` (margin size), `oma` (outer margin size), `mfrow` and `mfcol` (number of plots per row, column).
+The `par()` function is used to specify global graphics parameters that affect all plots in an R session. (Use `dev.off` or `plot.new` to reset to the defaults.) These parameters can be overridden when specified as arguments to specific plotting functions. These include `las` (the orientation of the axis labels on the plot), `bg` (background color), `mar` (margin size), `oma` (outer margin size), `mfrow`, and `mfcol` (number of plots per row, column).
 
 The last two, `mfrow` and `mfcol`, both deal with multiple plots in that they specify the number of plots per row and column. The difference between them is the order in which they fill the plot matrix. The call `mfrow` will fill the rows first while `mfcol` fills the columns first.
 
@@ -280,11 +293,13 @@ As we've seen, R provides several annotating functions.
 
 ```{r w, echo=FALSE}
 question("Which of the following is NOT one of them?",
-         answer("points"),
-         answer("lines"),
-         answer("text"),
-         answer("hist", correct = TRUE),
-         answer("title")
+         answer("`points`"),
+         answer("`lines`"),
+         answer("`text`"),
+         answer("`hist`", correct = TRUE),
+         answer("`title`"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE
 )
 ```
 
@@ -303,7 +318,7 @@ Before we close, let's test your ability to make a somewhat complicated scatterp
 plot(airquality$Wind, airquality$Ozone, type = "n")
 ```
 
-Now for the test. (You might need to check R's documentation for some of these.) Add a title with the argument `main` set equal to the string "Wind and Ozone in NYC".
+Now for the test. (You might need to check R's documentation for some of these.) Add a `title` with the argument `main` set equal to the string "Wind and Ozone in NYC".
 
 ```{r y, exercise = TRUE}
 plot(airquality$Wind, airquality$Ozone, type = "n")
@@ -331,6 +346,7 @@ Now use the R command `points` to plot May's wind and ozone (in that order) as s
 ```{r aa, exercise = TRUE}
 plot(airquality$Wind, airquality$Ozone, type = "n")
 title(main = "Wind and Ozone in NYC")
+may <- subset(airquality, Month == 5)
 # Your code below:
 
 
@@ -355,6 +371,8 @@ Now use the R command `points` to plot `notmay`'s wind and ozone (in that order)
 ```{r ac, exercise = TRUE}
 plot(airquality$Wind, airquality$Ozone, type = "n")
 title(main = "Wind and Ozone in NYC")
+may <- subset(airquality, Month == 5)
+notmay <- subset(airquality, Month != 5)
 points(may$Wind, may$Ozone, col = "blue", pch = 17)
 # Your code below:
 
@@ -371,6 +389,8 @@ Now we'll use the R command `legend` to clarify the plot and explain what it mea
 ```{r ad, exercise = TRUE}
 plot(airquality$Wind, airquality$Ozone, type = "n")
 title(main = "Wind and Ozone in NYC")
+may <- subset(airquality, Month == 5)
+notmay <- subset(airquality, Month != 5)
 points(may$Wind, may$Ozone, col = "blue", pch = 17)
 points(notmay$Wind, notmay$Ozone, col="red", pch=8)
 # Your code below:
@@ -391,6 +411,8 @@ Now add a vertical line at the median of `airquality$Wind`. Make it dashed (`lty
 ```{r ae, exercise = TRUE}
 plot(airquality$Wind, airquality$Ozone, type = "n")
 title(main = "Wind and Ozone in NYC")
+may <- subset(airquality, Month == 5)
+notmay <- subset(airquality, Month != 5)
 points(may$Wind, may$Ozone, col = "blue", pch = 17)
 points(notmay$Wind, notmay$Ozone, col="red", pch=8)
 legend("topright", 
@@ -413,6 +435,7 @@ Use `par` with the parameter `mfrow` set equal to the vector `(1, 2)` to set up 
 
 ```
 ```{r af-solution}
+par(mfrow = c(1, 2))
 ```
 
 Now plot `airquality$Wind` and `airquality$Ozone` and use `main` to specify the `title` "Ozone and Wind".
@@ -491,7 +514,7 @@ plot(airquality$Solar.R, airquality$Ozone, main = "Ozone and Solar Radiation")
 
 Now for the final panel.
 
-Plot airquality$Temp and airquality$Ozone with the title (argument main) as "Ozone and Temperature".
+Plot `airquality$Temp` and `airquality$Ozone` with the title (argument `main`) as "Ozone and Temperature".
 
 ```{r al, exercise=TRUE}
 par(mfrow = c(1, 3), mar = c(4, 4, 2, 1), oma = c(0, 0, 2, 0))
@@ -525,6 +548,4 @@ plot(airquality$Temp, airquality$Ozone, main = "Ozone and Temperature")
 ```{r am-solution}
 mtext("Ozone and Weather in New York City", outer = TRUE)
 ```
-
 Congrats! You've weathered this lesson nicely and passed out of the No!zone.
-

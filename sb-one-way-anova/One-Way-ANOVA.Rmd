@@ -1,6 +1,9 @@
 ---
 title: "One Way ANOVA"
-output: learnr::tutorial
+output: 
+  learnr::tutorial:
+    progressive: true
+    allow_skip: true
 runtime: shiny_prerendered
 ---
 
@@ -11,18 +14,25 @@ library(dplyr)
 library(pwr)
 load("One-Way-ANOVA.RData")
 knitr::opts_chunk$set(echo = FALSE)
+options(digits = 3, scipen = 9999)
 ```
 
+## Background
 
-## One Way ANOVA
+This lesson is both a reference and a tutorial. It contains all the code samples you need to perform a one-way ANOVA on your own data as well as background information such as how to interpret output and which graphs you might want to use to demonstrate results (and in some cases which graphs _not_ to use). 
 
-Use one-way anova when you have __one nominal variable__ and __one measurement variable__; the nominal variable divides the measurements into two or more groups. It tests whether the means of the measurement variable are the same for the different groups.
+## What kinds of Variables work with One-Way ANOVA
+
+> One [scalar (a.k.a. "measurement") variables](http://www.biostathandbook.com/variabletypes.html#measurement). 
+One [nominal variable](http://www.biostathandbook.com/variabletypes.html#nominal)   
+
+The nominal variable divides the measurements into two or more groups. It tests whether the means of the measurement variable are the same for the different groups.
 
 ### When to use it
 
 Analysis of variance (ANOVA) is the most commonly used technique for __comparing the means of groups__ of measurement data. There are lots of different experimental designs that can be analyzed with different kinds of ANOVA.
 
-In a one-way anova (also known as a one-factor, single-factor, or single-classification anova), there is one measurement variable and one nominal variable. You make multiple observations of the measurement variable for each value of the nominal variable. For example, here are some data on a shell measurement (the length of the anterior adductor muscle scar, standardized by dividing by length; “AAM length”) in the mussel *Mytilus trossulus* from five locations: Tillamook, Oregon; Newport, Oregon; Petersburg, Alaska; Magadan, Russia; and Tvarminne, Finland.
+In a one-way anova (also known as a one-factor, single-factor, or single-classification anova), there is one measurement variable and one nominal variable. You make multiple observations of the measurement variable for each value of the nominal variable. For example, here is some data on a shell measurement (the length of the anterior adductor muscle scar, standardized by dividing by length; “AAM length”) in the mussel *Mytilus trossulus* from five locations: Tillamook, Oregon; Newport, Oregon; Petersburg, Alaska; Magadan, Russia; and Tvarminne, Finland.
 
 ```{r data1, echo=FALSE}
 RawData
