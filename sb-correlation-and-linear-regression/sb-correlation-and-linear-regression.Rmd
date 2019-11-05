@@ -519,6 +519,8 @@ knitr::include_graphics("https://storage.googleapis.com/public-braunsb-media/Arc
 
 As you can see, with a narrower range of $\displaystyle X$ values, the $\displaystyle r^2$ gets smaller. If you did another experiment on humidity and running speed in your lizards and got a lower $\displaystyle r^2$, you couldn't say that running speed is more strongly associated with temperature than with humidity; if you had chosen a narrower range of temperatures and a broader range of humidities, humidity might have had a larger $\displaystyle r^2$ than temperature.
 
+The point is to remember that you can manipulate $\displaystyle r^2$ by choosing the range of your input variables. We'll talk about this more when we address multivariate analysis. 
+
 ```{r tflizards, echo=FALSE}
 question("True or false: A wider range of values tends to cause the relationship between two variables to become stronger.",
          answer("True", correct = TRUE),
