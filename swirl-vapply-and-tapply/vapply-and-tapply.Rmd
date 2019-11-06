@@ -8,7 +8,8 @@ runtime: shiny_prerendered
 library(learnr)
 library(data.table)
 library(dplyr)
-flags <- read.csv("flags.csv")
+library(tidyverse)
+flags <- as_tibble(read.csv("flags.csv"))
 flag_colors <- flags[, 11:17]
 flag_shapes <- flags[, 19:23]
 shape_mat <- sapply(flag_shapes, range)
