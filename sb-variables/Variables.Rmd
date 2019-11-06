@@ -17,7 +17,9 @@ question("What is the BEST definition of a random variable?",
          answer("a method for mapping the outcomes of random processes to numbers", correct = TRUE),
          answer("something you use in algebra in place of actual values"),
          answer("the best way to give you a headache"),
-         answer("the opposite of a specific variable")
+         answer("the opposite of a specific variable"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE
 )
 ```
 
@@ -32,7 +34,9 @@ question("Which of the following represents a scalar variable?",
          answer("the length of a newborn person", correct = TRUE),
          answer("a child's grade level in school"),
          answer("a species of vegetable"),
-         answer("ethnicity")
+         answer("ethnicity"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE
 )
 ```
 
@@ -43,9 +47,11 @@ Categorical variables represent things that fit into categories. They are repres
 ```{r c, echo=FALSE}
 question("Which of the following is NOT a categorical variable?",
          answer("gender"),
-         answer("the road name in a house's address", correct = TRUE), 
+         answer("the road name in a house's address"), 
          answer("a strawberry's status"),
-         answer("test score as a percentage")
+         answer("test score as a percentage", correct = TRUE),
+         random_answer_order = TRUE,
+         allow_retry = TRUE
 )
 ```
 
@@ -58,7 +64,9 @@ question("Select a binary variable from the list.",
          answer("The number of pages in The Life and Opinions of Tristram Shandy, Gentleman"),
          answer("Answer (y/n)", correct = TRUE),
          answer("your birthday"),
-         answer("the length of time it takes to wake up in the morning")
+         answer("the length of time it takes to wake up in the morning"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE
 )
 ```
 
@@ -68,7 +76,9 @@ question("Select a binary variable from the list.",
 question("Which of the following are scalar variables?",
          answer("days of the week"),
          answer("probability of getting heads when flipping a coin", correct = TRUE),
-         answer("bone density", correct = TRUE)
+         answer("bone density", correct = TRUE),
+         random_answer_order = TRUE,
+         allow_retry = TRUE
 )
 ```
 
@@ -84,7 +94,9 @@ Fortunately for us and for all budding statisticians, statistical tests for cont
 question("Let's review. Say you have two types of isopods, those with 32 spines and those with 33 spines. There are no other types of isopods. What kind of variable is number of spines?",
          answer("scalar"),
          answer("binary", correct = TRUE),
-         answer("categorical")
+         answer("categorical"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE
 )
 ```
 
@@ -94,7 +106,9 @@ If you have only two possible values for a discrete value, you might treat the v
 question("What kind of variable has two possible answers?",
          answer("scalar"),
          answer("binary", correct = TRUE),
-         answer("categorical")
+         answer("categorical"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE
 )
 ```
 
@@ -102,21 +116,27 @@ question("What kind of variable has two possible answers?",
 question("What kind of variable has five (and only five) possible answers, each of which can be labeled?",
          answer("binary"),
          answer("categorical", correct = TRUE),
-         answer("scalar")
+         answer("scalar"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE
 )
 ```
 ```{r j, echo=FALSE}
 question("What kind of variable can have an infinite number of possible answers?",
          answer("categorical"),
          answer("scalar", correct = TRUE),
-         answer("binary")
+         answer("binary"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE
 )
 ```
 ```{r k, echo=FALSE}
 question("If you group together people's ages into age groups, you are changing what kind of variable into what other kind of variable?",
          answer("binary to categorical"),
          answer("scalar to categorical", correct = TRUE),
-         answer("categorical to binary")
+         answer("categorical to binary"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE
 )
 ```
 ```{r l, echo=FALSE}
@@ -124,13 +144,12 @@ question("Knowing what types of variables you have in your data set gives you wh
          answer("you know how to analyze them"),
          answer("all of these", correct = TRUE),
          answer("you know how to summarize them"),
-         answer("you know how to plot them")
+         answer("you know how to plot them"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE
 )
 ```
 
 In this lesson, you have been introduced to the all-important practice of figuring out what kind of variable you might be examining. We have considered binary, scalar, and categorical variables. Scalar variables are often called "measurement" variables; sometimes people refer to categorical variables as "nominal" variables. Sometimes people refer to binary variables as "Boolean".
-
-We have not yet considered date variables, but if you explore the [R Programming lessons](), you will learn how to use them.
-
 
 

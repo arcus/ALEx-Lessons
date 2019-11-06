@@ -44,7 +44,7 @@ What happens if we do `15:1`? Give it a try to find out.
 
 It counted backwards in increments of 1! It’s unlikely we’d want this behavior, but nonetheless it’s good to know how it could happen.
 
-Remember that if you have questions about a particular R function, you can access its documentation with a question mark followed by the function name: ?function_name_here. However, in the case of an operator like the colon used above, you must enclose the symbol in backticks like this: ?\`:\`. (NOTE: The backtick (`) key is generally located in the top left corner of a keyboard, above the Tab key. If you don’t have a backtick key, you can use regular quotes.)
+Remember that if you have questions about a particular R function, you can access its documentation with a question mark followed by the function name: `?function_name_here`. However, in the case of an operator like the colon used above, you must enclose the symbol in backticks like this: ?\`:\`. (NOTE: The backtick (`) key is generally located in the top left corner of a keyboard, above the Tab key. If you don’t have a backtick key, you can use regular quotes.)
 
 Pull up the documentation for : now.
 
