@@ -67,9 +67,9 @@ For example, here is some data on a shell measurement (the length of the anterio
 mussels
 ```
 
-The nominal variable is `location`, with the five values Tillamook, Newport, Petersburg,
+The nominal variable is invisible but implicit in the data structure. It's `location`, with the five values Tillamook, Newport, Petersburg,
 Magadan, and Tvarminne. There are six to ten observations of the measurement variable,
-AAM `length`, from each location.
+AAM `length`, from each location. Again this variable is implicit and the data needs a bit of munging to be ready for analysis. 
 
 ### Null hypothesis
 
