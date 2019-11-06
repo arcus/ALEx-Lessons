@@ -65,18 +65,10 @@ question("Select a binary variable from the list.",
 ### Miscellany
 
 ```{r e, echo=FALSE}
-question("Which of the following is a scalar variable?",
-         answer("days of the week", correct = TRUE),
-         answer("probability of getting heads when flipping a coin"),
-         answer("bone density")
-)
-```
-
-```{r f, echo=FALSE}
-question("",
-         answer(""),
-         answer("", correct = TRUE),
-         answer("")
+question("Which of the following are scalar variables?",
+         answer("days of the week"),
+         answer("probability of getting heads when flipping a coin", correct = TRUE),
+         answer("bone density", correct = TRUE)
 )
 ```
 
