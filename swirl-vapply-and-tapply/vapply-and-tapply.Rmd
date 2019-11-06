@@ -128,12 +128,14 @@ tapply(flags$population, flags$red, summary)
 
 ```{r aa, echo=FALSE}
 question("What is the median population (in millions) for countries *without* the color red on their flag?",
-      answer("27.6"),
-      answer("3.0", correct = TRUE),
-      answer("0.0"),
-      answer("22.1"),
-      answer("4.0"),
-      answer("9.0")
+         answer("27.6"),
+         answer("3.0", correct = TRUE),
+         answer("0.0"),
+         answer("22.1"),
+         answer("4.0"),
+         answer("9.0"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE
 )
 ```
 
@@ -151,11 +153,13 @@ Use the `head()` function to look at the first 6 lines of `flag_colors`.
 
 ```{r l, echo=FALSE}
 question("What is the maximum population (in millions) for the fourth landmass group (Africa)?",
-      answer("56.00", correct = TRUE),
-      answer("119.0"),
-      answer("5.0"),
-      answer("157.00"),
-      answer("1010.0")
+         answer("56.00", correct = TRUE),
+         answer("119.0"),
+         answer("5.0"),
+         answer("157.00"),
+         answer("1010.0"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE
 )
 ```
 
