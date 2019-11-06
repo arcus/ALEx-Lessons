@@ -11,7 +11,7 @@ library(dplyr)
 library(tidyverse)
 flags <- as_tibble(read.csv("flags.csv"))
 
-flag_colors <- flags[, 11:17]
+flag_colors <- flags[, 12:18]
 flag_shapes <- flags[, 20:24]
 shape_mat <- sapply(flag_shapes, range)
 unique_vals <- lapply(flags, unique)
