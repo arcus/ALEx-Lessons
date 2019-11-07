@@ -5,15 +5,16 @@ runtime: shiny_prerendered
 ---
 
 ```{r setup, include=FALSE}
-setwd("/Users/braunsb/Documents/Arcus Learning Plan Generator/Lessons")
 library(learnr)
+options(digits = 3, scipen = 9999)
 pollution <- readRDS("pollution.RData")
 ppm <- pollution$pm25
 ```
 
-# Exploratory Graphs
-
 (Slides for this and other Data Science courses may be found at github [https://github.com/DataScienceSpecialization/courses/](https://github.com/DataScienceSpecialization/courses/). If you care to use them, they must be downloaded as a zip file and viewed locally. This lesson corresponds to 04_ExploratoryAnalysis/exploratoryGraphs.)
+
+
+# Exploratory Graphs
 
 In this lesson, we'll discuss why graphics are an important tool for data scientists and the special role that exploratory graphs play in the field.
 
@@ -21,7 +22,9 @@ In this lesson, we'll discuss why graphics are an important tool for data scient
 question("Which of the following would NOT be a good reason to use graphics in data science?",
          answer("To suggest modeling strategies"),
          answer("To find a color that best matches the shirt you're wearing", correct = TRUE),
-         answer("To find patterns in data")
+         answer("To find patterns in data"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE
 )
 ```
 
@@ -31,7 +34,9 @@ So graphics give us some visual form of data, and since our brains are very good
 question("Which of the following cliches captures the essence of graphics?",
          answer("A rose by any other name smells as sweet"),
          answer("A picture is worth a thousand words", correct = TRUE),
-         answer("The apple doesn't fall far from the tree")
+         answer("The apple doesn't fall far from the tree"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE
 )
 ```
 
@@ -77,7 +82,9 @@ question("Half the measured counties have a pollution level less than or equal t
          answer("9.836"),
          answer("10.050", correct = TRUE),
          answer("11.360"),
-         answer("8.549")
+         answer("8.549"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE
 )
 ```
 
@@ -99,7 +106,9 @@ question("What is the one value missing from this quantile output that summary g
          answer("the mean", correct = TRUE),
          answer("the median"),
          answer("the minimum value"),
-         answer("the maximum value")
+         answer("the maximum value"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE
 )
 ```
 
@@ -121,7 +130,9 @@ question("what do you think the horizontal line inside the box represents?",
          answer("the mean"),
          answer("the minimum value"),
          answer("the median", correct = TRUE),
-         answer("the maximum value")
+         answer("the maximum value"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE
 )
 ```
 
@@ -144,7 +155,9 @@ question("What did the command do?",
          answer("nothing"),
          answer("hid 12 random data points", correct = TRUE),
          answer("drew a vertical line at 12"),
-         answer("drew a horizontal line at 12", correct = TRUE)
+         answer("drew a horizontal line at 12", correct = TRUE),
+         random_answer_order = TRUE,
+         allow_retry = TRUE
 )
 ```
 
@@ -168,7 +181,9 @@ question("What are teh most frequent pollution counts?",
          answer("under 5"),
          answer("between 12 and 14"),
          answer("between 9 and 12", correct = TRUE),
-         answer("between 6 and 8")
+         answer("between 6 and 8"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE
 )
 ```
 
@@ -218,7 +233,9 @@ question("What do you think the breaks argument specifies in this case?",
          answer("the number of buckets to split the data into", correct = TRUE),
          answer("the number of data points to graph"),
          answer("the number of stars in the sky"),
-         answer("the number of counties exceeding the EPA standard")
+         answer("the number of counties exceeding the EPA standard"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE
 )
 ```
 
@@ -310,7 +327,9 @@ question("What do you think the argument main specifies?",
          answer("the y axis label"),
          answer("the title of the graph", correct = TRUE),
          answer("the x axis label"),
-         answer("I can't tell")
+         answer("I can't tell"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE
 )
 ```
 
@@ -432,7 +451,9 @@ We've got two colors on the map to distinguish between counties in the east and 
 ```{r ak, echo=FALSE}
 question("Latitudes indicate distance from the equator, so which half of the U.S. (east or west) has counties at the extreme north and south?",
          answer("east"),
-         answer("west", correct = TRUE)
+         answer("west", correct = TRUE),
+         random_answer_order = TRUE,
+         allow_retry = TRUE
 )
 ```
 
@@ -511,13 +532,17 @@ question("Which of the following characterizes exploratory plots?
          answer("quick and dead"),
          answer("slow and steady"),
          answer("quick and dirty", correct = TRUE),
-         answer("slow and clean")
+         answer("slow and clean"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE
 )
 ```
 ```{r ar, echo=FALSE}
 question("Plots let you summarize the data (usually graphically) and highlight any broad features",
          answer("True", correct = TRUE),
-         answer("False")
+         answer("False"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE
 )
 ```
 ```{r as, echo=FALSE}
@@ -525,7 +550,9 @@ question("Which of the following do plots NOT do?",
          answer("Summarize the data (usually graphically) and highlight any broad features"),
          answer("Conclude that you are ALWAYS right", correct = TRUE),
          answer("Suggest modeling strategies for the 'next step'"),
-         answer("Explore basic questions and hypotheses (and perhaps rule them out)")
+         answer("Explore basic questions and hypotheses (and perhaps rule them out)"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE
 )
 ```
 
