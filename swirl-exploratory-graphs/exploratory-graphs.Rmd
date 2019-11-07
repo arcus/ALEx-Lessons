@@ -7,8 +7,11 @@ runtime: shiny_prerendered
 ```{r setup, include=FALSE}
 library(learnr)
 options(digits = 3, scipen = 9999)
-pollution <- readRDS("pollution.RData")
+pollution <- readRDS("/Users/braunsb/Documents/GitHub/a-MESS Lessons/swirl-exploratory-graphs/pollution.RData")
 ppm <- pollution$pm25
+low <- pollution[pollution$pm25 < 5,]
+high <- pollution[pollution$pm25 > 15,]
+reg <- table(pollution$region)
 ```
 
 (Slides for this and other Data Science courses may be found at github [https://github.com/DataScienceSpecialization/courses/](https://github.com/DataScienceSpecialization/courses/). If you care to use them, they must be downloaded as a zip file and viewed locally. This lesson corresponds to 04_ExploratoryAnalysis/exploratoryGraphs.)
@@ -136,7 +139,7 @@ question("what do you think the horizontal line inside the box represents?",
 )
 ```
 
-The "whiskers" of the box (the vertical lines extending above and below the box) relate to the "range" parameter of boxplot, which we let default to the value 1.5 used by R. The height of the box is the interquartile range, the difference between the 75th and 25th quantiles. In this case that difference is 2.8. The whiskers are drawn to be a length of `range*2.8` or `1.5*2.8`. This shows us roughly how many, if any, data points are outliers, that is, beyond this range of values.
+The "whiskers" of the box (the vertical lines extending above and below the box) relate to the "range" parameter of boxplot, which we let default to the value 1.5 used by R. The height of the box is the interquartile range, the difference between the 75th and 25th quantiles. In this case that difference is 2.8. The whiskers are drawn to be a length of `range * 2.8` or `1.5 * 2.8`. This shows us roughly how many, if any, data points are outliers, that is, beyond this range of values.
 
 Note that `boxplot` is part of R's base plotting package. A nice feature that this package provides is its ability to overlay features. That is, you can add to (annotate) an existing plot.
 
@@ -145,21 +148,26 @@ Note that `boxplot` is part of R's base plotting package. A nice feature that th
 To see this, run the R command `abline` with the argument `h` equal to 12. Recall that 12 is the EPA standard for air quality.
 
 ```{r j, exercise = TRUE}
-
+boxplot(ppm, col = "blue")
+# Replace this comment with your new code
 ```
 ```{r j-solution}
+boxplot(ppm, col = "blue")
 abline(h = 12)
 ```
+
+
 ```{r k, echo=FALSE}
 question("What did the command do?",
          answer("nothing"),
-         answer("hid 12 random data points", correct = TRUE),
+         answer("hid 12 random data points"),
          answer("drew a vertical line at 12"),
          answer("drew a horizontal line at 12", correct = TRUE),
          random_answer_order = TRUE,
          allow_retry = TRUE
 )
 ```
+
 
 So `abline` "adds one or more straight lines through the current plot." We see from the plot that the bulk of the measured counties comply with the standard since they fall under the line marking that standard.
 
@@ -177,7 +185,7 @@ hist(ppm, col = "green")
 The histogram gives us a little more detailed information about our data, specifically the distribution of the pollution counts, or how many counties fall into each bucket of measurements.
 
 ```{r m, echo=FALSE}
-question("What are teh most frequent pollution counts?",
+question("What are the most frequent pollution counts?",
          answer("under 5"),
          answer("between 12 and 14"),
          answer("between 9 and 12", correct = TRUE),
@@ -189,12 +197,14 @@ question("What are teh most frequent pollution counts?",
 
 ### Histograms with rugs
 
-Now run the R command `rug` with the argument `ppm`.
+Now run the R command `rug` with the argument `ppm`. 
 
 ```{r n, exercise = TRUE}
-
+hist(ppm, col = "green")
+# Replace this comment with your new code
 ```
 ```{r n-solution}
+hist(ppm, col = "green")
 rug(ppm)
 ```
 
@@ -209,7 +219,7 @@ To illustrate this a little more, we've defined for you two vectors, `high` and 
 low
 ```
 
-It confirms that there are two data points between 3 and 4 and many between 4 and 5. Now look at high.
+It confirms that there are two data points between 3 and 4 and many between 4 and 5. Now look at `high`.
 
 ```{r p, exercise = TRUE}
 
@@ -242,44 +252,44 @@ question("What do you think the breaks argument specifies in this case?",
 So this histogram with more buckets is not nearly as smooth as the preceding one. In fact, it's a little too noisy to see the distribution clearly. When you're plotting histograms you might have to experiment with the argument `breaks` to get a good idea of your data's distribution. For fun now, rerun the R command `rug` with the argument `ppm`.
 
 ```{r s, exercise = TRUE}
-
+hist(ppm, col = "green", breaks = 100)
+# Replace this comment with your new code
 ```
 ```{r s-solution}
+hist(ppm, col = "green", breaks = 100)
 rug(ppm)
 ```
 
 See how rug works with the existing plot? It automatically adjusted its pocket size to that of the last plot plotted.
-
-Now rerun `hist` with `ppm` as the data and `col` equal to "green".
-
-```{r t, exercise = TRUE}
-
-```
-```{r t-solution}
-hist(ppm, col = "green")
-```
 
 ### Histograms with rugs and Overlays
 
 Now run the command `abline` with the argument `v` equal to 12 and the argument `lwd` equal to 2.
 
 ```{r u, exercise = TRUE}
-
+hist(ppm, col = "green")
+# Replace this comment with your new code
 ```
 ```{r u-solution}
+hist(ppm, col = "green")
 abline(v = 12, lwd = 2)
 ```
 
 See the vertical line at 12? Not very visible, is it, even though you specified a line width of 2? Run `abline` with the argument `v` equal to `median(ppm)`, the argument `col` equal to "magenta", and the argument `lwd` equal to 4.
 
 ```{r v, exercise = TRUE}
-
+hist(ppm, col = "green")
+# Replace this comment with your new code
 ```
 ```{r v-solution}
+hist(ppm, col = "green")
 abline(v = median(ppm), col = "magenta", lwd = 4)
 ```
 
 Better, right? Thicker and more of a contrast in color. This shows that although the median (50%) is below the standard, there are a fair number of counties in the U.S that have pollution levels higher than the recommended standard.
+
+
+### Barplots
 
 Now recall that our `pollution` data had 5 columns of information. So far we've looked only at the `pm25` column. We can also look at other information. To remind yourself what's there run the R command `names` with `pollution` as the argument.
 
@@ -292,7 +302,6 @@ names(pollution)
 
 `longitude` and `latitude` don't sound interesting, and each `fips` is unique since it identifies states (first 2 digits) and counties (last 3 digits). Let's look at the `region` column to see what's there. Run the R command `table` on this column. Use the construct `pollution$region`. Store the result in the variable `reg`.
 
-### Barplots
 
 ```{r x, exercise = TRUE}
 
