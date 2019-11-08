@@ -21,7 +21,7 @@ lesson_key,group,title,url
 127,Tidyverse,Piping and Summarizing,/sb-piping-and-summarizing/
 130,Stats,Correlation and Linear Regression,/sb-correlation-and-linear-regression/
 113,Stats,Exact Test of Goodness-of-Fit,/sb-exact-test-of-goodness-of-fit/
-130,Stats,Chi Square Test of Goodness-of-Fit,/sb-chi-square-test-of-goodness-of-fit/
+130,Stats,Chi Square Test of Goodness-of-Fit,/sb-chi-square-goodness-of-fit/
 129,Stats,One-Sample t Test,/sb-one-sample-t-test/
 128,Stats,Two-Sample t Test,/sb-two-sample-t-test/
 120,Stats,Introduction to Bayes's Theorem,/sb-introduction-to-bayes-theorem/
