@@ -60,6 +60,7 @@ if (window.hljs && document.readyState && document.readyState === "complete") {
 class(ht$inches)</code></pre>
 </div>
 <p><code>section</code> is a factor. Factors are excellent grouping variables. <code>inches</code> is an integer, which means we can perform mathematical functions, such as <code>mean</code> or <code>sd</code>, on it.</p>
+<p>To find out more about why variable types are important to understand at the outset of any examination of your data, see our <a href="http://a-mess.org/sb-variables/">Variables lesson</a>.</p>
 <p>Find out what the means are for the two groups. We’ll group the data and summarize it. Make sure you have <code>dplyr</code> in the library. <code>dplyr</code> puts <code>magrittr</code> in the library so we can use <code>%&gt;%</code> for piping (<a href="https://www.datacamp.com/community/tutorials/pipe-r-tutorial">What’s piping?</a> Unless you’re in interested in the history of R, control- or command-f the phrase “Why use it?” and start reading from there).</p>
 <p>Group the data by <code>section</code> using <code>group_by(section, .data = ht)</code> and examine the output.</p>
 <div class="tutorial-exercise" data-label="label" data-caption="Code" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="5">
