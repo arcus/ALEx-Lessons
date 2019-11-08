@@ -7,17 +7,18 @@ runtime: shiny_prerendered
 ```{r setup, include=FALSE}
 library(learnr)
 options(digits = 3, scipen = 9999)
-pollution <- readRDS("/Users/braunsb/Documents/GitHub/a-MESS Lessons/swirl-exploratory-graphs/pollution.RData")
+pollution <- readRDS("pollution.RData")
 ppm <- pollution$pm25
 low <- pollution[pollution$pm25 < 5,]
 high <- pollution[pollution$pm25 > 15,]
 reg <- table(pollution$region)
 ```
+Hint: Use the Solution buttons to check your work or to get help if you can't figure out what the solution is.     
+Another Hint: If you see a red ex next to your code, DO NOT RUN IT or this tutorial might freeze or crash. If it does freeze or crash, simply reload it. Your prior work will have been saved.
 
 (Slides for this and other Data Science courses may be found at github [https://github.com/DataScienceSpecialization/courses/](https://github.com/DataScienceSpecialization/courses/). If you care to use them, they must be downloaded as a zip file and viewed locally. This lesson corresponds to 04_ExploratoryAnalysis/exploratoryGraphs.)
 
-
-# Exploratory Graphs
+## Exploratory Graphs
 
 In this lesson, we'll discuss why graphics are an important tool for data scientists and the special role that exploratory graphs play in the field.
 
@@ -421,6 +422,17 @@ hist(subset(pollution, region == "west")$pm25, col = "green")
 
 See how R does all the labeling for you? Notice that the titles are different since we used different commands for the two plots. Let's look at some scatter plots now.
 
+Let's put together three commands into one code box: the `par` command (scroll up to find it) and the two histograms. You'll see how R puts the plots together as instructed in `par`. 
+
+```{r allthree, exercise = TRUE, exercise.lines = 5}
+
+```
+```{r allthree-solution}
+par(mfrow = c(2, 1), mar = c(4, 4, 2, 1))
+hist(east$pm25, col = "green")
+hist(subset(pollution, region == "west")$pm25, col = "green")
+```
+
 ### Scatter Plots (Which are, by Nature, Multi-Dimensional [Most of the Time])
 
 Scatter plots are two-dimensional plots which show the relationship between two variables, usually `x` and `y`. Let's look at a scatterplot showing the relationship between `latitude` and the `pm25` data. We'll use `plot`, a function from R's base plotting package.
@@ -436,13 +448,12 @@ with(pollution, plot(latitude, pm25))
 
 Note that the first argument is plotted along the x-axis and the second along the y. Now use `abline` to add a horizontal line at 12. Use two additional arguments, `lwd` equal to 2 and `lty` also equal to 2. See what happens.
 
-```{r prepare-ai}
-with(pollution, plot(latitude, pm25))
-```
 ```{r ai, exercise=TRUE}
-
+with(pollution, plot(latitude, pm25))
+# Replace this comment with your new code
 ```
 ```{r ai-solution}
+with(pollution, plot(latitude, pm25))
 abline(h = 12, lwd = 2, lty = 2)
 ```
 
@@ -468,13 +479,12 @@ question("Latitudes indicate distance from the equator, so which half of the U.S
 
 As before, use `abline` to add a horizontal line at 12. Use two additional arguments, `lwd` equal to 2 and `lty` also equal to 2.
 
-```{r prepare-al}
-plot(pollution$latitude, ppm, col = pollution$region)
-```
 ```{r al, exercise=TRUE}
-
+plot(pollution$latitude, ppm, col = pollution$region)
+# Replace this comment with your new code
 ```
 ```{r al-solution}
+plot(pollution$latitude, ppm, col = pollution$region)
 abline(h = 12, lwd = 2, lty = 2)
 ```
 
@@ -494,42 +504,78 @@ par(mfrow = c(1, 2), mar = c(5, 4, 2, 1))
 For the first scatterplot, on the left, we'll plot the `latitude`s and `pm25` counts from the west. We already pulled out the information for the counties in the east. Let's now get the information for the counties from the west. Create the variable `west` by using the `subset` command with `pollution` as the first argument and the appropriate boolean as the second.
 
 ```{r an, exercise = TRUE}
-
+par(mfrow = c(1, 2), mar = c(5, 4, 2, 1))
+# Replace this comment with your new code
 ```
 ```{r an-solution}
+par(mfrow = c(1, 2), mar = c(5, 4, 2, 1))
 west <- subset(pollution, region == "west")
 ```
 
 Now call `plot` with three arguments. These are `west$latitude`, `west$pm25` (y-axis), and the argument `main` equal to the string "West" (title). Do this now.
 
-```{r prepare-ao}
-par(mfrow = c(2, 1), mar = c(4, 4, 2, 1))
-east <- subset(pollution, region == "east")
+```{r callplotwest, exercise = TRUE, exercise.lines = 5}
+par(mfrow = c(1, 2), mar = c(5, 4, 2, 1))
 west <- subset(pollution, region == "west")
+# Replace this comment with your new code
 ```
-```{r ao, exercise=TRUE}
+```{r callplotwest-solution}
+par(mfrow = c(1, 2), mar = c(5, 4, 2, 1))
+west <- subset(pollution, region == "west")
+plot(west$latitude, west$pm25, main = "West")
+```
 
+For the second scatterplot, on the right, we'll plot the `latitudes` and `pm25` counts from the east. First create the dataset `east` as you did `west`. We'll bring along the correct code from above so you can see how the graph is built, line by line. 
+
+```{r ao, exercise=TRUE}
+par(mfrow = c(1, 2), mar = c(5, 4, 2, 1))
+west <- subset(pollution, region == "west")
+plot(west$latitude, west$pm25, main = "West")
+# Replace this comment with your new code
 ```
 ```{r ao-solution}
-plot(west$latitude, west$pm25, main = "West")
-```
-
-For the second scatterplot, on the right, we'll plot the latitudes and pm25 counts from the east.
-
-```{r prepare-ap}
-par(mfrow = c(2, 1), mar = c(4, 4, 2, 1))
-east <- subset(pollution, region == "east")
+par(mfrow = c(1, 2), mar = c(5, 4, 2, 1))
 west <- subset(pollution, region == "west")
 plot(west$latitude, west$pm25, main = "West")
+east <- subset(pollution, region == "east")
 ```
-```{r ap, exercise=TRUE}
 
+Now plot `east`. 
+
+```{r ap, exercise=TRUE}
+par(mfrow = c(1, 2), mar = c(5, 4, 2, 1))
+west <- subset(pollution, region == "west")
+plot(west$latitude, west$pm25, main = "West")
+east <- subset(pollution, region == "east")
+# Replace this comment with your new code
 ```
 ```{r ap-solution}
+par(mfrow = c(1, 2), mar = c(5, 4, 2, 1))
+west <- subset(pollution, region == "west")
+plot(west$latitude, west$pm25, main = "West")
+east <- subset(pollution, region == "east")
 plot(east$latitude, east$pm25, main = "East")
 ```
 
 See how R took care of all the details for you? Nice, right? It looks like there are more dirty counties in the east but the extreme dirt (greater than 15) is in the west.
+
+You can turn the whole graph 90 degrees by changing `mfrow = c(1, 2)` to `mfrow = c(2, 1)`. Try it. 
+
+```{r swappar, exercise=TRUE}
+par(mfrow = c(1, 2), mar = c(5, 4, 2, 1))
+west <- subset(pollution, region == "west")
+plot(west$latitude, west$pm25, main = "West")
+east <- subset(pollution, region == "east")
+plot(east$latitude, east$pm25, main = "East")
+```
+```{r swappar-solution}
+par(mfrow = c(2, 1), mar = c(5, 4, 2, 1))
+west <- subset(pollution, region == "west")
+plot(west$latitude, west$pm25, main = "West")
+east <- subset(pollution, region == "east")
+plot(east$latitude, east$pm25, main = "East")
+```
+
 
 ## Summary and Review
 
