@@ -55,7 +55,7 @@ If you already have a pretty good understanding of a paired _t_ test and just ne
 
 ## Background
 
-For a thorough treatment of the background for _t_ tests generally, see our lessons [One-Sample _t_ Test]("http://a-mess.org/sb-one-sample-t-test/") and [Two-Sample _t_ Test]("http://a-mess.org/sb-two-sample-t-test/").
+For a thorough treatment of the background for _t_ tests generally, see our lessons [One-Sample _t_ Test]("../sb-one-sample-t-test/") and [Two-Sample _t_ Test]("http://a-mess.org/sb-two-sample-t-test/").
 
 Use the **paired t–test** when you have one measurement variable and two nominal variables, one of the nominal variables has only two values, and you have _only_ one observation for each combination of the nominal variables; in other words, you have pairs of observations rather than unrelated observations. 
 
