@@ -412,7 +412,7 @@ In the above example, `arg1` has no default value, so a value must be provided f
 
 Notice that the ellipsis is the first argument, and all other arguments after the ellipsis have default values. This is a strict rule in R programming: all arguments after an ellipsis must have default values. Take a look at the `simon_says` function below:
 
-```{r simonsays}
+```{r simonsays, echo = TRUE}
 simon_says <- function(...){    
   paste("Simon says:", ...)    
 }
@@ -420,7 +420,7 @@ simon_says <- function(...){
 
 `simon_says` works just like the `paste` function, except the begining of every string is prepended by the string "Simon says:".
 
-Telegrams used to be peppered with the words START and STOP in order to demarcate the beginning and end of sentences. Write a function below called `telegram` that formats sentences for telegrams. For example, the expression `telegram("Good", "morning")` should evaluate to `"START Good morning STOP"`.
+Telegrams used to be peppered with the words START and STOP in order to demarcate the beginning and end of sentences. Write a function below called `telegram` that formats sentences for telegrams. For example, the expression `telegram("Good", "morning")` should evaluate to `"START Good morning STOP"`. Then test out your telegram function. Use your new telegram function passing in whatever arguments you wish!
 
 ```{r aww, exercise = TRUE}
 
@@ -429,15 +429,7 @@ Telegrams used to be peppered with the words START and STOP in order to demarcat
 telegram <- function(...){
   paste("START", ..., "STOP")
 }
-```
-
-Now let's test out your telegram function. Use your new telegram function passing in whatever arguments you wish!
-
-```{r x, exercise=TRUE}
-
-```
-```{r x-solution}
-telegram("Good", "Morning")
+telegram("I am an argument that was wanted here")
 ```
 
 ## Mad Libs
@@ -485,7 +477,7 @@ mad_libs <- function(...){
 }
 ```
 ```{r z, exercise=TRUE}
-mad_libs(place = "Philadelphia", adjective = "hyper", noun = "dishwasher")
+
 ```
 ```{r z-solution}
 mad_libs(place = "Philadelphia", adjective = "hyper", noun = "dishwasher")
@@ -540,3 +532,7 @@ You made your own binary operator! Let's test it out. Paste together the strings
 ```{r ab-solution}
 "I" %p% "love" %p% "R!"
 ```
+
+You may wonder when you'll ever want to create your own binary operators. Some people use them for complex math like adding together directions for quarks, and others use them for matrix math. 
+
+Now that you understand how to create your own functions, you can create R in your own image if you like. Start thinking about the packages _you_ want to write!

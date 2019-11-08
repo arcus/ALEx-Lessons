@@ -4,8 +4,6 @@ output:
   learnr::tutorial:
     progressive: true
     allow_skip: true
-fig_width: 8
-fig_height: 6
 runtime: shiny_prerendered
 ---
 
