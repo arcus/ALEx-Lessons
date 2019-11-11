@@ -226,7 +226,7 @@ Since we have six columns (including patient names), we’ll need to first creat
 cnames <- c("patient", "age", "weight", "bp", "rating", "test")
 ```
 
-Now, use the `colnames` function to set the colnames attribute for our data frame. This is similar to the way we used the `dim` function earlier in this lesson. Then see if that got the job done. Print the contents of my_data.
+Now, use the `colnames` function to set the colnames attribute for our data frame. This is similar to the way we used the `dim` function earlier in this lesson. Then see if that got the job done. Print the contents of `my_data`.
 ```{r prepare-s}
 my_vector <- 1:20
 dim(my_vector) <- c(4, 5)
