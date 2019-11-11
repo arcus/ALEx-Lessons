@@ -16,7 +16,8 @@ lesson_key,group,title,url
 117,R Basics,swirl Part 13 - Simulation,/swirl-simulation/
 118,R Basics,swirl Part 14 - Dates and Times,/swirl-dates-and-times/
 119,R Basics,swirl Part 15 -  Base Graphics,/swirl-base-graphics/
-122,Stats,swirl - Part 16 - Exploratory Graphs,/swirl-exploratory-graphs/
+132,Data Visualization,swirl Part 16 - ggplot2 Part 1,/swirl-ggplot2-part-1/
+122,Stats,swirl - Part 17 - Exploratory Graphs,/swirl-exploratory-graphs/
 129,Tidyverse,dplyr,/sb-dplyr/
 127,Tidyverse,Piping and Summarizing,/sb-piping-and-summarizing/
 130,Stats,Correlation and Linear Regression,/sb-correlation-and-linear-regression/
