@@ -225,7 +225,7 @@ par()$fg
 It gave you a color, right? 
 
 ```{r q, echo=FALSE}
-question("Since par()$fg specifies foreground color, what do you think par()$bg specifies?",
+question("Since `par()$fg` specifies foreground color, what do you think `par()$bg` specifies?",
          answer("Better color"),
          answer("blue-green"),
          answer("Background color", correct = TRUE),
@@ -338,6 +338,7 @@ plot(airquality$Wind, airquality$Ozone, type = "n")
 ##
 ```
 ```{r y-solution}
+plot(airquality$Wind, airquality$Ozone, type = "n")
 title(main = "Wind and Ozone in NYC")
 ```
 
@@ -363,6 +364,9 @@ may <- subset(airquality, Month == 5)
 ##
 ```
 ```{r aa-solution}
+plot(airquality$Wind, airquality$Ozone, type = "n")
+title(main = "Wind and Ozone in NYC")
+may <- subset(airquality, Month == 5)
 points(may$Wind, may$Ozone, col = "blue", pch = 17)
 ```
 
@@ -390,6 +394,11 @@ points(may$Wind, may$Ozone, col = "blue", pch = 17)
 ##
 ```
 ```{r ac-solution}
+plot(airquality$Wind, airquality$Ozone, type = "n")
+title(main = "Wind and Ozone in NYC")
+may <- subset(airquality, Month == 5)
+notmay <- subset(airquality, Month != 5)
+points(may$Wind, may$Ozone, col = "blue", pch = 17)
 points(notmay$Wind, notmay$Ozone, col="red", pch=8)
 ```
 
@@ -409,6 +418,12 @@ points(notmay$Wind, notmay$Ozone, col="red", pch=8)
 ##
 ```
 ```{r ad-solution}
+plot(airquality$Wind, airquality$Ozone, type = "n")
+title(main = "Wind and Ozone in NYC")
+may <- subset(airquality, Month == 5)
+notmay <- subset(airquality, Month != 5)
+points(may$Wind, may$Ozone, col = "blue", pch = 17)
+points(notmay$Wind, notmay$Ozone, col="red", pch=8)
 legend("topright", 
        pch = c(17,8), 
        col = c("blue", "red"),
@@ -435,6 +450,16 @@ legend("topright",
 ##
 ```
 ```{r ae-solution}
+plot(airquality$Wind, airquality$Ozone, type = "n")
+title(main = "Wind and Ozone in NYC")
+may <- subset(airquality, Month == 5)
+notmay <- subset(airquality, Month != 5)
+points(may$Wind, may$Ozone, col = "blue", pch = 17)
+points(notmay$Wind, notmay$Ozone, col="red", pch=8)
+legend("topright", 
+       pch = c(17,8), 
+       col = c("blue", "red"),
+       legend = c("May", "Other Months"))
 abline(v = median(airquality$Wind), lty = 2,lwd = 2)
 ```
 
@@ -459,6 +484,7 @@ par(mfrow = c(1, 2))
 
 ```
 ```{r ag-solution}
+par(mfrow = c(1, 2))
 plot(airquality$Wind, airquality$Ozone, main = "Ozone and Wind")
 ```
 
@@ -476,6 +502,8 @@ plot(airquality$Wind, airquality$Ozone, main = "Ozone and Wind")
 ###
 ```
 ```{r ah-solution}
+par(mfrow = c(1, 2))
+plot(airquality$Wind, airquality$Ozone, main = "Ozone and Wind")
 plot(airquality$Ozone, airquality$Solar.R, main = "Ozone and Solar Radiation")
 ```
 
@@ -504,6 +532,7 @@ par(mfrow = c(1, 3), mar = c(4, 4, 2, 1), oma = c(0, 0, 2, 0))
 ###
 ```
 ```{r aj-solution}
+par(mfrow = c(1, 3), mar = c(4, 4, 2, 1), oma = c(0, 0, 2, 0))
 plot(airquality$Wind, airquality$Ozone, main = "Ozone and Wind")
 ```
 
@@ -522,6 +551,8 @@ plot(airquality$Wind, airquality$Ozone, main = "Ozone and Wind")
 ##
 ```
 ```{r ak-solution}
+par(mfrow = c(1, 3), mar = c(4, 4, 2, 1), oma = c(0, 0, 2, 0))
+plot(airquality$Wind, airquality$Ozone, main = "Ozone and Wind")
 plot(airquality$Solar.R, airquality$Ozone, main = "Ozone and Solar Radiation")
 ```
 
@@ -540,6 +571,9 @@ plot(airquality$Solar.R, airquality$Ozone, main = "Ozone and Solar Radiation")
 ##
 ```
 ```{r al-solution}
+par(mfrow = c(1, 3), mar = c(4, 4, 2, 1), oma = c(0, 0, 2, 0))
+plot(airquality$Wind, airquality$Ozone, main = "Ozone and Wind")
+plot(airquality$Solar.R, airquality$Ozone, main = "Ozone and Solar Radiation")
 plot(airquality$Temp, airquality$Ozone, main = "Ozone and Temperature")
 ```
 
@@ -559,6 +593,10 @@ plot(airquality$Temp, airquality$Ozone, main = "Ozone and Temperature")
 ##
 ```
 ```{r am-solution}
+par(mfrow = c(1, 3), mar = c(4, 4, 2, 1), oma = c(0, 0, 2, 0))
+plot(airquality$Wind, airquality$Ozone, main = "Ozone and Wind")
+plot(airquality$Solar.R, airquality$Ozone, main = "Ozone and Solar Radiation")
+plot(airquality$Temp, airquality$Ozone, main = "Ozone and Temperature")
 mtext("Ozone and Weather in New York City", outer = TRUE)
 ```
 
