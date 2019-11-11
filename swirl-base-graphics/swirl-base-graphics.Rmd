@@ -39,7 +39,7 @@ data(cars)
 ?cars
 ```
 
-As you can see in the help page, the `cars` data set has only two variables: speed and stopping distance. Note that the data is from the 1920s. Run `head()` on `cars`.
+As you can see in the help page, the `cars` data set has only two variables: speed and stopping distance. Note that the data is from the 1920s. Run `head` on `cars`.
 
 ```{r c, exercise = TRUE, exercise.setup = "prepare-b"}
 
@@ -48,9 +48,9 @@ As you can see in the help page, the `cars` data set has only two variables: spe
 head(cars)
 ```
 
-Before plotting, it is always a good idea to get a sense of the data. Key R commands for doing so include `dim()`, `names()`, `head()`, `tail()` and `summary()`.
+Before plotting, it is always a good idea to get a sense of the data. Key R commands for doing so include `dim`, `names`, `head`, `tail` and `summary`.
 
-Run `plot()` on `cars`.
+Run `plot` on `cars`.
 
 ```{r d, exercise = TRUE, exercise.setup = "prepare-b"}
 
@@ -61,11 +61,11 @@ plot(cars)
 
 As always, R tries very hard to give you something sensible given the information that you have provided to it. First, R notes that the data frame you have given it has just two columns, so it assumes that you want to plot one column versus the other.
 
-Second, since we do not provide labels for either axis, R uses the names of the columns. Third, it creates axis tick marks at nice round numbers and labels them accordingly. Fourth, it uses the other defaults supplied in `plot()`.
+Second, since we do not provide labels for either axis, R uses the names of the columns. Third, it creates axis tick marks at nice round numbers and labels them accordingly. Fourth, it uses the other defaults supplied in `plot`.
 
 We will now spend some time exploring `plot`, but many of the topics covered here will apply to most other R graphics functions. Note that 'plot' is short for scatterplot.
 
-Look up the help page for `plot()`.
+Look up the help page for `plot`.
 
 ```{r e, exercise = TRUE}
 
@@ -74,9 +74,9 @@ Look up the help page for `plot()`.
 ?plot
 ```
 
-The help page for `plot()` highlights the different arguments that the function can take. The two most important are `x` and `y`, the variables that will be plotted. For the next set of questions, include the argument names in your answers. That is, do not type `plot(cars$speed, cars$dist)`, although that will work. Instead, use `plot(x = cars$speed, y = cars$dist)`.
+The help page for `plot` highlights the different arguments that the function can take. The two most important are `x` and `y`, the variables that will be plotted. For the next set of questions, include the argument names in your answers. That is, do not type `plot(cars$speed, cars$dist)`, although that will work. Instead, use `plot(x = cars$speed, y = cars$dist)`.
 
-Use `plot()` to show `speed` on the x-axis and `dist` on the y-axis from the `cars` data frame. Use the form of `plot` in which vectors are explicitly passed in as arguments for `x` and `y`.
+Use `plot` to show `speed` on the x-axis and `dist` on the y-axis from the `cars` data frame. Use the form of `plot` in which vectors are explicitly passed in as arguments for `x` and `y`.
 
 ```{r f, exercise = TRUE, exercise.setup = "prepare-b"}
 
@@ -89,7 +89,7 @@ Note that this produces a slightly different answer than `plot(cars)`. In this c
 
 Note that there are other ways to call the plot command, i.e., using the "formula" interface. For example, we get a similar plot to the above with `plot(dist ~ speed, cars)`. However, we will wait till later in the lesson before using the formula interface.
 
-Use `plot()` to show `dist` on the `x-axis` and speed on the `y-axis` from `cars`. This is the opposite of what we did above.
+Use `plot` to show `dist` on the `x-axis` and speed on the `y-axis` from `cars`. This is the opposite of what we did above.
 
 ```{r g, exercise = TRUE, exercise.setup = "prepare-b"}
 
@@ -154,7 +154,7 @@ Plot cars with only a sub title of "My Plot Subtitle".
 plot(cars, sub = "My Plot Subtitle")
 ```
 
-The plot help page (`?plot`) only covers a small number of the many arguments that can be passed in to `plot()` and to other graphical functions. To begin to explore the many other options, look at `?par`. Let's look at some of the more commonly used ones. Continue using `plot(cars, ...)` as the base answer to these questions.
+The plot help page (`?plot`) only covers a small number of the many arguments that can be passed in to `plot` and to other graphical functions. To begin to explore the many other options, look at `?par`. Let's look at some of the more commonly used ones. Continue using `plot(cars, ...)` as the base answer to these questions.
 
 Plot `cars` so that the plotted points are colored red. (Use `col = 2` to achieve this effect.)
 
@@ -205,7 +205,7 @@ data(mtcars)
 
 Anytime that you load up a new data frame, you should explore it before using it. Use any code box to play around however you like.
 
-Look up the help page for `boxplot()`.
+Look up the help page for `boxplot`.
 
 ```{r q, exercise = TRUE}
 
@@ -214,11 +214,11 @@ Look up the help page for `boxplot()`.
 ?boxplot
 ```
 
-Instead of adding data columns directly as input arguments, as we did with `plot()`, it is often handy to pass in the entire data frame. This is what the "data" argument in `boxplot()` allows.
+Instead of adding data columns directly as input arguments, as we did with `plot`, it is often handy to pass in the entire data frame. This is what the "data" argument in `boxplot` allows.
 
-`boxplot()`, like many R functions, also takes a "formula" argument, generally an expression with a tilde ("~") which indicates the relationship between the input variables. This allows you to enter something like `mpg ~ cyl` to plot the relationship between `cyl` (number of cylinders) on the x-axis and `mpg` (miles per gallon) on the y-axis.
+`boxplot`, like many R functions, also takes a "formula" argument, generally an expression with a tilde ("~") which indicates the relationship between the input variables. This allows you to enter something like `mpg ~ cyl` to plot the relationship between `cyl` (number of cylinders) on the x-axis and `mpg` (miles per gallon) on the y-axis.
 
-Use `boxplot()` with `formula = mpg ~ cyl` and `data = mtcars` to create a box plot.
+Use `boxplot` with `formula = mpg ~ cyl` and `data = mtcars` to create a box plot.
 
 ```{r r, exercise = TRUE, exercise.setup = "prepare-p"}
 
@@ -227,11 +227,11 @@ Use `boxplot()` with `formula = mpg ~ cyl` and `data = mtcars` to create a box p
 boxplot(formula = mpg ~ cyl, data = mtcars)
 ```
 
-The plot shows that `mpg` is much lower for cars with more cylinders. Note that we can use the same set of arguments that we explored with `plot()` above to add axis labels, titles and so on.
+The plot shows that `mpg` is much lower for cars with more cylinders. Note that we can use the same set of arguments that we explored with `plot` above to add axis labels, titles and so on.
 
-When looking at a single variable, histograms are a useful tool. `hist()` is the associated R function. Like `plot()`, `hist()` is best used by just passing in a single vector.
+When looking at a single variable, histograms are a useful tool. `hist` is the associated R function. Like `plot`, `hist` is best used by just passing in a single vector.
 
-Use `hist()` with the vector `mtcars$mpg` to create a histogram.
+Use `hist` with the vector `mtcars$mpg` to create a histogram.
 
 ```{r s, exercise = TRUE, exercise.setup = "prepare-p"}
 

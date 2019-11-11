@@ -13,13 +13,14 @@ set.seed(9699)
 flips2 <- rbinom(100, size = 1, prob = 0.7)
 set.seed(9699)
 my_pois <- replicate(100, rpois(5, 10))
+cm <- colMeans(my_pois)
 ```
 
 One of the great advantages of using a statistical programming language like R is its vast collection of tools for simulating random numbers.
 
 This lesson assumes familiarity with a few common probability distributions, but these topics will only be discussed with respect to random number generation. Even if you have no prior experience with these concepts, you should be able to complete the lesson and understand the main ideas.
 
-The first function we'll use to generate random numbers is sample(). Use ?sample to pull up the documentation.
+The first function we'll use to generate random numbers is `sample`. Use `?sample` to pull up the documentation.
 
 ```{r a, exercise = TRUE}
 
@@ -40,13 +41,12 @@ set.seed(9699)
 sample(1:6, 4, replace = TRUE)
 ```
 
-Now repeat the command to see how your result differs. (The probability of rolling the exact same result is (1/6)^4 = 0.00077, which is pretty small!)
+Now repeat the command---without setting the seed---to see how your result differs. (The probability of rolling the exact same result is (1/6)^4 = 0.00077, which is pretty small!)
 
 ```{r c, exercise = TRUE}
 
 ```
 ```{r c-solution}
-set.seed(9699)
 sample(1:6, 4, replace = TRUE)
 ```
 
@@ -73,7 +73,7 @@ R contains a number of handy vectors, one of which is `LETTERS`. Type `LETTERS` 
 LETTERS
 ```
 
-The `sample()` function can also be used to permute, or rearrange, the elements of a vector. For example, try `sample(LETTERS)` to permute all 26 letters of the English alphabet. This is identical to taking a sample of size 26 from LETTERS, without replacement. When the 'size' argument to `sample()` is not specified, R takes a sample equal in size to the vector from which you are sampling.
+The `sample` function can also be used to permute, or rearrange, the elements of a vector. For example, try `sample(LETTERS)` to permute all 26 letters of the English alphabet. This is identical to taking a sample of size 26 from LETTERS, without replacement. When the 'size' argument to `sample` is not specified, R takes a sample equal in size to the vector from which you are sampling.
 
 ```{r f, exercise = TRUE}
 
@@ -85,7 +85,7 @@ sample(LETTERS)
 
 Now, suppose we want to simulate 100 flips of an unfair two-sided coin. This particular coin has a 0.3 probability of landing 'tails' and a 0.7 probability of landing 'heads'.
 
-Let the value `0` represent tails and the value `1` represent heads. Use `sample()` to draw a sample of size 100 from the vector `c(0, 1)`, with replacement. Since the coin is unfair, we must attach specific probabilities to the values 0 (tails) and 1 (heads) with a fourth argument, `prob = c(0.3, 0.7)`. Assign the result to a new variable called `flips.`
+Let the value `0` represent tails and the value `1` represent heads. Use `sample` to draw a sample of size 100 from the vector `c(0, 1)`, with replacement. Since the coin is unfair, we must attach specific probabilities to the values 0 (tails) and 1 (heads) with a fourth argument, `prob = c(0.3, 0.7)`. Assign the result to a new variable called `flips.`
 
 ```{r g, exercise = TRUE}
 
@@ -104,7 +104,7 @@ View the contents `flips`.
 flips
 ```
 
-Since we set the probability of landing heads on any given flip to be 0.7, we'd expect approximately 70 of our coin flips to have the value 1. Count the actual number of 1s contained in flips using the `sum()` function.
+Since we set the probability of landing heads on any given flip to be 0.7, we'd expect approximately 70 of our coin flips to have the value 1. Count the actual number of 1s contained in flips using the `sum` function.
 
 ```{r i, exercise = TRUE, exercise.setup = "prepare-h"}
 
@@ -113,7 +113,7 @@ Since we set the probability of landing heads on any given flip to be 0.7, we'd 
 sum(flips)
 ```
 
-A coin flip is a binary outcome (0 or 1) and we are performing 100 independent trials (coin flips), so we can use `rbinom()` to simulate a binomial random variable. Pull up the documentation for `rbinom()` using `?rbinom`.
+A coin flip is a binary outcome (0 or 1) and we are performing 100 independent trials (coin flips), so we can use `rbinom` to simulate a binomial random variable. Pull up the documentation for `rbinom` using `?rbinom`.
 
 ```{r j, exercise = TRUE}
 
@@ -153,7 +153,7 @@ View the contents of `flips2`.
 flips2
 ```
 
-Now use `sum()` to count the number of 1s (heads) in `flips2`. It should be close to 70.
+Now use `sum` to count the number of 1s (heads) in `flips2`. It should be close to 70.
 
 ```{r n, exercise = TRUE, exercise.setup = "prepare-m"}
 
@@ -162,7 +162,7 @@ Now use `sum()` to count the number of 1s (heads) in `flips2`. It should be clos
 sum(flips2)
 ```
 
-Similar to `rbinom()`, we can use R to simulate random numbers from many other probability distributions. Pull up the documentation for `rnorm()` now.
+Similar to `rbinom`, we can use R to simulate random numbers from many other probability distributions. Pull up the documentation for `rnorm` now.
 
 ```{r o, exercise = TRUE}
 
@@ -171,7 +171,7 @@ Similar to `rbinom()`, we can use R to simulate random numbers from many other p
 ?rnorm
 ```
 
-The standard normal distribution has mean 0 and standard deviation 1. As you can see under the 'Usage' section in the documentation, the default values for the `mean` and `sd` arguments to `rnorm()` are 0 and 1, respectively. Thus, `rnorm(10)` will generate 10 random numbers from a standard normal distribution. Give it a try.
+The standard normal distribution has mean 0 and standard deviation 1. As you can see under the 'Usage' section in the documentation, the default values for the `mean` and `sd` arguments to `rnorm` are 0 and 1, respectively. Thus, `rnorm(10)` will generate 10 random numbers from a standard normal distribution. Give it a try.
 
 ```{r p, exercise = TRUE}
 
@@ -193,7 +193,7 @@ rnorm(10, mean = 100, sd = 25)
 
 Finally, what if we want to simulate 100 *groups* of random numbers, each containing 5 values generated from a Poisson distribution with mean 10? Let's start with one group of 5 numbers, then I'll show you how to repeat the operation 100 times in a convenient and compact way.
 
-Generate 5 random values from a Poisson distribution with mean 10. Check out the documentation for `rpois()` if you need help.
+Generate 5 random values from a Poisson distribution with mean 10. Check out the documentation for `rpois` if you need help.
 
 ```{r s, exercise = TRUE}
 
@@ -222,7 +222,7 @@ Take a look at the contents of `my_pois`.
 my_pois
 ```
 
-`replicate()` created a matrix, each column of which contains 5 random numbers generated from a Poisson distribution with mean 10. Now we can find the mean of each column in `my_pois` using the `colMeans()` function. Store the result in a variable called `cm`.
+`replicate` created a matrix, each column of which contains 5 random numbers generated from a Poisson distribution with mean 10. Now we can find the mean of each column in `my_pois` using the `colMeans` function. Store the result in a variable called `cm`.
 
 ```{r v, exercise = TRUE}
 
@@ -242,6 +242,6 @@ hist(cm)
 
 Looks like our column means are almost normally distributed, right? That's the Central Limit Theorem at work, but that's a lesson for another day!
 
-All of the standard probability distributions are built into R, including exponential (`rexp()`), chi-squared (`rchisq()`), gamma (`rgamma()`)---well, you see the pattern.
+All of the standard probability distributions are built into R, including exponential (`rexp`), chi-squared (`rchisq`), gamma (`rgamma`)---well, you see the pattern.
 
 Simulation is practically a field of its own and we've skimmed only the surface of what's possible. I encourage you to explore these and other functions further on your own.
