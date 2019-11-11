@@ -7,7 +7,12 @@ runtime: shiny_prerendered
 ```{r setup, include=FALSE}
 library(learnr)
 library(readr)
+library(dplyr)
 plants <- read_csv("plants.csv")
+names(plants)
+ncol(plants)
+plants <- plants %>% 
+  select(-X1)
 ```
 
 Whenever you're working with a new dataset, the first thing you should do is look at it to get answers to these questions: 
@@ -39,7 +44,7 @@ Let's begin by checking the class of the plants variable with `class(plants)`. T
 class(plants)
 ```
 
-It's very common for data to be stored in a data frame. It is the default class for data read into R using functions like `read.csv()` and `read.table()`, both of which you'll learn about in another lesson.
+It's very common for data to be stored in a data frame. It is the default class for data read into R using functions like `read.csv` and `read.table`, both of which you'll learn about in another lesson.
 
 Since the dataset is stored in a data frame, we know it is rectangular. In other words, it has two dimensions (rows and columns) and fits neatly into a table or spreadsheet. Use `dim(plants)` to see exactly how many rows and columns we're dealing with.
 
@@ -70,7 +75,7 @@ nrow(plants)
 ncol(plants)
 ```
 
-If you are curious as to how much space the dataset is occupying in memory, you can use object.size(plants).
+If you are curious as to how much space the dataset is occupying in memory, you can use `object.size(plants)`.
 
 ```{r f, exercise = TRUE}
 
@@ -90,7 +95,7 @@ names(plants)
 
 We've applied fairly descriptive variable names to this dataset, but that won't always be the case. A logical next step is to peek at the actual data. However, our dataset contains over 5000 observations (rows), so it's impractical to view the whole thing all at once.
 
-The `head()` function allows you to preview the top of the dataset. Give it a try with only one argument.
+The `head` function allows you to preview the top of the dataset. Give it a try with only one argument.
 
 ```{r h, exercise = TRUE}
 
@@ -101,7 +106,7 @@ head(plants)
 
 Take a minute to look through and understand the output above. Each row is labeled with the observation number and each column with the variable name. Your screen is probably not wide enough to view all 10 columns side by side, in which case R displays as many columns as it can on each line before continuing on the next.
 
-By default, `head()` shows you the first six rows of the data. You can alter this behavior by passing as a second argument the number of rows you'd like to view. Use `head()` to preview the first 10 rows of plants.
+By default, `head` shows you the first six rows of the data. You can alter this behavior by passing as a second argument the number of rows you'd like to view. Use `head` to preview the first 10 rows of plants.
 
 ```{r i, exercise = TRUE}
 
@@ -128,9 +133,9 @@ After previewing the top and bottom of the data, you probably noticed lots of `N
 summary(plants)
 ```
 
-`summary()` provides different output for each variable, depending on its class. For numeric data such as `Precip_Min`, `summary()` displays the minimum, 1st quartile, median, mean, 3rd quartile, and maximum. These values help us understand how the data is distributed.
+`summary` provides different output for each variable, depending on its class. For numeric data such as `Precip_Min`, `summary` displays the minimum, 1st quartile, median, mean, 3rd quartile, and maximum. These values help us understand how the data is distributed.
 
-For categorical variables (called 'factor' variables in R), `summary()` displays the number of times each value (or 'level') occurs in the data. For example, each value of `Scientific_Name` appears only once, since it is unique to a specific plant. In contrast, the summary for `Duration` (also a factor variable) tells us that our dataset contains 3031 Perennial plants, 682 Annual plants, etc.
+For categorical variables (called 'factor' variables in R), `summary` displays the number of times each value (or 'level') occurs in the data. For example, each value of `Scientific_Name` appears only once, since it is unique to a specific plant. In contrast, the summary for `Duration` (also a factor variable) tells us that our dataset contains 3031 Perennial plants, 682 Annual plants, etc.
 
 You can see that R truncated the summary for `Active_Growth_Period` by including a catch-all category called 'Other'. Since it is a categorical or factor variable, we can see how many times each value actually occurs in the data with `table(plants$Active_Growth_Period)`.
 
@@ -143,7 +148,7 @@ table(plants$Active_Growth_Period)
 
 Each of the functions we've introduced so far has its place in helping you to better understand the structure of your data. However, we've left the best for last....
 
-Perhaps the most useful and concise function for understanding the *str*ucture of your data is `str()`. Give it a try now.
+Perhaps the most useful and concise function for understanding the *str*ucture of your data is `str`. Give it a try now.
 
 ```{r m, exercise = TRUE}
 
@@ -152,8 +157,8 @@ Perhaps the most useful and concise function for understanding the *str*ucture o
 str(plants)
 ```
 
-The beauty of `str()` is that it combines many of the features of the other functions you've already seen, all in a concise and readable format. At the very top, it tells us that the class of plants is 'data.frame' and that it has 5166 observations and 10 variables. It then gives us the name and class of each variable, as well as a preview of its contents.
+The beauty of `str` is that it combines many of the features of the other functions you've already seen, all in a concise and readable format. At the very top, it tells us that the class of plants is 'data.frame' and that it has 5166 observations and 10 variables. It then gives us the name and class of each variable, as well as a preview of its contents.
 
-`str()` is actually a very general function that you can use on most objects in R. Any time you want to understand the structure of something (a dataset, a function, or whatever---even a function),` str()` is a good place to start.
+`str` is actually a very general function that you can use on most objects in R. Any time you want to understand the structure of something (a dataset, a function, or whatever---even a function),` str` is a good place to start.
 
 In this lesson, you learned how to get a feel for the structure and contents of a new dataset using a collection of simple and useful functions. Taking the time to do this upfront can save you time and frustration later on in your analysis.
