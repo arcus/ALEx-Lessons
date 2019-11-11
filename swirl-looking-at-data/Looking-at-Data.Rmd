@@ -7,7 +7,7 @@ runtime: shiny_prerendered
 ```{r setup, include=FALSE}
 library(learnr)
 library(readr)
-read_csv("plants.csv")
+plants <- read_csv("plants.csv")
 ```
 
 Whenever you're working with a new dataset, the first thing you should do is look at it to get answers to these questions: 
@@ -21,7 +21,7 @@ Whenever you're working with a new dataset, the first thing you should do is loo
 
 This lesson will teach you how to answer these questions (and more) using R's built-in functions. We'll be using a dataset constructed from the United States Department of Agriculture's PLANTS Database (http://plants.usda.gov/adv_search.html).
 
-I've stored the data for you in a variable called `plants`. Type `ls()` to list the variables in your workspace, among which should be `plants`. 
+I've stored the data for you in a tibble (a type of data frame) called `plants`. Type `plants` to see what it looks like. 
 
 ```{r a, exercise = TRUE}
 
