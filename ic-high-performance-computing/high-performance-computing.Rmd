@@ -127,7 +127,7 @@ qsub -pe smp 2 -l m_mem_free=4G -l h_vmem=4G
 ```
 This achieves the same result as the `script.sh` above.
 
-## Piping Standard Input
+## Checking on the Status of Jobs
 You can check on the status of jobs using the `qstat` command.
 ```{r, engine = 'bash', eval = FALSE}
 qstat
