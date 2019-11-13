@@ -30,3 +30,4 @@ lesson_key,group,title,url
 114,Stats,Kruskal-Wallis Test,/sb-kruskal-wallis/
 131,Stats,Paired t Test,/sb-paired-t-test/
 150,HPC,High Performance Computing,/ic-high-performance-computing/
+180,Genomics,Genomic Variant Basics,/ic-genomic-variant-basics/
