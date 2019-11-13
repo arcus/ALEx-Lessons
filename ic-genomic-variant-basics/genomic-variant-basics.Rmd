@@ -1,0 +1,59 @@
+---
+title: "Genomic Variant Basics"
+output:
+  rmarkdown::html_document:
+    highlight: pygments
+    toc: true
+    toc_float: true
+    theme: spacelab
+---
+```{r, echo=FALSE}
+library(rmarkdown)
+library(shiny)
+library(knitr)
+```
+
+# Introduction
+
+In genetics, __variants__ are differences in the gentic code that vary from the reference sequencing. The reference is arbitrarily defined by the [Genome Reference Consortium](https://www.ncbi.nlm.nih.gov/grc) and ideally represents the most common genetic sequence across humanity. Although many sequences in the reference deviate from this ideal^[1](https://www.ncbi.nlm.nih.gov/pmc/articles/pmid/26670213/)^, such issues are outside of the scope of this tutorial. 
+
+Bioinformatically, variants are typically represented in one of two ways.
+
+1. Variant call files (vcf)
+2. Flat text files
+
+## Variant Call Files
+__Variant call files__ are standarized, uncompressed text files used to store variants. Although they are wasteful from a space perspective, they are the _de facto_ standard. There are compression strategies discussed later.
+
+The following figure is from the [Danecek _et al_ paper in _Bioinformatics_](https://www.ncbi.nlm.nih.gov/pmc/articles/pmid/21653522/) that defines the standard.
+
+```{r echo=FALSE, out.width = '90%'}
+knitr::include_graphics("www/fig1.png")
+```
+
+The begining of every VCF file is a header that defines the file format and ideally the version of the reference genome used to call the variants initially. 
+
+The final line of the header defintes subsequent fields in the body.
+
+### VCF Field Description
+Here is a description of all of the fixed fields in a VCF file.
+```{r echo = FALSE, results='asis'}
+ToRender <- rbind(c("CHROM","Chromosome of the variant"),
+                  c("POS","1-based position of the start of the varirant"),
+                  c("ID","Unique identifier of the varirant, if any"),
+                  c("REF","The referenece allele at that position"),
+                  c("ALT","The alternative allele identified at that position in the subject"),
+                  c("QUAL","The PHRED quality of the call of the allele"),
+                  c("FILTER","Site filtering information"),
+                  c("INFO","Semicolon delimited field that can be customized to the user's neads"),
+                  c("FORMAT","Colon delimited field that defines the information contained within each subsequent genotype column")
+                    )
+ToRender <- as.data.frame(ToRender)
+colnames(ToRender) <- c("Field Name","Description")
+kable(ToRender)
+```
+
+```{r, engine = 'bash', eval = FALSE}
+ssh username@respublica.research.chop.edu
+```
+
