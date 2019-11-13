@@ -6,12 +6,18 @@ runtime: shiny_prerendered
 
 ```{r setup, include=FALSE}
 library(learnr)
-library(datasets)
+tutorial_options(exercise.completion = FALSE)
+knitr::opts_chunk$set(echo = FALSE)
+may <- subset(airquality, Month == 5)
+notmay <- subset(airquality, Month != 5)
 ```
 
-# Base Plotting System
-
 (Slides for this and other Data Science courses may be found at github [https://github.com/DataScienceSpecialization/courses/](https://github.com/DataScienceSpecialization/courses/). If you care to use them, they must be downloaded as a zip file and viewed locally. This lesson corresponds to 04_ExploratoryAnalysis/PlottingBase.)
+
+**Hint**: Use the Solution buttons to check your work or to get help if you can't figure out what the solution is.     
+**Another Hint**: If you see a red ex next to your code, DO NOT RUN IT or this tutorial might freeze or crash. If it does freeze or crash, simply reload it. Your prior work will have been saved.
+
+## Base Plotting System
 
 In this lesson, we'll focus on the base plotting system and talk about how you can exploit all its many parameters to get the plot you want.  We'll focus on using the base plotting system to create graphics on the screen device rather than another graphics device (such as a document).
 
@@ -26,13 +32,15 @@ question("What do you think is a disadvantage of the Base Plotting System?",
          answer("It's intuitive and exploratory"),
          answer("It mirrors how we think of building plots and analyzing data"),
          answer("You can't go back once a plot has started", correct = TRUE),
-         answer("A complicated plot is a series of simple R commands")
+         answer("A complicated plot is a series of simple R commands"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE
 )
 ```
 
 Yes! The base system is very intuitive and easy to use. You can't go backwards, though, say, if you need to readjust margins or have misspelled a caption. A finished plot will be a series of R commands, so it's difficult to translate a finished plot into a different system.
 
-Calling a basic routine such as `plot(x, y)` or `hist(x)` launches a graphics device (if one is not already open) and draws a new plot on the device. If the arguments to plot or hist are not of some special class, then the default method is called.
+Calling a basic routine such as `plot(x, y)` or `hist(x)` launches a graphics device (if one is not already open) and draws a new plot on the device. If the arguments to `plot` or `hist` are not of some special class, then the default method is called.
 
 As you'll see, most of the base plotting functions have many arguments, for example, setting the title, the labels of axes, or the plot character. Some of the parameters can be set when you call the function or they can be added later in a separate function call.
 
@@ -76,7 +84,9 @@ question("What is the most frequent count?",
          answer("More than 150"),
          answer("More than 100"),
          answer("Less than 25", correct = TRUE),
-         answer("Between 60 and 75")
+         answer("Between 60 and 75"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE
 )
 ```
 
@@ -100,7 +110,7 @@ We see that the data covers 5 months, May through September. We'll want a boxplo
 boxplot(Ozone ~ Month, airquality)
 ```
 
-Note that boxplot, unlike hist, did NOT specify a title and axis labels for you automatically.
+Note that `boxplot`, unlike `hist`, did NOT specify a title and axis labels for you automatically.
 
 Let's call `boxplot` again to specify labels. We'll add more arguments to the call to specify labels for the 2 axes. Set `xlab` equal to "Month" and `ylab` equal to "Ozone (ppb)". Specify `col.axis` equal to "blue" and `col.lab` equal to "red". Try this now.
 
@@ -135,7 +145,7 @@ title(main = "Ozone and Wind in New York City")
 
 ## Scatterplots
 
-Now we'll show you how to plot a simple two-dimensional scatterplot using the R function plot. We'll show the relationship between `Wind` (x-axis) and `Ozone` (y-axis). We'll use the function `plot` with those two arguments (`Wind` and `Ozone`, in that order). To save some typing, though, we'll call the R command `with` using 2 arguments. The first argument of `with` will be `airquality`, the dataset containing `Wind` and `Ozone`; the second argument will be the call to `plot`. Doing this allows us to avoid using the longer notation, e.g., `airquality$Wind`. Try this now.
+Now we'll show you how to plot a simple two-dimensional scatterplot using the R function `plot`. We'll show the relationship between `Wind` (x-axis) and `Ozone` (y-axis). We'll use the function `plot` with those two arguments (`Wind` and `Ozone`, in that order). To save some typing, though, we'll call the R command `with` using 2 arguments. The first argument of `with` will be `airquality`, the dataset containing `Wind` and `Ozone`; the second argument will be the call to `plot`. Doing this allows us to avoid using the longer notation, e.g., `airquality$Wind`. Try this now.
 
 ```{r j, exercise = TRUE}
 
@@ -197,7 +207,9 @@ question("What do you think these two numbers represent?",
          answer("Plot dimensions in inches", correct = TRUE),
          answer("Coordinates of the center of the plot window"),
          answer("A confidence interval"),
-         answer("Random numbers")
+         answer("Random numbers"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE
 )
 ```
 
@@ -213,22 +225,26 @@ par()$fg
 It gave you a color, right? 
 
 ```{r q, echo=FALSE}
-question("Since par()$fg specifies foreground color, what do you think par()$bg specifies?",
+question("Since `par()$fg` specifies foreground color, what do you think `par()$bg` specifies?",
          answer("Better color"),
          answer("blue-green"),
          answer("Background color", correct = TRUE),
-         answer("Beautiful color")
+         answer("Beautiful color"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE
 )
 ```
 
 Many base plotting functions share a set of parameters. We'll go through some of the more commonly used ones now. See if you can tell what they do from their names.
 
 ```{r r, echo=FALSE}
-question("What do you think the graphical parameter pch controls?",
+question("What do you think the graphical parameter `pch` controls?",
          answer("picture characteristics"),
          answer("point control height"),
          answer("pc help"),
-         answer("plot character", correct = TRUE)
+         answer("plot character", correct = TRUE),
+         random_answer_order = TRUE,
+         allow_retry = TRUE
 )
 ```
 
@@ -244,12 +260,13 @@ par("pch")
 So 1 is the code for the open circle.
 
 ```{r t, echo=FALSE}
-question("What do you think the graphical parameters lty and lwd control
-| respectively?",
+question("What do you think the graphical parameters `lty` and `lwd` control, respectively?",
          answer("line slope and intercept"),
          answer("line length and width"),
          answer("line width and type"),
-         answer("line type and width", correct = TRUE)
+         answer("line type and width", correct = TRUE),
+         random_answer_order = TRUE,
+         allow_retry = TRUE
 )
 ```
 
@@ -267,9 +284,11 @@ So the default line type is solid, but it can be dashed, dotted, etc. Once again
 We've seen a lot of examples of `col`, the plotting color, specified as a number, string, or hex code; the `colors()` function gives you a vector of colors by name.
 
 ```{r v, echo=FALSE}
-question("What do you think the graphical parameters xlab and ylab control respectively?",
+question("What do you think the graphical parameters `xlab` and `ylab` control, respectively?",
          answer("labels for the x- and y-axes", correct = TRUE),
-         answer("labels for the y- and x-axes")
+         answer("labels for the y- and x-axes"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE
 )
 ```
 
@@ -287,7 +306,9 @@ question("Which of the following is NOT one of them?",
          answer("lines"),
          answer("text"),
          answer("hist", correct = TRUE),
-         answer("title")
+         answer("title"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE
 )
 ```
 
@@ -317,6 +338,7 @@ plot(airquality$Wind, airquality$Ozone, type = "n")
 ##
 ```
 ```{r y-solution}
+plot(airquality$Wind, airquality$Ozone, type = "n")
 title(main = "Wind and Ozone in NYC")
 ```
 
@@ -334,6 +356,7 @@ Now use the R command `points` to plot May's wind and ozone (in that order) as s
 ```{r aa, exercise = TRUE}
 plot(airquality$Wind, airquality$Ozone, type = "n")
 title(main = "Wind and Ozone in NYC")
+may <- subset(airquality, Month == 5)
 # Your code below:
 
 
@@ -341,6 +364,9 @@ title(main = "Wind and Ozone in NYC")
 ##
 ```
 ```{r aa-solution}
+plot(airquality$Wind, airquality$Ozone, type = "n")
+title(main = "Wind and Ozone in NYC")
+may <- subset(airquality, Month == 5)
 points(may$Wind, may$Ozone, col = "blue", pch = 17)
 ```
 
@@ -358,6 +384,8 @@ Now use the R command `points` to plot `notmay`'s wind and ozone (in that order)
 ```{r ac, exercise = TRUE}
 plot(airquality$Wind, airquality$Ozone, type = "n")
 title(main = "Wind and Ozone in NYC")
+may <- subset(airquality, Month == 5)
+notmay <- subset(airquality, Month != 5)
 points(may$Wind, may$Ozone, col = "blue", pch = 17)
 # Your code below:
 
@@ -366,6 +394,11 @@ points(may$Wind, may$Ozone, col = "blue", pch = 17)
 ##
 ```
 ```{r ac-solution}
+plot(airquality$Wind, airquality$Ozone, type = "n")
+title(main = "Wind and Ozone in NYC")
+may <- subset(airquality, Month == 5)
+notmay <- subset(airquality, Month != 5)
+points(may$Wind, may$Ozone, col = "blue", pch = 17)
 points(notmay$Wind, notmay$Ozone, col="red", pch=8)
 ```
 
@@ -374,6 +407,8 @@ Now we'll use the R command `legend` to clarify the plot and explain what it mea
 ```{r ad, exercise = TRUE}
 plot(airquality$Wind, airquality$Ozone, type = "n")
 title(main = "Wind and Ozone in NYC")
+may <- subset(airquality, Month == 5)
+notmay <- subset(airquality, Month != 5)
 points(may$Wind, may$Ozone, col = "blue", pch = 17)
 points(notmay$Wind, notmay$Ozone, col="red", pch=8)
 # Your code below:
@@ -383,6 +418,12 @@ points(notmay$Wind, notmay$Ozone, col="red", pch=8)
 ##
 ```
 ```{r ad-solution}
+plot(airquality$Wind, airquality$Ozone, type = "n")
+title(main = "Wind and Ozone in NYC")
+may <- subset(airquality, Month == 5)
+notmay <- subset(airquality, Month != 5)
+points(may$Wind, may$Ozone, col = "blue", pch = 17)
+points(notmay$Wind, notmay$Ozone, col="red", pch=8)
 legend("topright", 
        pch = c(17,8), 
        col = c("blue", "red"),
@@ -394,6 +435,8 @@ Now add a vertical line at the median of `airquality$Wind`. Make it dashed (`lty
 ```{r ae, exercise = TRUE}
 plot(airquality$Wind, airquality$Ozone, type = "n")
 title(main = "Wind and Ozone in NYC")
+may <- subset(airquality, Month == 5)
+notmay <- subset(airquality, Month != 5)
 points(may$Wind, may$Ozone, col = "blue", pch = 17)
 points(notmay$Wind, notmay$Ozone, col="red", pch=8)
 legend("topright", 
@@ -407,6 +450,16 @@ legend("topright",
 ##
 ```
 ```{r ae-solution}
+plot(airquality$Wind, airquality$Ozone, type = "n")
+title(main = "Wind and Ozone in NYC")
+may <- subset(airquality, Month == 5)
+notmay <- subset(airquality, Month != 5)
+points(may$Wind, may$Ozone, col = "blue", pch = 17)
+points(notmay$Wind, notmay$Ozone, col="red", pch=8)
+legend("topright", 
+       pch = c(17,8), 
+       col = c("blue", "red"),
+       legend = c("May", "Other Months"))
 abline(v = median(airquality$Wind), lty = 2,lwd = 2)
 ```
 
@@ -416,17 +469,22 @@ Use `par` with the parameter `mfrow` set equal to the vector `(1, 2)` to set up 
 
 ```
 ```{r af-solution}
+par(mfrow = c(1, 2))
 ```
 
 Now plot `airquality$Wind` and `airquality$Ozone` and use `main` to specify the `title` "Ozone and Wind".
 
-```{r prepare-ag}
-par(mfrow = c(1, 2))
-```
 ```{r ag, exercise=TRUE}
+par(mfrow = c(1, 2))
+# Your code below:
+
+
+
+###
 
 ```
 ```{r ag-solution}
+par(mfrow = c(1, 2))
 plot(airquality$Wind, airquality$Ozone, main = "Ozone and Wind")
 ```
 
@@ -444,6 +502,8 @@ plot(airquality$Wind, airquality$Ozone, main = "Ozone and Wind")
 ###
 ```
 ```{r ah-solution}
+par(mfrow = c(1, 2))
+plot(airquality$Wind, airquality$Ozone, main = "Ozone and Wind")
 plot(airquality$Ozone, airquality$Solar.R, main = "Ozone and Solar Radiation")
 ```
 
@@ -464,13 +524,15 @@ Margins are specified as 4-long vectors of integers. Each number tells how many 
 
 The first plot should be familiar. Plot `airquality$Wind` and `airquality$Ozone` with the title (argument `main`) as "Ozone and Wind".
 
-```{r prepare-aj}
-par(mfrow = c(1, 3), mar = c(4, 4, 2, 1), oma = c(0, 0, 2, 0))
-```
 ```{r aj, exercise=TRUE}
+par(mfrow = c(1, 3), mar = c(4, 4, 2, 1), oma = c(0, 0, 2, 0))
+# Your code below:
 
+
+###
 ```
 ```{r aj-solution}
+par(mfrow = c(1, 3), mar = c(4, 4, 2, 1), oma = c(0, 0, 2, 0))
 plot(airquality$Wind, airquality$Ozone, main = "Ozone and Wind")
 ```
 
@@ -489,12 +551,14 @@ plot(airquality$Wind, airquality$Ozone, main = "Ozone and Wind")
 ##
 ```
 ```{r ak-solution}
+par(mfrow = c(1, 3), mar = c(4, 4, 2, 1), oma = c(0, 0, 2, 0))
+plot(airquality$Wind, airquality$Ozone, main = "Ozone and Wind")
 plot(airquality$Solar.R, airquality$Ozone, main = "Ozone and Solar Radiation")
 ```
 
 Now for the final panel.
 
-Plot airquality$Temp and airquality$Ozone with the title (argument main) as "Ozone and Temperature".
+Plot `airquality$Temp` and `airquality$Ozone` with the title (argument `main`) as "Ozone and Temperature".
 
 ```{r al, exercise=TRUE}
 par(mfrow = c(1, 3), mar = c(4, 4, 2, 1), oma = c(0, 0, 2, 0))
@@ -507,6 +571,9 @@ plot(airquality$Solar.R, airquality$Ozone, main = "Ozone and Solar Radiation")
 ##
 ```
 ```{r al-solution}
+par(mfrow = c(1, 3), mar = c(4, 4, 2, 1), oma = c(0, 0, 2, 0))
+plot(airquality$Wind, airquality$Ozone, main = "Ozone and Wind")
+plot(airquality$Solar.R, airquality$Ozone, main = "Ozone and Solar Radiation")
 plot(airquality$Temp, airquality$Ozone, main = "Ozone and Temperature")
 ```
 
@@ -526,6 +593,10 @@ plot(airquality$Temp, airquality$Ozone, main = "Ozone and Temperature")
 ##
 ```
 ```{r am-solution}
+par(mfrow = c(1, 3), mar = c(4, 4, 2, 1), oma = c(0, 0, 2, 0))
+plot(airquality$Wind, airquality$Ozone, main = "Ozone and Wind")
+plot(airquality$Solar.R, airquality$Ozone, main = "Ozone and Solar Radiation")
+plot(airquality$Temp, airquality$Ozone, main = "Ozone and Temperature")
 mtext("Ozone and Weather in New York City", outer = TRUE)
 ```
 

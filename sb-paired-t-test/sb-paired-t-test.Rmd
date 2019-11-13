@@ -55,7 +55,7 @@ If you already have a pretty good understanding of a paired _t_ test and just ne
 
 ## Background
 
-For a thorough treatment of the background for _t_ tests generally, see our lessons [One-Sample _t_ Test]("http://a-mess.org/sb-one-sample-t-test/") and [Two-Sample _t_ Test]("http://a-mess.org/sb-two-sample-t-test/").
+For a thorough treatment of the background for _t_ tests generally, see our lessons [One-Sample _t_ Test]("http://www.a-mess.org/sb-one-sample-t-test/) and [Two-Sample _t_ Test]("http://a-mess.org/sb-two-sample-t-test/").
 
 Use the **paired t–test** when you have one measurement variable and two nominal variables, one of the nominal variables has only two values, and you have _only_ one observation for each combination of the nominal variables; in other words, you have pairs of observations rather than unrelated observations. 
 
@@ -85,7 +85,7 @@ question("True or false: You can perform a paired _t_ test using the native `sta
 
 ## Null and Alternative Hypotheses
 
->* **H<sub>0</sub>**: "The mean difference between paired observations is zero. 
+>* **H<sub>0</sub>**: "The mean difference between paired observations is zero." 
 
 When the mean difference is zero, the means of the two groups must also be equal. Because of the paired design of the data, the null hypothesis of a paired t–test is usually expressed in terms of the **mean difference**.   
 
@@ -224,11 +224,11 @@ question("How do you interpret the plot you just made?",
 )
 ```
 
-Let's make another useful plot, a simple 1-to-1 plot of values. In this plot, each bird has its yellowness value of typical feathers along the x-axis and its value for yellowness of odd feathers along the y-axis. 
+Let's make another useful plot, a simple 1-to-1 plot of values. In this plot, each bird has its value for yellowness of typical feathers along the x-axis and its value for yellowness of odd feathers along the y-axis. 
 
 1. Send your two variables to `plot` and set `pch` to 16 as you did above. 
 
-2. Also within the call to `plot`, set the parameter `xlab` to "Typical Feathers" and the parameter `ylab` to "Odd Feathers`. That's all you need to send to `plot`. s
+2. Also within the call to `plot`, set the parameter `xlab` to "Typical Feathers" and the parameter `ylab` to "Odd Feathers". That's all you need to send to `plot`.
 
 3. On a new line, call the function `abline` with 4 parameters: 0, 1, `col` set equal to "blue", and `lwd` set equal to 2. 
 
