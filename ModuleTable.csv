@@ -29,3 +29,4 @@ lesson_key,group,title,url
 111,Stats,One-Way ANOVA,/sb-one-way-anova/
 114,Stats,Kruskal-Wallis Test,/sb-kruskal-wallis/
 131,Stats,Paired t Test,/sb-paired-t-test/
+150,HPC,High Performance Computing,/ic-high-performance-computing/
