@@ -1,0 +1,475 @@
+---
+title: "`ggplot2` Part 1"
+output: 
+  learnr::tutorial:
+    progressive: true
+    allow_skip: true
+runtime: shiny_prerendered
+---
+
+```{r setup, include=FALSE}
+library(learnr)
+library(`ggplot2`)
+knitr::opts_chunk$set(echo = TRUE)
+options(scipen = 9999, digits = 3)
+tutorial_options(exercise.completion = FALSE,
+                 exercise.eval = TRUE,
+                 exercise.lines = 5,
+                 exercise.diagnostics = TRUE)
+
+myhigh <- mpg$hwy
+```
+
+Slides for this and other Data Science courses may be found at github https://github.com/DataScienceSpecialization/courses/. If you care to use them, they must be downloaded as a zip file and viewed locally. This lesson corresponds to 04_ExploratoryAnalysis/ggplot2. We relied on `swirl` lessons for the text. Thanks for making this great content open source!
+
+**Hints**: Use the "Hints" and "More hints" buttons to check your work or to get help if you can't figure out what the solution is. The final hint is the solution.      
+**Another Hint**: If you see a red ex next to your code, DO NOT RUN IT or this tutorial might freeze or crash. If it does freeze or crash, simply reload it. Your prior work will have been saved (except for the bit that didn't work).
+
+## Introduction to `ggplot2`
+
+In lessons, we gave you an overview of the three plotting systems in R. In this lesson, we'll focus on the third and newest plotting system in R, `ggplot2`.  As we did with the other two systems, we'll focus on creating graphics on the screen device rather than another graphics device.
+
+```{r graphics-device, echo=FALSE}
+question("What's a graphics device? Guess!",
+         answer("A place you can send a graphic to, such as a screen, a printer, or a document.", correct = TRUE),
+         answer("A device that automatically translates code into interactive graphics"),
+         answer("An artificial intelligence machine that runs on R code"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         correct = "Yes, a graphics device is just somewhere to send the output of any code that creates an image or graphic. You can tell certain graphics packages to use files, for instance, rather than the screen.",
+         incorrect = "Um, no."
+)
+```
+
+The `ggplot2` package is an add-on R package available from CRAN via `install.packages()`. (Don't worry, we've installed it for you already.) It is an implementation of [_The Grammar of Graphics_](https://www.cs.uic.edu/~wilkinson/TheGrammarOfGraphics/GOG.html), an abstract concept (as well as book) authored and invented by Leland Wilkinson and implemented by Hadley Wickham while he was a graduate student at Iowa State. The web site [https://ggplot2.tidyverse.org](https://ggplot2.tidyverse.org) provides complete documentation.
+
+
+A grammar of graphics represents an abstraction of graphics: that is,  a theory of graphics which conceptualizes basic pieces from which you can build new graphics and graphical objects. The  goal of the grammar is to “shorten the distance from mind to page”. From Hadley Wickham's book we learn that  
+
+
+>the `ggplot2` package is composed of a set of independent components that can be composed in many different ways. . . . You can create new graphics that are precisely tailored for your problem.
+
+These components include _aesthetics_, which are attributes such as `colour`, `shape`, and  `size`, and _geometric objects_ or `geoms` such as `point`s, `line`s, and `bar`s.  
+
+```{r aesthetics, echo=FALSE}
+question("Which of the following are aesthetics?",
+         answer("color", correct = TRUE),
+         answer("colour", correct = TRUE),
+         answer("shape", correct = TRUE),
+         answer("size", correct = TRUE),
+         answer("geoms", correct = TRUE),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         incorrect = "You haven't selected enough answers. After all, `ggplot2` is amazing.",
+         correct = "You got them all!"
+)
+```
+
+
+Before we delve into details, let's review the other two plotting systems.
+
+```{r ggp1-recallbase, echo=FALSE}
+question("Recall what you know about R's base plotting system. Which of the following apply?",
+         answer("Start with `plot` (or similar) function", correct = TRUE),
+         answer("Use annotation functions to add or modify the plot (`text`, `lines`, `points`, `axis`)", correct = TRUE),
+         answer("It is convenient and mirrors how we think of building plots and analyzing data", correct = TRUE),
+         answer("Can easily go back once the plot has started (e.g., to adjust margins or correct a typo)"),
+         correct = "You are amazing!",
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         incorrect = "Can you unwrite something on a plot once you've put it there using `plot`?"
+)
+```
+
+```{r recall-recalllattice, echo=FALSE}
+question("Recall what you know about R's lattice plotting system. Which of the following does NOT apply?",
+         answer("Plots are created with a single function call (`xyplot`, `bwplot`, etc.)", message = "Which choice is the only one which is inconsistent with the other three?"),
+         answer("Most useful for conditioning types of plots and putting many panels on one plot", message = "Which choice is the only one which is inconsistent with the other three?"),
+         answer("Margins and spacing are set automatically because entire plot is specified at once", message = "Which choice is the only one which is inconsistent with the other three?"),
+         answer("Can always add to the plot once it is created", correct = TRUE),
+         correct = "Excellent!",
+         random_answer_order = TRUE,
+         allow_retry = TRUE
+)
+```
+ 
+```{r recall-this-that, echo=FALSE}
+question("If we told you that `ggplot2` combines the best of `base` and `lattice`, that would mean what?",
+         answer("Automatically deals with spacings, text, and titles, but also allows you to annotate", correct = TRUE),
+         answer("Like `lattice`, it allows for multipanels but more easily and intuitively", correct = TRUE),
+         answer("Its default mode makes many choices for you (but you can customize!)", correct = TRUE),
+         incorrect = "Pick _all_ the good stuff.",
+         correct = "Right! You are really good at this.",
+         random_answer_order = TRUE,
+         allow_retry = TRUE
+)
+```
+  
+Yes, `ggplot2` combines the best of `base` and `lattice`. It allows for multipanel (conditioning) plots (as `lattice` does) but also _post facto_ annotation (as `base` does), so you can add titles and labels. 
+
+`ggplot2` uses the low-level `grid` package (which comes with R) to draw the graphics. As part of its grammar philosophy, `ggplot2` plots are composed of `aesthetics` (attributes such as `size`, `shape`, `color`) and `geoms` (`point`s, `line`s, and `bar`s), the geometric objects you see on the plot.
+
+```{r composition-of-ggplot2-plots, echo=FALSE}
+question("Of which of the following are `ggplot2` plots composed?",
+         answer("black lines"),
+         answer("only primary colors"),
+         answer("`aesthetics`", correct = TRUE),
+         answer("`geoms`, the geometric objects you see on a plot", correct = TRUE),
+         random_answer_order = TRUE,
+         allow_retry = TRUE
+)
+```
+
+The `ggplot2` package has two workhorse functions. The more basic workhorse function is `qplot`, (think "quick plot"), which works like the `plot` function in the `base` graphics system. It can produce many types of plots (scatter, histograms, box and whisker) while hiding tedious details from the user. Similar to `lattice` functions, it looks for data in a data frame or parent environment. 
+
+
+The more advanced workhorse function in the package is `ggplot`, which is  more flexible and can be customized for doing things `qplot` cannot do. In this lesson, we'll focus on `qplot`.
+
+```{r workhorse-functions, echo=FALSE}
+question("Which of the following are the workhorse functions of `ggplot2`?",
+         answer("qplot", correct = TRUE),
+         answer("gplot", message = "Then look again at the options, and keep in mind that sometimes we try to be tricky."),
+         answer("ggplot", correct = TRUE),
+         answer("gqplot", message = "Look carefully at the options."),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         incorrect = "Not quite. Read the paragraphs above carefully.",
+         correct = "You've got it right!"
+)
+```
+
+We'll start by showing how easy and versatile `qplot` is. 
+
+## Quick Plots with `qplot`
+
+First, let's look at some data which comes with the `ggplot2` package. The `mpg` data frame contains fuel economy data for 38 models of cars manufactured in 1999 and 2008. Run the R command `str` with the argument `mpg`. This will give you an idea of what `mpg` contains.
+
+```{r qplot-easy, exercise = TRUE, exercise.lines = 5}
+
+```
+```{r qplot-easy-hint-1}
+str()
+```
+```{r qplot-easy-hint-2}
+str(mpg)
+```
+
+We see that there are 234 points in the dataset concerning 11 different characteristics of the cars. 
+
+## `qplot` Scatterplots
+
+Suppose we want to see if there's a correlation between engine displacement (`displ`) and highway miles per gallon (`hwy`). As we did with the `plot` function in the `base` system, we could simply call `qplot` with 3 arguments: the first two are the variables we want to examine and the third argument, `data`, is set equal to the name of the dataset which contains them (in this case, `mpg`). Try this now.
+
+```{r try-qplot, exercise = TRUE, exercise.lines = 5}
+
+```
+```{r try-qplot-hint-1}
+qplot()
+```
+```{r try-qplot-hint-2}
+qplot(displ, hwy, ...)
+```
+```{r try-qplot-hint-3}
+qplot(displ, hwy, data = mpg)
+```
+
+A nice scatterplot done simply, right? All the labels are provided. The first argument is shown along the x-axis and the second along the y-axis. The negative trend (increasing displacement and lower gas mileage) is pretty clear. 
+
+## `qplot` Scatterplot using Color to Represent a Factor Variable
+
+Now suppose we want to do the same plot but this time use different colors to distinguish between the 3 factors (subsets) of different types of drive (`drv`) in  the data (front-wheel, rear-wheel, and 4-wheel). Again, `qplot` makes this very easy. We'll just add what `ggplot2` calls an `aesthetic`, a fourth argument, `color`, and set it equal to `drv`. Try this now. (Copy and paste from the previous code block if you want to save some typing.)
+
+```{r scatterplot, exercise = TRUE, exercise.lines = 5}
+
+```
+```{r scatterplot-hint-1}
+qplot(displ, hwy, ...)
+```
+```{r scatterplot-hint-2}
+qplot(displ, hwy, data  = mpg, ...)
+```
+```{r scatterplot-hint-3}
+qplot(displ, hwy, data  = mpg, color = drv)
+```
+
+Pretty cool, right? 
+
+See the legend to the right which `qplot` helpfully supplied? The colors were automatically assigned by `qplot` so the legend decodes the colors for you. Notice that `qplot` automatically used dots, a.k.a. `point`s, to indicate the data. These points are `geoms` (geometric objects). We could have used a different `aesthetic`, for instance `shape` instead of `color`, to distinguish between the drive types. Feel free to play around with this or any other code block.
+
+## `qplot` Scatterplot with Smoothing
+
+Now let's add a second `geom` to the default `point`. How about some smoothing function to produce trend lines, one for each color? Just add a fifth argument, `geom`, and using the R function `c()`, set it equal to the concatenation of the two strings "point" and "smooth". The first refers to the data points and second to the trend lines we want plotted. Try this now.
+
+```{r geom_aesthetic, exercise = TRUE, exercise.lines = 5}
+
+```
+```{r geom_aesthetic-hint-1}
+qplot(displ, hwy, ...)
+```
+```{r geom_aesthetic-hint-2}
+qplot(displ, hwy, data = mpg, ...)
+```
+```{r geom_aesthetic-hint-3}
+qplot(displ, hwy, data = mpg, color = drv, ...)
+```
+```{r geom_aesthetic-hint-4}
+qplot(displ, hwy, data = mpg, color = drv, geom = c(...))
+```
+```{r geom_aesthetic-hint-5}
+qplot(displ, hwy, data = mpg, color = drv, geom = c("point", "smooth"))
+```
+
+Notice the gray areas surrounding each trend lines. These indicate the 95% confidence intervals for the lines.
+
+## `qplot` Scatterplot with a Single Axis and a Second (Factor) Variable shown as Color
+
+Before we leave `qplot`'s scatterplotting ability, call `qplot` again, this time with 3 arguments. The first is `y` set equal to `hwy`, the second is `data`, set equal to `mpg`, and the third is `color` set equal to `drv`. Try this now.
+
+```{r xyish-thing, exercise = TRUE, exercise.lines = 5}
+
+```
+```{r xyish-thing-hint-1}
+qplot(y = hwy, ...)
+```
+```{r xyish-thing-hint-2}
+qplot(y = hwy, data = mpg, ...)
+```
+```{r xyish-thing-solution}
+qplot(y = hwy, data = mpg, color = drv)
+```
+
+What's this plot showing? We see the x-axis ranges from 0 to 250 and we remember that we had 234 data points in our set, so we can infer that each point in the plot represents one of the `hwy` values (indicated by the y-axis). 
+
+We've created the vector `myhigh` for you which contains the hwy data from the `mpg` dataset. Look at `myhigh` now.
+
+```{r myhigh, exercise = TRUE, exercise.lines = 5}
+
+```
+```{r myhigh-hint}
+#data name here
+```
+```{r myhigh-solution}
+myhigh
+```
+
+Comparing the values of `myhigh` with the plot, we see the first entries in the vector (29, 29, 31, 30,...) correspond to the leftmost points in the the plot (in order), and the last entries in myhigh (28, 29, 26, 26, 26) correspond to the rightmost plotted points. So, specifying the `y` parameter only, without an `x` argument, plots the values of the `y` argument in the order in which they occur in the data.
+
+## `qplot` Boxplot
+
+The all-purpose `qplot` can also create box plots.  Call `qplot` now with 4 arguments. First specify the variable by which you'll split the data, in this case `drv`, then specify the variable which you want to examine, in this case `hwy`. The third argument is `data` (set equal to `mpg`), and the fourth, the `geom`, set equal to the string "boxplot"
+
+```{r boxplot, exercise = TRUE, exercise.lines = 5}
+
+```
+```{r boxplot-hint-1}
+qplot(drv, ...)
+```
+```{r boxplot-hint-2}
+qplot(drv, hwy, data = mpg, ...)
+```
+```{r boxplot-hint-3}
+qplot(drv, hwy, data = mpg, geom = "")
+```
+```{r boxplot-solution}
+qplot(drv, hwy, data = mpg, geom = "boxplot")
+```
+
+We see 3 boxes, one for each drive. 
+
+## `qplot` Boxplot using Color to Represent a Factor Variable
+
+Now to impress yourself, call `qplot` with 5 arguments. The first 4 are just as you used previously, (`drv`, `hwy`, `data`, set equal to `mpg`, and `geom` set equal to the string "boxplot"). Now add a fifth argument, `color`, equal to `manufacturer`. 
+
+```{r manufacturer, exercise = TRUE, exercise.lines = 5}
+
+```
+```{r manufacturer-hint-1}
+qplot(drv, hwy, ...)
+```
+```{r manufacturer-hint-2}
+qplot(drv, hwy, data = mpg, ...)
+```
+```{r manufacturer-hint-3}
+qplot(drv, hwy, data = mpg, geom = "?")
+```
+```{r manufacturer-hint-4}
+qplot(drv, hwy, data = mpg, geom = "boxplot", ...)
+```
+```{r manufacturer-solution}
+qplot(drv, hwy, data = mpg, geom = "boxplot", color = manufacturer)
+```
+
+It's a little squished, but we just wanted to illustrate `qplot`'s capabilities. Notice that there are still 3 regions of the plot (determined by the factor `drv`). Each is subdivided into several boxes depicting different manufacturers.
+
+## `qplot` Histogram
+
+Now, on to histograms. These display frequency counts for a single variable. Let's start with an easy one. Call `qplot` with 3 arguments. First, specify the variable for which you want the frequency count, in this case `hwy`, then specify the `data` (set equal to `mpg`), and finally, the `aesthetic`, `fill`, set equal to `drv`. Instead of a plain old histogram, this will again use colors to distinguish the 3 different drive factors.
+
+```{r histogram, exercise = TRUE, exercise.lines = 5}
+
+```
+```{r histogram-hint-1}
+qplot(hwy, ...)
+```
+```{r histogram-hint-2}
+qplot(hwy, data = mpg, ...)
+```
+```{r histogram-solution}
+qplot(hwy, data = mpg, fill = drv)
+```
+
+See how `qplot` consistently uses the colors. Red (if 4-wheel `drv` is in the bin) is at the bottom of the bin, then green on top of it (if present), followed by blue (rear wheel `drv`). The color lets us see right away that 4-wheel drive vehicles in this dataset don't have gas mileages exceeding 30 miles per gallon.
+
+## `qplot` Scatterplot with Facets
+
+It's cool that `qplot` can do a multiply-colored histogram so easily, but some people may find that multi-color histogram hard to interpret. Instead of using colors to distinguish between the drive factors, let's use _facets_ or _panels._ (That's what `lattice` called them.) This just means we'll split the data into 3 subsets (according to drive) and make 3 smaller individual plots of each subset in one plot (and with one call to `qplot`!).
+
+Remember that with base `plot` we had to do each subplot individually? The `lattice` system made plotting  conditioning plots easier. Let's see how easy it is with `qplot`.
+
+We'll do two plots, a scatterplot and then a histogram, each with 3 facets. For the scatterplot, call `qplot` with 4 arguments. The first two are `displ` and `hwy`, and the third is the argument `data`, set equal to `mpg`. The fourth is the argument `facets`, which will be set equal to the expression `. ~ drv`, which is `ggplot2`'s shorthand for number of rows (to the left of the `~`) and number of columns (to the right of the `~`). Here the `.` indicates a single row and `drv` implies 3, since there are 3 distinct drive factors. Try this now.
+
+```{r scatterhist, exercise = TRUE, exercise.lines = 5}
+
+```
+```{r scatterhist-hint-1}
+qplot(displ, ...)
+```
+```{r scatterhist-hint-2}
+qplot(displ, hwy, ...)
+```
+```{r scatterhist-hint-3}
+qplot(displ, hwy, data = mpg, ...)
+```
+```{r scatterhist-solution}
+qplot(displ, hwy, data = mpg, facets = . ~ drv)
+```
+
+
+The result is a 1 by 3 array of plots. Note how each is labeled at the top with the factor label (4, f, or r). This shows us more detailed information than the histogram. We see the relationship between displacement and highway mileage for each of the 3 drive factors.
+
+## `qplot` Histogram with Facets
+
+Now we'll do a histogram, again calling qplot with 4 arguments. This time, since we need only one variable for a histogram, the first is `hwy` and the second is the argument `data`, set equal to `mpg`. The third is the argument `facets`, which we'll set equal to the expression `drv ~ .`. This will give us a different arrangement of the facets. The fourth argument is `binwidth`. Set this equal to 2. Try this now.
+
+```{r bin, exercise = TRUE, exercise.lines = 5}
+
+```
+```{r bin-hint-1}
+qplot(...)
+```
+```{r bin-hint-2}
+qplot(hwy, ...)
+```
+```{r bin-hint-3}
+qplot(hwy, data = mpg, ...)
+```
+```{r bin-hint-4}
+qplot(hwy, data = mpg, facets = drv ~ ., ...)
+```
+```{r bin-solution}
+qplot(hwy, data = mpg, facets = drv ~ ., binwidth = 2)
+```
+
+```{r facets, echo=FALSE}
+question("The facets argument, drv ~ ., would result in what arrangement of facets?",
+         answer("1 by 3", message = "How many rows? How many columns?"),
+         answer("3 by 1", correct = TRUE),
+         answer("2 by 2", message = "How many rows? How many columns?"),
+         answer("Huh?", message = "How many rows? How many columns?"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         correct = "You can count!",
+         incorrect = "Count the rows and columns."
+)
+```
+
+## `qplot` Review
+
+Pretty good, right? Not too difficult either. Let's review what we learned!
+
+```{r workhorse, echo=FALSE}
+question("Which of the following is a basic workhorse function of `ggplot2`?",
+         answer("`hist`", message = "Well, yes, it's used a lot, but which funtion have we been talking about the whole lesson?"),
+         answer("`xyplot`", message = "We didn't even talk about this."),
+         answer("`scattplot`", message  = "We didn't talk about a function called `scatterplot`."),
+         answer("`gplot`", message = "Look again."),
+         answer("`qplot`", correct = TRUE),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         correct = "Yes! Well done.",
+         incorrect = "Try again."
+)
+```
+
+```{r dot, echo=FALSE}
+question("Which types of plot does `qplot` plot?",
+         answer("histograms", correct = TRUE),
+         answer("scatterplots", correct = TRUE),
+         answer("box plots", correct = TRUE),
+         incorrect = "That `qplot` is amazing! It seems to do everything!",
+         correct = "Right! There's almost nothing `qplot` can't do!",
+         random_answer_order = TRUE,
+         allow_retry = TRUE
+)
+```
+
+```{r gg, echo=FALSE}
+question("What does the gg in `ggplot2` stand for?",
+         answer("good grief"),
+         answer("grammar of graphics", correct = TRUE),
+         answer("goto graphics"),
+         answer("good graphics"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         incorrect = "Think of building blocks and components.",
+         correct = "Yes! You are amazing!"
+)
+```
+
+```{r geom, echo=FALSE}
+question("True or False? The `geom` argument takes a string for a value.",
+         answer("True", correct = TRUE),
+         answer("False"),
+                     random_answer_order = TRUE,
+                     allow_retry = TRUE,
+         correct = "Of course!",
+         incorrect = 'Recall our examples; for instance, geom = "density".'
+)
+```
+
+```{r data-arg, echo=FALSE}
+question("True or False? The `data` argument takes a string for a value.",
+         answer("True"),
+         answer("False", correct = TRUE),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         correct  = "You are making great progress!",
+         incorrect = "Not quite. Did you put quotation marks around the argument to `data` in any of your code in this exercise?"
+)
+```
+
+```{r binwidth-arg, echo=FALSE}
+question("The `binwidth` argument takes a string for a value.",
+         answer("True"),
+         answer("False", correct = TRUE),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         correct = "Correct!",
+         incorrect = "To what did you set `binwidth` equal in the exercises above? What sort of variable was it?"
+)
+```
+
+```{r xylabels, echo=FALSE}
+question("True or False? The user must specify x- and y-axis labels when using `qplot`.",
+         answer("True"),
+         answer("False", correct = TRUE),
+         correct = "You are amazing!",
+         incorrect = "'Must'? More like 'may'.",
+         random_answer_order = TRUE,
+         allow_retry = TRUE
+)
+```
+
+
+Congrats! You've finished Part 1 of  `ggplot2`. In the next lesson the plot thickens.
+
