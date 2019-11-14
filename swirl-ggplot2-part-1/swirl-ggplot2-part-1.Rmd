@@ -20,14 +20,11 @@ tutorial_options(exercise.completion = FALSE,
 myhigh <- mpg$hwy
 ```
 
-Slides for this and other Data Science courses may be found at github https://github.com/DataScienceSpecialization/courses/. If you care to use them, they must be downloaded as a zip file and viewed locally. This lesson corresponds to 04_ExploratoryAnalysis/ggplot2. We relied on `swirl` lessons for the text. Thanks for making this great content open source!
-
 **Hints**: Use the "Hints" and "More hints" buttons to check your work or to get help if you can't figure out what the solution is. The final hint is the solution.      
-**Another Hint**: If you see a red ex next to your code, DO NOT RUN IT or this tutorial might freeze or crash. If it does freeze or crash, simply reload it. Your prior work will have been saved (except for the bit that didn't work).
 
 ## Introduction to `ggplot2`
 
-In lessons, we gave you an overview of the three plotting systems in R. In this lesson, we'll focus on the third and newest plotting system in R, `ggplot2`.  As we did with the other two systems, we'll focus on creating graphics on the screen device rather than another graphics device.
+In other lessons, we gave you an overview of the three plotting systems in R. In this lesson, we'll focus on the third and newest plotting system in R, `ggplot2`.  As we did with the other two systems, we'll focus on creating graphics on the screen device rather than another graphics device.
 
 ```{r graphics-device, echo=FALSE}
 question("What's a graphics device? Guess!",
@@ -473,3 +470,4 @@ question("True or False? The user must specify x- and y-axis labels when using `
 
 Congrats! You've finished Part 1 of  `ggplot2`. In the next lesson the plot thickens.
 
+Slides for this and other Data Science courses may be found at github https://github.com/DataScienceSpecialization/courses/. If you care to use them, they must be downloaded as a zip file and viewed locally. This lesson corresponds to 04_ExploratoryAnalysis/ggplot2. We relied on `swirl` lessons for the text. Thanks for making this great content open source!
