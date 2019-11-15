@@ -68,7 +68,7 @@ question("Do you remember what the artist's palette model is in the context of p
          random_answer_order = TRUE,
          allow_retry = TRUE, 
          incorrect = "Sounds like fun, but no.",
-         correct = "Yes! We build plots up in layers, just as an artist creates a good painting."
+         correct = "Yes! We build plots up in layers just as an artist creates a good painting."
 )
 ```
 
@@ -101,7 +101,7 @@ We see a 3-facet plot, one for each drive type (4, f, and r). `ggplot` also gave
 
 Now we'll see how `ggplot` works. We'll build up a similar plot using the basic components of the package. We'll do this in a series of steps. 
 
-First we'll create a variable `g` by assigning to it the output of a call to `ggplot` with 2 arguments: the first is `mpg` (our dataset) and the second will tell `ggplot` what we want to plot, in this case, `displ` and `hwy`. These are what we want our aesthetics to represent so we enclose these as two arguments to the function `aes`. Try this now. 
+First we'll create a variable `g` by assigning to it the output of a call to `ggplot` with 2 arguments: the first is `mpg` (our dataset) and the second will tell `ggplot` what we want to plot, in this case, `displ` and `hwy`. These are what we want our aesthetics to represent, so we enclose these as two arguments to the function `aes`. Try this now. 
 
 ```{r first-ggplot, exercise = TRUE, exercise.lines = 5}
 
@@ -136,7 +136,7 @@ summary(...)
 summary(g)
 ```
 
-So `g` contains the `mpg` data with all its named components in a 234 by 11 matrix. It also contains a `mapping`, `x` (`displ`) and `y` (`hwy`) which you specified, and no faceting. 
+So `g` contains the `mpg` data with all its named components in a 234 by 11 matrix. It also contains a `mapping`, `x` (`displ`), and `y` (`hwy`) which you specified, and no faceting. 
 
 Note that if you tried to print `g` with the expressions `g` or `print(g)` you'd get an error! Even though it's a great package, `ggplot` doesn't know how to display the data yet since, although you specified what data goes _into_ the plot, you didn't specify how you wanted to _see_ it. Now type `g + geom_point()` and see what happens.
 
@@ -156,7 +156,7 @@ Notice that you didn't have to pass any arguments to the function `geom_point`. 
 
 ## `ggplot` Scatterplot with Smoothed Regression Line
 
-Now use the expression you just typed (`g + geom_point()`) and add to it another layer, a call to `geom_smooth()`. Notice the red message R gives you.
+Now use the expression you just typed (`g + geom_point()`) and add to it another layer, a call to `geom_smooth()`. Notice the messge R gives you.
 
 
 ```{r geom-point-smooth, exercise = TRUE, exercise.lines = 5}
@@ -208,7 +208,7 @@ g + geom_point() + geom_smooth(method = "")
 g + geom_point() + geom_smooth(method = "lm")
 ```
 
-By changing the smoothing function to "lm" (linear model) `ggplot2` generated a regression line through the data. 
+Changing the smoothing function to "lm" (linear model) `ggplot2` generated a regression line through the data. 
 
 ## `ggplot` Scatterplots in Facets, with Regression Lines
 
