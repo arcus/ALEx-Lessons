@@ -28,7 +28,7 @@ testdat$x[50] <- 50
 testdat$y[50] <- 100
 myx <- testdat$x
 myy <- testdat$y
-o <- ggplot(mpg, aes(x = displ, y = hwy, color = factor(year)))
+o <- ggplot(testdat, aes(x = myx, y = myy)) 
 ab <- ggplot(mpg, aes(x = displ, y = hwy, color = factor(year)))
 ```
   
@@ -502,9 +502,9 @@ question("What is different now that you are using the black and white them?",
 
 ## Customizing Axis Limits
 
-One final note before we go through a more complicated, layered `ggplot` example, and this concerns the limits of the axes. We're pointing this out to emphasize a subtle difference between `ggplot` and the `base` plotting function `plot.`
+One final note before we go through a more complicated, layered `ggplot` example, and this concerns the limits of the axes. We're pointing this out to emphasize a subtle difference between `ggplot` and the `base` plotting function `plot`.
 
-We've created some random `x` and `y` data, called `myx` and `myy`, components of a dataframe called `testdat.` These represent 100 random normal points, except halfway through, we made one of the points be an outlier. That is, we set its `y`-value to be out of range of the other points. 
+We've created some random `x` and `y` data, called `myx` and `myy`, components of a dataframe called `testdat`. These represent 100 random normal points, except halfway through, we made one of the points be an outlier. That is, we set its `y`-value to be out of range of the other points. 
 
 Use the base plotting function `plot` to create a line plot of this data. Call it with 4 arguments: `myx`, `myy`, `type = "l"`, and `ylim = c(-3, 3)`. The `type = "l"` tells `plot` you want to display the data as a line instead of as a scatterplot.
 
@@ -529,7 +529,7 @@ plot(myx, myy, type = "l", ylim = c(-3, 3))
 
 Notice how `plot` plotted the points in the (-3, 3) range for y-values. The outlier at (50, 100) is NOT shown on the line plot. 
 
-Now we'll plot the same data with `ggplot.` Recall that the name of the dataframe is `testdat.` Create the graphical object `o` with a call to `ggplot` with 2 arguments: `testdat` (the data) and a call to `aes` with 2 arguments, `x` set equal to `myx`, and `y` set equal to `myy.`
+Now we'll plot the same data with `ggplot`. Recall that the name of the dataframe is `testdat`. Create the graphical object `o` with a call to `ggplot` with 2 arguments: `testdat` (the data) and a call to `aes` with 2 arguments, `x` set equal to `myx`, and `y` set equal to `myy`.
 
 ```{r myxmyy-ggplot, exercise = TRUE, exercise.lines = 5}
 
@@ -547,7 +547,7 @@ o <- ggplot(testdat, aes(...))
 o <- ggplot(testdat, aes(x = myx, y = myy)) 
 ```
 
-Add a call to `geom_line` with 0 arguments to `g.`
+Add a call to `geom_line` with 0 arguments to `o`.
 
 ```{r geomgline, exercise = TRUE, exercise.lines = 5}
 
@@ -561,7 +561,7 @@ o + geom_line()
 
 Notice how ggplot _did_ display the outlier point at (50, 100). As a result, the rest of the data is smashed down so you don't get to see what the bulk of it looks like. The single outlier probably isn't important enough to dominate the graph. How do we get `ggplot` to behave more like `plot` in a situation like this?
 
-Let's take a guess that in addition to adding `geom_line`() to `o` we also just have to add `ylim(-3, 3)` to it as we did with the call to `plot.` Try this now to see what happens.
+Let's take a guess that in addition to adding `geom_line` to `o` we also just have to add `ylim(-3, 3)` to it as we did with the call to `plot`. Try this now to see what happens.
 
 ```{r addylim-to-ggplot, exercise = TRUE, exercise.lines = 5}
 
@@ -634,7 +634,7 @@ You probably noticed that `ggplot` ordered the data along the x-axis. We didn't 
 
 We'll close with a complicated example to show you the full power of `ggplot` and the entire `ggplot2` package. We'll continue to work with the `mpg` dataset.
 
-Start by creating the graphical object `ab` by assigning to it a call to `ggplot` with 2 arguments. The first is the dataset and the second is a call to the function `aes.` This call will have 3 arguments, `x` set equal to `displ`, `y` set equal to `hwy`, and `color` set equal to `factor(year)`. This last will allow us to distinguish between the two manufacturing years (1999 and 2008) in our data.
+Start by creating the graphical object `ab` by assigning to it a call to `ggplot` with 2 arguments. The first is the dataset and the second is a call to the function `aes`. This call will have 3 arguments, `x` set equal to `displ`, `y` set equal to `hwy`, and `color` set equal to `factor(year)`. This last will allow us to distinguish between the two manufacturing years (1999 and 2008) in our data.
 
 ```{r complex-plot, exercise = TRUE, exercise.lines = 5}
 
@@ -683,7 +683,7 @@ ab + ?
 ab + geom_point()
 ```
 
-A simple, yet comfortingly familiar scatterplot appears. Let's make our display a 2-dimensional multi-panel plot. Copy your last command and add to it a call the function `facet_grid`. Give it 2 arguments: the first is the formula `drv ~ cyl`, and the second is the argument `margins` set equal to `TRUE.` Try this now.
+A simple, yet comfortingly familiar scatterplot appears. Let's make our display a 2-dimensional multi-panel plot. Copy your last command and add to it a call the function `facet_grid`. Give it 2 arguments: the first is the formula `drv ~ cyl`, and the second is the argument `margins` set equal to `TRUE`. Try this now.
 
 ```{r familiar, exercise = TRUE, exercise.lines = 5}
 
@@ -775,6 +775,6 @@ ab + geom_point() +
 
 You could have done these labels with separate calls to `labs`, but we thought you'd be sick of this by now. 
 
-Anyway, congrats! You've concluded part 2 of `ggplot2.` We hope you gotten enough mileage out of the lesson. If you like `ggplot2`, you can do some extras with the extra lesson.
+Anyway, congrats! You've concluded part 2 of `ggplot2`. We hope you gotten enough mileage out of the lesson. If you like `ggplot2`, you can do some extras with the extra lesson.
 
 GGPlot2_Part2. Slides for this and other Data Science courses may be found at github https://github.com/DataScienceSpecialization/courses/. If you care to use them, they must be downloaded as a zip file and viewed locally. This lesson corresponds to 04_ExploratoryAnalysis/ggplot2. We relied on `swirl` lessons for the text. Thanks for making this great content open source!
