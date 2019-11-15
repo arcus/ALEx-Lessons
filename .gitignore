@@ -5,3 +5,5 @@ swirl-lapply-and-sapply/lapply-and-sapply.html
 Correlation-and-Linear-Regression.html
 .DS_Store
 **/.DS_Store
+.RData
+.Rproj.user
