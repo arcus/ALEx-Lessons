@@ -20,21 +20,22 @@ tutorial_options(exercise.completion = FALSE,
 
 # Variables needed in code chunks below
 g <- ggplot(mpg, aes(displ, hwy)) 
-x <- rnorm(100, -2.75, 2.75)
-y <- rnorm(100, -2.75, 2.75)
+x <- rnorm(100)
+y <- rnorm(100)
 testdat <- cbind(x, y)
 testdat <- as.data.frame(testdat)
+testdat$x[50] <- 50
 testdat$y[50] <- 100
 myx <- testdat$x
 myy <- testdat$y
 ```
-
+  
 **Hints**: Use the "Hints" and "More hints" buttons to check your work or to get help if you can't figure out what the solution is. The final hint is the solution.      
 
 
 ## Where We've Been: `qplot`
 
-In a previous lesson we showed you the vast capabilities of `qplot`, the basic workhorse function of the `ggplot2` package. In this lesson we'll focus on some fundamental components of the package. These  underlie `qplot`, which uses default values when it calls them. If you understand these building blocks, you will be better able to customize your plots. 
+In a previous lesson we showed you the vast capabilities of `qplot`, the basic workhorse function of the `ggplot2` package. In this lesson, we'll focus on some fundamental components of the package. These  underlie `qplot`, which uses default values when it calls them. If you understand these building blocks, you will be better able to customize your plots. 
 
 We'll use the second workhorse function in the package, `ggplot`, as well as other graphing functions. 
 
@@ -52,7 +53,7 @@ question("Do you remember what the gg of ggplot2 stands for?",
 )
 ```
 
-A "grammar" of graphics means that `ggplot2` contains building blocks with which you can create your own graphical objects. What are these basic components of `ggplot2` plots? There are 7 of them. 
+A "grammar" of graphics means that `ggplot2` contains building blocks with which you can create your own graphical objects. What are these basic components of `ggplot2` plots, you ask? There are 7 of them. 
 
 Obviously, there's a **data frame** which contains the data you're trying to plot. Then the **aesthetic mappings** determine how data is mapped to color, size, etc. The `geoms` (geometric objects) are what you see in the plot (`point`s, `line`s, `shape`s) and `facets` are the panels used in conditional plots. You've used these or seen them used in the first `ggplot2` (`qplot`) lesson.
 
@@ -239,6 +240,8 @@ All the data associated with 4-wheel drive cars is in the leftmost panel; front-
 
 Notice that this is similar to the plot you created at the start of the lesson using `qplot`. (We used a different smoothing function than previously.)
 
+Have you noticed how we are building this plot function call by function call? That is part of the magic of `ggplot`: the way you can add layer after layer until you have the perfect plot for your needs.
+
 ## `ggplot` Scatterplot in Facets, with Regresssion Lines, with Annotations
 
 So far you've just used the default labels that `ggplot` provides. You can add your own annotation using functions such as `xlab`, `ylab`, and `ggtitle`. 
@@ -269,7 +272,7 @@ g + geom_point() + geom_smooth(method = "lm") + facet_grid(. ~ drv) +  ggtitle("
 
 ## `ggplot` Customizations
 
-Now that you've seen the basics, we'll talk about customizing. Each of the `geom` functions (e.g., `_point` and `_smooth`) has options to modify it. Also, the function `theme` can be used to modify aspects of the entire plot: e.g. the position of the legend. 
+Now that you've seen the basics, we'll talk about customizing. Each of the `geom` functions (e.g., `_point` and `_smooth`) has options to modify it. Also, the function `theme` can be used to modify aspects of the entire plot (e.g., the position of the legend). 
 
 Two standard appearance themes are included in `ggplot`. These are `theme_gray`, which is the default theme (gray background with white grid lines), and `theme_bw`, which is a plainer (black and white) color scheme.
 
@@ -359,7 +362,7 @@ g + geom_point(aes(color = drv), size = 4, alpha = 1/2)
 Notice the helpful legend on the right decoding the relationship between `color` and `drv`.
 
 ```{r why-aes-this-time, echo=FALSE}
-question("Why are some aesthetics not passed to the `aes` function but others are?",
+question("Why are some aesthetics not passed to the `aes` function but others are not?",
          answer("Because programmers are a fickle breed", message = "Perhaps this is true, but it's not the reason for this particular design decision."),
          answer("Only constants must be passed to a `geom` by way of the `aes` function.", message = "That's backwards."),
          answer("Any aesthetic that is a constant can be passed directly to the `geom`; but an aesthetic that is an interpretation of the data you're plotting _must_ be passed to `geom` by way of the `aes` function.", correct = TRUE),
@@ -461,7 +464,7 @@ What did these arguments do?
 
 ## Customizing by Adding a Theme
 
-Finally, let's do a simple plot using the black and white theme, `theme_bw`. Specify `g` and add a call to the function `geom_point` with the argument setting the `color` to the `drv` type. Then add a call to the function `theme_bw` with the argument `base_family` set equal to "Times". See if you notice the difference. 
+Finally, let's do a simple plot using the black and white theme, `theme_bw`. Specify `g` and add a call to the function `geom_point` with the argument setting the `color` to the `drv` type (inside a call to `aes`), `size` to 4, and `alpha` to 1/2. Then add a call to the function `theme_bw` with the argument `base_family` set equal to "Times". See if you notice the difference. 
 
 ```{r fun-with-themes, exercise = TRUE, exercise.lines = 5}
 
@@ -470,16 +473,16 @@ Finally, let's do a simple plot using the black and white theme, `theme_bw`. Spe
 g + geom_point(...) + ?
 ```
 ```{r fun-with-themes-hint-2}
-g + geom_point(aes(...)) + ?
+g + geom_point(aes(color = drv), ...) + ?
 ```
 ```{r fun-with-themes-hint-3}
-g + geom_point(aes(color = drv)) + theme_bw(...)
+g + geom_point(aes(color = drv), size = 4, alpha = 1/2) + theme_bw(...)
 ```
 ```{r fun-with-themes-hint-4}
-g + geom_point(aes(color = drv)) + theme_bw(base_family = "?")
+g + geom_point(aes(color = drv), size = 4, alpha = 1/2) + theme_bw(base_family = "?")
 ```
 ```{r fun-with-themes-solution}
-g + geom_point(aes(color = drv)) + theme_bw(base_family = "Times")
+g + geom_point(aes(color = drv), size = 4, alpha = 1/2) + theme_bw(base_family = "Times")
 ```
 
 ```{r what-is-diff, echo=FALSE}
@@ -521,91 +524,253 @@ plot(myx, myy, type = "l", ylim = c(...))
 plot(myx, myy, type = "l", ylim = c(-3, 3))
 ```
 
-Notice how plot plotted the points in the (-3,3) range for y-values. The outlier at (50,100) is NOT shown on the line plot. Now we'll plot the same data with ggplot. Recall that the name of the dataframe is testdat. Create the graphical object g with a call to ggplot with 2 arguments, testdat (the data) and a call to aes with 2 arguments, x set equal to myx, and y set equal to myy.
-  CorrectAnswer: g <- ggplot(testdat, aes(x = myx, y = myy)) 
-  AnswerTests: expr_creates_var("g"); omnitest(correctExpr='g <- ggplot(testdat, aes(x = myx, y = myy))')
-  Hint: Type g <- ggplot(testdat, aes(x = myx, y = myy)) at the command prompt.
+Notice how `plot` plotted the points in the (-3, 3) range for y-values. The outlier at (50, 100) is NOT shown on the line plot. 
+
+Now we'll plot the same data with `ggplot.` Recall that the name of the dataframe is `testdat.` Create the graphical object `g` with a call to `ggplot` with 2 arguments: `testdat` (the data) and a call to `aes` with 2 arguments, `x` set equal to `myx`, and `y` set equal to `myy.`
+
+```{r myxmyy-ggplot, exercise = TRUE, exercise.lines = 5}
+
+```
+```{r myxmyy-ggplot-hint-1}
+g <- ? 
+```
+```{r myxmyy-ggplot-hint-2}
+g <- ggplot(...) 
+```
+```{r myxmyy-ggplot-hint-3}
+g <- ggplot(testdat, aes(...)) 
+```
+```{r myxmyy-ggplot-solution}
+g <- ggplot(testdat, aes(x = myx, y = myy)) 
+```
+
+Add a call to `geom_line` with 0 arguments to `g.`
+
+```{r geomgline, exercise = TRUE, exercise.lines = 5}
+
+```
+```{r geomgline-hint}
+g + ?
+```
+```{r geomgline-solution}
+g + geom_line()
+```
+
+Notice how ggplot _did_ display the outlier point at (50, 100). As a result, the rest of the data is smashed down so you don't get to see what the bulk of it looks like. The single outlier probably isn't important enough to dominate the graph. How do we get `ggplot` to behave more like `plot` in a situation like this?
+
+Let's take a guess that in addition to adding `geom_line`() to `g` we also just have to add `ylim(-3, 3)` to it as we did with the call to `plot.` Try this now to see what happens.
+
+```{r addylim-to-ggplot, exercise = TRUE, exercise.lines = 5}
+
+```
+```{r addylim-to-ggplot-hint-1}
+g + ?
+```
+```{r addylim-to-ggplot-hint-2}
+g + geom_line() + ?
+```
+```{r addylim-to-ggplot-hint-3}
+g + geom_line() + ylim(...)
+```
+```{r addylim-to-ggplot-solution}
+g + geom_line() + ylim(-3, 3)
+```
 
 
-Now add a call to geom_line with 0 arguments to g.
-  CorrectAnswer: g + geom_line()
-  AnswerTests: omnitest(correctExpr='g + geom_line()')
-  Hint: Type g + geom_line() at the command prompt.
+`ggplot` simply ignored the outlier point at (50, 100). There's a break in the line which isn't very noticeable. 
+
+Recall that at the beginning of the lesson we mentioned 7 components of a `ggplot` plot, one of which was a **coordinate system**. This is a situation where using a coordinate system would be helpful. 
+
+Instead of adding `ylim(-3, 3)` to the expression `g + geom_line()`, add a call to the function `coord_cartesian` with the argument `ylim` set equal to `c(-3, 3)`.
+
+```{r coord-cartesian, exercise = TRUE, exercise.lines = 5}
+
+```
+```{r coord-cartesian-hint-1}
+g + ?
+```
+```{r coord-cartesian-hint-2}
+g + geom_line() + ?
+```
+```{r coord-cartesian-hint-3}
+g + geom_line() + coord_cartesian(...)
+```
+```{r coord-cartesian-hint-4}
+g + geom_line() + coord_cartesian(ylim = c(...))
+```
+```{r coord-cartesian-solution}
+g + geom_line() + coord_cartesian(ylim = c(-3, 3))
+```
+
+See the difference? This looks more like the plot produced by the base plot function. The outlier `y` value at `x = 50` is not shown, but the plot indicates that it is larger than 3. 
+
+Use any of these methods depending on your needs. But first, let's make the plot square by starting with `g`, adding `geom_line()`, adding `ylim = c(-3, 3)`, and then adding one more function with 2 arguments. See if you can guess what that final function should be. 
+
+```{r one-more-function, exercise = TRUE, exercise.lines = 5}
+
+```
+```{r one-more-function-hint-1}
+g + ?
+```
+```{r one-more-function-hint-2}
+g + geom_line() + ?
+```
+```{r one-more-function-hint-3}
+g + geom_line() + ylim(...) + ?
+```
+```{r one-more-function-hint-4}
+g + geom_line() + ylim(-3, 3) + ?
+```
+```{r one-more-function-solution}
+g + geom_line() + ylim(-3, 3) + xlim(-3, 3)
+```
+
+You probably noticed that `ggplot` ordered the data along the x-axis. We didn't ask it to do that; it's just nice that way.
+
+We'll close with a complicated example to show you the full power of `ggplot` and the entire `ggplot2` package. We'll continue to work with the `mpg` dataset.
 
 
-Notice how ggplot DID display the outlier point at (50,100). As a result the rest of the data is smashed down so you don't get to see what the bulk of it looks like. The single outlier probably isn't important enough to dominate the graph. How do we get ggplot to behave more like plot in a situation like this?
+Start by creating the graphical object `g` by assigning to it a call to `ggplot` with 2 arguments. The first is the dataset and the second is a call to the function `aes.` This call will have 3 arguments, `x` set equal to `displ`, `y` set equal to `hwy`, and `color` set equal to `factor(year)`. This last will allow us to distinguish between the two manufacturing years (1999 and 2008) in our data.
+
+```{r complex-plot, exercise = TRUE, exercise.lines = 5}
+
+```
+```{r complex-plot-hint-1}
+g <- ggplot(...)
+```
+```{r complex-plot-hint-2}
+g <- ggplot(mpg, aes(...))
+```
+```{r complex-plot-hint-3}
+g <- ggplot(mpg, aes(x = displ, ...))
+```
+```{r complex-plot-hint-4}
+g <- ggplot(mpg, aes(x = displ, y = hwy, ...))
+```
+```{r complex-plot-solution}
+g <- ggplot(mpg, aes(x = displ, y = hwy, color = factor(year)))
+```
+
+Uh oh! Nothing happened. Does `g` exist? Of course, it just isn't visible yet since you didn't add a visual layer. All you did was assign the data to the plot
+
+```{r if-you-typed-g, echo=FALSE}
+question("If you typed `g` at the command line, what would happen?",
+         answer("a scatterplot would appear with 2 colors of points", 
+                message = "Remember, you have not assigned a visual layer. How can there be color if there are no visuals?"),
+         answer("R would return an error", correct = TRUE),
+         answer("I would have to this to answer the question", 
+                message = "We'd like you to guess."),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         correct = "Right!",
+         incorrect = ""
+)
+```
+
+We'll build the plot up step by step. First, add to `g` a call to the function `geom_point` with 0 arguments.
+
+```{r build-step-by-step, exercise = TRUE, exercise.lines = 5}
+
+```
+```{r build-step-by-step-hint}
+g + ?
+```
+```{r build-step-by-step-solution}
+g + geom_point()
+```
+
+A simple, yet comfortingly familiar scatterplot appears. Let's make our display a 2-dimensional multi-panel plot. Copy your last command and add to it a call the function `facet_grid`. Give it 2 arguments: the first is the formula `drv ~ cyl`, and the second is the argument `margins` set equal to `TRUE.` Try this now.
+
+```{r familiar, exercise = TRUE, exercise.lines = 5}
+
+```
+```{r familiar-hint-1}
+g + ?
+```
+```{r familiar-hint-2}
+g + geom_point() + ?
+```
+```{r familiar-hint-3}
+g + geom_point() + facet_grid(...)
+```
+```{r familiar-hint-4}
+g + geom_point() + facet_grid(drv ~ cyl, ...)
+```
+```{r familiar-solution}
+g + geom_point() + facet_grid(drv ~ cyl, margins = TRUE)
+```
+
+A 4 by 5 plot, huh? The `margins` argument tells `ggplot` to display the marginal totals over each row and column, so instead of seeing 3 rows (the number of `drv` factors) and 4 columns (the number of `cyl` factors) we see a 3 + 1 = 4 by 4 + 1 = 5 display: one extra column for the row totals and one extra row for the column totals. 
+
+Note that the panel in position (4, 5) is a tiny version of the scatterplot of the entire dataset. It contains the grand totals of data in rows by the grand total of data in columns.
 
 
-Let's take a guess that in addition to adding geom_line() to g we also just have to add ylim(-3,3) to it as we did with the call to plot. Try this now to see what happens.
-  CorrectAnswer: g + geom_line() + ylim(-3,3)
-  AnswerTests: omnitest(correctExpr='g + geom_line() + ylim(-3,3)')
-  Hint: Type g + geom_line() + ylim(-3,3) at the command prompt.
+Now add to your last command (or retype it if you like to type) a call to `geom_smooth` with 4 arguments. These are `method` set to "lm", `se` set to `FALSE`, `size` set to 2, and `color` set to "black".
 
+```{r add-or-retype, exercise = TRUE, exercise.lines = 5}
 
-Notice that by doing this, ggplot simply ignored the outlier point at (50,100). There's a break in the line which isn't very noticeable. Now recall that at the beginning of the lesson we mentioned 7 components of a ggplot plot, one of which was a coordinate system. This is a situation where using a coordinate system would be helpful. Instead of adding ylim(-3,3) to the expression g + geom_line(), add a call to the function coord_cartesian with the argument ylim set equal to c(-3,3).
-  CorrectAnswer: g + geom_line() + coord_cartesian(ylim=c(-3,3))
-  AnswerTests: omnitest(correctExpr='g + geom_line() + coord_cartesian(ylim=c(-3,3))')
-  Hint: Type g + geom_line() + coord_cartesian(ylim=c(-3,3)) at the command prompt.
+```
+```{r add-or-retype-hint-1}
+g + geom_point() +
+    ?
+```
+```{r add-or-retype-hint-2}
+g + geom_point() + 
+  facet_grid(...) + 
+  ?
+```
+```{r add-or-retype-hint-3}
+g + geom_point() + 
+  facet_grid(drv ~ cyl, margins = TRUE) + 
+  ?
+```
+```{r add-or-retype-hint-4}
+g + geom_point() + 
+  facet_grid(drv ~ cyl, margins = TRUE) + 
+  geom_smooth(...)
+```
+```{r add-or-retype-solution}
+g + geom_point() + 
+  facet_grid(drv ~ cyl, margins = TRUE) + 
+  geom_smooth(method = "lm", size = 2, se = FALSE, color = "black")
+```
 
+Angry Birds? 
 
-See the difference? This looks more like the plot produced by the base plot function. The outlier y value at x = 50 is not shown, but the plot indicates that it is larger than 3.
+Finally, add to your last command (or retype it if you like to type) a call to the function `labs` with 3 arguments. These are `x` set to "Displacement", `y` set to "Highway Mileage", and `title` set to "Swirl Rules!".
 
+```{r finally, exercise = TRUE, exercise.lines = 5}
 
-We'll close with a more complicated example to show you the full power of ggplot and the entire ggplot2 package. We'll continue to work with the mpg dataset.
+```
+```{r finally-hint-1}
+g + geom_point() + ?
+```
+```{r finally-hint-2}
+g + geom_point() +
+  facet_grid(drv ~ cyl, margins = TRUE) + 
+  ?
+```
+```{r finally-hint-3}
+g + geom_point() +
+  facet_grid(drv ~ cyl, margins = TRUE) + 
+  geom_smooth(method = "lm", size = 2, se = FALSE, color = "black") + 
+  ?
+```
+```{r finally-hint-4}
+g + geom_point() +
+  facet_grid(drv ~ cyl, margins = TRUE) + 
+  geom_smooth(method = "lm", size = 2, se = FALSE, color = "black") + 
+  labs(...)
+```
+```{r finally-solution}
+g + geom_point() +
+  facet_grid(drv ~ cyl, margins = TRUE) + 
+  geom_smooth(method = "lm", size = 2, se = FALSE, color = "black") + 
+  labs(x = "Displacement", y = "Highway Mileage", title = "Swirl Rules!")
+```
 
+You could have done these labels with separate calls to `labs`, but we thought you'd be sick of this by now. 
 
-Start by creating the graphical object g by assigning to it a call to ggplot with 2 arguments. The first is the dataset and the second is a call to the function aes. This call will have 3 arguments, x set equal to displ, y set equal to hwy, and color set equal to factor(year). This last will allow us to distinguish between the two manufacturing years (1999 and 2008) in our data.
-  CorrectAnswer: g <- ggplot(mpg,aes(x = displ,y = hwy,color=factor(year)))
-  AnswerTests: expr_creates_var("g"); omnitest(correctExpr='g <- ggplot(mpg,aes(x = displ,y = hwy,color=factor(year)))')
-  Hint: Type g <- ggplot(mpg,aes(x = displ,y = hwy,color=factor(year))) at the command prompt.
-
-
-Uh oh! Nothing happened. Does g exist? Of course, it just isn't visible yet since you didn't add a layer.
-
-
-If you typed g at the command line, what would happen?
-  AnswerChoices: a scatterplot would appear with 2 colors of points; R would return an error in red; I would have to try this to answer the question
-  CorrectAnswer: R would return an error in red
-  AnswerTests: omnitest(correctVal='R would return an error in red')
-  Hint: You've told ggplot about the data, but have you told it how to display it? 
-
-
-We'll build the plot up step by step. First add to g a call to the function geom_point with 0 arguments.
-  CorrectAnswer: g + geom_point()
-  AnswerTests:  omnitest(correctExpr='g + geom_point()')
-  Hint: Type g + geom_point() at the command prompt.
-
-
-A simple, yet comfortingly familiar scatterplot appears. Let's make our display a 2 dimensional multi-panel plot. Recall your last command (with the up arrow) and add to it a call the function `facet_grid`. Give it 2 arguments. The first is the formula drv~cyl, and the second is the argument margins set equal to TRUE. Try this now.
-  CorrectAnswer: g + geom_point() + facet_grid(drv~cyl,margins=TRUE)
-  AnswerTests:  omnitest(correctExpr='g + geom_point() + facet_grid(drv~cyl,margins=TRUE)')
-  Hint: Type g + geom_point() + facet_grid(drv~cyl,margins=TRUE) at the command prompt.
-
-
-A 4 by 5 plot, huh? The margins argument tells ggplot to display the marginal totals over each row and column, so instead of seeing 3 rows (the number of drv factors) and 4 columns (the number of cyl factors) we see a 4 by 5 display. Note that the panel in position (4,5) is a tiny version of the scatterplot of the entire dataset.
-
-
-Now add to your last command (or retype it if you like to type) a call to geom_smooth with 4 arguments. These are method set to "lm", se set to FALSE, size set to 2, and color set to "black".
-  CorrectAnswer: g + geom_point() + facet_grid(drv~cyl,margins=TRUE) + geom_smooth(method = "lm",size = 2,se=FALSE,color = "black")
-  AnswerTests:  omnitest(correctExpr='g + geom_point() + facet_grid(drv~cyl,margins=TRUE) + geom_smooth(method = "lm",size = 2,se=FALSE,color = "black")')
-  Hint: Type g + geom_point() + facet_grid(drv~cyl,margins=TRUE) + geom_smooth(method = "lm",size = 2,se=FALSE,color = "black") at the command prompt.
-
-
-Angry Birds? Finally, add to your last command (or retype it if you like to type) a call to the function labs with 3 arguments. These are x set to "Displacement", y set to "Highway Mileage", and title set to "Swirl Rules!".
-  CorrectAnswer: g + geom_point() + facet_grid(drv~cyl,margins=TRUE) + geom_smooth(method = "lm",size = 2,se=FALSE,color = "black") + labs(x = "Displacement",y = "Highway Mileage",title = "Swirl Rules!")
-  AnswerTests:  omnitest(correctExpr='g + geom_point() + facet_grid(drv~cyl,margins=TRUE) + geom_smooth(method = "lm",size = 2,se=FALSE,color = "black") + labs(x = "Displacement",y = "Highway Mileage",title = "Swirl Rules!")')
-  Hint: Typeg + geom_point() + facet_grid(drv~cyl,margins=TRUE) + geom_smooth(method = "lm",size = 2,se=FALSE,color = "black") + labs(x = "Displacement",y = "Highway Mileage",title = "Swirl Rules!") at the command prompt.
-
-
-You could have done these labels with separate calls to labs but we thought you'd be sick of this by now. Anyway, congrats! You've concluded part 2 of ggplot2. We hope you got enough mileage out of the lesson. If you like ggplot2 you can do some extras with the extra lesson.
-
-
-"Would you like to receive credit for completing this course on
-    Coursera.org?"
-  CorrectAnswer: NULL
-  AnswerChoices: Yes;No
-  AnswerTests: coursera_on_demand()
-  Hint: ""
-
+Anyway, congrats! You've concluded part 2 of `ggplot2.` We hope you gotten enough mileage out of the lesson. If you like `ggplot2`, you can do some extras with the extra lesson.
 
 GGPlot2_Part2. Slides for this and other Data Science courses may be found at github https://github.com/DataScienceSpecialization/courses/. If you care to use them, they must be downloaded as a zip file and viewed locally. This lesson corresponds to 04_ExploratoryAnalysis/ggplot2. We relied on `swirl` lessons for the text. Thanks for making this great content open source!

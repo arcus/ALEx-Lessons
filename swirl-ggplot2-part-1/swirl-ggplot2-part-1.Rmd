@@ -374,7 +374,7 @@ question("The facets argument, drv ~ ., would result in what arrangement of face
          answer("Huh?", message = "How many rows? How many columns?"),
          random_answer_order = TRUE,
          allow_retry = TRUE,
-         correct = "You can count!",
+         correct = "Yay!",
          incorrect = "Count the rows and columns."
 )
 ```
