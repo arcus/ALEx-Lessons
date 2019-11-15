@@ -607,7 +607,7 @@ o + geom_line() + coord_cartesian(ylim = c(-3, 3))
 
 See the difference? This looks more like the plot produced by the base plot function. The outlier `y` value at `x = 50` is not shown, but the plot indicates that it is larger than 3. 
 
-Use any of these methods depending on your needs. But first, let's make the plot square by starting with `o`, adding `geom_line()`, adding `ylim = c(-3, 3)`, and then adding one more function with 2 arguments. See if you can guess what that final function should be. 
+Use any of these methods depending on your needs. But first, let's make the plot square by starting with `o`, adding `geom_line()`, adding `ylim(-3, 3)`, and then adding one more function with 2 arguments. See if you can guess what that final function should be. 
 
 ```{r one-more-function, exercise = TRUE, exercise.lines = 5}
 
@@ -655,14 +655,14 @@ ab <- ggplot(mpg, aes(x = displ, y = hwy, ...))
 ab <- ggplot(mpg, aes(x = displ, y = hwy, color = factor(year)))
 ```
 
-Uh oh! Nothing happened. Does `ab` exist? Of course, it just isn't visible yet since you didn't add a visual layer. All you did was assign the data to the plot
+Uh oh! Nothing happened. Does `ab` exist? Of course, it just isn't visible yet since you didn't add a visual layer. All you did was assign the data to the plot.
 
 ```{r if-you-typed-g, echo=FALSE}
 question("If you typed `ab` at the command line, what would happen?",
          answer("a scatterplot would appear with 2 colors of points", 
                 message = "Remember, you have not assigned a visual layer. How can there be color if there are no visuals?"),
          answer("R would return an error", correct = TRUE),
-         answer("I would have to this to answer the question", 
+         answer("I would have to try this to answer the question", 
                 message = "We'd like you to guess."),
          random_answer_order = TRUE,
          allow_retry = TRUE,
@@ -777,4 +777,4 @@ You could have done these labels with separate calls to `labs`, but we thought y
 
 Anyway, congrats! You've concluded part 2 of `ggplot2`. We hope you gotten enough mileage out of the lesson. If you like `ggplot2`, you can do some extras with the extra lesson.
 
-GGPlot2_Part2. Slides for this and other Data Science courses may be found at github https://github.com/DataScienceSpecialization/courses/. If you care to use them, they must be downloaded as a zip file and viewed locally. This lesson corresponds to 04_ExploratoryAnalysis/ggplot2. We relied on `swirl` lessons for the text. Thanks for making this great content open source!
+Slides for this and other Data Science courses may be found at github https://github.com/DataScienceSpecialization/courses/. If you care to use them, they must be downloaded as a zip file and viewed locally. This lesson corresponds to 04_ExploratoryAnalysis/ggplot2. We relied on `swirl` lessons for the text. Thanks for making this great content open source!
