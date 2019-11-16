@@ -270,7 +270,7 @@ qplot(drv, hwy, data = mpg, geom = "")
 qplot(drv, hwy, data = mpg, geom = "boxplot")
 ```
 
-We see 3 boxes, one for each drive. 
+We see 3 boxes, one for each drive. Each box illustrates the distribution of points along `y`, highway miles per gallon. 
 
 ## `qplot` Boxplot using Color to Represent a Factor Variable
 
