@@ -170,7 +170,7 @@ colnames(ToRender) <- c("Variable","Description")
 kable(ToRender)
 ```
 
-Use this example to print chromosome, position, reference allele, alternate alleles, sample name and genotype. 
+Use this example to print chromosome, position, reference allele, alternate alleles, sample name, and genotype. 
 
 ```{r, engine = 'bash', eval = FALSE}
 module load sam-bcf-tools/
