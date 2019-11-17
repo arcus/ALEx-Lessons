@@ -57,10 +57,10 @@ question("Do you remember what the gg of ggplot2 stands for?",
 
 A "grammar" of graphics means that `ggplot2` contains building blocks with which you can create your own graphical objects. What are these basic building blocks of `ggplot2` plots, you ask? There are 7 of them. 
 
-Obviously, there's a **data frame** which contains the data you're trying to plot. Then the **aesthetic mappings** determine how data is mapped to color, size, etc. The `geoms` (geometric objects) are what you see in the plot (`point`s, `line`s, `shape`s) and `facets` are the panels used in conditional plots. You've used these or seen them used in the first `ggplot2` (`qplot`) lesson.
+Obviously, there's a **data frame** which contains the data you're trying to plot. Then the **aesthetic mappings** determine how data is mapped to color, size, etc. The `geoms` (geometric objects) are what you see in the plot (`point`s, `line`s, `shape`s), and `facets` are the panels used in conditional plots. You've used these or seen them used in the first `ggplot2` (`qplot`) lesson.
 
 
-There are 3 more: `stats` are statistical transformations such as binning, quantiles, and smoothing, which `ggplot2` applies to the data. `scales` show what coding an aesthetic map uses (for example, `male = red`, `female = blue`). Finally, the plots are depicted on a **coordinate system**. When you used `qplot`, these were taken care of for you.
+There are 3 more: `stats` are statistical transformations such as binning, quantiles, and smoothing, which `ggplot2` applies to the data. `scales` show what coding an aesthetic map uses (for example, `male = red`, `female = blue`). Finally, the plots are depicted on a **coordinate system** (e.g., Cartesian). When you used `qplot`, these were taken care of for you.
 
 ```{r artists-palette, echo=FALSE}
 question("Do you remember what the artist's palette model is in the context of plotting?",
@@ -184,7 +184,7 @@ question("What method did `geom_smooth` use to calculate the regression line?",
          random_answer_order = TRUE,
          allow_retry = TRUE,
          correct = "That's correct!",
-         incorrect = "Read the red output from the last plot you made."
+         incorrect = "Read the output from the last plot you made."
 )
 ```
 
@@ -211,7 +211,7 @@ g + geom_point() + geom_smooth(method = "")
 g + geom_point() + geom_smooth(method = "lm")
 ```
 
-Changing the smoothing function to "lm" (linear model) `ggplot2` generated a regression line through the data. 
+Changing the smoothing function to "lm" (linear model) `ggplot2` generated a linear regression line through the data. 
 
 ## `ggplot` Scatterplots in Facets, with Regression Lines
 
@@ -240,7 +240,7 @@ Notice how each panel is labeled with the appropriate factor.
 
 All the data associated with 4-wheel drive cars is in the leftmost panel; front-wheel drive data is shown in the middle panel; and rear-wheel drive data in the rightmost. 
 
-Notice that this is similar to the plot you created at the start of the lesson using `qplot`. (We used a different smoothing function than previously.)
+This is similar to the plot you created at the start of the lesson using `qplot`, although we used a different smoothing function than previously.
 
 Have you noticed how we are building this plot function call by function call? That is part of the magic of `ggplot`: the way you can add layer after layer until you have the perfect plot for your needs.
 
@@ -286,7 +286,7 @@ question("Which of the following are customization options you can use with `ggp
          answer("`theme_gray`", correct = TRUE),
          random_answer_order = TRUE,
          allow_retry = TRUE,
-         correct = "You are really on a roll!",
+         correct = "That's right!",
          incorrect = "Remember how amazing the `ggplot2` package is? Select more options."
 )
 ```
@@ -295,7 +295,7 @@ question("Which of the following are customization options you can use with `ggp
 
 Let's practice modifying aesthetics now. We'll use the graphic object `g` that we already filled with `mpg` data and add a call to the function `geom_point`, but this time we'll give `geom_point` 3 arguments. Set the argument `color` equal to "pink", the argument `size` to 4, and the argument `alpha` to 1/2. You'll see what `alpha` does when you run the plot.
 
-Notice that all these aesthetic arguments are set equal to constants _inside_ calls to `geom`s. We are not setting the aesthetics for the entire plot, but rather for the objects under the control of the `geom` call. 
+All three of these aesthetic arguments are set equal to _constants_ _inside_ calls to `geom`s. We are not setting the aesthetics for the entire plot, but rather for the objects under the control of the `geom` call. And because they are constants, they can be passed directy to the `geom` function without being passed first to `aes`. More about that later.
 
 Go ahead and create the plot.
 
