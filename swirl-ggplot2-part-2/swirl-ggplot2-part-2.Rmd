@@ -20,8 +20,8 @@ tutorial_options(exercise.completion = FALSE,
 
 # Variables needed in code chunks below
 g <- ggplot(mpg, aes(displ, hwy)) 
-x <- rnorm(100)
-y <- rnorm(100)
+x <- rnorm(100, mean = 0, sd = .1)
+y <- rnorm(100, mean = 0, sd = .1)
 testdat <- cbind(x, y)
 testdat <- as.data.frame(testdat)
 testdat$y[50] <- 100
@@ -465,7 +465,9 @@ What did these arguments do?
 
 ## Customizing by Adding a Theme
 
-Finally, let's do a simple plot using the black and white theme, `theme_bw`. Specify `g` and add a call to the function `geom_point` with the argument setting the `color` to the `drv` type (inside a call to `aes`), `size` to 4, and `alpha` to 1/2. Then add a call to the function `theme_bw` with the argument `base_family` set equal to "Times". Are there differences? 
+Finally, let's do a simple plot using the black and white theme, `theme_bw`. Specify `g` and add a call to the function `geom_point` with the argument setting the `color` to the `drv` type (inside a call to `aes`), `size` to 4, and `alpha` to 1/2. Then add a call to the function `theme_bw` with the argument `base_family` set equal to "Times". 
+
+Are there differences? 
 
 ```{r fun-with-themes, exercise = TRUE, exercise.lines = 5}
 
@@ -548,7 +550,7 @@ o <- ggplot(testdat, aes(x = myx, y = myy))
 
 Nothing happened because we sent the output to the variable `o` rather than to your screen. 
 
-Add a call to `geom_line` with 0 arguments to `o`.
+Add a call to `geom_line` to `o` with 0 arguments.
 
 ```{r geomgline, exercise = TRUE, exercise.lines = 5}
 
