@@ -349,7 +349,7 @@ The result is a 1 by 3 array of plots. Note how each is labeled at the top with 
 
 ## `qplot` Histogram with Facets
 
-Now we'll do a histogram, again calling qplot with 4 arguments. This time, since we need only one variable for a histogram, the first is `hwy` and the second is the argument `data`, set equal to `mpg`. The third is the argument `facets`, which we'll set equal to the expression `drv ~ .`. This will give us a different arrangement of the facets. The fourth argument is `binwidth`. Set this equal to 2. Try this now.
+Let's do a histogram, again calling qplot with 4 arguments. This time, since we need only one variable for a histogram, the first is `hwy` and the second is the argument `data`, set equal to `mpg`. The third is the argument `facets`, which we'll set equal to the expression `. ~ drv`. This will give us a different arrangement of the facets. The fourth argument is `binwidth`. Set this equal to 2. Try it now.
 
 ```{r bin, exercise = TRUE, exercise.lines = 5}
 
@@ -364,10 +364,10 @@ qplot(hwy, ...)
 qplot(hwy, data = mpg, ...)
 ```
 ```{r bin-hint-4}
-qplot(hwy, data = mpg, facets = drv ~ ., ...)
+qplot(hwy, data = mpg, facets = . ~ drv, ...)
 ```
 ```{r bin-solution}
-qplot(hwy, data = mpg, facets = drv ~ ., binwidth = 2)
+qplot(hwy, data = mpg, facets = . ~ drv, binwidth = 2)
 ```
 
 ```{r facets, echo=FALSE}
@@ -390,7 +390,7 @@ Pretty good, right? Not too difficult either. Let's review what we learned!
 ```{r workhorse, echo=FALSE}
 question("Which of the following is a basic workhorse function of `ggplot2`?",
          answer("`hist`", message = "Well, yes, it's used a lot, but which funtion have we been talking about the whole lesson?"),
-         answer("`xyplot`", message = "We didn't even talk about this."),
+         answer("`xyplot`", message = "We didn't talk about this."),
          answer("`scattplot`", message  = "We didn't talk about a function called `scatterplot`."),
          answer("`gplot`", message = "Look again."),
          answer("`qplot`", correct = TRUE),

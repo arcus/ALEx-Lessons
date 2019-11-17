@@ -55,7 +55,7 @@ question("Do you remember what the gg of ggplot2 stands for?",
 )
 ```
 
-A "grammar" of graphics means that `ggplot2` contains building blocks with which you can create your own graphical objects. What are these basic components of `ggplot2` plots, you ask? There are 7 of them. 
+A "grammar" of graphics means that `ggplot2` contains building blocks with which you can create your own graphical objects. What are these basic building blocks of `ggplot2` plots, you ask? There are 7 of them. 
 
 Obviously, there's a **data frame** which contains the data you're trying to plot. Then the **aesthetic mappings** determine how data is mapped to color, size, etc. The `geoms` (geometric objects) are what you see in the plot (`point`s, `line`s, `shape`s) and `facets` are the panels used in conditional plots. You've used these or seen them used in the first `ggplot2` (`qplot`) lesson.
 
