@@ -368,7 +368,7 @@ Pretty good, right? Not too difficult, either.
 Let's review what we learned!
 
 
-```{r types-of-plots  , echo=FALSE}
+```{r types-of-plots, echo=FALSE}
 question("Which types of plot does qplot plot?",
          answer("histograms", correct = TRUE),
          answer("scatterplots", correct = TRUE),
