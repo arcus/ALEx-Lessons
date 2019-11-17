@@ -24,7 +24,6 @@ x <- rnorm(100)
 y <- rnorm(100)
 testdat <- cbind(x, y)
 testdat <- as.data.frame(testdat)
-testdat$x[50] <- 50
 testdat$y[50] <- 100
 myx <- testdat$x
 myy <- testdat$y
@@ -102,7 +101,7 @@ We see a 3-facet plot, one for each drive type (4, f, and r). `ggplot` also gave
 
 ## Build your First Plot with `ggplot`
 
-Now we'll see how `ggplot` works. We'll build up a similar plot using the basic components of the package. We'll do this in a series of steps. 
+First we'll see how `ggplot` works. We'll build up a similar plot using the basic components of the package. We'll do this in a series of steps. 
 
 First we'll create a variable `g` by assigning to it the output of a call to `ggplot` with 2 arguments: the first is `mpg` (our dataset) and the second will tell `ggplot` what we want to plot, in this case, `displ` and `hwy`. These are what we want our aesthetics to represent, so we enclose these as two arguments to the function `aes`. Try this now. 
 
@@ -125,7 +124,7 @@ g <- ggplot(mpg, aes(displ, ...))
 g <- ggplot(mpg, aes(displ, hwy))
 ```
 
-Notice that nothing happened? As in the `lattice` system, `ggplot` created a *graphical object* which we assigned to the variable `g`. 
+Nothing happened, right? As in the `lattice` system, `ggplot` created a *graphical object* which we assigned to the variable `g`. 
 
 Run the R command `summary` with `g` as its argument to see what `g` contains.
 
@@ -141,7 +140,7 @@ summary(g)
 
 So `g` contains the `mpg` data with all its named components in a 234 by 11 matrix. It also contains a `mapping`, `x` (`displ`), and `y` (`hwy`) which you specified, and no faceting. 
 
-Note that if you tried to print `g` with the expressions `g` or `print(g)` you'd get an error! Even though it's a great package, `ggplot` doesn't know how to display the data yet since, although you specified what data goes _into_ the plot, you didn't specify how you wanted to _see_ it. Now type `g + geom_point()` and see what happens.
+Note that if you tried to print `g` with the expressions `g` or `print(g)` you'd get an error! Even though it's a great package, `ggplot` doesn't know how to display the data yet since, although you specified what data goes _into_ the plot, you didn't specify how you wanted to _see_ it. Type `g + geom_point()` and see what happens.
 
 ```{r facet-xy, exercise = TRUE, exercise.lines = 5}
 
@@ -155,11 +154,11 @@ g + geom_point()
 
 By calling the function `geom_point`, you added a visual **layer.** By _not_ assigning the expression to a variable, you _displayed_ the plot. 
 
-Notice that you didn't have to pass any arguments to the function `geom_point`. That's because the object `g` has all the data stored in it. (Remember you saw that when you ran `summary` on `g` before.) 
+You didn't have to pass any arguments to the function `geom_point`. That's because the object `g` has all the data stored in it. (Remember you saw that when you ran `summary` on `g` before.) 
 
 ## `ggplot` Scatterplot with Smoothed Regression Line
 
-Now use the expression you just typed (`g + geom_point()`) and add to it another layer, a call to `geom_smooth()`. Notice the messge R gives you.
+Use the expression you just typed (`g + geom_point()`) and add to it another layer, a call to `geom_smooth()`. Notice the messge R gives you.
 
 
 ```{r geom-point-smooth, exercise = TRUE, exercise.lines = 5}
@@ -215,7 +214,7 @@ Changing the smoothing function to "lm" (linear model) `ggplot2` generated a lin
 
 ## `ggplot` Scatterplots in Facets, with Regression Lines
 
-Now copy the expression you just used and add to it another call, this time to the function `facet_grid`. Use the formula `. ~ drv` as it argument. Note that this is the same type of formula used in the calls to `qplot`. 
+Copy the expression you just used and add to it another call, this time to the function `facet_grid`. Use the formula `. ~ drv` as it argument. Note that this is the same type of formula used in the calls to `qplot`. 
 
 ```{r face-grid-drv, exercise = TRUE, exercise.lines = 5}
 
@@ -236,7 +235,7 @@ g + geom_point() + geom_smooth(method = "lm") + facet_grid(...)
 g + geom_point() + geom_smooth(method = "lm") + facet_grid(. ~ drv)
 ```
 
-Notice how each panel is labeled with the appropriate factor. 
+Each panel is labeled with the appropriate factor. 
 
 All the data associated with 4-wheel drive cars is in the leftmost panel; front-wheel drive data is shown in the middle panel; and rear-wheel drive data in the rightmost. 
 
@@ -250,7 +249,7 @@ So far you've just used the default labels that `ggplot` provides. You can add y
 
 In addition, the function `labs` is more general and can be used to label either or both axes in addition to providing an overall title. 
 
-Now copy the expression you just typed and add a call to the function `ggtitle` with the string argument "Swirl Rules!".
+Copy the expression you just typed and add a call to the function `ggtitle` with the string argument "Swirl Rules!".
 
 ```{r ggtitle-first-use, exercise = TRUE, exercise.lines = 5}
 
@@ -318,7 +317,7 @@ g + geom_point(color = "pink", size = 4, ...)
 g + geom_point(color = "pink", size = 4, alpha = 1/2)
 ```
 
-Notice the different shades of pink? That's the result of the `alpha` aesthetic, which you set to 1/2. This aesthetic tells `ggplot` how transparent the points should be. 
+See the different shades of pink? That's the result of the `alpha` aesthetic, which you set to 1/2. This aesthetic tells `ggplot` how transparent the points should be. 
 
 ```{r why-transparency, echo=FALSE}
 question("Why would you want transparency?",
@@ -336,7 +335,7 @@ question("Why would you want transparency?",
 
 ## Data-Dependent Customizations: Color, Size, and Alpha
 
-Now we'll modify the aesthetics so that `color` indicates which `drv` type each point represents. 
+Next, we'll modify the aesthetics so that `color` indicates which `drv` type each point represents. 
 
 Again, use `g` and add to it a call to the function `geom_point` with 3 arguments. The first is `size` set equal to 4, the second is `alpha` equal to 1/2. The third is a call to the function `aes` with the argument `color` set equal to `drv`. 
 
@@ -379,7 +378,7 @@ question("Why are some aesthetics not passed to the `aes` function but others ar
 ## Customizing `labs` for Better Labels
 
 
-Now we'll practice modifying labels. Again, we'll use `g` and add to it calls to 3 functions.
+Let's practice modifying labels. Again, we'll use `g` and add to it calls to 3 functions.
 
 First, add a call to `geom_point` with an argument making the `color` dependent on the `drv` type (as we did in the previous example). Second, add a call to the function `labs` with the argument `title` set equal to "Swirl Rules!". Finally, add a call to `labs` with 2 arguments, one setting `x` equal to "Displacement" and the other setting `y` equal to "Hwy Mileage". 
 
@@ -418,7 +417,7 @@ question("True or False: You could have combined the two calls to the function `
 
 ## Customizing `geom_smooth`
 
-Now we'll practice customizing the `geom_smooth` calls. 
+Let's practice customizing the `geom_smooth` calls. 
 
 Use `g` and add to it a call to `geom_point`, setting the `color` to `drv` type (remember to use the call to the `aes` function because the value is data-dependent), `size` set to 2, and `alpha` set to 1/2. 
 
@@ -462,11 +461,11 @@ What did these arguments do?
 * The `method` specified a linear regression (note the negative slope indicating that the bigger the displacement the lower the gas mileage)    
 * the `linetype` specified that the regression line should be dashed, not continuous    
 * `size` made the dashes big    
-* the `se` flag told `ggplot` to turn off the gray shadows we've been seeing around our regression lines that indicate standard errors (confidence intervals)
+* the `se` flag told `ggplot` to turn off the gray shadows we've been seeing around our regression lines that indicate standard errors (confidence intervals).
 
 ## Customizing by Adding a Theme
 
-Finally, let's do a simple plot using the black and white theme, `theme_bw`. Specify `g` and add a call to the function `geom_point` with the argument setting the `color` to the `drv` type (inside a call to `aes`), `size` to 4, and `alpha` to 1/2. Then add a call to the function `theme_bw` with the argument `base_family` set equal to "Times". See if you notice the difference. 
+Finally, let's do a simple plot using the black and white theme, `theme_bw`. Specify `g` and add a call to the function `geom_point` with the argument setting the `color` to the `drv` type (inside a call to `aes`), `size` to 4, and `alpha` to 1/2. Then add a call to the function `theme_bw` with the argument `base_family` set equal to "Times". Are there differences? 
 
 ```{r fun-with-themes, exercise = TRUE, exercise.lines = 5}
 
@@ -506,7 +505,7 @@ One final note before we go through a more complicated, layered `ggplot` example
 
 We've created some random `x` and `y` data, called `myx` and `myy`, components of a dataframe called `testdat`. These represent 100 random normal points, except halfway through, we made one of the points be an outlier. That is, we set its `y`-value to be out of range of the other points. 
 
-Use the base plotting function `plot` to create a line plot of this data. Call it with 4 arguments: `myx`, `myy`, `type = "l"`, and `ylim = c(-3, 3)`. The `type = "l"` tells `plot` you want to display the data as a line instead of as a scatterplot.
+Use the base plotting function `plot` to create a line plot of this data. Call it with 4 arguments: `myx`, `myy`, `type = "l"`, and `ylim = c(-3, 3)`. `type = "l"` tells `plot` you want to display the data as a line instead of as a scatterplot.
 
 ```{r myx-myy, exercise = TRUE, exercise.lines = 5}
 
@@ -527,9 +526,9 @@ plot(myx, myy, type = "l", ylim = c(...))
 plot(myx, myy, type = "l", ylim = c(-3, 3))
 ```
 
-Notice how `plot` plotted the points in the (-3, 3) range for y-values. The outlier at (50, 100) is NOT shown on the line plot. 
+`plot` plotted the points in the (-3, 3) range for y-values. The outlier is NOT shown on the line plot. 
 
-Now we'll plot the same data with `ggplot`. Recall that the name of the dataframe is `testdat`. Create the graphical object `o` with a call to `ggplot` with 2 arguments: `testdat` (the data) and a call to `aes` with 2 arguments, `x` set equal to `myx`, and `y` set equal to `myy`.
+We'll plot the same data with `ggplot`. Recall that the name of the dataframe is `testdat`. Create the graphical object `o` with a call to `ggplot` with 2 arguments: `testdat` (the data) and a call to `aes` with 2 arguments, `x` set equal to `myx`, and `y` set equal to `myy`.
 
 ```{r myxmyy-ggplot, exercise = TRUE, exercise.lines = 5}
 
@@ -547,6 +546,8 @@ o <- ggplot(testdat, aes(...))
 o <- ggplot(testdat, aes(x = myx, y = myy)) 
 ```
 
+Nothing happened because we sent the output to the variable `o` rather than to your screen. 
+
 Add a call to `geom_line` with 0 arguments to `o`.
 
 ```{r geomgline, exercise = TRUE, exercise.lines = 5}
@@ -559,7 +560,7 @@ o + ?
 o + geom_line()
 ```
 
-Notice how ggplot _did_ display the outlier point at (50, 100). As a result, the rest of the data is smashed down so you don't get to see what the bulk of it looks like. The single outlier probably isn't important enough to dominate the graph. How do we get `ggplot` to behave more like `plot` in a situation like this?
+`ggplot` _did_ display the outlier point at (50, 100). As a result, the rest of the data is smashed down so you don't get to see what the bulk of it looks like. The single outlier probably isn't important enough to dominate the graph. How do we get `ggplot` to behave more like `plot` in a situation like this?
 
 Let's take a guess that in addition to adding `geom_line` to `o` we also just have to add `ylim(-3, 3)` to it as we did with the call to `plot`. Try this now to see what happens.
 
@@ -605,7 +606,7 @@ o + geom_line() + coord_cartesian(ylim = c(...))
 o + geom_line() + coord_cartesian(ylim = c(-3, 3))
 ```
 
-See the difference? This looks more like the plot produced by the base plot function. The outlier `y` value at `x = 50` is not shown, but the plot indicates that it is larger than 3. 
+See the difference? This looks more like the plot produced by the base plot function. The outlier `y` value is not shown, but the plot indicates that it is larger than 3. 
 
 Use any of these methods depending on your needs. But first, let's make the plot square by starting with `o`, adding `geom_line()`, adding `ylim(-3, 3)`, and then adding one more function with 2 arguments. See if you can guess what that final function should be. 
 
@@ -628,7 +629,7 @@ o + geom_line() + ylim(-3, 3) + ?
 o + geom_line() + ylim(-3, 3) + xlim(-3, 3)
 ```
 
-You probably noticed that `ggplot` ordered the data along the x-axis. We didn't ask it to do that; it's just nice that way.
+You probably noticed that `ggplot`, unlike `plot`, ordered the data along the x-axis. We didn't ask it to do that; it's just nice that way.
 
 ## A Complicated `ggplot` Example
 
@@ -709,7 +710,7 @@ A 4 by 5 plot, huh? The `margins` argument tells `ggplot` to display the margina
 Note that the panel in position (4, 5) is a tiny version of the scatterplot of the entire dataset. It contains the grand totals of data in rows by the grand total of data in columns.
 
 
-Now add to your last command (or retype it if you like to type) a call to `geom_smooth` with 4 arguments. These are `method` set to "lm", `se` set to `FALSE`, `size` set to 2, and `color` set to "black".
+Next, add to your last command (or retype it if you like to type) a call to `geom_smooth` with 4 arguments. These are `method` set to "lm", `se` set to `FALSE`, `size` set to 2, and `color` set to "black".
 
 ```{r add-or-retype, exercise = TRUE, exercise.lines = 5}
 
