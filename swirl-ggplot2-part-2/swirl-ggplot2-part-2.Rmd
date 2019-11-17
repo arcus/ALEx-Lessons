@@ -20,8 +20,9 @@ tutorial_options(exercise.completion = FALSE,
 
 # Variables needed in code chunks below
 g <- ggplot(mpg, aes(displ, hwy)) 
-x <- rnorm(100, mean = 0, sd = .1)
-y <- rnorm(100, mean = 0, sd = .1)
+set.seed(9699)
+x <- rnorm(100, mean = 0, sd = 1)
+y <- rnorm(100, mean = 0, sd = 1)
 testdat <- cbind(x, y)
 testdat <- as.data.frame(testdat)
 testdat$y[50] <- 100
@@ -631,7 +632,9 @@ o + geom_line() + ylim(-3, 3) + ?
 o + geom_line() + ylim(-3, 3) + xlim(-3, 3)
 ```
 
-You probably noticed that `ggplot`, unlike `plot`, ordered the data along the x-axis. We didn't ask it to do that; it's just nice that way.
+Okay, it's the same plot, because `ggplot` set up excellent defaults for the ones that came before. But now you know how to set limits along both axes. 
+
+Also, you probably noticed that `ggplot`, unlike `plot`, ordered the data along the x-axis. We didn't ask it to do that; it's just nice that way. 
 
 ## A Complicated `ggplot` Example
 
