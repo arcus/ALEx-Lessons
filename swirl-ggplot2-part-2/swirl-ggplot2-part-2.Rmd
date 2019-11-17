@@ -632,7 +632,7 @@ o + geom_line() + ylim(-3, 3) + ?
 o + geom_line() + ylim(-3, 3) + xlim(-3, 3)
 ```
 
-Okay, it's the same plot, because `ggplot` set up excellent defaults for the ones that came before. But now you know how to set limits along both axes. 
+Now you know how to set limits along both axes. 
 
 Also, you probably noticed that `ggplot`, unlike `plot`, ordered the data along the x-axis. We didn't ask it to do that; it's just nice that way. 
 
@@ -717,7 +717,7 @@ Note that the panel in position (4, 5) is a tiny version of the scatterplot of t
 
 Next, add to your last command (or retype it if you like to type) a call to `geom_smooth` with 4 arguments. These are `method` set to "lm", `se` set to `FALSE`, `size` set to 2, and `color` set to "black".
 
-```{r add-or-retype, exercise = TRUE, exercise.lines = 5}
+```{r add-or-retype, exercise = TRUE, exercise.lines = 10}
 
 ```
 ```{r add-or-retype-hint-1}
@@ -781,6 +781,6 @@ ab + geom_point() +
 
 You could have done these labels with separate calls to `labs`, but we thought you'd be sick of this by now. 
 
-Anyway, congrats! You've concluded part 2 of `ggplot2`. We hope you gotten enough mileage out of the lesson. If you like `ggplot2`, you can do some extras with the extra lesson.
+Anyway, congrats! You've concluded Part 2 of `ggplot2`. We hope you gotten enough mileage out of the lesson. If you like `ggplot2`, you can do some extras with the extra lesson.
 
 Slides for this and other Data Science courses may be found at github https://github.com/DataScienceSpecialization/courses/. If you care to use them, they must be downloaded as a zip file and viewed locally. This lesson corresponds to 04_ExploratoryAnalysis/ggplot2. We relied on `swirl` lessons for the text. Thanks for making this great content open source!
