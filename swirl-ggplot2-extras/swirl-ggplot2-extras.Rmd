@@ -50,14 +50,14 @@ str(diamonds)
 
 ```{r diamond-characs, echo=FALSE}
 question("From the output, how many _characteristics_ of diamonds do you thing this data contains?",
-         answer("10", correct = TRUE),
+         answer("11", correct = TRUE),
          answer("53940"),
          answer("5394"),
          answer("53950"),
          random_answer_order = TRUE,
          allow_retry = TRUE,
          correct = "You are amazing!",
-         incorrect = "It's the same as the number of variables, which is the same as the number of columns. The output says there are 53940 observations of 10 variables. This is followed by a 10-long list of characteristics (carat, cut, color, etc.) that can apply to diamonds."
+         incorrect = "It's the same as the number of variables, which is the same as the number of columns. The output says there are 53940 observations of 11 variables. This is followed by a 10-long list of characteristics (carat, cut, color, etc.) that can apply to diamonds."
 )
 ```
 
@@ -70,13 +70,13 @@ question("From the output of `str`, how many _diamonds_ are characterized in thi
          random_answer_order = TRUE,
          allow_retry = TRUE,
          correct = "Your dedication is inspiring!",
-         incorrect = "The output says there are 53940 observations of 10 variables. This is followed by a 10-long list of characteristics (carat, cut, color, etc.) that can apply to diamonds."
+         incorrect = "The output says there are 53940 observations of 11 variables. This is followed by a 10-long list of characteristics (carat, cut, color, etc.) that can apply to diamonds."
 )
 ```
 
 ## Advanced `qplot` Histograms
 
-Now let's plot a histogram of the price of the 53940 diamonds in this dataset. Recall that a histogram requires only one variable of the data, so run the R command `qplot` with the first argument `price` and the argument `data` set equal to `diamonds`. This will show the frequency of different diamond prices.
+Now let's plot a histogram of the prices of the 53940 diamonds in this dataset. Recall that a histogram requires only one variable, so run the R command `qplot` with the first argument `price` and the argument `data` set equal to `diamonds`. This will show the frequency of different diamond prices.
 
 ```{r hist-price, exercise = TRUE, exercise.lines = 5}
 
@@ -153,7 +153,7 @@ counts
  
 See how it matches the histogram you just plotted? So `qplot` really works!
 
-You're probably sick of it, but rerun `qplot` again, this time with 4 arguments. The first 3 are the same as the last qplot command you just ran  (`price`, `data` set equal to `diamonds`, and `binwidth` set equal to 18497 / 30). (Copy from the previous code block to save yourself some typing.) The fourth argument is `fill` set equal to `cut`. The shape of the histogram will be familiar, but it will be more colorful.
+You're probably sick of it, but run `qplot` again, this time with 4 arguments. The first 3 are the same as the last qplot command you just ran  (`price`, `data` set equal to `diamonds`, and `binwidth` set equal to 18497 / 30). (Copy from the previous code block to save yourself some typing.) The fourth argument is `fill` set equal to `cut`. The shape of the histogram will be familiar, but it will be more colorful.
  
 ```{r sick-qplot, exercise = TRUE, exercise.lines = 5}
 
@@ -202,7 +202,7 @@ qplot(price, data = diamonds, geom = "density")
 
 Notice that the shape is similar to that of the histogram we saw previously. The highest peak is close to 0 on the x-axis, meaning that most of the diamonds in the dataset were inexpensive. In general, as prices increase (move right along the x-axis) the number of diamonds (at those prices) decreases. The exception to this is when the price is around $4000; there's a slight increase in frequency. 
 
-Let's see if `cut` is responsible for this increase by adding another argument to `qplot`: `color = cut`. And since the number of arguments is enough to extend the function call close to the right edge, let's use some line breaks to make the code more readable. 
+Let's see if `cut` is responsible for this increase by adding another argument to `qplot`: `color = cut`. And since the number of arguments is enough to extend the function call close to the right edge in an average RStudio interface, let's use some line breaks to make the code more readable. 
 
 ```{r responsible-cut, exercise = TRUE, exercise.lines = 10}
 
@@ -369,7 +369,7 @@ Let's review what we learned!
 
 
 ```{r types-of-plots, echo=FALSE}
-question("Which types of plot does qplot plot?",
+question("Which types of plot does `qplot` plot?",
          answer("histograms", correct = TRUE),
          answer("scatterplots", correct = TRUE),
          answer("box and whisker plots", correct = TRUE),
@@ -384,7 +384,7 @@ question("Which types of plot does qplot plot?",
 ```{r tf-geom-string, echo=FALSE}
 question("True or False? The `geom` argument takes a string for a value.",
          answer("True", correct = TRUE),
-         answer("False", message = 'Recall our examples. For instance, `geom = "density`'),
+         answer("False", message = 'Recall our examples. For instance, `geom = "density`.'),
          random_answer_order = TRUE,
          allow_retry = TRUE,
          correct = "You are doing so well!"
@@ -598,7 +598,7 @@ diamonds[myd, ]
 ```
 
 
-The `car2` field is, in fact, `NA` for these entries, but the `carat` field shows they each had a carat size of .2. What's going on here?
+The `car2` field (way over to the right---use the black arrow in the top right of the data window if you can't see it) is, in fact, `NA` for these entries, but the `carat` field shows they each had a carat size of .2. What's going on here?
 
 
 Actually, our plot answers this question. The boundaries for each column appear in the gray labels at the top of each column, and we see that the first column is labeled `(0.2,0.5]`. This indicates that this column contains data greater than .2 (hence it is prefixed by a `(`) and less than or equal to .5 (which is suffixed by a `]`). Therefore, diamonds with carat size .2 were excluded from the `car2` field. 
