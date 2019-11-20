@@ -1171,8 +1171,8 @@ The other method is to do linear regression with $\displaystyle Y$ as the indepe
 
 ```{r estimatingxfromy, echo=FALSE}
 question("What are two ways to estimate _X_ from _Y_?",
-         answer("classical estimation"),
-         answer("inverse estimation"),
+         answer("classical estimation", correct = TRUE),
+         answer("inverse estimation", correct = TRUE),
          answer("reverse estimation"),
          answer("linear estimation"),
          random_answer_order = TRUE,
