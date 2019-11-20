@@ -950,10 +950,10 @@ question("What does a dark red pie indicate in a correlogram?",
 
 Now add another parameter to the call to `corrgram`: `main = "Car Mileage Correlations in PCA Order"` to see what happens. 
 
-```{r panel.text, exercise = TRUE, exercise.lines = 5}
+```{r paneltext, exercise = TRUE, exercise.lines = 5}
 
 ```
-```{r panel.text-solution}
+```{r paneltext-solution}
 corrgram(mtcars, 
          order = TRUE,
          upper.panel = panel.pie,
