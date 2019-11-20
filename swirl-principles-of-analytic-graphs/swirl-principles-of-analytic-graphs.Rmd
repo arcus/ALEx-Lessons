@@ -53,7 +53,7 @@ The top and bottom lines of the box indicate the 25% and 75% quartiles of the da
 
 Since the box is above 0, the number of symptom-free days for children with asthma is bigger using the air cleaner. This is good, right?
 
-```{r label, include = TRUE, echo = FALSE}
+```{r one-box, include = TRUE, echo = FALSE}
 fname <- paste("https://storage.googleapis.com/public-braunsb-media/Arcus-Education-Assets/Lessons/images/AirCln1.png")
 knitr::include_graphics(fname)
 
@@ -76,9 +76,11 @@ question("How many days of improvement does the median correspond to?",
 While it's somewhat informative, it's also somewhat cryptic, since the y-axis is claiming to show a change in number of symptom-free days. Wouldn't it be better to show a comparison?
 
 Like this? Here's a graphic which shows two boxplots, the one on the left showing the results for a control group that doesn't use an air cleaner alongside the previously shown boxplot.
-  Figure: AC2.R
-  FigureType: new
 
+```{r two-box, include = TRUE, echo = FALSE}
+fname <- paste("https://storage.googleapis.com/public-braunsb-media/Arcus-Education-Assets/a-MESS%20Lessons/images/2%20boxes.png")
+knitr::include_graphics(fname)
+```
 
 By showing the two boxplots side by side, you can clearly see that using the air cleaner increases the number of symptom-free days for most asthmatic children. The plot on the right (using the air cleaner) is generally higher than the one on the left (the control group).
 
@@ -99,13 +101,14 @@ question("What does this graph NOT show you?",
 ## Second Priciple: Show a Causality or a Mechanism of how your Theory of the Data Works
 
 So the first principle was to show a comparison. The second principle is to show causality or a mechanism of how your theory of the data works. This  explanation or systematic structure shows your causal framework for thinking about the question you're trying to answer.
-  Figure: clearPlot.R
-  FigureType: new
-
 
 Consider this plot which shows the dual boxplot we just showed, but next to it we have a corresponding plot of changes in measures of particulate matter. 
-  Figure: AC3.R
-  FigureType: new
+
+```{r two-plot-4-box, include = TRUE, echo = FALSE, fig.width = 2}
+fname <- paste("https://storage.googleapis.com/public-braunsb-media/Arcus-Education-Assets/a-MESS%20Lessons/images/2%20plots%204%20boxes.png")
+knitr::include_graphics(fname, dpi = NULL)
+
+```
 
 ```{r ac3-R-q, echo=FALSE}
 question("This picture tries to explain how the air cleaner  increases the number of symptom-free days for asthmatic children. What mechanism does the graph imply?",
