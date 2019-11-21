@@ -10,7 +10,7 @@ runtime: shiny_prerendered
 library(learnr)
 library(datasets)
 ```
-(Slides for this and other Data Science courses may be found at github [https://github.com/DataScienceSpecialization/courses/](https://github.com/DataScienceSpecialization/courses/). If you care to use them, they must be downloaded as a zip file and viewed locally. This lesson corresponds to 04_ExploratoryAnalysis/PlottingBase.)
+
 
 ## Base Plotting System
 
@@ -549,3 +549,5 @@ plot(airquality$Temp, airquality$Ozone, main = "Ozone and Temperature")
 mtext("Ozone and Weather in New York City", outer = TRUE)
 ```
 Congrats! You've weathered this lesson nicely and passed out of the No!zone.
+
+Slides for this and other Data Science courses may be found at github [https://github.com/DataScienceSpecialization/courses/](https://github.com/DataScienceSpecialization/courses/). If you care to use them, they must be downloaded as a zip file and viewed locally. This lesson corresponds to 04_ExploratoryAnalysis/PlottingBase.
