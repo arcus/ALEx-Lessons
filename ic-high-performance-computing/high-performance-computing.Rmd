@@ -3,8 +3,8 @@ title: High Performance Computing with Univa Grid
 output: 
   rmarkdown::html_document:
     highlight: pygments
-    toc: true
-    toc_float: true
+#    toc: true
+#    toc_float: true
     theme: spacelab
 ---
 ```{r, echo=FALSE}
