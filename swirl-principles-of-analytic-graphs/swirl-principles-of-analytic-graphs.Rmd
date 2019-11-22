@@ -52,7 +52,7 @@ The top and bottom lines of the box indicate the 25% and 75% quartiles of the da
 
 Since the box is above 0, the number of symptom-free days for children with asthma is bigger using the air cleaner. This is good, right?
 
-```{r echo=FALSE, out.width = '100%'}
+```{r echo=FALSE, out.width = '50%'}
 knitr::include_graphics("www/AirCln1.png")
 ```
 
@@ -76,7 +76,7 @@ While it's somewhat informative, it's also somewhat cryptic, since the y-axis is
 Like this? Here's a graphic which shows two boxplots, the one on the left showing the results for a control group that doesn't use an air cleaner alongside the previously shown boxplot.
 
 
-```{r echo=FALSE, out.width = '100%'}
+```{r echo=FALSE, out.width = '50%'}
 knitr::include_graphics("www/2 boxes.png")
 ```
 
@@ -136,7 +136,7 @@ Sometimes, if you restrict yourself to two variables you'll be misled and draw a
 
 Consider this plot which shows the relationship between air pollution (x-axis) and mortality rates among the elderly (y-axis). The blue regression line shows a surprising result. (You'll learn about regression lines when you take the fabulous Regression Models course.)
 
-```{r echo=FALSE, out.width = '100%'}
+```{r echo=FALSE, out.width = '50%'}
 knitr::include_graphics("www/burst from the left going down.png")
 ```
  
