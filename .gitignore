@@ -7,3 +7,5 @@ Correlation-and-Linear-Regression.html
 **/.DS_Store
 .RData
 .Rproj.user
+*.html
+.Rproj.user/shared/notebooks/paths

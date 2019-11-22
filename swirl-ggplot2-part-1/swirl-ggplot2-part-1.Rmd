@@ -270,7 +270,7 @@ qplot(drv, hwy, data = mpg, geom = "")
 qplot(drv, hwy, data = mpg, geom = "boxplot")
 ```
 
-We see 3 boxes, one for each drive. 
+We see 3 boxes, one for each drive. Each box illustrates the distribution of points along `y`, highway miles per gallon. 
 
 ## `qplot` Boxplot using Color to Represent a Factor Variable
 
@@ -322,7 +322,11 @@ It's cool that `qplot` can do a multiply-colored histogram so easily, but some p
 
 Remember that with base `plot` we had to do each subplot individually? The `lattice` system made plotting  conditioning plots easier. Let's see how easy it is with `qplot`.
 
-We'll do two plots, a scatterplot and then a histogram, each with 3 facets. For the scatterplot, call `qplot` with 4 arguments. The first two are `displ` and `hwy`, and the third is the argument `data`, set equal to `mpg`. The fourth is the argument `facets`, which will be set equal to the expression `. ~ drv`, which is `ggplot2`'s shorthand for number of rows (to the left of the `~`) and number of columns (to the right of the `~`). Here the `.` indicates a single row and `drv` implies 3, since there are 3 distinct drive factors. Try this now.
+We'll do two plots, a scatterplot and then a histogram, each with 3 facets. For the scatterplot, call `qplot` with 4 arguments. The first two are `displ` and `hwy`, and the third is the argument `data`, set equal to `mpg`. The fourth is the argument `facets`, which will be set equal to the expression `. ~ drv`, which is `ggplot2`'s shorthand for number of rows (to the left of the `~`) and number of columns (to the right of the `~`). When you see a `.` like that in a formula, think "everything else in the data for this function." You'll run into it in functions such as `lm` (See our lesson [Correlaion and Linear Regression](http://www.a-mess.org/sb-correlation-and-linear-regression/) or the [tidyverse reference page for Quick Plot](https://ggplot2.tidyverse.org/reference/qplot.html) to learn more). 
+
+Here, because we have identified only the two variables `displ` and `hwy` as data for the `qplot` function, the `.` indicates a single row and `drv` implies 3, since there are 3 distinct drive factors. 
+
+Write your code for the two plots now.
 
 ```{r scatterhist, exercise = TRUE, exercise.lines = 5}
 
@@ -345,7 +349,7 @@ The result is a 1 by 3 array of plots. Note how each is labeled at the top with 
 
 ## `qplot` Histogram with Facets
 
-Now we'll do a histogram, again calling qplot with 4 arguments. This time, since we need only one variable for a histogram, the first is `hwy` and the second is the argument `data`, set equal to `mpg`. The third is the argument `facets`, which we'll set equal to the expression `drv ~ .`. This will give us a different arrangement of the facets. The fourth argument is `binwidth`. Set this equal to 2. Try this now.
+Let's do a histogram, again calling qplot with 4 arguments. This time, since we need only one variable for a histogram, the first is `hwy` and the second is the argument `data`, set equal to `mpg`. The third is the argument `facets`, which we'll set equal to the expression `. ~ drv`. This will give us a different arrangement of the facets. The fourth argument is `binwidth`. Set this equal to 2. Try it now.
 
 ```{r bin, exercise = TRUE, exercise.lines = 5}
 
@@ -360,10 +364,10 @@ qplot(hwy, ...)
 qplot(hwy, data = mpg, ...)
 ```
 ```{r bin-hint-4}
-qplot(hwy, data = mpg, facets = drv ~ ., ...)
+qplot(hwy, data = mpg, facets = . ~ drv, ...)
 ```
 ```{r bin-solution}
-qplot(hwy, data = mpg, facets = drv ~ ., binwidth = 2)
+qplot(hwy, data = mpg, facets = . ~ drv, binwidth = 2)
 ```
 
 ```{r facets, echo=FALSE}
@@ -386,7 +390,7 @@ Pretty good, right? Not too difficult either. Let's review what we learned!
 ```{r workhorse, echo=FALSE}
 question("Which of the following is a basic workhorse function of `ggplot2`?",
          answer("`hist`", message = "Well, yes, it's used a lot, but which funtion have we been talking about the whole lesson?"),
-         answer("`xyplot`", message = "We didn't even talk about this."),
+         answer("`xyplot`", message = "We didn't talk about this."),
          answer("`scattplot`", message  = "We didn't talk about a function called `scatterplot`."),
          answer("`gplot`", message = "Look again."),
          answer("`qplot`", correct = TRUE),

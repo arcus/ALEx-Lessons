@@ -1,0 +1,679 @@
+---
+title: "`ggplot2` Extras"
+output: 
+  learnr::tutorial:
+    progressive: true
+    allow_skip: true
+runtime: shiny_prerendered
+---
+
+```{r setup, include=FALSE}
+library(learnr)
+library(`ggplot2`)
+library(tidyverse)
+knitr::opts_chunk$set(echo = TRUE)
+options(scipen = 9999, digits = 3)
+tutorial_options(exercise.completion = FALSE,
+                 exercise.eval = TRUE,
+                 exercise.lines = 5,
+                 exercise.diagnostics = TRUE)
+
+# Variables needed in code chunks below
+brk <- seq(617, 18497 + (617 * 2), by = 617)
+counts <- c(4611, 13255, 5230, 4262, 3362, 2567, 2831, 2841, 2203, 1666, 1445, 1112, 987, 766, 796, 655, 606, 553, 540, 427, 429, 376, 348, 338, 298, 305, 269, 287, 227, 251, 97)
+counts <- as.integer(counts)
+g <- ggplot(diamonds, aes(depth, price))
+cutpoints <- quantile(diamonds$carat, seq(0, 1, length = 4), na.rm = TRUE)
+diamonds$car2 <- cut(diamonds$carat, cutpoints)
+g2 <- ggplot(diamonds, aes(depth, price))
+myd <- c(15, 31592, 31593, 31594, 31595, 31596, 31597, 31598, 31599, 31600, 31601, 31602)
+```
+  
+**Hints**: Use the "Hints" and "More hints" buttons to check your work or to get help if you can't figure out what the solution is. The final hint is the solution.      
+
+## Advanced `qplot`
+
+In this lesson, we'll go through a few more `qplot` examples using the `diamond` data, which comes with the `ggplot2` package. This data is a little more complicated than the `mpg` data and it contains information on various characteristics of diamonds.
+
+
+Run the R command `str` with the argument `diamonds` to see what the data looks like.
+
+```{r str-diamonds, exercise = TRUE}
+
+```
+```{r str-diamonds-hint}
+str(...)
+```
+```{r str-diamonds-solution}
+str(diamonds)
+```
+
+```{r diamond-characs, echo=FALSE}
+question("From the output, how many _characteristics_ of diamonds do you thing this data contains?",
+         answer("11", correct = TRUE),
+         answer("53940"),
+         answer("5394"),
+         answer("53950"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         correct = "You are amazing!",
+         incorrect = "It's the same as the number of variables, which is the same as the number of columns. The output says there are 53940 observations of 11 variables. This is followed by a 10-long list of characteristics (carat, cut, color, etc.) that can apply to diamonds."
+)
+```
+
+```{r str-output, echo=FALSE}
+question("From the output of `str`, how many _diamonds_ are characterized in this dataset?",
+         answer("10"),
+         answer("53940", correct = TRUE),
+         answer("5394"),
+         answer("53950"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         correct = "Your dedication is inspiring!",
+         incorrect = "The output says there are 53940 observations of 11 variables. This is followed by a 10-long list of characteristics (carat, cut, color, etc.) that can apply to diamonds."
+)
+```
+
+## Advanced `qplot` Histograms
+
+Now let's plot a histogram of the prices of the 53940 diamonds in this dataset. Recall that a histogram requires only one variable, so run the R command `qplot` with the first argument `price` and the argument `data` set equal to `diamonds`. This will show the frequency of different diamond prices.
+
+```{r hist-price, exercise = TRUE, exercise.lines = 5}
+
+```
+```{r hist-price-hint-1}
+qplot(...)
+```
+```{r hist-price-hint-2}
+qplot(price, ...)
+```
+```{r hist-price-solution}
+qplot(price, data = diamonds)
+```
+
+
+Not only do you get a histogram, you also get a message about the `binwidth` defaulting to 30 and a friendly reminder of how you can change the number of bins.
+
+Recall that `range` refers to the _spread_ or _dispersion_ of the data, in this case `price` of diamonds. Run  the R command `range` now with `diamonds$price` as its argument.
+
+```{r rang-hist, exercise = TRUE, exercise.lines = 5}
+
+```
+```{r rang-hist-hint}
+range(...)
+```
+```{r rang-hist-solution}
+range(diamonds$price)
+```
+
+We see that range returned the minimum and maximum prices, so the diamonds vary in price from $326 to $18823. We've done the arithmetic for you: the range (difference between these two numbers) is $18497.
+
+
+ Rerun `qplot` now with 3 arguments. The first is `price`, the second is `data` set equal to `diamonds`, and the third is `binwidth` set equal to 18497 / 30). (Copy from the previous code block to save yourself some typing.) See if the plot looks familiar.
+
+```{r new-binwidth, exercise = TRUE, exercise.lines = 5}
+
+```
+```{r new-binwidth-hint-1}
+qplot(...)
+```
+```{r new-binwidth-hint-2}
+qplot(price, ...)
+```
+```{r new-binwidth-hint-3}
+qplot(price, data = diamonds, ...)
+```
+```{r new-binwidth-hint-4}
+qplot(price, data = diamonds, binwidth = )
+```
+```{r new-binwidth-solution}
+qplot(price, data = diamonds, binwidth = 18497 / 30)
+```
+
+No more messages, but a histogram almost identical to the previous one! If you typed 18497 / 30 at the command line (which you can do in any code block if you feel like it), you would get 616.5667 as a result. This means that the height of each bin tells you how many diamonds have a price between $\displaystyle x$ and $\displaystyle x$ + 617, where $\displaystyle x$ is the left edge of the bin. The formula 18497 (the price of the most expensive diamond) / 30 (the number of bins) provides you with number of dollars represented by the width of each bin.  
+
+
+ We've created a vector containing integers that are multiples of 617 for you. It's called `brk`. Look at it now.
+
+```{r brk, exercise = TRUE, exercise.lines = 5}
+
+```
+```{r brk-solution}
+brk
+```
+
+We've also created a vector containing the number of diamonds with  prices between each pair of adjacent entries of `brk`. For instance, the first `count` is the number of diamonds with prices between 0 and \$617, and the second is the number of diamonds with prices between \$617 and $1234. Look at the vector named `counts` now.
+ 
+```{r counts, exercise = TRUE, exercise.lines = 5}
+
+```
+```{r counts-solution}
+counts
+```
+ 
+See how it matches the histogram you just plotted? So `qplot` really works!
+
+You're probably sick of it, but run `qplot` again, this time with 4 arguments. The first 3 are the same as the last qplot command you just ran  (`price`, `data` set equal to `diamonds`, and `binwidth` set equal to 18497 / 30). (Copy from the previous code block to save yourself some typing.) The fourth argument is `fill` set equal to `cut`. The shape of the histogram will be familiar, but it will be more colorful.
+ 
+```{r sick-qplot, exercise = TRUE, exercise.lines = 5}
+
+```
+```{r sick-qplot-hint-1}
+qplot(...)
+```
+```{r sick-qplot-hint-2}
+qplot(price, ...)
+```
+```{r sick-qplot-hint-3}
+qplot(price, data = diamonds, ...)
+```
+```{r sick-qplot-hint-4}
+qplot(price, data = diamonds, binwidth = 18497 / 30, ...)
+```
+```{r sick-qplot-solution}
+qplot(price, data = diamonds, binwidth = 18497 / 30, fill = cut)
+```
+ 
+
+This shows how the counts within each price grouping (a.k.a. "bin") are distributed among the different cuts of diamonds. Notice how `qplot` displays these distributions relative to the `cut` legend on the right. The `Fair` cut diamonds are at the bottom of each bin, the `Good` cuts are above them, then the `Very Good` above them, until the `Ideal` cuts are at the top of each bin. You can quickly see from this display that there are very few `Fair` cut diamonds priced above $5000.
+
+## Advanced `qplot` Density Plots
+
+
+Let's replot the histogram as a _density function_, which will show the **proportion** of diamonds in each bin. This means that the shape will be similar but the scale on the y-axis will be different since, by definition, the density function is nonnegative everywhere, and the area under the curve is 1. 
+
+To do this, simply call `qplot` with 3 arguments. The first 2 are  `price` and `data` (set equal to `diamonds`). The third is `geom`, which should be set equal to the string "density". Try this now.
+
+```{r geom-density-diamonds, exercise = TRUE, exercise.lines = 5}
+
+```
+```{r geom-density-diamonds-hint-1}
+qplot(...)
+```
+```{r geom-density-diamonds-hint-2}
+qplot(price, ...)
+```
+```{r geom-density-diamonds-hint-3}
+qplot(price, data = diamonds, ...)
+```
+```{r geom-density-diamonds-solution}
+qplot(price, data = diamonds, geom = "density")
+```
+
+Notice that the shape is similar to that of the histogram we saw previously. The highest peak is close to 0 on the x-axis, meaning that most of the diamonds in the dataset were inexpensive. In general, as prices increase (move right along the x-axis) the number of diamonds (at those prices) decreases. The exception to this is when the price is around $4000; there's a slight increase in frequency. 
+
+Let's see if `cut` is responsible for this increase by adding another argument to `qplot`: `color = cut`. And since the number of arguments is enough to extend the function call close to the right edge in an average RStudio interface, let's use some line breaks to make the code more readable. 
+
+```{r responsible-cut, exercise = TRUE, exercise.lines = 10}
+
+```
+```{r responsible-cut-hint-1}
+qplot(...)
+```
+```{r responsible-cut-hint-2}
+qplot(price, 
+      ...)
+```
+```{r responsible-cut-hint-3}
+qplot(price, 
+      data = diamonds, 
+      ...)
+```
+```{r responsible-cut-hint-4}
+qplot(price, 
+      data = diamonds, 
+      geom = "density", 
+      ...)
+```
+```{r responsible-cut-solution}
+qplot(price, 
+      data = diamonds, 
+      geom = "density", 
+      color = cut)
+```
+
+See how easily qplot did this? Four of the five cuts have 2 peaks, one at price \$1000 and the other between \$4000 and \$5000. The exception is the `Fair` cut, which has a single peak at $2500. Now we have a little more understanding of the histogram we saw before.
+
+## Advanced `qplot` Scatterplots
+
+For scatterplots, we'll need to specify two variables from the diamond dataset.
+
+
+Let's start with `carat` and `price`. Use these as the first 2 arguments of `qplot`. The third should be `data` set equal to the dataset.
+
+
+```{r scatterplot-carat-by-price, exercise = TRUE, exercise.lines = 5}
+
+```
+```{r scatterplot-carat-by-price-hint-1}
+qplot(...)
+```
+```{r scatterplot-carat-by-price-hint-2}
+qplot(carat, ...)
+```
+```{r scatterplot-carat-by-price-hint-3}
+qplot(carat, price, ...)
+```
+```{r scatterplot-carat-by-price-hint-4}
+qplot(carat, price, data = )
+```
+```{r scatterplot-carat-by-price-solution}
+qplot(carat, price, data = diamonds)
+```
+
+
+We see a positive trend here: as the number of carats increases, the price also goes up.
+
+
+ Now rerun the same command, except add a fourth parameter, `shape`, set equal to `cut`.
+
+```{r add-shape-is-cut, exercise = TRUE, exercise.lines = 5}
+
+```
+```{r add-shape-is-cut-hint-1}
+qplot(...)
+```
+```{r add-shape-is-cut-hint-2}
+qplot(carat, ...)
+```
+```{r add-shape-is-cut-hint-3}
+qplot(carat, price, ...)
+```
+```{r add-shape-is-cut-hint-4}
+qplot(carat, price, data = diamonds, ...)
+```
+```{r add-shape-is-cut-solution}
+qplot(carat, price, data = diamonds, shape = cut)
+```
+
+
+The same scatterplot appears, except the cuts of the diamonds are distinguished by different symbols. The legend at the right tells you which symbol is associated with each cut. These are small and hard to read, so rerun the same command, except this time instead of setting the argument `shape` equal to `cut`, set the argument `color` equal to `cut`.
+
+```{r change-to-color-is-cut, exercise = TRUE, exercise.lines = 5}
+
+```
+```{r change-to-color-is-cut-hint}
+qplot(carat, price, data = diamonds, ...)
+```
+```{r change-to-color-is-cut-solution}
+qplot(carat, price, data = diamonds, color = cut)
+```
+
+
+That's easier to see---though not exactly easy because there are so many data points.
+
+## Advanced `qplot` Scatterplots with Complications
+
+Let's close with two complicated scatterplot examples. 
+
+`qplot` can be built up in additive layers just like `ggplot` can. Try it: duplicate the plot you just made, and after the function call, add a call to `geom_smooth` using "lm" as the `method`.
+
+```{r complicated-scatterplot, exercise = TRUE, exercise.lines = 5}
+
+```
+```{r complicated-scatterplot-hint-1}
+qplot(...) + 
+    ?
+```
+```{r complicated-scatterplot-hint-2}
+qplot(carat, ...) + 
+    ?
+```
+```{r complicated-scatterplot-hint-3}
+qplot(carat, price, data = diamons, color = cut) + 
+    ?
+```
+```{r complicated-scatterplot-hint-4}
+qplot(carat, price, data = diamonds, color = cut) + 
+    geom_smooth(...)
+```
+```{r complicated-scatterplot-solution}
+qplot(carat, price, data = diamonds, color = cut) + 
+    geom_smooth(method = "lm")
+```
+
+
+We see the same scatterplot, but slightly more compressed and showing 5 regression lines, one for each `cut` of diamonds. It might be hard to see, but around each line is a shadow showing the 95% confidence interval. Unsurprisingly, the better the cut is, the steeper (more positive) the slope of the line is.
+
+Let's rerun that plot you just did `qplot(carat, price, data = diamonds, color = cut) + geom_smooth(method = "lm")`, adding one (just one) more argument to `qplot`. The new argument is `facets`. It should be set equal to the formula `. ~ cut`. Recall that the `facets` argument indicates we want a multi-panel plot. The symbol to the left of the tilde indicates rows: here just one, because there are only two variables in the function call and the other is on the other side of the tilde representing the number of columns (in this case five, the number of cuts). Try this now.
+
+```{r facets-with-cut, exercise = TRUE, exercise.lines = 5}
+
+```
+```{r facets-with-cut-hint-1}
+qplot(carat, price, ...) + 
+    ?
+```
+```{r facets-with-cut-hint-2}
+qplot(carat, price, data = diamonds, ...) + 
+    ?
+```
+```{r facets-with-cut-hint-3}
+qplot(carat, price, data = diamonds, color = cut, ...) + 
+    ?
+```
+```{r facets-with-cut-hint-4}
+qplot(carat, price, data = diamonds, color = cut, facets = . ~ cut) + 
+    geom_smooth(...)
+```
+```{r facets-with-cut-solution}
+qplot(carat, price, data = diamonds, color = cut, facets = . ~ cut) + 
+    geom_smooth(method = "lm")
+```
+
+Pretty good, right? Not too difficult, either. 
+
+## Advanced `qplot` Review
+
+Let's review what we learned!
+
+
+```{r types-of-plots, echo=FALSE}
+question("Which types of plot does `qplot` plot?",
+         answer("histograms", correct = TRUE),
+         answer("scatterplots", correct = TRUE),
+         answer("box and whisker plots", correct = TRUE),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         correct = "That's right!",
+         incorrect = "More."
+)
+```
+
+
+```{r tf-geom-string, echo=FALSE}
+question("True or False? The `geom` argument takes a string for a value.",
+         answer("True", correct = TRUE),
+         answer("False", message = 'Recall our examples. For instance, `geom = "density`.'),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         correct = "You are doing so well!"
+)
+```
+ 
+```{r tf-method-string, echo=FALSE}
+question("The `method` argument takes a string for a value.",
+         answer("True", correct = TRUE),
+         answer("False"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         correct = "All that hard work is paying off!"
+)
+```
+
+```{r binwidth-input-type, echo=FALSE}
+question("The `binwidth` argument takes a string for a value.",
+         answer("True"),
+         answer("False", correct = TRUE),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         incorrect = "Remember typing `binwidth = 18497 / 30`?",
+         correct = "Yay!"
+)
+```
+
+```{r xylabels, echo=FALSE}
+question("True or False? The user must specify x- and y-axis labels when using `qplot`.",
+         answer("True"),
+         answer("False", correct = TRUE),
+         correct = "You are amazing!",
+         incorrect = "'Must'? More like 'may'.",
+         random_answer_order = TRUE,
+         allow_retry = TRUE
+)
+```
+
+Now for some ggplots.
+
+## Advanced `ggplots`
+
+First, create a graphical object `g` by assigning to it the output of a call to the function `ggplot` with 2 arguments. The first is the dataset `diamonds` and the second is a call to the function `aes` with 2 arguments, `depth` and `price`. Remember, you won't see any result.
+
+```{r g-ggplot-initiation, exercise = TRUE, exercise.lines = 5}
+
+```
+```{r g-ggplot-initiation-hint-1}
+g <- ggplot(...)
+```
+```{r g-ggplot-initiation-hint-2}
+g <- ggplot(diamonds, ...)
+```
+```{r g-ggplot-initiation-hint-3}
+g <- ggplot(diamonds, aes(...))
+```
+```{r g-ggplot-initiation-hint-4}
+g <- ggplot(diamonds, aes(depth, ...))
+```
+```{r g-ggplot-initiation-solution}
+g <- ggplot(diamonds, aes(depth, price))
+```
+
+Does `g` exist? Yes! Type `summary` with `g` as an argument to see what it holds.
+
+```{r does-g-exist, exercise = TRUE, exercise.lines = 5}
+
+```
+```{r does-g-exist-hint}
+summary(...)
+```
+```{r does-g-exist-solution}
+summary(g)
+```
+
+We see that `g` holds the entire dataset. Now suppose we want to see a scatterplot of a relationship. Add to `g` a call to the function `geom_point` with 1 argument, `alpha`, set equal to 1/3.
+
+```{r g-geom-point, exercise = TRUE, exercise.lines = 5}
+
+```
+```{r g-geom-point-hint-1}
+g + ?
+```
+```{r g-geom-point-hint-2}
+g + geom_point(...)
+```
+```{r g-geom-point-solution}
+g + geom_point(alpha = 1/3)
+```
+
+That's somewhat interesting. We see that depth ranges from 43 to 79, but the densest distribution is around 60 to 65. Suppose we want to see if this relationship (between `depth` and `price`) is affected by `cut` or `carat`. We know `cut` is a factor with 5 levels (`Fair`, `Good`, `Very Good`, `Premium`, and `Ideal`). But `carat` is  numeric and not a discrete factor. Can we do this?
+
+Of course! That's why we asked. 
+
+## Advanced `ggplot` in Combination with the `cut` Function for a Multi-Faceted Plot
+
+R has a handy command, `cut` (not the same as the variable `cut` in our dataset), which allows you to divide your data into sets and label each entry as belonging to one of the sets, in effect creating a new factor. 
+
+First, we divide the data into 3 _pockets_ so 1/3 of the data falls into each. We'll use the R command `quantile` to do this. Create the variable `cutpoints` and assign to it the output of a call to the function `quantile`, with 3 arguments. The first is the data to cut, namely `diamonds$carat`; the second is a call to the R function `seq`. This is also called with 3 arguments: 0, 1, and `length` set equal to 4. The third argument to the call to `quantile` is the boolean `na.rm` set equal to `TRUE`.
+
+**TIP**: If you want to see the output, surround the entire assignment statement with parentheses.
+
+```{r cut-data, exercise = TRUE, exercise.lines = 5}
+
+```
+```{r cut-data-hint-1}
+cutpoints <- ?
+```
+```{r cut-data-hint-2}
+cutpoints <- quantile(...)
+```
+```{r cut-data-hint-3}
+cutpoints <- quantile(diamonds$carat, ...)
+```
+```{r cut-data-hint-4}
+cutpoints <- quantile(diamonds$carat, seq(...), na.rm = TRUE)
+```
+```{r cut-data-solution}
+(cutpoints <- quantile(diamonds$carat, seq(0, 1, length = 4), na.rm = TRUE))
+```
+
+What you just did was tell `quantile` to take the data in `diamonds$carat` and provide 4 `quantile`s between 0 and 1, removing any empty data points (`NA`s) from the calculation.
+
+Look at `cutpoints` (unless you used the parentheses trick metioned above the previous code block).
+
+```{r look-at-cutpoints, exercise = TRUE, exercise.lines = 5}
+
+```
+```{r look-at-cutpoints-solution}
+cutpoints
+```
+
+We see a 4-long vector (explaining why length was set equal to 4). We also see that .2 is the smallest carat size in the dataset and 5.01 is the largest. One third of the diamonds are between .2 and .5 carats and another third are between .5 and 1 carat in size. The remaining third are between 1 and 5.01 carats. 
+
+Now we can use the R command `cut` to label each of the 53940 diamonds in the dataset as belonging to one of these 3 factors. Create a new name in `diamonds`, `diamonds$car2` by assigning it the output of the call to `cut`. 
+
+This command takes 2 arguments, `diamonds$carat`, which is what we want to cut, and `cutpoints`, the places where we'll cut. 
+
+Remember that you can place parentheses around the output if you want to see the assignment values. In this case, you might not want to, because there are a _lot_ of values. 
+
+```{r execute-the-cut-command, exercise = TRUE, exercise.lines = 5}
+
+```
+```{r execute-the-cut-command-hint-1}
+diamonds$car2 <- ?
+```
+```{r execute-the-cut-command-hint-2}
+diamonds$car2 <- cut(...)
+```
+```{r execute-the-cut-command-hint-3}
+diamonds$car2 <- cut(diamonds$carat, ...)
+```
+```{r execute-the-cut-command-solution}
+diamonds$car2 <- cut(diamonds$carat, cutpoints)
+```
+
+Let's continue with our multi-faceted plot. First, we have to create a new graphical object , say `g2`, because we changed the dataset (`diamonds`) `g` contained (by adding a new column). Assign to `g2` the output of a call to `ggplot` with 2 arguments. The dataset `diamonds` is the first, and a call to the function `aes` with 2 arguments (`depth`, `price`) is the second.
+
+```{r set-g2, exercise = TRUE, exercise.lines = 5}
+
+```
+```{r set-g2-hint-1}
+g2 <- ggplot(...)
+```
+```{r set-g2-hint-2}
+g2 <- ggplot(diamonds, aes(...))
+```
+```{r set-g2-solution}
+g2 <- ggplot(diamonds, aes(depth, price))
+```
+
+Now add to `g2`  calls to 2 functions. This first is a call to `geom_point` with the argument `alpha` set equal to 1/3. The second is a call to the function `facet_grid` using the formula `cut ~ car2` as its argument.
+
+```{r cut-across-car2, exercise = TRUE, exercise.lines = 5}
+
+```
+```{r cut-across-car2-hint-1}
+g2 + geom_point(...) + ?
+```
+```{r cut-across-car2-hint-2}
+g2 + geom_point(alpha = ) + ?
+```
+```{r cut-across-car2-hint-3}
+g2 + geom_point(alpha = 1/3) + ?
+```
+```{r cut-across-car2-hint-4}
+g2 + geom_point(alpha = 1/3) + facet_grid(...)
+```
+```{r cut-across-car2-solution}
+g2 + geom_point(alpha = 1/3) + facet_grid(cut ~ car2)
+```
+
+You can see now how `cut` worked: It created a new factor variable. We see a multi-faceted plot with 5 rows, each corresponding to a cut factor. Not surprising. 
+
+What _is_ surprising is the number of columns. We were expecting 3 and got 4. Why?
+
+The first 3 columns are labeled with the cutpoint boundaries. The fourth is labeled `NA` and shows us where the data points with missing data (`NA` or "Not Available") occurred. We see that there were only a handful (12, in fact) and they occurred in `Very Good`, `Premium`, and `Ideal` cuts. 
+
+We created a vector, `myd`, containing the indices of these datapoints. If you're curious, type `myd` in any nearby code block to see what the indices of all the `NA`s are. 
+
+Now use the vector of indices to see the contents at each index. Type the expression `diamonds[myd, ]`. `myd` tells R what rows to show and the empty column entry says to print all the columns for each of those rows. 
+
+```{r diamonds-myd, exercise = TRUE, exercise.lines = 5}
+
+```
+```{r diamonds-myd-hint}
+diamonds[ , ] #What goes on which side of the comma?
+```
+```{r diamonds-myd-solution}
+diamonds[myd, ]
+```
+
+
+The `car2` field (way over to the right---use the black arrow in the top right of the data window if you can't see it) is, in fact, `NA` for these entries, but the `carat` field shows they each had a carat size of .2. What's going on here?
+
+
+Actually, our plot answers this question. The boundaries for each column appear in the gray labels at the top of each column, and we see that the first column is labeled `(0.2,0.5]`. This indicates that this column contains data greater than .2 (hence it is prefixed by a `(`) and less than or equal to .5 (which is suffixed by a `]`). Therefore, diamonds with carat size .2 were excluded from the `car2` field. 
+
+Finally, recall the last plotting command? It was `g + geom_point(alpha = 1/3) + facet_grid(cut ~ car2)`. 
+
+Copy or  retype that plotting command and add another call, this one to the function `geom_smooth`. Pass `geom_smooth` 3 arguments, `method` set equal to the string "lm", `size` set equal to 3, and `color` equal to the string "pink".
+
+```{r recall-last-and-add-geom-smooth, exercise = TRUE, exercise.lines = 5}
+
+```
+```{r recall-last-and-add-geom-smooth-hint-1}
+g + geom_point(...) + 
+    ? +
+    ?
+```
+```{r recall-last-and-add-geom-smooth-hint-2}
+g2 + geom_point(...) + 
+    facet_grid(...) +
+    geom_smooth(...)
+```
+```{r recall-last-and-add-geom-smooth-hint-3}
+g2 + geom_point(alpha = 1/3) + 
+    facet_grid(...) +
+    geom_smooth(...)
+```
+```{r recall-last-and-add-geom-smooth-hint-4}
+g2 + geom_point(alpha = 1/3) + 
+    facet_grid(cut ~ car2) +
+    geom_smooth(method = "lm", ...)
+```
+```{r recall-last-and-add-geom-smooth-solution}
+g2 + geom_point(alpha = 1/3) + 
+    facet_grid(cut ~ car2) +
+    geom_smooth(method = "lm", size = 3, color = "pink")
+```
+
+Nice thick regression lines that are somewhat interesting. You can add labels to the plot if you want but we'll let you experiment on your own.
+
+## Advanced `ggplot` Boxplots
+
+Lastly, `ggplot` can, of course, produce boxplots. This final exercise is the sum of 3 function calls. The first call is to `ggplot` with 2 arguments, `diamonds` and a call to `aes` with `carat` and `price` as arguments. The second call is to `geom_boxplot` with no arguments. The third is to `facet_grid` with one argument, the formula `. ~ cut`. Try this now.
+
+
+```{r ggplot-boxplot, exercise = TRUE, exercise.lines = 5}
+
+```
+```{r ggplot-boxplot-hint-1}
+ggplot(...) +
+    ? + 
+    ?
+```
+```{r ggplot-boxplot-hint-2}
+ggplot(diamonds, aes(...)) +
+    ? + 
+    ?
+```
+```{r ggplot-boxplot-hint-3}
+ggplot(diamonds, aes(carat, price)) +
+    geom_boxplot() + 
+    ?
+```
+```{r ggplot-boxplot-hint-4}
+ggplot(diamonds, aes(carat, price)) +
+    geom_boxplot() + 
+    facet_grid(...)
+```
+```{r ggplot-boxplot-solution}
+ggplot(diamonds, aes(carat, price)) +
+    geom_boxplot() + 
+    facet_grid(. ~ cut)
+```
+
+Yes! A boxplot looking like marshmallows about to be roasted. (Don't worry about the warning message.)
+
+Well done and  congratulations! You've finished this jewel of a lesson. Hope it paid off!
+
+Slides for this and other Data Science courses may be found at github https://github.com/DataScienceSpecialization/courses/. If you care to use them, they must be downloaded as a zip file and viewed locally. This lesson corresponds to 04_ExploratoryAnalysis/ggplot2. We relied on `swirl` lessons for the text. Thanks for making this great content open source!
