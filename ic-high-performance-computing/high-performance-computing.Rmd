@@ -104,6 +104,7 @@ ToRender <- rbind(c("-S /bin/bash","Shell","Specify the interpreting shell for t
                   c("-V","Variables","Exports all environmental variables to the job"),
                   c("-cwd","Current Working Directory","Executes the job from the current working directory"),
                   c("-wd ~","Working Directory","Executes the job from the home directory"),
+                  c("-N","Name","Job name. Visible when using qstat"),
                   c("-o ~/output.txt","Standard Out","Outputs stdout to ~/output.txt"),
                   c("-e ~/error.txt","Standard Error","Outputs stderr to ~/error.txt"))
 ToRender <- as.data.frame(ToRender)
