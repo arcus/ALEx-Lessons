@@ -193,7 +193,16 @@ The fifth principle of graphing involves describing and documenting the evidence
 ## Sixth Principle: Content is King!
 
 
-The sixth and final principle of analytic graphing is maybe the most important. Content is king! If you don't have something interesting to report, your graphs won't save you. Analytical presentations ultimately stand or fall depending on the quality, relevance, and integrity of their content.
+The sixth and final principle of analytic graphing is maybe the most important. Content is king! 
+
+>If you don't have something interesting to report, your graphs won't save you. 
+
+
+>Analytical presentations ultimately stand or fall depending on  
+* quality         
+* relevance    
+* integrity   
+
 
 
 ```{r q1, echo=FALSE}
