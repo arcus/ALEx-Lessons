@@ -52,7 +52,9 @@ The top and bottom lines of the box indicate the 25% and 75% quartiles of the da
 
 Since the box is above 0, the number of symptom-free days for children with asthma is bigger using the air cleaner. This is good, right?
 
-![Single boxplot.](AirCln1.png)
+```{r echo=FALSE, out.width = '100%'}
+knitr::include_graphics("www/AirCln1.png")
+```
 
 
 ```{r how-many-days, echo=FALSE}
@@ -73,7 +75,11 @@ While it's somewhat informative, it's also somewhat cryptic, since the y-axis is
 
 Like this? Here's a graphic which shows two boxplots, the one on the left showing the results for a control group that doesn't use an air cleaner alongside the previously shown boxplot.
 
-![Two boxplots.](2 boxes.png)
+
+```{r echo=FALSE, out.width = '100%'}
+knitr::include_graphics("www/2 boxes.png")
+```
+
 
 By showing the two boxplots side by side, you can clearly see that using the air cleaner increases the number of symptom-free days for most asthmatic children. The plot on the right (using the air cleaner) is generally higher than the one on the left (the control group).
 
@@ -97,7 +103,9 @@ So the first principle was to show a comparison. The second principle is to show
 
 Consider this plot which shows the dual boxplot we just showed, but next to it we have a corresponding plot of changes in measures of particulate matter. 
 
-![Two plots, each with 2 boxplots](2 plots 4 boxes.png)
+```{r echo=FALSE, out.width = '100%'}
+knitr::include_graphics("www/2 plots 4 boxes.png")
+```
 
 ```{r ac3-R-q, echo=FALSE}
 question("This picture tries to explain how the air cleaner  increases the number of symptom-free days for asthmatic children. What mechanism does the graph imply?",
@@ -128,8 +136,9 @@ Sometimes, if you restrict yourself to two variables you'll be misled and draw a
 
 Consider this plot which shows the relationship between air pollution (x-axis) and mortality rates among the elderly (y-axis). The blue regression line shows a surprising result. (You'll learn about regression lines when you take the fabulous Regression Models course.)
 
-![Pollution and mortality data.](burst from the left going down.png)
-
+```{r echo=FALSE, out.width = '100%'}
+knitr::include_graphics("www/burst from the left going down.png")
+```
  
 ```{r regression-question, echo=FALSE}
 question("What does the blue regression line indicate?",
@@ -153,7 +162,9 @@ Suppose we divided this mortality and pollution data into the four seasons. Woul
 
 Yes, we do! Plotting the same data for the 4 seasons individually we see a different result.
 
-![Pollution and mortality by season.](by season.png)
+```{r echo=FALSE, out.width = '100%'}
+knitr::include_graphics("www/by season.png")
+```
 
 ```{r pollution-data-in-groups, echo=FALSE}
 question("What does the new plot indicate?",
@@ -178,8 +189,9 @@ The fourth principle of analytic graphing involves integrating evidence. This me
 
 To show you what we mean, here's an example of a figure taken from a paper published in the _Journal of the American Medical Association_. It shows the relationship between pollution and hospitalization of people with heart disease. As you can see, it's a lot different from our previous plots. The solid circles in the center portion indicate point estimates of percentage changes in hospitalization rates for different levels of pollution. The lines through the circles indicate confidence intervals associated with these estimates. (You'll learn more about confidence intervals in another great course, the one on statistical inference.) 
 
-
-![Confidence intervals.](cis.png)
+```{r echo=FALSE, out.width = '100%'}
+knitr::include_graphics("www/cis.png")
+```
 
 
 Note that on the right side of the figure is another column of numbers, one for each of the point estimates given. This column shows posterior probabilities that relative risk is greater than 0. This, in effect, is a measure of the strength of the evidence showing the correlation between pollution and hospitalization.  The point here is that all of this information is located in one picture so that the reader can see the strength of not only the correlations but the evidence as well.
