@@ -17,7 +17,6 @@ tutorial_options(exercise.completion = FALSE,
                  exercise.eval = TRUE,
                  exercise.lines = 5,
                  exercise.diagnostics = TRUE)
-
 Input = ("
 Tillamook Newport Petersburg  Magadan Tvarminne
 0.0571	0.0873	0.0974	0.1033	0.0703

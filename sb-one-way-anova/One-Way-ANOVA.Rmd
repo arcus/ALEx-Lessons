@@ -101,7 +101,7 @@ For example, here is some data on a shell measurement (the length of the anterio
 mussels
 ```
 
-The nominal variable is invisible but implicit in the data structure. It's `location`, with the five values `Tillamook`, `Newport`, `Petersburg`, `Magadan`, and `Tvarminne`. There are six to ten observations of the measurement variable, AAM `length`, from each location. Again, `length` is implicit: you won't find a column called "length", but all the values in the columns we do have are values for `length`. 
+The nominal variable is invisible but implicit in the data structure. It's `location`, with the five values `Tillamook`, `Newport`, `Petersburg`, `Magadan`, and `Tvarminne`. There are six to ten observations of the measurement variable, AAM length (`aam`), from each location. Again, `aam` is implicit: you won't find a column called "aam", but all the values in the columns we do have are values for `aam`. 
 
 The data needs a bit of munging to be ready for analysis. 
 
@@ -112,7 +112,7 @@ question("Which variables do we have in the `mussels` data as it is?",
          answer("Petersburg", correct = TRUE),
          answer("Magadan", correct = TRUE),
          answer("Tvarminne", correct = TRUE),
-         answer("length"),
+         answer("aam"),
          random_answer_order = TRUE,
          allow_retry = TRUE,
          correct = "You found them all!",
@@ -123,7 +123,7 @@ question("Which variables do we have in the `mussels` data as it is?",
 ```{r how-to-modify-data, echo=FALSE}
 question("Which variables do we actually want to analyze?",
          answer("location", correct = TRUE),
-         answer("length", correct = TRUE),
+         answer("aam", correct = TRUE),
          answer("country"),
          answer("city"),
          random_answer_order = TRUE,
@@ -159,7 +159,7 @@ Using the method from [Pivot Longer](../sb-pivot-longer/), enter the code for ma
 
 Remember to set the new `location` variable in `long_mussels` to be a factor once you've created `long_mussels`.
 
-```{r pivot-in-prep-for-anova, exercise = TRUE, exercise.lines = 5}
+```{r pivot-in-prep-for-anova, exercise = TRUE, exercise.lines = 10}
 
 ```
 ```{r pivot-in-prep-for-anova-hint-1}
