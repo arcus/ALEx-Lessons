@@ -113,8 +113,11 @@ We need to fix just one more thing: `long_mussels$location` is a character varia
 (long_mussels$location <- as.factor(long_mussels$location))
 ```
 
-Now have a look at the data frame we just made, `long_mussels`. To look at the data, use any of the functions you have previously learned. If you haven't learned any, try our lesson [Looking at Data](../swirl-looking-at-data/)
+Now have a look at the data frame we just made, `long_mussels`. To look at the data, use any of the functions you have previously learned. If you haven't learned any, try our lesson [Looking at Data](../swirl-looking-at-data/).
 
+```{r prepare-look-at-long_mussels}
+long_mussels$location <- as.factor(long_mussels$location)
+```
 ```{r look-at-long_mussels, exercise = TRUE, exercise.lines = 5}
 
 ```
