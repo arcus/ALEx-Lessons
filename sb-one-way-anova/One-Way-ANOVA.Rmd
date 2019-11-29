@@ -180,19 +180,19 @@ long_mussels <- pivot_longer(data = mussels,
 long_mussels <- pivot_longer(data = mussels,
                              cols = names(mussels),
                              names_to = "location",
-                             values_to = "aam_length")
+                             values_to = "aam")
 ```
 ```{r pivot-in-prep-for-anova-solution}
 long_mussels <- pivot_longer(data = mussels,
                              cols = names(mussels),
                              names_to = "location",
-                             values_to = "aam_length")
+                             values_to = "aam")
 long_mussels$location <- as.factor(long_mussels$location)
 ```
 
 ## Visualize the Data with a Boxplot
 
-Quickly visualize `long_mussels` with `boxplot`. This can quickly be done using the R formula interface (`aam_length ~ location`).
+Quickly visualize `long_mussels` with `boxplot`. This can quickly be done using the R formula interface (`aam ~ location`).
 
 ```{r boxplot, exercise = TRUE, exercise.lines = 5}
 
@@ -201,13 +201,13 @@ Quickly visualize `long_mussels` with `boxplot`. This can quickly be done using 
 boxplot(...)
 ```
 ```{r boxplot-hint-2}
-boxplot(aam_length ~ ..., ...)
+boxplot(aam ~ ..., ...)
 ```
 ```{r boxplot-hint-3}
-boxplot(aam_length ~ location, data = ...)
+boxplot(aam ~ location, data = ...)
 ```
 ```{r boxplot-solution}
-boxplot(aam_length ~ location, data = long_mussels)
+boxplot(aam ~ location, data = long_mussels)
 ```
 
 To learn more about base plotting, see our lessons [Base Graphics](../swirl-base-graphics/) and [Base Plotting System](../swirl-base-plotting-system/). For a discussion of data visualization principles, see [Principles of Analytic Graphs](../swirl-principles-of-analytic-graphs/). To learn how to plot in `ggplot`, see [`ggplot2` Part 1](../swirl-ggplot2-part-1/), [`ggplot2` Part 2](../swirl-ggplot2-part-2/), [`ggplot2` Extras](../swirl-ggplot2-extras/), and [Exploratory Graphs](../swirl-exploratory-graphs/).
@@ -264,7 +264,7 @@ R functions which make multiple comparisons usually allow for adjusting p-values
 Perform the analysis with the `aov` function from the `stats` package.
 
 ```{r ANOVA, exercise=TRUE}
-fit <- aov(aam ~ location, data = aam_data)
+fit <- aov(aam ~ location, data = long_mussels)
 summary(fit)
 ```
 
