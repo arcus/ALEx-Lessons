@@ -3,6 +3,7 @@ title: "Pivot Longer"
 output: 
  learnr::tutorial:
       progressive: true
+      allow_skip: true
 runtime: shiny_prerendered
 ---
 
@@ -12,6 +13,11 @@ if(!require(learnr)){install.packages("learnr")}
 library(learnr)
 library(dplyr)
 library(tidyr)
+tutorial_options(exercise.completion = FALSE,
+                 exercise.eval = TRUE,
+                 exercise.lines = 5,
+                 exercise.diagnostics = TRUE)
+
 Input = ("
 Tillamook Newport Petersburg  Magadan Tvarminne
 0.0571	0.0873	0.0974	0.1033	0.0703
@@ -90,11 +96,11 @@ We want to create a new, narrow data set with two variables: `location`, which h
 
 This plan looks and sounds like it will be complicated, but it won't be.
 
-Call `pivot_longer` and pass it the argument `data = ` the name of our data set. Then set the argument `cols` equal to the column names we would like to include as levels in our new `location` variable. The easy way to get those column names is to call `names` with the argument `mussels`. The next argument, `names_to` tells `pivot_longer` what variable we would like those "names to" become levels for. In our case, `names_to = location`. Finally, we tell `pivot_longer` what we want the "values to" become data for. Set `values_to` equal to `aam`. 
+Call `pivot_longer` and pass it the argument `data = ` the name of our data set. Then set the argument `cols` equal to the column names we would like to include as levels in our new `location` variable. The easy way to get those column names is to call `names` with the argument `mussels`. The next argument, `names_to` tells `pivot_longer` what variable we would like those "names to" become levels for. In our case, `names_to = "location"`. Finally, we tell `pivot_longer` what we want the "values to" become data for. Set `values_to` equal to `"aam"`. 
 
 Assign the output from `pivot_longer` to the data name `long_mussels`. Surround the entire assignment, from beginning to end, with parentheses so you can see what the new data set looks like when `pivot_longer` is done with it. 
 
-```{r pivot-longer, exercise = TRUE, exercise.lines = 5}
+```{r pivot-longer, exercise = TRUE, exercise.lines = 10}
 
 ```
 ```{r pivot-longer-solution}
