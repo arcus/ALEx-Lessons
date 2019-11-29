@@ -118,7 +118,7 @@ Now have a look at the data frame we just made, `long_mussels`. To look at the d
 ```{r prepare-look-at-long_mussels}
 long_mussels$location <- as.factor(long_mussels$location)
 ```
-```{r look-at-long_mussels, exercise = TRUE, exercise.lines = 5}
+```{r look-at-long_mussels, exercise = TRUE, exercise.lines = 5, exercise.setup = "prepare-look-at-long_mussels"}
 
 ```
 ```{r look-at-long_mussels-solution}
