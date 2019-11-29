@@ -11,6 +11,7 @@ options(digits = 3, scipen = 9999)
 if(!require(learnr)){install.packages("learnr")}
 library(learnr)
 library(dplyr)
+library(tidyr)
 Input = ("
 Tillamook Newport Petersburg  Magadan Tvarminne
 0.0571	0.0873	0.0974	0.1033	0.0703
@@ -66,19 +67,24 @@ question("Which variables are we actually interested in from the `mussels` data 
          answer("length of the anterior adductor muscle scar", correct = TRUE),
          answer("location of the mussel when it was measured", correct = TRUE),
          answer("number of mussels"),
-         answer("status of the musself when it was measured (dead or alive)"),
+         answer("status of the mussel when it was measured (dead or alive)"),
          random_answer_order = TRUE,
-         allow_retry = TRUE
+         allow_retry = TRUE,
+         correct = "You are really getting good at this!"
 )
 ```
 
-In the above data, each column is a _level_ of an implicit variable, `location`. 
+In the `mussel` data, each column is a _level_ of an implicit variable, `location`. Click on the "Previous Topic" button at the bottom of this page to go back and see it. You won't lose any of the work you've done on this page.
 
 The values in the cells are the standardized lengths of individual mussels' anterior adductor muscle scars (`aam_length`).
 
-Let's make this "wide" data "narrow", using `tidyr`'s function `pivot_longer`.
+### Go from Wide to Long Data
 
-We want to create a new, narrow data set with two variables: `location`, which has the levels `Tillamook`, `Newport`, `Petersburg`, `Magadan`, and `Tvarminne`, and `aam_length`, which contains a list of standardized anterior adductor muscle lengths, sorted and matched by the various `location` levels. This looks and sounds like it will be complicated, but it isn't.
+Let's make our "wide" data "narrow", using `tidyr`'s function `pivot_longer`.
+
+We want to create a new, narrow data set with two variables: `location`, which has the levels `Tillamook`, `Newport`, `Petersburg`, `Magadan`, and `Tvarminne`; and `aam_length`, which contains a list of standardized anterior adductor muscle lengths, sorted and matched by the various `location` levels. 
+
+This plan looks and sounds like it will be complicated, but it won't be.
 
 Call `pivot_longer` and pass it the argument `data = ` the name of our data set. Then set the argument `cols` equal to the column names we would like to include as levels in our new `location` variable. The easy way to get those column names is to call `names` with the argument `mussels`. The next argument, `names_to` tells `pivot_longer` what variable we would like those "names to" become levels for. In our case, `names_to = location`. Finally, we tell `pivot_longer` what we want the "values to" become data for. Set `values_to` equal to `aam_length`. 
 
@@ -120,3 +126,5 @@ As you can see, you now have a nice long data set. Why did you do that? So you c
 ## References
 
 [R for Data Science](https://r4ds.had.co.nz/tidy-data.html#spreading-and-gathering)
+
+This lesson is heavily based with thanks on the works of John H. McDonald ([Handbook of Biological Statistics](http://www.biostathandbook.com/chigof.html)) and Salvatore S. Mangiafico ([R Companion to the Biostats Handbook](https://rcompanion.org/rcompanion/b_03.html)).
