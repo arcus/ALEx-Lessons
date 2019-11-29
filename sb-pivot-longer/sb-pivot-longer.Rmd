@@ -27,6 +27,10 @@ Tillamook Newport Petersburg  Magadan Tvarminne
 ")
 mussels <- read.table(textConnection(Input), header = TRUE)
 rm(Input)
+long_mussels <- pivot_longer(data = mussels,
+                             cols = names(mussels),
+                             names_to = "location",
+                             values_to = "aam_length")
 ```
 
 ## The Problem
