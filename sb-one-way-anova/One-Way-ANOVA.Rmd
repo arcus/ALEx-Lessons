@@ -12,6 +12,10 @@ library(learnr)
 library(data.table)
 library(dplyr)
 library(pwr)
+library(tidyr)
+shhh <- suppressPackageStartupMessages
+shh <- suppressWarnings
+sh <- suppressMessages
 knitr::opts_chunk$set(echo = FALSE)
 options(digits = 3, scipen = 9999)
 Input = ("
@@ -29,6 +33,11 @@ Tillamook Newport Petersburg  Magadan Tvarminne
 ")
 mussels <- read.table(textConnection(Input), header = TRUE)
 rm(Input)
+long_mussels <- pivot_longer(data = mussels,
+                             cols = names(mussels),
+                             names_to = "location",
+                             values_to = "aam_length")
+long_mussels$location <- as.factor(long_mussels$location)
 ```
 
 ## Background
@@ -122,49 +131,123 @@ question("Which variables do we actually want to analyze?",
 
 ## How to Perform a One-Way ANOVA in R
 
-You'll need the following packages to perform all the functions in this lesson:
-
-```{r load-packages, echo = TRUE, include = FALSE}
-if(!require(dplyr)){install.packages("dplyr")}
-if(!require(FSA)){install.packages("FSA")}
-if(!require(car)){install.packages("car")}
-if(!require(agricolae)){install.packages("agricolae")}
-if(!require(multcomp)){install.packages("multcomp")}
-if(!require(DescTools)){install.packages("DescTools")}
-if(!require(lsmeans)){install.packages("lsmeans")}
-if(!require(multcompView)){install.packages("multcompView")}
-if(!require(Rmisc)){install.packages("Rmisc")}
-if(!require(ggplot2)){install.packages("ggplot2")}
-if(!require(pwr)){install.packages("pwr")}
-```
+First, check to be sure the data is in the correct format for running the analysis. Remember, you should have one categorical variable with 2 or more categories and one measurement (a.k.a. "scalar") variable. 
 
 ### Data Prep
 
+Start by looking at the data again.
 
-First convert the implicit variable `location` into a factor variable. 
+```{r look-at-mussels-again, exercise = TRUE, exercise.lines = 5}
 
-The `dplyr` package (which is part of the `tidyverse`) was designed with just this sort of data manipulation in mind. 
-
-First, put `dplyr` in the library. Then use it to convert the various locations to a `factor`. This is the sort of function you'll want to do many times in R, so keep this code handy. It creates a new data set, `aam_data`, by mutating `mussels` to have a new column, a factor variable called `location` with levels drawn from 
-
-```{r two-plus-two, exercise=TRUE}
-library(dplyr)
-aam_data = 
-  mutate(mussels,
-         location = factor(location, levels = unique(location)))
+```
+```{r look-at-mussels-again-solution}
+mussels
 ```
 
-### Visualize the data with a boxplot
+We will need to convert the implicit variable `location` into a factor variable. 
 
-Qucikly visualize the data with a boxplot. This can qucikly be done using the R formula interface.
+#### Convert Wide Data to Long Data by using `pivot_longer`
 
-```{r boxplot, exercise=TRUE}
-boxplot(aam ~ location,data=aam_data)
+The `tidyr` package (which is part of the `tidyverse`) was designed with just this sort of data manipulation in mind. Check out our lesson [Pivot Longer](../sb-pivot-longer/) if you haven't transformed a wide data set to a narrower, longer one. Your work will still be here when you get back. 
+
+Using the method from [Pivot Longer](../sb-pivot-longer/), enter the code for making the the wide version of `mussels` longer here. Store the output from your call to `pivot_longer` in `long_mussels`. 
+
+Remember to set the new `location` variable in `long_mussels` to be a factor once you've created `long_mussels`.
+
+```{r pivot-in-prep-for-anova, exercise = TRUE, exercise.lines = 5}
+
+```
+```{r pivot-in-prep-for-anova-hint-1}
+long_mussels <- pivot_longer(data = ...,
+                             cols = ...)
+```
+```{r pivot-in-prep-for-anova-hint-2}
+long_mussels <- pivot_longer(data = mussels,
+                             cols = names(...))
+```
+```{r pivot-in-prep-for-anova-hint-3}
+long_mussels <- pivot_longer(data = mussels,
+                             cols = names(mussels),
+                             names_to = ...,
+                             values_to = ...)
+```
+```{r pivot-in-prep-for-anova-hint-4}
+long_mussels <- pivot_longer(data = mussels,
+                             cols = names(mussels),
+                             names_to = "location",
+                             values_to = "aam_length")
+```
+```{r pivot-in-prep-for-anova-solution}
+long_mussels <- pivot_longer(data = mussels,
+                             cols = names(mussels),
+                             names_to = "location",
+                             values_to = "aam_length")
+long_mussels$location <- as.factor(long_mussels$location)
 ```
 
-### Perform ANOVA 
+## Visualize the Data with a Boxplot
 
-The `lm` function in the native `stats` package fits a linear model by [least squares](https://rcompanion.org/handbook/G_05.html), and can be used for a variety of analyses: [regression](../sb-correlation-and-linear-regression/), analysis of variance, and [analysis of covariance](https://rcompanion.org/rcompanion/e_04.html), for instance.  The analysis of variance is then conducted either with the `anova` function in the `car` package for [Type II or Type III sum of squares](https://rcompanion.org/rcompanion/d_04.html), or with the `anova` function in the native `stats` package for [Type I sum of squares](https://rcompanion.org/rcompanion/d_04.html). 
+Quickly visualize `long_mussels` with `boxplot`. This can quickly be done using the R formula interface (`aam_length ~ location`).
+
+```{r boxplot, exercise = TRUE, exercise.lines = 5}
+
+```
+```{r boxplot-hint-1}
+boxplot(...)
+```
+```{r boxplot-hint-2}
+boxplot(aam_length ~ ..., ...)
+```
+```{r boxplot-hint-3}
+boxplot(aam_length ~ location, data = ...)
+```
+```{r boxplot-solution}
+boxplot(aam_length ~ location, data = long_mussels)
+```
+
+To learn more about base plotting, see our lessons [Base Graphics](../swirl-base-graphics/) and [Base Plotting System](../swirl-base-plotting-system/). For a discussion of data visualization principles, see [Principles of Analytic Graphs](../swirl-principles-of-analytic-graphs/). To learn how to plot in `ggplot`, see [`ggplot2` Part 1](../swirl-ggplot2-part-1/), [`ggplot2` Part 2](../swirl-ggplot2-part-2/), [`ggplot2` Extras](../swirl-ggplot2-extras/), and [Exploratory Graphs](../swirl-exploratory-graphs/).
+
+## At Last, Perform the ANOVA 
+
+The `lm` function in the native `stats` package fits a linear model by [least squares](https://rcompanion.org/handbook/G_05.html), and can be used for a variety of analyses: [regression](../sb-correlation-and-linear-regression/), analysis of variance (what we're doing now), and [analysis of covariance](https://rcompanion.org/rcompanion/e_04.html), for instance.  The analysis of variance is then conducted either with the `anova` function in the `car` package for [Type II or Type III sum of squares](https://rcompanion.org/rcompanion/d_04.html), or with the `anova` function in the native `stats` package for [Type I sum of squares](https://rcompanion.org/rcompanion/d_04.html). 
+
+```{r where-can-we-use-lm, echo=FALSE}
+question("Which analyses can you do using the `lm` function?",
+         answer("linear regression", correct = TRUE),
+         answer("analysis of variance", correct = TRUE),
+         answer("analysis of covariance", correct = TRUE),
+         answer("Kruskal-Wallis test"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         correct = "`lm` is amazing. And so are you!",
+         incorrect = "Doing a Kruskal-Wallis test with `lm` would be a bit like vacuuming with a wet mop: It's just not done, for very good reasons."
+)
+```
+
+```{r two-functions-to-do-anova, echo=FALSE}
+question("Which two functions can you use to run an analysis of variance?",
+         answer("`stats`", message = "`stats` is a package, not a function."),
+         answer("`anova`", correct = TRUE),
+         answer("`lm`", correct = TRUE),
+         answer("`car`", message = "`car` is a package, not a function."),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         incorrect = "",
+         correct = "You got it!"
+)
+```
+```{r two-packages-to-do-anova, echo=FALSE}
+question("Which two packages can you use to run an analysis of variance?",
+         answer("`stats`", correct = TRUE),
+         answer("`anova`", message = "`anova` is a function, not a package."),
+         answer("`lm`", message = "`lm` is a function, not a package."),
+         answer("`car`", correct = TRUE),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         incorrect = "",
+         correct = "All your hard work is paying off!"
+)
+```
  
 If the analysis of variance indicates a significant effect of the independent variable, multiple comparisons among the levels of this factor can be conducted using Tukey or Least Significant Difference (LSD) procedures.  The problem of inflating the Type I Error Rate when making multiple comparisons is discussed in the Multiple Comparisons chapter in the Handbook.  R functions which make multiple comparisons usually allow for adjusting p-values.  In R, the “BH”, or “fdr”, procedure is the Benjamini–Hochberg procedure discussed in the Handbook.  See ?p.adjust for more information.
  
