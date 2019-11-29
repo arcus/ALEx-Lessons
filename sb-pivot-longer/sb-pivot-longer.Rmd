@@ -30,7 +30,7 @@ rm(Input)
 long_mussels <- pivot_longer(data = mussels,
                              cols = names(mussels),
                              names_to = "location",
-                             values_to = "aam_length")
+                             values_to = "aam")
 ```
 
 ## The Problem
@@ -55,7 +55,7 @@ question("Is it tidy?",
          answer("No", correct = TRUE),
          random_answer_order = TRUE,
          allow_retry = TRUE,
-         incorrect = "Of what do the rows consist? If that isn't obvious, consider the possibility that this isn't a tidy data set.",
+         incorrect = "Of what do the rows consist? If it isn't obvious, consider the possibility that you are not looking at a tidy data set.",
          correct = "You are amazing!"
 )
 ```
@@ -78,19 +78,19 @@ question("Which variables are we actually interested in from the `mussels` data 
 )
 ```
 
-In the `mussel` data, each column is a _level_ of an implicit variable, `location`. Click on the "Previous Topic" button at the bottom of this page to go back and see it. You won't lose any of the work you've done on this page.
+In the `mussel` data, each column is a _level_ of an implicit variable, `location`. Use your browser's "back" button to go back and see it. You won't lose any of the work you've done on this page.
 
-The values in the cells are the standardized lengths of individual mussels' anterior adductor muscle scars (`aam_length`).
+The values in the cells are the standardized lengths of individual mussels' anterior adductor muscle scars (`aam`).
 
 ### Go from Wide to Long Data
 
 Let's make our "wide" data "narrow", using `tidyr`'s function `pivot_longer`.
 
-We want to create a new, narrow data set with two variables: `location`, which has the levels `Tillamook`, `Newport`, `Petersburg`, `Magadan`, and `Tvarminne`; and `aam_length`, which contains a list of standardized anterior adductor muscle lengths, sorted and matched by the various `location` levels. 
+We want to create a new, narrow data set with two variables: `location`, which has the levels `Tillamook`, `Newport`, `Petersburg`, `Magadan`, and `Tvarminne`; and `aam`, which contains a list of standardized anterior adductor muscle lengths, sorted and matched by the various `location` levels. 
 
 This plan looks and sounds like it will be complicated, but it won't be.
 
-Call `pivot_longer` and pass it the argument `data = ` the name of our data set. Then set the argument `cols` equal to the column names we would like to include as levels in our new `location` variable. The easy way to get those column names is to call `names` with the argument `mussels`. The next argument, `names_to` tells `pivot_longer` what variable we would like those "names to" become levels for. In our case, `names_to = location`. Finally, we tell `pivot_longer` what we want the "values to" become data for. Set `values_to` equal to `aam_length`. 
+Call `pivot_longer` and pass it the argument `data = ` the name of our data set. Then set the argument `cols` equal to the column names we would like to include as levels in our new `location` variable. The easy way to get those column names is to call `names` with the argument `mussels`. The next argument, `names_to` tells `pivot_longer` what variable we would like those "names to" become levels for. In our case, `names_to = location`. Finally, we tell `pivot_longer` what we want the "values to" become data for. Set `values_to` equal to `aam`. 
 
 Assign the output from `pivot_longer` to the data name `long_mussels`. Surround the entire assignment, from beginning to end, with parentheses so you can see what the new data set looks like when `pivot_longer` is done with it. 
 
@@ -101,7 +101,7 @@ Assign the output from `pivot_longer` to the data name `long_mussels`. Surround 
 (long_mussels <- pivot_longer(data = mussels,
                              cols = names(mussels),
                              names_to = "location",
-                             values_to = "aam_length"))
+                             values_to = "aam"))
 ```
 
 We need to fix just one more thing: `long_mussels$location` is a character variable. Turn it into a factor variable by replacing it with itself being passed to `as.factor`. Surround that with parentheses, too, so you can see what happens. 

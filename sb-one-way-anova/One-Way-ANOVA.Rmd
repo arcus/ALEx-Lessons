@@ -248,8 +248,12 @@ question("Which two packages can you use to run an analysis of variance?",
          correct = "All your hard work is paying off!"
 )
 ```
+
+## You found something interesting! Now what?
  
-If the analysis of variance indicates a significant effect of the independent variable, multiple comparisons among the levels of this factor can be conducted using Tukey or Least Significant Difference (LSD) procedures.  The problem of inflating the Type I Error Rate when making multiple comparisons is discussed in the Multiple Comparisons chapter in the Handbook.  R functions which make multiple comparisons usually allow for adjusting p-values.  In R, the “BH”, or “fdr”, procedure is the Benjamini–Hochberg procedure discussed in the Handbook.  See ?p.adjust for more information.
+If the analysis of variance indicates an interesting effect of the independent variable (here, `location`), multiple comparisons among the levels of this factor can be conducted using Tukey or Least Significant Difference (LSD) procedures. (The problem of inflating the Type I Error Rate when making multiple comparisons is discussed in the [Multiple Comparisons]() chapter in the Handbook.)  
+
+R functions which make multiple comparisons usually allow for adjusting p-values.  In R, the “BH”, or “fdr”, procedure is the Benjamini–Hochberg procedure discussed in the Handbook.  See ?p.adjust for more information.
  
 
 Perform the analysis with the `aov` function from the `stats` package.
