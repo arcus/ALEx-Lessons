@@ -9,13 +9,6 @@ runtime: shiny_prerendered
 
 ```{r setup, include=FALSE}
 options(digits = 3, scipen = 9999)
-if(!require(learnr)){install.packages("learnr")}
-if(!require(lsr)){install.packages("lsr")}
-if(!require(FSA)){install.packages("FSA")}
-if(!require(lattice)){install.packages("lattice")}
-if(!require(ggplot2)){install.packages("ggplot2")}
-if(!require(rcompanion)){install.packages("rcompanion")}
-if(!require(pwr)){install.packages("pwr")}
 library(learnr)
 library(lsr)
 library(FSA)

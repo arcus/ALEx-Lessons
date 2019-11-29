@@ -40,77 +40,118 @@ This lesson is both a reference and a tutorial. It contains all the code samples
 >One [scalar (a.k.a. "measurement") variable](http://www.biostathandbook.com/variabletypes.html#measurement).     
 One [nominal variable](http://www.biostathandbook.com/variabletypes.html#nominal)   
 
-The nominal variable divides the measurements into two or more groups. It tests whether the means of the measurement variable are the same for the different groups.
+The nominal variable divides the measurements into two or more groups. The one-way ANOVA tests whether the means of the measurement variable are the same for the different groups.
 
-### When to use it
+## Null and Alternative Hypotheses
+
+>* **H<sub>0</sub>**: The means of the measurement variable are the
+same for the different categories in the categorical variable.     
+* **H<sub>A</sub>**: The means are not all the same for the different categories in the categorical variable.   
+
+```{r bb, echo=FALSE}
+question("Which are examples of a one-way ANOVA null hypotheses?",
+         answer("Mean tibia length is the same for each age group of children", correct = TRUE),
+         answer("The average monthly electric bill is the same in major cities within the United States", correct = TRUE),
+         answer("The average monthly electric bill in Philadelphia, PA is less than what it is in Burlington, VT"),
+         answer("The average monthly electric bill in Philadelphia, PA is more than what it is in Burlington, VT"),
+         allow_retry = TRUE,
+         random_answer_order = TRUE,
+         incorrect = "Remember that the one-way ANOVA tests whether the means of the measurement variable are teh same for different groups.",
+         correct = "Yes!"
+)
+```
+
+## When to use an ANOVA
 
 Analysis of variance (ANOVA) is the most commonly used technique for __comparing the means of groups__ of measurement data. You can analyze lots of different experimental designs with different kinds of ANOVA. Here we will discuss only the simplest ANOVA.
 
 ```{r whentouseANOVA, echo=FALSE}
 question("Select the cases where ANOVA is appropriate",
-         answer("a professor has three classes and you want to compare the mean class grades"),
-         answer("three professors have one class each and you want to compare the mean class grades", correct = TRUE),
-         answer("you want to compare white blood cell counts as a response to medication for four groups of patients", correct = TRUE),
+         answer("A professor has three classes and you want to compare the professor's assessment of the three classes in comparison with each other"),
+         answer("Three professors have one class each and you want to compare the mean class grades", correct = TRUE),
+         answer("You want to compare white blood cell counts as a response to medication for four groups of patients", correct = TRUE),
          random_answer_order = TRUE,
-         allow_retry = TRUE
+         allow_retry = TRUE,
+         incorrect = "You'll learn about independence between groups later, which matters for an ANOVA, but at this point, using common sense, you might be able to figure out why a design that uses only one professor to fill out assessments comparing three classes might introduce bias. Might comparing the classes against each cause a professor to inflate or deflate ratings to rank the classes rather than objectively assess them? And what about the categorical variable? How many categories does the variable `professor` have? If it has only one, then it is not a variable but a constant. Therefore there are not three groups to compare, but just one: and that just won't work."
 )
 ```
 <div id="filter-hint">
 **Hint:** If you have just one professor and three classes, then the nominal variable (`professor`) is a constant. You need a nominal variable with two or more groups and a measurement variable to perform an ANOVA.
 </div>
 
-In a one-way ANOVA (also known as a one-factor, single-factor, or single-classification ANOVA), there is one measurement variable and one nominal variable. You make multiple observations of the measurement variable for each value of the nominal variable. 
+In a one-way ANOVA (also known as a _one-factor_, _single-factor_, or _single-classification_ ANOVA), there is one measurement variable and one nominal variable. You make multiple observations of the measurement variable for each value of the nominal variable. 
 
-For example, here is some data on a shell measurement (the length of the anterior adductor muscle scar, standardized by dividing by length; “AAM length”) in the mussel *Mytilus trossulus* from five locations: Tillamook, Oregon; Newport, Oregon; Petersburg, Alaska; Magadan, Russia; and Tvarminne, Finland.
+For example, here is some data on a shell measurement (the length of the anterior adductor muscle scar, standardized by dividing by length, **AAM Length**) in the mussel *Mytilus trossulus* from five locations: Tillamook, Oregon; Newport, Oregon; Petersburg, Alaska; Magadan, Russia; and Tvarminne, Finland.
 
 ```{r data1, echo=FALSE}
 mussels
 ```
 
-The nominal variable is invisible but implicit in the data structure. It's `location`, with the five values Tillamook, Newport, Petersburg,
-Magadan, and Tvarminne. There are six to ten observations of the measurement variable,
-AAM `length`, from each location. Again this variable is implicit and the data needs a bit of munging to be ready for analysis. 
+The nominal variable is invisible but implicit in the data structure. It's `location`, with the five values `Tillamook`, `Newport`, `Petersburg`, `Magadan`, and `Tvarminne`. There are six to ten observations of the measurement variable, AAM `length`, from each location. Again, `length` is implicit: you won't find a column called "length", but all the values in the columns we do have are values for `length`. 
 
-### Null hypothesis
+The data needs a bit of munging to be ready for analysis. 
 
-The statistical null hypothesis is that the means of the measurement variable are the
-same for the different categories of data; the alternative hypothesis is that they are not all
-the same. For the example data set, the null hypothesis is that the mean AAM length is the same at each location, and the alternative hypothesis is that the mean AAM lengths are not all the same.
-
-## How the test works
-The basic idea is to calculate the mean of the observations within each group, then
-compare the variance among these means to the average variance within each group.
-Under the *null hypothesis* that the observations in the different groups all have the same
-mean, the weighted among-group variance will be the same as the within-group variance.
-As the means get further apart, the variance among the means increases. The test statistic
-is thus the ratio of the variance among means divided by the average variance within
-groups, or Fs. This statistic has a known distribution under the null hypothesis, so the
-probability of obtaining the observed Fs under the null hypothesis can be calculated.
-The shape of the F-distribution depends on two degrees of freedom, the degrees of
-freedom of the numerator (among-group variance) and degrees of freedom of the
-denominator (within-group variance). The among-group degrees of freedom is the
-number of groups minus one. The within-groups degrees of freedom is the total number
-of observations, minus the number of groups. Thus if there are n observations in a groups,
-numerator degrees of freedom is a-1 and denominator degrees of freedom is n-a. For the
-example data set, there are 5 groups and 39 observations, so the numerator degrees of
-freedom is 4 and the denominator degrees of freedom is 34. 
-
-## Performing a one-way ANOVA in R
-
-The raw data `aam_data` is provided as a two column `data.frame` with the first column being the `location` and the second column being the anterior adductor muscle length, `aam`.
-
-```{r raw_data, exercise=TRUE}
-print(aam_data)
+```{r select-variables, echo=FALSE}
+question("Which variables do we have in the `mussels` data as it is?",
+         answer("Tillamook", correct = TRUE),
+         answer("Newport", correct = TRUE),
+         answer("Petersburg", correct = TRUE),
+         answer("Magadan", correct = TRUE),
+         answer("Tvarminne", correct = TRUE),
+         answer("length"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         correct = "You found them all!",
+         incorrect = "The column names in the dataset `mussels` are the variables."
+)
 ```
 
-### Convert variable to factor
-First, use `dplyr` to convert the locations to a `factor`. 
+```{r how-to-modify-data, echo=FALSE}
+question("Which variables do we actually want to analyze?",
+         answer("location", correct = TRUE),
+         answer("length", correct = TRUE),
+         answer("country"),
+         answer("city"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         correct = "That's right. Just two variables will do the trick.",
+         incorrect = "You need only two variables as described in the paragraph above these two questions."
+)
+```
+
+
+## How to Perform a One-Way ANOVA in R
+
+You'll need the following packages to perform all the functions in this lesson:
+
+```{r load-packages, echo = TRUE, include = FALSE}
+if(!require(dplyr)){install.packages("dplyr")}
+if(!require(FSA)){install.packages("FSA")}
+if(!require(car)){install.packages("car")}
+if(!require(agricolae)){install.packages("agricolae")}
+if(!require(multcomp)){install.packages("multcomp")}
+if(!require(DescTools)){install.packages("DescTools")}
+if(!require(lsmeans)){install.packages("lsmeans")}
+if(!require(multcompView)){install.packages("multcompView")}
+if(!require(Rmisc)){install.packages("Rmisc")}
+if(!require(ggplot2)){install.packages("ggplot2")}
+if(!require(pwr)){install.packages("pwr")}
+```
+
+### Data Prep
+
+
+First convert the implicit variable `location` into a factor variable. 
+
+The `dplyr` package (which is part of the `tidyverse`) was designed with just this sort of data manipulation in mind. 
+
+First, put `dplyr` in the library. Then use it to convert the various locations to a `factor`. This is the sort of function you'll want to do many times in R, so keep this code handy. It creates a new data set, `aam_data`, by mutating `mussels` to have a new column, a factor variable called `location` with levels drawn from 
 
 ```{r two-plus-two, exercise=TRUE}
 library(dplyr)
 aam_data = 
-mutate(aam_data,
-       location = factor(location, levels=unique(location)))
+  mutate(mussels,
+         location = factor(location, levels = unique(location)))
 ```
 
 ### Visualize the data with a boxplot
@@ -123,10 +164,15 @@ boxplot(aam ~ location,data=aam_data)
 
 ### Perform ANOVA 
 
+The `lm` function in the native `stats` package fits a linear model by [least squares](https://rcompanion.org/handbook/G_05.html), and can be used for a variety of analyses: [regression](../sb-correlation-and-linear-regression/), analysis of variance, and [analysis of covariance](https://rcompanion.org/rcompanion/e_04.html), for instance.  The analysis of variance is then conducted either with the `anova` function in the `car` package for [Type II or Type III sum of squares](https://rcompanion.org/rcompanion/d_04.html), or with the `anova` function in the native `stats` package for [Type I sum of squares](https://rcompanion.org/rcompanion/d_04.html). 
+ 
+If the analysis of variance indicates a significant effect of the independent variable, multiple comparisons among the levels of this factor can be conducted using Tukey or Least Significant Difference (LSD) procedures.  The problem of inflating the Type I Error Rate when making multiple comparisons is discussed in the Multiple Comparisons chapter in the Handbook.  R functions which make multiple comparisons usually allow for adjusting p-values.  In R, the “BH”, or “fdr”, procedure is the Benjamini–Hochberg procedure discussed in the Handbook.  See ?p.adjust for more information.
+ 
+
 Perform the analysis with the `aov` function from the `stats` package.
 
 ```{r ANOVA, exercise=TRUE}
-fit <- aov(aam ~ location,data=aam_data)
+fit <- aov(aam ~ location, data = aam_data)
 summary(fit)
 ```
 
@@ -230,7 +276,8 @@ Perform the analysis with the `oneway.test` function from the `stats` package. W
 oneway.test(aam ~ location,data=aam_data,var.equal=FALSE)
 ```
 
-## Power analysis
+## Power Analysis
+
 To do a power analysis for a one-way ANOVA is kind of tricky, because you need to
 decide what kind of effect size you’re looking for. If you’re mainly interested in the overall
 significance test, the sample size needed is a function of the standard deviation of the
@@ -271,4 +318,53 @@ pwr.ANOVA.test(k = 5,
 
 ```
 
-See also: [Kruskall Wallis test](../Kruskal-Wallis/).
+## But I like math. Where's the math?
+
+The basic idea is to calculate the mean of the observations within each group, then
+compare the variance **among** these means to the average variance **within** each group.
+
+Let's state that slightly differently: Under the null hypothesis that the observations in the different groups all have the same mean, the weighted **among-group** variance will be the same as the **within-group** variance. 
+
+As the means get further apart, the variance **among** the means increases. 
+
+The test statistic is _F_: the ratio of the variance **among** the group means _divided by_ the average variance **within** the groups. 
+
+> $\displaystyle F = \frac{Var_a}{Var_w}$,
+
+where $\displaystyle Var_a = $ variance _among_ group means and $\displaystyle Var_w =$ the average variance _within_ the values in each group.
+
+
+The $\displaystyle F$ statistic has a known distribution under the null hypothesis, so you can calculate the
+probability of obtaining the observed $\displaystyle F$ under the null hypothesis.
+The shape of the $\displaystyle F$-distribution depends on two degrees of freedom:
+
+* the degrees of
+freedom of the numerator (among-group variance)    
+* degrees of freedom of the
+denominator (within-group variance). 
+
+The _among-group degrees of freedom_ is the
+number of groups minus one. 
+
+The _within-groups degrees of freedom_ is the total number
+of observations minus the number of groups. 
+
+If there are $\displaystyle n$ observations in $\displaystyle A$ groups,
+
+* numerator degrees of freedom is $\displaystyle n - 1$     
+* denominator degrees of freedom is $\displaystyle n - A$. 
+
+For the
+example data set, there are 5 groups and 39 observations, so 
+
+* the numerator degrees of
+freedom is $\displaystyle 5 - 1 = 4$      
+* the denominator degrees of freedom is $\displaystyle 39 - 5 = 34$. 
+
+In order to check where your results fall under the $\displaystyle F$ distribution, you need three pieces of information (if you are calculating by hand): the value of $\displaystyle \frac{Var_a}{Var_w}$, the numerator degrees of freedom (here 4) and the denominator degrees of freedom (here 34). 
+
+But you can always take the easy way out and use R to calculate your $\displaystyle F$ statistic and its accompanying _p_ value for you. 
+
+## See Also 
+
+[Kruskall Wallis test](../Kruskal-Wallis/).
