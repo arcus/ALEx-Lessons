@@ -38,7 +38,7 @@ Tidy data is where
 2. Every row is an observation.    
 3. Every cell is a single value.
 
-Check out this data set:
+Check out this data set. It's called `mussels`:
 
 ```{r echo = FALSE, include = TRUE}
 mussels
