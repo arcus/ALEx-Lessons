@@ -527,10 +527,10 @@ MSD, the pair of means is significantly different.
 Perform the analysis with the `TukeyHSD` function from the `stats` package.
 
 ```{r tukey, exercise = TRUE}
-libray(stats)
-fit <- aov(aam ~ location, data = long_mussels)
-summary(fit)
-TukeyHSD(fit)
+# libray(stats)
+# fit <- aov(aam ~ location, data = long_mussels)
+# summary(fit)
+# TukeyHSD(fit)
 ```
 
 
@@ -543,7 +543,7 @@ positive may be much higher than 5%. In that case, you should use Welch’s ANOV
 Perform the analysis with the `oneway.test` function from the `stats` package. When the `var.equal` argument is set to `FALSE`, the Welch method is used. 
 
 ```{r welch, exercise=TRUE}
-oneway.test(aam ~ location,data=long_mussels,var.equal=FALSE)
+oneway.test(aam ~ location, data = long_mussels, var.equal=FALSE)
 ```
 
 ## Power Analysis
