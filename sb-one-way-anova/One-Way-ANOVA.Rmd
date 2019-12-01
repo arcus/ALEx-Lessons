@@ -263,15 +263,13 @@ qplot(...)
 ```
 ```{r qplot-density-hint-2}
 library(ggplot2)
-qplot(data = long_mussels, 
-      ...)
+qplot(data = long_mussels, ...)
 ```
 ```{r qplot-density-hint-3}
 library(ggplot2)
 qplot(data = long_mussels, 
       x = aam, 
-      geom = "density", 
-      ...)
+      geom = "density", ...)
 ```
 ```{r qplot-density-hint-4}
 library(ggplot2)
@@ -279,8 +277,7 @@ qplot(data = long_mussels,
       x = aam, 
       geom = "density", 
       color = location,
-      fill = location,
-      ...)
+      fill = location, ...)
 ```
 ```{r qplot-density-solution}
 library(ggplot2)
