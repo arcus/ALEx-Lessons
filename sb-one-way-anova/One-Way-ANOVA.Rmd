@@ -54,7 +54,7 @@ This lesson is both a reference and a tutorial. It contains all the code samples
 ## What kinds of Variables work with One-Way ANOVA
 
 >One [scalar (a.k.a. "measurement") variable](http://www.biostathandbook.com/variabletypes.html#measurement).     
-One [nominal variable](http://www.biostathandbook.com/variabletypes.html#nominal)   
+One [nominal (a.k.a. "categorical") variable](http://www.biostathandbook.com/variabletypes.html#nominal)   
 
 The nominal variable divides the measurements into two or more groups. The one-way ANOVA tests whether the means of the measurement variable are the same for the different groups.
 
@@ -97,7 +97,7 @@ question("Select the cases where ANOVA is appropriate",
 
 In a one-way ANOVA (also known as a _one-factor_, _single-factor_, or _single-classification_ ANOVA), there is one measurement variable and one nominal variable. You make multiple observations of the measurement variable for each value of the nominal variable. 
 
-For example, here is some data on a shell measurement (the length of the anterior adductor muscle scar, standardized by dividing by length, **AAM Length**) in the mussel *Mytilus trossulus* from five locations: Tillamook, Oregon; Newport, Oregon; Petersburg, Alaska; Magadan, Russia; and Tvarminne, Finland.
+For example, here is some data on a shell measurement (the length of the anterior adductor muscle scar, or AAM length, standardized by dividing by length) in the mussel *Mytilus trossulus* from five locations: Tillamook, Oregon; Newport, Oregon; Petersburg, Alaska; Magadan, Russia; and Tvarminne, Finland.
 
 ```{r data1, echo=FALSE}
 mussels
@@ -108,7 +108,7 @@ The nominal variable is invisible but implicit in the data structure. It's `loca
 The data needs a bit of munging to be ready for analysis. 
 
 ```{r select-variables, echo=FALSE}
-question("Which variables do we have in the `mussels` data as it is?",
+question("Which _explicit_ variables do we have in the `mussels` data as it is?",
          answer("Tillamook", correct = TRUE),
          answer("Newport", correct = TRUE),
          answer("Petersburg", correct = TRUE),
@@ -149,11 +149,13 @@ Start by looking at the data again.
 mussels
 ```
 
-To use the language of `tidyverse`s `gather` and `spread` functions, we have a bunch of "key" variables that should actually be levels in a `location` variable. And we have a bunch of "values" that are anterior adductor muscle (AAM) scar lengths that should actually be the `aam` variable. We will need to convert the implicit variable `location` into a factor variable and the implicit variable `aam` into a scalar variable. 
+To use the language of `tidyverse`s `gather` and `spread` functions, we have a bunch of "key" variables that should actually be levels in a `location` variable. And we have a bunch of "values", anterior adductor muscle (AAM) scar lengths, that should actually be the `aam` variable. 
 
-The terms "key" and "value", however, have proven difficult to communicate to many R users. The folks who created the `tidyverse` therefore set up some new functions, `pivot_longer` and `pivot_wider`, that they hoped would prove easier for people to understand. The `gather` and `spread` functions aren't being maintained any more. You might have learned them elsewhere, but you may want to learn the new functions now. 
+In short, we will convert the implicit variable `location` into a factor variable and the implicit variable `aam` into a scalar variable. 
 
-So your first step may be to check out our lesson [Pivot Longer](../sb-pivot-longer/) if you haven't used it before to transform a wide data set to a narrower, longer one. Your work will still be here when you get back. 
+The terms "key" and "value", as used in `gather` and `spread`, have proven difficult to communicate to many R users. The folks who created the `tidyverse` therefore set up some new functions, `pivot_longer` and `pivot_wider`, that they hoped would prove easier for people to understand. The `gather` and `spread` functions aren't being maintained any more. You might have learned them elsewhere, but you may want to learn the new functions now. 
+
+So your first step may be to check out our lesson [Pivot Longer](../sb-pivot-longer/) if you haven't used `pivot_longer` before to transform a wide data set to a narrower, longer one. Your work will still be here when you get back. 
 
 #### Convert Wide Data to Long Data by using `pivot_longer`
 
@@ -196,13 +198,15 @@ long_mussels <- pivot_longer(data = ...,
 (long_mussels$location <- as.factor(long_mussels$location))
 ```
 
+Now you have a beautiful data set with the two variables of interest. One variable is a factor (a categorical or nominal variable) and the other is a scalar or measurement variable. Now let's visualize this data set.
+
 ## Data Visualization for an ANOVA
 
 As is typical with R, there are many ways to visualize the data. I'll show you two of the easiest here.
 
 ### Quickly Visualize the Data with a Boxplot
 
-Quickly visualize `long_mussels` with `boxplot`. This can quickly be done using the R formula interface (`aam ~ location`).
+You can uickly visualize `long_mussels` with a `boxplot` using the R formula interface (`aam ~ location`) in a call to `boxplot`. Send `boxplot` that formula and tell it that the data is `long_mussels`. 
 
 ```{r boxplot, exercise = TRUE, exercise.lines = 5}
 
@@ -220,11 +224,26 @@ boxplot(aam ~ location, data = ...)
 boxplot(aam ~ location, data = long_mussels)
 ```
 
+You now have a beautiful, clean visualization to provide along with the results of your ANOVA.
+
+```{r predict-the-finding, echo=FALSE}
+question("Looking at the boxplot you just made, what do you think the results of an ANOVA will be?",
+         answer("Not all the means are the same among locations.", correct = TRUE),
+         answer("All the means are the same among locations.", message = "It's pretty clear from the boxplot that some `location` means are different from at least one other `location` mean."),
+         answer("Petersburg and Tvarminne have the same means", message = "Although an ANOVA tells us whether any pairs means differ from each other, it doesn't tell us which pairs. You need a post hoc test to get that additional information."),
+         answer("There are two groups of `aam` values", message = "Although you can see clear groups in the boxplot, an ANOVA does not tell you anything about groups. It tells you only that some means differ. You can run a post hoc test to find out more about groupings."),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         incorrect = "Unfortunately, no.",
+         correct = "Yes!"
+)
+```
+
 To learn more about base plotting, see our lessons [Base Graphics](../swirl-base-graphics/) and [Base Plotting System](../swirl-base-plotting-system/). For a discussion of data visualization principles, see [Principles of Analytic Graphs](../swirl-principles-of-analytic-graphs/). To learn how to plot in `ggplot`, see [`ggplot2` Part 1](../swirl-ggplot2-part-1/), [`ggplot2` Part 2](../swirl-ggplot2-part-2/), [`ggplot2` Extras](../swirl-ggplot2-extras/), and [Exploratory Graphs](../swirl-exploratory-graphs/).
 
 ### Quickly Visualize the Data with a Density Plot
 
-Sometimes the most accurate way to compare levels of a variable against each other for the purpose of illustrating your ANOVA is by creating a density plot (which, at one point, would have been called a "joyplot"). 
+Sometimes the most accurate way to compare levels of a variable against each other for the purpose of illustrating your ANOVA is by creating a density plot (which, at one point, was called a "joyplot"). 
 
 `qplot` is a very handy way to use `ggplot2` quickly to create a plot. Place `ggplot2` in the library, then construct your call to `qplot` by passing 6 items to it:
 
@@ -235,7 +254,7 @@ Sometimes the most accurate way to compare levels of a variable against each oth
 * `fill` also set equal to the variable `location`    
 * `alpha` set equal to .25
 
-```{r qplot-density, exercise = TRUE, exercise.lines = 5}
+```{r qplot-density, exercise = TRUE, exercise.lines = 10}
 
 ```
 ```{r qplot-density-hint-1}
@@ -282,9 +301,23 @@ Many people choose to show their data as boxplots because it is a cleaner visual
 
 Some of the problems we see are common in small data sets. The fact that we lost 11 rows is also interesting: are we sure we have designed the experiment properly? 
 
-It may be that our data violates assumptions of ANOVA. We'll have that discussion later in this lesson.
+What is alpha? See [`ggplot2` Part 1](../swirl-ggplot2-part-1/), [`ggplot2` Part 2](../swirl-ggplot2-part-2/), [`ggplot2` Extras](../swirl-ggplot2-extras/) to find out. But you can also guess.
 
-Let's soldier on. 
+```{r what-is-alpha, echo=FALSE}
+question("What is `alpha` in the density plot above?",
+         answer("A value that tells us what is the cutoff for 'alpha variables'"),
+         answer("The family of the colors to use"),
+         answer("Color opacity", correct = TRUE),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         correct = "Good job!",
+         incorrect = "Nope. Try again."
+)
+```
+
+If this plot makes you wonder whether our data violates assumptions of ANOVA, then you are thinking like a data scientist! We'll talk more about assumptions later in this lesson.
+
+Meanwhile, we soldier on. 
 
 ## At Last, Perform the ANOVA 
 
@@ -316,7 +349,7 @@ question("Which two functions can you use to run an analysis of variance?",
 )
 ```
 ```{r two-packages-to-do-anova, echo=FALSE}
-question("Which two packages can you use to run an analysis of variance?",
+question("Name two packages that can you use to run an analysis of variance (of course there are more---this is R).",
          answer("`stats`", correct = TRUE),
          answer("`anova`", message = "`anova` is a function, not a package."),
          answer("`lm`", message = "`lm` is a function, not a package."),
@@ -359,7 +392,18 @@ summary(fit)
 
 What does all this mean? Most people quickly focus on the _p_ value, which here is .0036. Apparently we can reject the null hypothesis that the means within the groups are the same. 
 
-We also have more information: the test statistic $\displaystyle F$ (4.78), the degrees of freedom (4, 34), and the sums of the squares and the mean square values for location and for the residuals.
+We also have more information: the test statistic $\displaystyle F$ (4.78), the degrees of freedom (4, 34), and the sums of the squares and the mean square values for location and for the residuals. When you report ANOVA results, you typically report $\displaystyle F$, the degrees of freedom, and the $\displaystyle p$ statistic.
+
+```{r what-to-report, echo=FALSE}
+question("Which of these numbers do you include when you report the results of an ANOVA?",
+         answer("_p_", correct = TRUE),
+         answer("_F_", correct = TRUE),
+         answer("df", correct = TRUE),
+         answer("the mean squares"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE
+)
+```
 
 Take note of the fact that 11 observations were deleted due to missingness. The levels do not all have the same number of values in them. Is this a problem? Perhaps. We'll talk more about that later.
 
@@ -398,7 +442,7 @@ question("Which lines of code result in a summary of the fit for an ANOVA?",
 
 ## You found something interesting! Now what?
  
-If the analysis of variance indicates an interesting effect of the independent variable (here, `location`), you can conduct multiple comparisons _among_ the levels of this factor using Tukey or Least Significant Difference (LSD) procedures. (The problem of inflating the Type I Error Rate when making multiple comparisons is discussed in the [Multiple Comparisons]() chapter in the Handbook.)  
+If the analysis of variance indicates an interesting effect of the independent variable (here, `location`), you can conduct multiple comparisons _among_ the levels of this factor using Tukey or Least Significant Difference (LSD) procedures. (The problem of inflating the Type I Error Rate when making multiple comparisons is discussed in the [Multiple Comparisons chapter](http://www.biostathandbook.com/multiplecomparisons.html) in John H. McDonald's ([Handbook of Biological Statistics](http://www.biostathandbook.com/chigof.html)))  
 
 R functions which make multiple comparisons usually allow for adjusting _p_ values. In R you can use the Benjamini–Hochberg (BH) or `fdr` procedure. See `?p.adjust` for more information.
 
@@ -485,8 +529,9 @@ MSD, the pair of means is significantly different.
 
 Perform the analysis with the `TukeyHSD` function from the `stats` package.
 
-```{r tukey, exercise=TRUE}
-fit <- aov(aam ~ location,data=long_mussels)
+```{r tukey, exercise = TRUE}
+libray(stats)
+fit <- aov(aam ~ location, data = long_mussels)
 summary(fit)
 TukeyHSD(fit)
 ```
@@ -592,6 +637,10 @@ freedom is $\displaystyle 5 - 1 = 4$
 In order to check where your results fall under the $\displaystyle F$ distribution, you need three pieces of information (if you are calculating by hand): the value of $\displaystyle \frac{Var_a}{Var_w}$, the numerator degrees of freedom (here 4) and the denominator degrees of freedom (here 34). 
 
 But you can always take the easy way out and use R to calculate your $\displaystyle F$ statistic and its accompanying _p_ value for you. 
+
+## References 
+
+This lesson is heavily based with thanks on the works of John H. McDonald ([Handbook of Biological Statistics](http://www.biostathandbook.com/chigof.html)) and Salvatore S. Mangiafico ([R Companion to the Biostats Handbook](https://rcompanion.org/rcompanion/b_03.html)).
 
 ## See Also 
 
