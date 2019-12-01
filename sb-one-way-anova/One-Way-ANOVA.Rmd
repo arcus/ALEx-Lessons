@@ -206,7 +206,7 @@ As is typical with R, there are many ways to visualize the data. I'll show you t
 
 ### Quickly Visualize the Data with a Boxplot
 
-You can uickly visualize `long_mussels` with a `boxplot` using the R formula interface (`aam ~ location`) in a call to `boxplot`. Send `boxplot` that formula and tell it that the data is `long_mussels`. 
+You can quickly visualize `long_mussels` with a `boxplot` using the R formula interface (`aam ~ location`) in a call to `boxplot`. Send `boxplot` that formula and tell it that the data is `long_mussels`. 
 
 ```{r boxplot, fig.width = 9, exercise = TRUE, exercise.lines = 5}
 
