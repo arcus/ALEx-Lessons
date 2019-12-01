@@ -13,6 +13,8 @@ library(data.table)
 library(dplyr)
 library(pwr)
 library(tidyr)
+library(stats)
+library(ggplot2)
 shhh <- suppressPackageStartupMessages
 shh <- suppressWarnings
 sh <- suppressMessages
@@ -20,7 +22,7 @@ knitr::opts_chunk$set(echo = FALSE)
 options(digits = 3, scipen = 9999)
 tutorial_options(exercise.completion = FALSE,
                  exercise.eval = TRUE,
-                 exercise.lines = 5,
+                 exercise.lines = 8,
                  exercise.diagnostics = TRUE)
 
 Input = ("
@@ -41,7 +43,7 @@ rm(Input)
 long_mussels <- pivot_longer(data = mussels,
                              cols = names(mussels),
                              names_to = "location",
-                             values_to = "aam_length")
+                             values_to = "aam")
 long_mussels$location <- as.factor(long_mussels$location)
 ```
 
@@ -59,7 +61,7 @@ The nominal variable divides the measurements into two or more groups. The one-w
 ## Null and Alternative Hypotheses
 
 >* **H<sub>0</sub>**: The means of the measurement variable are the
-same for the different categories in the categorical variable.     
+same for the different categories in the nominal (a.k.a. "categorical") variable.     
 * **H<sub>A</sub>**: The means are not all the same for the different categories in the categorical variable.   
 
 ```{r bb, echo=FALSE}
@@ -90,7 +92,7 @@ question("Select the cases where ANOVA is appropriate",
 )
 ```
 <div id="filter-hint">
-**Hint:** If you have just one professor and three classes, then the nominal variable (`professor`) is a constant. You need a nominal variable with two or more groups and a measurement variable to perform an ANOVA.
+**Hint:** If you have just one professor and three classes, then the nominal variable (`professor`) is a constant. You need a nominal variable with two or more groups and a [measurement](http://www.biostathandbook.com/variabletypes.html#measurement) variable to perform an ANOVA.
 </div>
 
 In a one-way ANOVA (also known as a _one-factor_, _single-factor_, or _single-classification_ ANOVA), there is one measurement variable and one nominal variable. You make multiple observations of the measurement variable for each value of the nominal variable. 
@@ -134,11 +136,9 @@ question("Which variables do we actually want to analyze?",
 ```
 
 
-## How to Perform a One-Way ANOVA in R
+## How to Prepare your Data for a One-Way ANOVA in R
 
-First, check to be sure the data is in the correct format for running the analysis. Remember, you should have one categorical variable with 2 or more categories and one measurement (a.k.a. "scalar") variable. 
-
-### Data Prep
+You should, before any call to a statistical function, ensure that the data is in the correct format for running the analysis. For an ANOVA, remember, you should have one [nominal (a.k.a. "categorical") variable](http://www.biostathandbook.com/variabletypes.html#nominal) variable with 2 or more categories and one [measurement (a.k.a. "scalar")](http://www.biostathandbook.com/variabletypes.html#measurement) variable. 
 
 Start by looking at the data again.
 
@@ -149,15 +149,21 @@ Start by looking at the data again.
 mussels
 ```
 
-We will need to convert the implicit variable `location` into a factor variable. 
+To use the language of `tidyverse`s `gather` and `spread` functions, we have a bunch of "key" variables that should actually be levels in a `location` variable. And we have a bunch of "values" that are anterior adductor muscle (AAM) scar lengths that should actually be the `aam` variable. We will need to convert the implicit variable `location` into a factor variable and the implicit variable `aam` into a scalar variable. 
+
+The terms "key" and "value", however, have proven difficult to communicate to many R users. The folks who created the `tidyverse` therefore set up some new functions, `pivot_longer` and `pivot_wider`, that they hoped would prove easier for people to understand. The `gather` and `spread` functions aren't being maintained any more. You might have learned them elsewhere, but you may want to learn the new functions now. 
+
+So your first step may be to check out our lesson [Pivot Longer](../sb-pivot-longer/) if you haven't used it before to transform a wide data set to a narrower, longer one. Your work will still be here when you get back. 
 
 #### Convert Wide Data to Long Data by using `pivot_longer`
-
-The `tidyr` package (which is part of the `tidyverse`) was designed with just this sort of data manipulation in mind. Check out our lesson [Pivot Longer](../sb-pivot-longer/) if you haven't transformed a wide data set to a narrower, longer one. Your work will still be here when you get back. 
 
 Using the method from [Pivot Longer](../sb-pivot-longer/), enter the code for making the the wide version of `mussels` longer here. Store the output from your call to `pivot_longer` in `long_mussels`. 
 
 Remember to set the new `location` variable in `long_mussels` to be a factor once you've created `long_mussels`.
+
+If you haven't time to do the [Pivot Longer](../sb-pivot-longer/) lesson, use the Hints buttons to teach yourself the proper syntax for the `pivot_longer` function.
+
+Make sure you enclose your assignment commands in parentheses so you can see what they are doing without having to add another line to display results. 
 
 ```{r pivot-in-prep-for-anova, exercise = TRUE, exercise.lines = 10}
 
@@ -167,30 +173,34 @@ long_mussels <- pivot_longer(data = ...,
                              cols = ...)
 ```
 ```{r pivot-in-prep-for-anova-hint-2}
-long_mussels <- pivot_longer(data = mussels,
-                             cols = names(...))
+(long_mussels <- pivot_longer(data = mussels,
+                             cols = names(...)))
 ```
 ```{r pivot-in-prep-for-anova-hint-3}
-long_mussels <- pivot_longer(data = mussels,
+(long_mussels <- pivot_longer(data = mussels,
                              cols = names(mussels),
                              names_to = ...,
-                             values_to = ...)
+                             values_to = ...))
 ```
 ```{r pivot-in-prep-for-anova-hint-4}
-long_mussels <- pivot_longer(data = mussels,
+(long_mussels <- pivot_longer(data = mussels,
                              cols = names(mussels),
                              names_to = "location",
-                             values_to = "aam")
+                             values_to = "aam"))
 ```
 ```{r pivot-in-prep-for-anova-solution}
-long_mussels <- pivot_longer(data = mussels,
+(long_mussels <- pivot_longer(data = mussels,
                              cols = names(mussels),
                              names_to = "location",
-                             values_to = "aam")
-long_mussels$location <- as.factor(long_mussels$location)
+                             values_to = "aam"))
+(long_mussels$location <- as.factor(long_mussels$location))
 ```
 
-## Visualize the Data with a Boxplot
+## Data Visualization for an ANOVA
+
+As is typical with R, there are many ways to visualize the data. I'll show you two of the easiest here.
+
+### Quickly Visualize the Data with a Boxplot
 
 Quickly visualize `long_mussels` with `boxplot`. This can quickly be done using the R formula interface (`aam ~ location`).
 
@@ -212,9 +222,73 @@ boxplot(aam ~ location, data = long_mussels)
 
 To learn more about base plotting, see our lessons [Base Graphics](../swirl-base-graphics/) and [Base Plotting System](../swirl-base-plotting-system/). For a discussion of data visualization principles, see [Principles of Analytic Graphs](../swirl-principles-of-analytic-graphs/). To learn how to plot in `ggplot`, see [`ggplot2` Part 1](../swirl-ggplot2-part-1/), [`ggplot2` Part 2](../swirl-ggplot2-part-2/), [`ggplot2` Extras](../swirl-ggplot2-extras/), and [Exploratory Graphs](../swirl-exploratory-graphs/).
 
+### Quickly Visualize the Data with a Density Plot
+
+Sometimes the most accurate way to compare levels of a variable against each other for the purpose of illustrating your ANOVA is by creating a density plot (which, at one point, would have been called a "joyplot"). 
+
+`qplot` is a very handy way to use `ggplot2` quickly to create a plot. Place `ggplot2` in the library, then construct your call to `qplot` by passing 6 items to it:
+
+* `data` set equal to `long_mussels`    
+* `x` set equal to the variable `aam`    
+* `geom` set equal to the string "density"    
+* `color` set equal to the variable `location`    
+* `fill` also set equal to the variable `location`    
+* `alpha` set equal to .25
+
+```{r qplot-density, exercise = TRUE, exercise.lines = 5}
+
+```
+```{r qplot-density-hint-1}
+library(ggplot2)
+qplot(...)
+```
+```{r qplot-density-hint-2}
+library(ggplot2)
+qplot(data = long_mussels, 
+      ...)
+```
+```{r qplot-density-hint-3}
+library(ggplot2)
+qplot(data = long_mussels, 
+      x = aam, 
+      geom = "density", 
+      ...)
+```
+```{r qplot-density-hint-4}
+library(ggplot2)
+qplot(data = long_mussels, 
+      x = aam, 
+      geom = "density", 
+      color = location,
+      fill = location,
+      ...)
+```
+```{r qplot-density-solution}
+library(ggplot2)
+qplot(data = long_mussels, 
+      x = aam, 
+      geom = "density", 
+      color = location,
+      fill = location,
+      alpha = .25)
+```
+
+Many people choose to show their data as boxplots because it is a cleaner visualization. However, the density plot provides a lot of information about our data:
+
+* Means vary from ~.07 to ~.10
+* Tvarminne is bi-modal    
+* Not all the levels are normally distributed    
+* 11 rows were deleted due to missingness, which means that not all the levels of `location` contain the same number of observations. 
+
+Some of the problems we see are common in small data sets. The fact that we lost 11 rows is also interesting: are we sure we have designed the experiment properly? 
+
+It may be that our data violates assumptions of ANOVA. We'll have that discussion later in this lesson.
+
+Let's soldier on. 
+
 ## At Last, Perform the ANOVA 
 
-The `lm` function in the native `stats` package fits a linear model by [least squares](https://rcompanion.org/handbook/G_05.html), and can be used for a variety of analyses: [regression](../sb-correlation-and-linear-regression/), analysis of variance (what we're doing now), and [analysis of covariance](https://rcompanion.org/rcompanion/e_04.html), for instance.  The analysis of variance is then conducted either with the `anova` function in the `car` package for [Type II or Type III sum of squares](https://rcompanion.org/rcompanion/d_04.html), or with the `anova` function in the native `stats` package for [Type I sum of squares](https://rcompanion.org/rcompanion/d_04.html). 
+The `lm` function in the native `stats` package fits a linear model by [least squares](https://rcompanion.org/handbook/G_05.html), and can be used for a variety of analyses: [regression](../sb-correlation-and-linear-regression/), analysis of variance (what we're doing now), and [analysis of covariance](https://rcompanion.org/rcompanion/e_04.html), for instance.  The analysis of variance is then conducted either with the `anova` function in the `car` package for [Type II or Type III sum of squares](https://rcompanion.org/rcompanion/d_04.html), or with the `aov` function in the native `stats` package for [Type I sum of squares](https://rcompanion.org/rcompanion/d_04.html). 
 
 ```{r where-can-we-use-lm, echo=FALSE}
 question("Which analyses can you do using the `lm` function?",
@@ -232,7 +306,7 @@ question("Which analyses can you do using the `lm` function?",
 ```{r two-functions-to-do-anova, echo=FALSE}
 question("Which two functions can you use to run an analysis of variance?",
          answer("`stats`", message = "`stats` is a package, not a function."),
-         answer("`anova`", correct = TRUE),
+         answer("`aov`", correct = TRUE),
          answer("`lm`", correct = TRUE),
          answer("`car`", message = "`car` is a package, not a function."),
          random_answer_order = TRUE,
@@ -254,19 +328,81 @@ question("Which two packages can you use to run an analysis of variance?",
 )
 ```
 
-## You found something interesting! Now what?
- 
-If the analysis of variance indicates an interesting effect of the independent variable (here, `location`), multiple comparisons among the levels of this factor can be conducted using Tukey or Least Significant Difference (LSD) procedures. (The problem of inflating the Type I Error Rate when making multiple comparisons is discussed in the [Multiple Comparisons]() chapter in the Handbook.)  
+The simplest way to perform the analysis of variance procedure is using `aov` from the native `stats` package, accepting all its defaults. To see what the defaults are, type `?aov` at the command line.
 
-R functions which make multiple comparisons usually allow for adjusting p-values.  In R, the “BH”, or “fdr”, procedure is the Benjamini–Hochberg procedure discussed in the Handbook.  See ?p.adjust for more information.
- 
+Try running `aov` here. First, make sure that you have `stats` in the library. 
 
-Perform the analysis with the `aov` function from the `stats` package.
+Next, store the results of your call to `aov` (which calls `lm`, among other things) in the variable `fit`. Pass `aov` the formula of interest (the measurement variable "across" or `~` the categorical variable) and the name of the data set in the form `data = long_mussels`. 
 
-```{r ANOVA, exercise=TRUE}
+Finally, use `summary(fit)` to see the results. 
+
+```{r aov-for-fun, exercise = TRUE, exercise.lines = 5}
+
+```
+```{r aov-for-fun-hint-1}
+library(stats)
+fit <- ?
+summary(fit)
+```
+```{r aov-for-fun-hint-2}
+library(stats)
+fit <- aov(...)
+summary(fit)
+```
+```{r aov-for-fun-solution}
+library(stats)
 fit <- aov(aam ~ location, data = long_mussels)
 summary(fit)
 ```
+
+(Hint: If you don't see any results, make sure you have asked to see a `summary` of `fit`.)
+
+What does all this mean? Most people quickly focus on the _p_ value, which here is .0036. Apparently we can reject the null hypothesis that the means within the groups are the same. 
+
+We also have more information: the test statistic $\displaystyle F$ (4.78), the degrees of freedom (4, 34), and the sums of the squares and the mean square values for location and for the residuals.
+
+Take note of the fact that 11 observations were deleted due to missingness. The levels do not all have the same number of values in them. Is this a problem? Perhaps. We'll talk more about that later.
+
+Just for fun, run `aov` and allow the results to print without first storing them in `fit` and using `summary` to format them.
+
+```{r name, exercise = TRUE, exercise.lines = 5}
+
+```
+```{r name-hint-1}
+library(stats)
+aov(...)
+```
+```{r name-hint-2}
+library(stats)
+aov(aam ~ location, ...)
+```
+```{r name-solution}
+library(stats)
+aov(aam ~ location, data = long_mussels)
+```
+
+This provides less information! That's why people usually summarize the fit. 
+
+```{r two-ways-to-summarize-fit, echo=FALSE}
+question("Which lines of code result in a summary of the fit for an ANOVA?",
+         answer("`summary(aov(aam ~ location, data = long_mussels))`", correct = TRUE),
+         answer("`fit <- aov(aam ~ location, data = long_mussels); summary(fit)`", correct = TRUE),
+         answer("`fit <- aov(aam ~ location, data = long_mussels)`"),
+         answer("`aov(aam ~ location, data = long_mussels)`"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         incorrect = "Here's a hint: In R, you can put multiple commands on the same line using `;` to separate them.",
+         correct = "You are amazing!"
+)
+```
+
+## You found something interesting! Now what?
+ 
+If the analysis of variance indicates an interesting effect of the independent variable (here, `location`), you can conduct multiple comparisons _among_ the levels of this factor using Tukey or Least Significant Difference (LSD) procedures. (The problem of inflating the Type I Error Rate when making multiple comparisons is discussed in the [Multiple Comparisons]() chapter in the Handbook.)  
+
+R functions which make multiple comparisons usually allow for adjusting _p_ values. In R you can use the Benjamini–Hochberg (BH) or `fdr` procedure. See `?p.adjust` for more information.
+
+START HERE
 
 ## Assumptions
 
@@ -350,7 +486,7 @@ MSD, the pair of means is significantly different.
 Perform the analysis with the `TukeyHSD` function from the `stats` package.
 
 ```{r tukey, exercise=TRUE}
-fit <- aov(aam ~ location,data=aam_data)
+fit <- aov(aam ~ location,data=long_mussels)
 summary(fit)
 TukeyHSD(fit)
 ```
@@ -365,7 +501,7 @@ positive may be much higher than 5%. In that case, you should use Welch’s ANOV
 Perform the analysis with the `oneway.test` function from the `stats` package. When the `var.equal` argument is set to `FALSE`, the Welch method is used. 
 
 ```{r welch, exercise=TRUE}
-oneway.test(aam ~ location,data=aam_data,var.equal=FALSE)
+oneway.test(aam ~ location,data=long_mussels,var.equal=FALSE)
 ```
 
 ## Power Analysis
@@ -389,12 +525,12 @@ is 12 units.
 Perform the analysis with the `power.ANOVA.test` function from the `stats` package. You need to specify the number of groups with the `groups` argument, within group *variance* with the `within.var` argument, between group *variance* with the `between.var` argument, the signficiance value with `sig.level` and power with `power`. Recall that standard deviation is the square root of variance. 
 
 ```{r power, exercise=TRUE}
-group_means <- c(10, 10, 15, 15, 15)
-experiment_var <- 12^2
-power.ANOVA.test(groups = 5, 
-                 within.var = experiment_var, 
-                 between.var = var(group_means), 
-                 sig.level = 0.05, power = 0.80)
+# group_means <- c(10, 10, 15, 15, 15)
+# experiment_var <- 12^2
+# power.ANOVA.test(groups = 5, 
+#                  within.var = experiment_var, 
+#                  between.var = var(group_means), 
+#                  sig.level = 0.05, power = 0.80)
 ```
 
 Since there are five groups, you’d need 59 observations per group to have an 80% chance of having a significant (P<0.05) one-way ANOVA.
@@ -402,11 +538,11 @@ Since there are five groups, you’d need 59 observations per group to have an 8
 Alternatively, if you have no experimental data, you can use the `cohen.ES` function to estimate effect sizes and the `pwr.ANOVA.test` function from the `pwr` package. 
 
 ```{r cohen, exercise=TRUE}
-library(pwr)
-effect_size <- cohen.ES(test="anov",size="small")$effect.size
-pwr.ANOVA.test(k = 5, 
-               f = effect_size,
-               sig.level = 0.05, power = 0.80)
+# library(pwr)
+# effect_size <- cohen.ES(test="anov",size="small")$effect.size
+# pwr.ANOVA.test(k = 5, 
+#                f = effect_size,
+#                sig.level = 0.05, power = 0.80)
 
 ```
 
