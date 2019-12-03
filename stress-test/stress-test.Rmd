@@ -1,0 +1,3481 @@
+---
+title: "Stress Test"
+output: 
+  learnr::tutorial:
+    progressive: true
+    allow_skip: true
+runtime: shiny_prerendered
+---
+
+```{r setup, include=FALSE}
+library(learnr)
+library(data.table)
+library(dplyr)
+library(pwr)
+library(tidyr)
+library(stats)
+library(ggplot2)
+library(tidyverse)
+shhh <- suppressPackageStartupMessages
+shh <- suppressWarnings
+sh <- suppressMessages
+knitr::opts_chunk$set(echo = FALSE)
+options(digits = 3, scipen = 9999)
+tutorial_options(exercise.completion = FALSE,
+                 exercise.eval = TRUE,
+                 exercise.lines = 8,
+                 exercise.diagnostics = TRUE)
+
+Input = ("
+Tillamook Newport Petersburg  Magadan Tvarminne
+0.0571	0.0873	0.0974	0.1033	0.0703
+0.0813	0.0662	0.1352	0.0915	0.1026
+0.0831	0.0672	0.0817	0.0781	0.0956
+0.0976	0.0819	0.1016	0.0685	0.0973
+0.0817	0.0749	0.0968	0.0677	0.1039
+0.0859	0.0649	0.1064	0.0697	0.1045
+0.0735	0.0835	0.105	  0.0764	NA
+0.0659	0.0725	0.0689  NA  NA
+0.0923  NA  NA  NA  NA
+0.0836  NA  NA  NA  NA
+")
+mussels <- read.table(textConnection(Input), header = TRUE)
+rm(Input)
+long_mussels <- pivot_longer(data = mussels,
+                             cols = names(mussels),
+                             names_to = "location",
+                             values_to = "aam")
+long_mussels$location <- as.factor(long_mussels$location)
+```
+
+
+
+```{r bb, echo=FALSE}
+question("Which are examples of a one-way ANOVA null hypotheses?",
+         answer("Mean tibia length is the same for each age group of children", correct = TRUE),
+         answer("The average monthly electric bill is the same in major cities within the United States", correct = TRUE),
+         answer("The average monthly electric bill in Philadelphia, PA is less than what it is in Burlington, VT"),
+         answer("The average monthly electric bill in Philadelphia, PA is more than what it is in Burlington, VT"),
+         allow_retry = TRUE,
+         random_answer_order = TRUE,
+         incorrect = "Remember that the one-way ANOVA tests whether the means of the measurement variable are teh same for different groups.",
+         correct = "Yes!"
+)
+```
+
+
+
+```{r whentouseANOVA, echo=FALSE}
+question("Select the cases where ANOVA is appropriate",
+         answer("A professor has three classes and you want to compare the professor's assessment of the three classes in comparison with each other"),
+         answer("Three professors have one class each and you want to compare the mean class grades", correct = TRUE),
+         answer("You want to compare white blood cell counts as a response to medication for four groups of patients", correct = TRUE),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         incorrect = "You'll learn about independence between groups later, which matters for an ANOVA, but at this point, using common sense, you might be able to figure out why a design that uses only one professor to fill out assessments comparing three classes might introduce bias. Might comparing the classes against each cause a professor to inflate or deflate ratings to rank the classes rather than objectively assess them? And what about the categorical variable? How many categories does the variable `professor` have? If it has only one, then it is not a variable but a constant. Therefore there are not three groups to compare, but just one: and that just won't work."
+)
+```
+
+
+```{r select-variables, echo=FALSE}
+question("Which _explicit_ variables do we have in the `mussels` data as it is?",
+         answer("Tillamook", correct = TRUE),
+         answer("Newport", correct = TRUE),
+         answer("Petersburg", correct = TRUE),
+         answer("Magadan", correct = TRUE),
+         answer("Tvarminne", correct = TRUE),
+         answer("aam"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         correct = "You found them all!",
+         incorrect = "The column names in the dataset `mussels` are the variables."
+)
+```
+
+```{r how-to-modify-data, echo=FALSE}
+question("Which variables do we actually want to analyze?",
+         answer("location", correct = TRUE),
+         answer("aam", correct = TRUE),
+         answer("country"),
+         answer("city"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         correct = "That's right. Just two variables will do the trick.",
+         incorrect = "You need only two variables as described in the paragraph above these two questions."
+)
+```
+
+
+
+```{r predict-the-finding, echo=FALSE}
+question("Looking at the boxplot you just made, what do you think the results of an ANOVA will be?",
+         answer("Not all the means are the same among locations.", correct = TRUE),
+         answer("All the means are the same among locations.", message = "It's pretty clear from the boxplot that some `location` means are different from at least one other `location` mean."),
+         answer("Petersburg and Tvarminne have the same means", message = "Although an ANOVA tells us whether any pairs means differ from each other, it doesn't tell us which pairs. You need a post hoc test to get that additional information."),
+         answer("There are two groups of `aam` values", message = "Although you can see clear groups in the boxplot, an ANOVA does not tell you anything about groups. It tells you only that some means differ. You can run a post hoc test to find out more about groupings."),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         incorrect = "Unfortunately, no.",
+         correct = "Yes!"
+)
+```
+
+
+```{r what-is-alpha, echo=FALSE}
+question("What is `alpha` in the density plot above?",
+         answer("A value that tells us what is the cutoff for 'alpha variables'"),
+         answer("The family of the colors to use"),
+         answer("Color opacity", correct = TRUE),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         correct = "Good job!",
+         incorrect = "Nope. Try again."
+)
+```
+
+
+```{r where-can-we-use-lm, echo=FALSE}
+question("Which analyses can you do using the `lm` function?",
+         answer("linear regression", correct = TRUE),
+         answer("analysis of variance", correct = TRUE),
+         answer("analysis of covariance", correct = TRUE),
+         answer("Kruskal-Wallis test"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         correct = "`lm` is amazing. And so are you!",
+         incorrect = "Doing a Kruskal-Wallis test with `lm` would be a bit like vacuuming with a wet mop: It's just not done, for very good reasons."
+)
+```
+
+```{r two-functions-to-do-anova, echo=FALSE}
+question("Which two functions can you use to run an analysis of variance?",
+         answer("`stats`", message = "`stats` is a package, not a function."),
+         answer("`aov`", correct = TRUE),
+         answer("`lm`", correct = TRUE),
+         answer("`car`", message = "`car` is a package, not a function."),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         incorrect = "",
+         correct = "You got it!"
+)
+```
+```{r two-packages-to-do-anova, echo=FALSE}
+question("Name two packages that can you use to run an analysis of variance (of course there are more---this is R).",
+         answer("`stats`", correct = TRUE),
+         answer("`anova`", message = "`anova` is a function, not a package."),
+         answer("`lm`", message = "`lm` is a function, not a package."),
+         answer("`car`", correct = TRUE),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         incorrect = "",
+         correct = "All your hard work is paying off!"
+)
+```
+
+
+```{r what-to-report, echo=FALSE}
+question("Which of these numbers do you include when you report the results of an ANOVA?",
+         answer("_p_", correct = TRUE),
+         answer("_F_", correct = TRUE),
+         answer("df", correct = TRUE),
+         answer("the mean squares"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE
+)
+```
+
+
+```{r two-ways-to-summarize-fit, echo=FALSE}
+question("Which lines of code result in a summary of the fit for an ANOVA?",
+         answer("`summary(aov(aam ~ location, data = long_mussels))`", correct = TRUE),
+         answer("`fit <- aov(aam ~ location, data = long_mussels); summary(fit)`", correct = TRUE),
+         answer("`fit <- aov(aam ~ location, data = long_mussels)`"),
+         answer("`aov(aam ~ location, data = long_mussels)`"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         incorrect = "Here's a hint: In R, you can put multiple commands on the same line using `;` to separate them.",
+         correct = "You are amazing!"
+)
+```
+
+
+```{r what-does-tukey-kramer-do, echo=FALSE}
+question("What does the Tukey-Kramer test tell you?",
+         answer("Which pairs of group means are different from each other.", correct = TRUE),
+         answer("Whether the critic Tukey liked the movie _Kramer vs. Kramer_."),
+         answer("Whether the non-parametric ANOVA is also significant."),
+         answer("Whether the ANOVA was significant under the assumptions."),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         correct = "Perfect!",
+         incorrect = "Not correct. Read the paragraph just above this question to find the answer."
+)
+```
+
+
+
+```{r bb, echo=FALSE}
+question("Which are examples of a one-way ANOVA null hypotheses?",
+         answer("Mean tibia length is the same for each age group of children", correct = TRUE),
+         answer("The average monthly electric bill is the same in major cities within the United States", correct = TRUE),
+         answer("The average monthly electric bill in Philadelphia, PA is less than what it is in Burlington, VT"),
+         answer("The average monthly electric bill in Philadelphia, PA is more than what it is in Burlington, VT"),
+         allow_retry = TRUE,
+         random_answer_order = TRUE,
+         incorrect = "Remember that the one-way ANOVA tests whether the means of the measurement variable are teh same for different groups.",
+         correct = "Yes!"
+)
+```
+
+
+
+```{r whentouseANOVA, echo=FALSE}
+question("Select the cases where ANOVA is appropriate",
+         answer("A professor has three classes and you want to compare the professor's assessment of the three classes in comparison with each other"),
+         answer("Three professors have one class each and you want to compare the mean class grades", correct = TRUE),
+         answer("You want to compare white blood cell counts as a response to medication for four groups of patients", correct = TRUE),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         incorrect = "You'll learn about independence between groups later, which matters for an ANOVA, but at this point, using common sense, you might be able to figure out why a design that uses only one professor to fill out assessments comparing three classes might introduce bias. Might comparing the classes against each cause a professor to inflate or deflate ratings to rank the classes rather than objectively assess them? And what about the categorical variable? How many categories does the variable `professor` have? If it has only one, then it is not a variable but a constant. Therefore there are not three groups to compare, but just one: and that just won't work."
+)
+```
+
+
+```{r select-variables, echo=FALSE}
+question("Which _explicit_ variables do we have in the `mussels` data as it is?",
+         answer("Tillamook", correct = TRUE),
+         answer("Newport", correct = TRUE),
+         answer("Petersburg", correct = TRUE),
+         answer("Magadan", correct = TRUE),
+         answer("Tvarminne", correct = TRUE),
+         answer("aam"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         correct = "You found them all!",
+         incorrect = "The column names in the dataset `mussels` are the variables."
+)
+```
+
+```{r how-to-modify-data, echo=FALSE}
+question("Which variables do we actually want to analyze?",
+         answer("location", correct = TRUE),
+         answer("aam", correct = TRUE),
+         answer("country"),
+         answer("city"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         correct = "That's right. Just two variables will do the trick.",
+         incorrect = "You need only two variables as described in the paragraph above these two questions."
+)
+```
+
+
+
+```{r predict-the-finding, echo=FALSE}
+question("Looking at the boxplot you just made, what do you think the results of an ANOVA will be?",
+         answer("Not all the means are the same among locations.", correct = TRUE),
+         answer("All the means are the same among locations.", message = "It's pretty clear from the boxplot that some `location` means are different from at least one other `location` mean."),
+         answer("Petersburg and Tvarminne have the same means", message = "Although an ANOVA tells us whether any pairs means differ from each other, it doesn't tell us which pairs. You need a post hoc test to get that additional information."),
+         answer("There are two groups of `aam` values", message = "Although you can see clear groups in the boxplot, an ANOVA does not tell you anything about groups. It tells you only that some means differ. You can run a post hoc test to find out more about groupings."),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         incorrect = "Unfortunately, no.",
+         correct = "Yes!"
+)
+```
+
+
+```{r what-is-alpha, echo=FALSE}
+question("What is `alpha` in the density plot above?",
+         answer("A value that tells us what is the cutoff for 'alpha variables'"),
+         answer("The family of the colors to use"),
+         answer("Color opacity", correct = TRUE),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         correct = "Good job!",
+         incorrect = "Nope. Try again."
+)
+```
+
+
+```{r where-can-we-use-lm, echo=FALSE}
+question("Which analyses can you do using the `lm` function?",
+         answer("linear regression", correct = TRUE),
+         answer("analysis of variance", correct = TRUE),
+         answer("analysis of covariance", correct = TRUE),
+         answer("Kruskal-Wallis test"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         correct = "`lm` is amazing. And so are you!",
+         incorrect = "Doing a Kruskal-Wallis test with `lm` would be a bit like vacuuming with a wet mop: It's just not done, for very good reasons."
+)
+```
+
+```{r two-functions-to-do-anova, echo=FALSE}
+question("Which two functions can you use to run an analysis of variance?",
+         answer("`stats`", message = "`stats` is a package, not a function."),
+         answer("`aov`", correct = TRUE),
+         answer("`lm`", correct = TRUE),
+         answer("`car`", message = "`car` is a package, not a function."),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         incorrect = "",
+         correct = "You got it!"
+)
+```
+```{r two-packages-to-do-anova, echo=FALSE}
+question("Name two packages that can you use to run an analysis of variance (of course there are more---this is R).",
+         answer("`stats`", correct = TRUE),
+         answer("`anova`", message = "`anova` is a function, not a package."),
+         answer("`lm`", message = "`lm` is a function, not a package."),
+         answer("`car`", correct = TRUE),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         incorrect = "",
+         correct = "All your hard work is paying off!"
+)
+```
+
+
+```{r what-to-report, echo=FALSE}
+question("Which of these numbers do you include when you report the results of an ANOVA?",
+         answer("_p_", correct = TRUE),
+         answer("_F_", correct = TRUE),
+         answer("df", correct = TRUE),
+         answer("the mean squares"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE
+)
+```
+
+
+```{r two-ways-to-summarize-fit, echo=FALSE}
+question("Which lines of code result in a summary of the fit for an ANOVA?",
+         answer("`summary(aov(aam ~ location, data = long_mussels))`", correct = TRUE),
+         answer("`fit <- aov(aam ~ location, data = long_mussels); summary(fit)`", correct = TRUE),
+         answer("`fit <- aov(aam ~ location, data = long_mussels)`"),
+         answer("`aov(aam ~ location, data = long_mussels)`"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         incorrect = "Here's a hint: In R, you can put multiple commands on the same line using `;` to separate them.",
+         correct = "You are amazing!"
+)
+```
+
+
+```{r what-does-tukey-kramer-do, echo=FALSE}
+question("What does the Tukey-Kramer test tell you?",
+         answer("Which pairs of group means are different from each other.", correct = TRUE),
+         answer("Whether the critic Tukey liked the movie _Kramer vs. Kramer_."),
+         answer("Whether the non-parametric ANOVA is also significant."),
+         answer("Whether the ANOVA was significant under the assumptions."),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         correct = "Perfect!",
+         incorrect = "Not correct. Read the paragraph just above this question to find the answer."
+)
+```
+
+
+
+```{r bb, echo=FALSE}
+question("Which are examples of a one-way ANOVA null hypotheses?",
+         answer("Mean tibia length is the same for each age group of children", correct = TRUE),
+         answer("The average monthly electric bill is the same in major cities within the United States", correct = TRUE),
+         answer("The average monthly electric bill in Philadelphia, PA is less than what it is in Burlington, VT"),
+         answer("The average monthly electric bill in Philadelphia, PA is more than what it is in Burlington, VT"),
+         allow_retry = TRUE,
+         random_answer_order = TRUE,
+         incorrect = "Remember that the one-way ANOVA tests whether the means of the measurement variable are teh same for different groups.",
+         correct = "Yes!"
+)
+```
+
+
+
+```{r whentouseANOVA, echo=FALSE}
+question("Select the cases where ANOVA is appropriate",
+         answer("A professor has three classes and you want to compare the professor's assessment of the three classes in comparison with each other"),
+         answer("Three professors have one class each and you want to compare the mean class grades", correct = TRUE),
+         answer("You want to compare white blood cell counts as a response to medication for four groups of patients", correct = TRUE),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         incorrect = "You'll learn about independence between groups later, which matters for an ANOVA, but at this point, using common sense, you might be able to figure out why a design that uses only one professor to fill out assessments comparing three classes might introduce bias. Might comparing the classes against each cause a professor to inflate or deflate ratings to rank the classes rather than objectively assess them? And what about the categorical variable? How many categories does the variable `professor` have? If it has only one, then it is not a variable but a constant. Therefore there are not three groups to compare, but just one: and that just won't work."
+)
+```
+
+
+```{r select-variables, echo=FALSE}
+question("Which _explicit_ variables do we have in the `mussels` data as it is?",
+         answer("Tillamook", correct = TRUE),
+         answer("Newport", correct = TRUE),
+         answer("Petersburg", correct = TRUE),
+         answer("Magadan", correct = TRUE),
+         answer("Tvarminne", correct = TRUE),
+         answer("aam"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         correct = "You found them all!",
+         incorrect = "The column names in the dataset `mussels` are the variables."
+)
+```
+
+```{r how-to-modify-data, echo=FALSE}
+question("Which variables do we actually want to analyze?",
+         answer("location", correct = TRUE),
+         answer("aam", correct = TRUE),
+         answer("country"),
+         answer("city"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         correct = "That's right. Just two variables will do the trick.",
+         incorrect = "You need only two variables as described in the paragraph above these two questions."
+)
+```
+
+
+
+```{r predict-the-finding, echo=FALSE}
+question("Looking at the boxplot you just made, what do you think the results of an ANOVA will be?",
+         answer("Not all the means are the same among locations.", correct = TRUE),
+         answer("All the means are the same among locations.", message = "It's pretty clear from the boxplot that some `location` means are different from at least one other `location` mean."),
+         answer("Petersburg and Tvarminne have the same means", message = "Although an ANOVA tells us whether any pairs means differ from each other, it doesn't tell us which pairs. You need a post hoc test to get that additional information."),
+         answer("There are two groups of `aam` values", message = "Although you can see clear groups in the boxplot, an ANOVA does not tell you anything about groups. It tells you only that some means differ. You can run a post hoc test to find out more about groupings."),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         incorrect = "Unfortunately, no.",
+         correct = "Yes!"
+)
+```
+
+
+```{r what-is-alpha, echo=FALSE}
+question("What is `alpha` in the density plot above?",
+         answer("A value that tells us what is the cutoff for 'alpha variables'"),
+         answer("The family of the colors to use"),
+         answer("Color opacity", correct = TRUE),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         correct = "Good job!",
+         incorrect = "Nope. Try again."
+)
+```
+
+
+```{r where-can-we-use-lm, echo=FALSE}
+question("Which analyses can you do using the `lm` function?",
+         answer("linear regression", correct = TRUE),
+         answer("analysis of variance", correct = TRUE),
+         answer("analysis of covariance", correct = TRUE),
+         answer("Kruskal-Wallis test"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         correct = "`lm` is amazing. And so are you!",
+         incorrect = "Doing a Kruskal-Wallis test with `lm` would be a bit like vacuuming with a wet mop: It's just not done, for very good reasons."
+)
+```
+
+```{r two-functions-to-do-anova, echo=FALSE}
+question("Which two functions can you use to run an analysis of variance?",
+         answer("`stats`", message = "`stats` is a package, not a function."),
+         answer("`aov`", correct = TRUE),
+         answer("`lm`", correct = TRUE),
+         answer("`car`", message = "`car` is a package, not a function."),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         incorrect = "",
+         correct = "You got it!"
+)
+```
+```{r two-packages-to-do-anova, echo=FALSE}
+question("Name two packages that can you use to run an analysis of variance (of course there are more---this is R).",
+         answer("`stats`", correct = TRUE),
+         answer("`anova`", message = "`anova` is a function, not a package."),
+         answer("`lm`", message = "`lm` is a function, not a package."),
+         answer("`car`", correct = TRUE),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         incorrect = "",
+         correct = "All your hard work is paying off!"
+)
+```
+
+
+```{r what-to-report, echo=FALSE}
+question("Which of these numbers do you include when you report the results of an ANOVA?",
+         answer("_p_", correct = TRUE),
+         answer("_F_", correct = TRUE),
+         answer("df", correct = TRUE),
+         answer("the mean squares"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE
+)
+```
+
+
+```{r two-ways-to-summarize-fit, echo=FALSE}
+question("Which lines of code result in a summary of the fit for an ANOVA?",
+         answer("`summary(aov(aam ~ location, data = long_mussels))`", correct = TRUE),
+         answer("`fit <- aov(aam ~ location, data = long_mussels); summary(fit)`", correct = TRUE),
+         answer("`fit <- aov(aam ~ location, data = long_mussels)`"),
+         answer("`aov(aam ~ location, data = long_mussels)`"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         incorrect = "Here's a hint: In R, you can put multiple commands on the same line using `;` to separate them.",
+         correct = "You are amazing!"
+)
+```
+
+
+```{r what-does-tukey-kramer-do, echo=FALSE}
+question("What does the Tukey-Kramer test tell you?",
+         answer("Which pairs of group means are different from each other.", correct = TRUE),
+         answer("Whether the critic Tukey liked the movie _Kramer vs. Kramer_."),
+         answer("Whether the non-parametric ANOVA is also significant."),
+         answer("Whether the ANOVA was significant under the assumptions."),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         correct = "Perfect!",
+         incorrect = "Not correct. Read the paragraph just above this question to find the answer."
+)
+```
+
+
+
+```{r bb, echo=FALSE}
+question("Which are examples of a one-way ANOVA null hypotheses?",
+         answer("Mean tibia length is the same for each age group of children", correct = TRUE),
+         answer("The average monthly electric bill is the same in major cities within the United States", correct = TRUE),
+         answer("The average monthly electric bill in Philadelphia, PA is less than what it is in Burlington, VT"),
+         answer("The average monthly electric bill in Philadelphia, PA is more than what it is in Burlington, VT"),
+         allow_retry = TRUE,
+         random_answer_order = TRUE,
+         incorrect = "Remember that the one-way ANOVA tests whether the means of the measurement variable are teh same for different groups.",
+         correct = "Yes!"
+)
+```
+
+
+
+```{r whentouseANOVA, echo=FALSE}
+question("Select the cases where ANOVA is appropriate",
+         answer("A professor has three classes and you want to compare the professor's assessment of the three classes in comparison with each other"),
+         answer("Three professors have one class each and you want to compare the mean class grades", correct = TRUE),
+         answer("You want to compare white blood cell counts as a response to medication for four groups of patients", correct = TRUE),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         incorrect = "You'll learn about independence between groups later, which matters for an ANOVA, but at this point, using common sense, you might be able to figure out why a design that uses only one professor to fill out assessments comparing three classes might introduce bias. Might comparing the classes against each cause a professor to inflate or deflate ratings to rank the classes rather than objectively assess them? And what about the categorical variable? How many categories does the variable `professor` have? If it has only one, then it is not a variable but a constant. Therefore there are not three groups to compare, but just one: and that just won't work."
+)
+```
+
+
+```{r select-variables, echo=FALSE}
+question("Which _explicit_ variables do we have in the `mussels` data as it is?",
+         answer("Tillamook", correct = TRUE),
+         answer("Newport", correct = TRUE),
+         answer("Petersburg", correct = TRUE),
+         answer("Magadan", correct = TRUE),
+         answer("Tvarminne", correct = TRUE),
+         answer("aam"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         correct = "You found them all!",
+         incorrect = "The column names in the dataset `mussels` are the variables."
+)
+```
+
+```{r how-to-modify-data, echo=FALSE}
+question("Which variables do we actually want to analyze?",
+         answer("location", correct = TRUE),
+         answer("aam", correct = TRUE),
+         answer("country"),
+         answer("city"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         correct = "That's right. Just two variables will do the trick.",
+         incorrect = "You need only two variables as described in the paragraph above these two questions."
+)
+```
+
+
+
+```{r predict-the-finding, echo=FALSE}
+question("Looking at the boxplot you just made, what do you think the results of an ANOVA will be?",
+         answer("Not all the means are the same among locations.", correct = TRUE),
+         answer("All the means are the same among locations.", message = "It's pretty clear from the boxplot that some `location` means are different from at least one other `location` mean."),
+         answer("Petersburg and Tvarminne have the same means", message = "Although an ANOVA tells us whether any pairs means differ from each other, it doesn't tell us which pairs. You need a post hoc test to get that additional information."),
+         answer("There are two groups of `aam` values", message = "Although you can see clear groups in the boxplot, an ANOVA does not tell you anything about groups. It tells you only that some means differ. You can run a post hoc test to find out more about groupings."),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         incorrect = "Unfortunately, no.",
+         correct = "Yes!"
+)
+```
+
+
+```{r what-is-alpha, echo=FALSE}
+question("What is `alpha` in the density plot above?",
+         answer("A value that tells us what is the cutoff for 'alpha variables'"),
+         answer("The family of the colors to use"),
+         answer("Color opacity", correct = TRUE),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         correct = "Good job!",
+         incorrect = "Nope. Try again."
+)
+```
+
+
+```{r where-can-we-use-lm, echo=FALSE}
+question("Which analyses can you do using the `lm` function?",
+         answer("linear regression", correct = TRUE),
+         answer("analysis of variance", correct = TRUE),
+         answer("analysis of covariance", correct = TRUE),
+         answer("Kruskal-Wallis test"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         correct = "`lm` is amazing. And so are you!",
+         incorrect = "Doing a Kruskal-Wallis test with `lm` would be a bit like vacuuming with a wet mop: It's just not done, for very good reasons."
+)
+```
+
+```{r two-functions-to-do-anova, echo=FALSE}
+question("Which two functions can you use to run an analysis of variance?",
+         answer("`stats`", message = "`stats` is a package, not a function."),
+         answer("`aov`", correct = TRUE),
+         answer("`lm`", correct = TRUE),
+         answer("`car`", message = "`car` is a package, not a function."),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         incorrect = "",
+         correct = "You got it!"
+)
+```
+```{r two-packages-to-do-anova, echo=FALSE}
+question("Name two packages that can you use to run an analysis of variance (of course there are more---this is R).",
+         answer("`stats`", correct = TRUE),
+         answer("`anova`", message = "`anova` is a function, not a package."),
+         answer("`lm`", message = "`lm` is a function, not a package."),
+         answer("`car`", correct = TRUE),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         incorrect = "",
+         correct = "All your hard work is paying off!"
+)
+```
+
+
+```{r what-to-report, echo=FALSE}
+question("Which of these numbers do you include when you report the results of an ANOVA?",
+         answer("_p_", correct = TRUE),
+         answer("_F_", correct = TRUE),
+         answer("df", correct = TRUE),
+         answer("the mean squares"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE
+)
+```
+
+
+```{r two-ways-to-summarize-fit, echo=FALSE}
+question("Which lines of code result in a summary of the fit for an ANOVA?",
+         answer("`summary(aov(aam ~ location, data = long_mussels))`", correct = TRUE),
+         answer("`fit <- aov(aam ~ location, data = long_mussels); summary(fit)`", correct = TRUE),
+         answer("`fit <- aov(aam ~ location, data = long_mussels)`"),
+         answer("`aov(aam ~ location, data = long_mussels)`"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         incorrect = "Here's a hint: In R, you can put multiple commands on the same line using `;` to separate them.",
+         correct = "You are amazing!"
+)
+```
+
+
+```{r what-does-tukey-kramer-do, echo=FALSE}
+question("What does the Tukey-Kramer test tell you?",
+         answer("Which pairs of group means are different from each other.", correct = TRUE),
+         answer("Whether the critic Tukey liked the movie _Kramer vs. Kramer_."),
+         answer("Whether the non-parametric ANOVA is also significant."),
+         answer("Whether the ANOVA was significant under the assumptions."),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         correct = "Perfect!",
+         incorrect = "Not correct. Read the paragraph just above this question to find the answer."
+)
+```
+
+
+
+```{r bb, echo=FALSE}
+question("Which are examples of a one-way ANOVA null hypotheses?",
+         answer("Mean tibia length is the same for each age group of children", correct = TRUE),
+         answer("The average monthly electric bill is the same in major cities within the United States", correct = TRUE),
+         answer("The average monthly electric bill in Philadelphia, PA is less than what it is in Burlington, VT"),
+         answer("The average monthly electric bill in Philadelphia, PA is more than what it is in Burlington, VT"),
+         allow_retry = TRUE,
+         random_answer_order = TRUE,
+         incorrect = "Remember that the one-way ANOVA tests whether the means of the measurement variable are teh same for different groups.",
+         correct = "Yes!"
+)
+```
+
+
+
+```{r whentouseANOVA, echo=FALSE}
+question("Select the cases where ANOVA is appropriate",
+         answer("A professor has three classes and you want to compare the professor's assessment of the three classes in comparison with each other"),
+         answer("Three professors have one class each and you want to compare the mean class grades", correct = TRUE),
+         answer("You want to compare white blood cell counts as a response to medication for four groups of patients", correct = TRUE),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         incorrect = "You'll learn about independence between groups later, which matters for an ANOVA, but at this point, using common sense, you might be able to figure out why a design that uses only one professor to fill out assessments comparing three classes might introduce bias. Might comparing the classes against each cause a professor to inflate or deflate ratings to rank the classes rather than objectively assess them? And what about the categorical variable? How many categories does the variable `professor` have? If it has only one, then it is not a variable but a constant. Therefore there are not three groups to compare, but just one: and that just won't work."
+)
+```
+
+
+```{r select-variables, echo=FALSE}
+question("Which _explicit_ variables do we have in the `mussels` data as it is?",
+         answer("Tillamook", correct = TRUE),
+         answer("Newport", correct = TRUE),
+         answer("Petersburg", correct = TRUE),
+         answer("Magadan", correct = TRUE),
+         answer("Tvarminne", correct = TRUE),
+         answer("aam"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         correct = "You found them all!",
+         incorrect = "The column names in the dataset `mussels` are the variables."
+)
+```
+
+```{r how-to-modify-data, echo=FALSE}
+question("Which variables do we actually want to analyze?",
+         answer("location", correct = TRUE),
+         answer("aam", correct = TRUE),
+         answer("country"),
+         answer("city"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         correct = "That's right. Just two variables will do the trick.",
+         incorrect = "You need only two variables as described in the paragraph above these two questions."
+)
+```
+
+
+
+```{r predict-the-finding, echo=FALSE}
+question("Looking at the boxplot you just made, what do you think the results of an ANOVA will be?",
+         answer("Not all the means are the same among locations.", correct = TRUE),
+         answer("All the means are the same among locations.", message = "It's pretty clear from the boxplot that some `location` means are different from at least one other `location` mean."),
+         answer("Petersburg and Tvarminne have the same means", message = "Although an ANOVA tells us whether any pairs means differ from each other, it doesn't tell us which pairs. You need a post hoc test to get that additional information."),
+         answer("There are two groups of `aam` values", message = "Although you can see clear groups in the boxplot, an ANOVA does not tell you anything about groups. It tells you only that some means differ. You can run a post hoc test to find out more about groupings."),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         incorrect = "Unfortunately, no.",
+         correct = "Yes!"
+)
+```
+
+
+```{r what-is-alpha, echo=FALSE}
+question("What is `alpha` in the density plot above?",
+         answer("A value that tells us what is the cutoff for 'alpha variables'"),
+         answer("The family of the colors to use"),
+         answer("Color opacity", correct = TRUE),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         correct = "Good job!",
+         incorrect = "Nope. Try again."
+)
+```
+
+
+```{r where-can-we-use-lm, echo=FALSE}
+question("Which analyses can you do using the `lm` function?",
+         answer("linear regression", correct = TRUE),
+         answer("analysis of variance", correct = TRUE),
+         answer("analysis of covariance", correct = TRUE),
+         answer("Kruskal-Wallis test"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         correct = "`lm` is amazing. And so are you!",
+         incorrect = "Doing a Kruskal-Wallis test with `lm` would be a bit like vacuuming with a wet mop: It's just not done, for very good reasons."
+)
+```
+
+```{r two-functions-to-do-anova, echo=FALSE}
+question("Which two functions can you use to run an analysis of variance?",
+         answer("`stats`", message = "`stats` is a package, not a function."),
+         answer("`aov`", correct = TRUE),
+         answer("`lm`", correct = TRUE),
+         answer("`car`", message = "`car` is a package, not a function."),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         incorrect = "",
+         correct = "You got it!"
+)
+```
+```{r two-packages-to-do-anova, echo=FALSE}
+question("Name two packages that can you use to run an analysis of variance (of course there are more---this is R).",
+         answer("`stats`", correct = TRUE),
+         answer("`anova`", message = "`anova` is a function, not a package."),
+         answer("`lm`", message = "`lm` is a function, not a package."),
+         answer("`car`", correct = TRUE),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         incorrect = "",
+         correct = "All your hard work is paying off!"
+)
+```
+
+
+```{r what-to-report, echo=FALSE}
+question("Which of these numbers do you include when you report the results of an ANOVA?",
+         answer("_p_", correct = TRUE),
+         answer("_F_", correct = TRUE),
+         answer("df", correct = TRUE),
+         answer("the mean squares"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE
+)
+```
+
+
+```{r two-ways-to-summarize-fit, echo=FALSE}
+question("Which lines of code result in a summary of the fit for an ANOVA?",
+         answer("`summary(aov(aam ~ location, data = long_mussels))`", correct = TRUE),
+         answer("`fit <- aov(aam ~ location, data = long_mussels); summary(fit)`", correct = TRUE),
+         answer("`fit <- aov(aam ~ location, data = long_mussels)`"),
+         answer("`aov(aam ~ location, data = long_mussels)`"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         incorrect = "Here's a hint: In R, you can put multiple commands on the same line using `;` to separate them.",
+         correct = "You are amazing!"
+)
+```
+
+
+```{r what-does-tukey-kramer-do, echo=FALSE}
+question("What does the Tukey-Kramer test tell you?",
+         answer("Which pairs of group means are different from each other.", correct = TRUE),
+         answer("Whether the critic Tukey liked the movie _Kramer vs. Kramer_."),
+         answer("Whether the non-parametric ANOVA is also significant."),
+         answer("Whether the ANOVA was significant under the assumptions."),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         correct = "Perfect!",
+         incorrect = "Not correct. Read the paragraph just above this question to find the answer."
+)
+```
+
+
+
+```{r bb, echo=FALSE}
+question("Which are examples of a one-way ANOVA null hypotheses?",
+         answer("Mean tibia length is the same for each age group of children", correct = TRUE),
+         answer("The average monthly electric bill is the same in major cities within the United States", correct = TRUE),
+         answer("The average monthly electric bill in Philadelphia, PA is less than what it is in Burlington, VT"),
+         answer("The average monthly electric bill in Philadelphia, PA is more than what it is in Burlington, VT"),
+         allow_retry = TRUE,
+         random_answer_order = TRUE,
+         incorrect = "Remember that the one-way ANOVA tests whether the means of the measurement variable are teh same for different groups.",
+         correct = "Yes!"
+)
+```
+
+
+
+```{r whentouseANOVA, echo=FALSE}
+question("Select the cases where ANOVA is appropriate",
+         answer("A professor has three classes and you want to compare the professor's assessment of the three classes in comparison with each other"),
+         answer("Three professors have one class each and you want to compare the mean class grades", correct = TRUE),
+         answer("You want to compare white blood cell counts as a response to medication for four groups of patients", correct = TRUE),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         incorrect = "You'll learn about independence between groups later, which matters for an ANOVA, but at this point, using common sense, you might be able to figure out why a design that uses only one professor to fill out assessments comparing three classes might introduce bias. Might comparing the classes against each cause a professor to inflate or deflate ratings to rank the classes rather than objectively assess them? And what about the categorical variable? How many categories does the variable `professor` have? If it has only one, then it is not a variable but a constant. Therefore there are not three groups to compare, but just one: and that just won't work."
+)
+```
+
+
+```{r select-variables, echo=FALSE}
+question("Which _explicit_ variables do we have in the `mussels` data as it is?",
+         answer("Tillamook", correct = TRUE),
+         answer("Newport", correct = TRUE),
+         answer("Petersburg", correct = TRUE),
+         answer("Magadan", correct = TRUE),
+         answer("Tvarminne", correct = TRUE),
+         answer("aam"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         correct = "You found them all!",
+         incorrect = "The column names in the dataset `mussels` are the variables."
+)
+```
+
+```{r how-to-modify-data, echo=FALSE}
+question("Which variables do we actually want to analyze?",
+         answer("location", correct = TRUE),
+         answer("aam", correct = TRUE),
+         answer("country"),
+         answer("city"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         correct = "That's right. Just two variables will do the trick.",
+         incorrect = "You need only two variables as described in the paragraph above these two questions."
+)
+```
+
+
+
+```{r predict-the-finding, echo=FALSE}
+question("Looking at the boxplot you just made, what do you think the results of an ANOVA will be?",
+         answer("Not all the means are the same among locations.", correct = TRUE),
+         answer("All the means are the same among locations.", message = "It's pretty clear from the boxplot that some `location` means are different from at least one other `location` mean."),
+         answer("Petersburg and Tvarminne have the same means", message = "Although an ANOVA tells us whether any pairs means differ from each other, it doesn't tell us which pairs. You need a post hoc test to get that additional information."),
+         answer("There are two groups of `aam` values", message = "Although you can see clear groups in the boxplot, an ANOVA does not tell you anything about groups. It tells you only that some means differ. You can run a post hoc test to find out more about groupings."),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         incorrect = "Unfortunately, no.",
+         correct = "Yes!"
+)
+```
+
+
+```{r what-is-alpha, echo=FALSE}
+question("What is `alpha` in the density plot above?",
+         answer("A value that tells us what is the cutoff for 'alpha variables'"),
+         answer("The family of the colors to use"),
+         answer("Color opacity", correct = TRUE),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         correct = "Good job!",
+         incorrect = "Nope. Try again."
+)
+```
+
+
+```{r where-can-we-use-lm, echo=FALSE}
+question("Which analyses can you do using the `lm` function?",
+         answer("linear regression", correct = TRUE),
+         answer("analysis of variance", correct = TRUE),
+         answer("analysis of covariance", correct = TRUE),
+         answer("Kruskal-Wallis test"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         correct = "`lm` is amazing. And so are you!",
+         incorrect = "Doing a Kruskal-Wallis test with `lm` would be a bit like vacuuming with a wet mop: It's just not done, for very good reasons."
+)
+```
+
+```{r two-functions-to-do-anova, echo=FALSE}
+question("Which two functions can you use to run an analysis of variance?",
+         answer("`stats`", message = "`stats` is a package, not a function."),
+         answer("`aov`", correct = TRUE),
+         answer("`lm`", correct = TRUE),
+         answer("`car`", message = "`car` is a package, not a function."),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         incorrect = "",
+         correct = "You got it!"
+)
+```
+```{r two-packages-to-do-anova, echo=FALSE}
+question("Name two packages that can you use to run an analysis of variance (of course there are more---this is R).",
+         answer("`stats`", correct = TRUE),
+         answer("`anova`", message = "`anova` is a function, not a package."),
+         answer("`lm`", message = "`lm` is a function, not a package."),
+         answer("`car`", correct = TRUE),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         incorrect = "",
+         correct = "All your hard work is paying off!"
+)
+```
+
+
+```{r what-to-report, echo=FALSE}
+question("Which of these numbers do you include when you report the results of an ANOVA?",
+         answer("_p_", correct = TRUE),
+         answer("_F_", correct = TRUE),
+         answer("df", correct = TRUE),
+         answer("the mean squares"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE
+)
+```
+
+
+```{r two-ways-to-summarize-fit, echo=FALSE}
+question("Which lines of code result in a summary of the fit for an ANOVA?",
+         answer("`summary(aov(aam ~ location, data = long_mussels))`", correct = TRUE),
+         answer("`fit <- aov(aam ~ location, data = long_mussels); summary(fit)`", correct = TRUE),
+         answer("`fit <- aov(aam ~ location, data = long_mussels)`"),
+         answer("`aov(aam ~ location, data = long_mussels)`"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         incorrect = "Here's a hint: In R, you can put multiple commands on the same line using `;` to separate them.",
+         correct = "You are amazing!"
+)
+```
+
+
+```{r what-does-tukey-kramer-do, echo=FALSE}
+question("What does the Tukey-Kramer test tell you?",
+         answer("Which pairs of group means are different from each other.", correct = TRUE),
+         answer("Whether the critic Tukey liked the movie _Kramer vs. Kramer_."),
+         answer("Whether the non-parametric ANOVA is also significant."),
+         answer("Whether the ANOVA was significant under the assumptions."),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         correct = "Perfect!",
+         incorrect = "Not correct. Read the paragraph just above this question to find the answer."
+)
+```
+
+
+
+```{r bb, echo=FALSE}
+question("Which are examples of a one-way ANOVA null hypotheses?",
+         answer("Mean tibia length is the same for each age group of children", correct = TRUE),
+         answer("The average monthly electric bill is the same in major cities within the United States", correct = TRUE),
+         answer("The average monthly electric bill in Philadelphia, PA is less than what it is in Burlington, VT"),
+         answer("The average monthly electric bill in Philadelphia, PA is more than what it is in Burlington, VT"),
+         allow_retry = TRUE,
+         random_answer_order = TRUE,
+         incorrect = "Remember that the one-way ANOVA tests whether the means of the measurement variable are teh same for different groups.",
+         correct = "Yes!"
+)
+```
+
+
+
+```{r whentouseANOVA, echo=FALSE}
+question("Select the cases where ANOVA is appropriate",
+         answer("A professor has three classes and you want to compare the professor's assessment of the three classes in comparison with each other"),
+         answer("Three professors have one class each and you want to compare the mean class grades", correct = TRUE),
+         answer("You want to compare white blood cell counts as a response to medication for four groups of patients", correct = TRUE),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         incorrect = "You'll learn about independence between groups later, which matters for an ANOVA, but at this point, using common sense, you might be able to figure out why a design that uses only one professor to fill out assessments comparing three classes might introduce bias. Might comparing the classes against each cause a professor to inflate or deflate ratings to rank the classes rather than objectively assess them? And what about the categorical variable? How many categories does the variable `professor` have? If it has only one, then it is not a variable but a constant. Therefore there are not three groups to compare, but just one: and that just won't work."
+)
+```
+
+
+```{r select-variables, echo=FALSE}
+question("Which _explicit_ variables do we have in the `mussels` data as it is?",
+         answer("Tillamook", correct = TRUE),
+         answer("Newport", correct = TRUE),
+         answer("Petersburg", correct = TRUE),
+         answer("Magadan", correct = TRUE),
+         answer("Tvarminne", correct = TRUE),
+         answer("aam"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         correct = "You found them all!",
+         incorrect = "The column names in the dataset `mussels` are the variables."
+)
+```
+
+```{r how-to-modify-data, echo=FALSE}
+question("Which variables do we actually want to analyze?",
+         answer("location", correct = TRUE),
+         answer("aam", correct = TRUE),
+         answer("country"),
+         answer("city"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         correct = "That's right. Just two variables will do the trick.",
+         incorrect = "You need only two variables as described in the paragraph above these two questions."
+)
+```
+
+
+
+```{r predict-the-finding, echo=FALSE}
+question("Looking at the boxplot you just made, what do you think the results of an ANOVA will be?",
+         answer("Not all the means are the same among locations.", correct = TRUE),
+         answer("All the means are the same among locations.", message = "It's pretty clear from the boxplot that some `location` means are different from at least one other `location` mean."),
+         answer("Petersburg and Tvarminne have the same means", message = "Although an ANOVA tells us whether any pairs means differ from each other, it doesn't tell us which pairs. You need a post hoc test to get that additional information."),
+         answer("There are two groups of `aam` values", message = "Although you can see clear groups in the boxplot, an ANOVA does not tell you anything about groups. It tells you only that some means differ. You can run a post hoc test to find out more about groupings."),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         incorrect = "Unfortunately, no.",
+         correct = "Yes!"
+)
+```
+
+
+```{r what-is-alpha, echo=FALSE}
+question("What is `alpha` in the density plot above?",
+         answer("A value that tells us what is the cutoff for 'alpha variables'"),
+         answer("The family of the colors to use"),
+         answer("Color opacity", correct = TRUE),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         correct = "Good job!",
+         incorrect = "Nope. Try again."
+)
+```
+
+
+```{r where-can-we-use-lm, echo=FALSE}
+question("Which analyses can you do using the `lm` function?",
+         answer("linear regression", correct = TRUE),
+         answer("analysis of variance", correct = TRUE),
+         answer("analysis of covariance", correct = TRUE),
+         answer("Kruskal-Wallis test"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         correct = "`lm` is amazing. And so are you!",
+         incorrect = "Doing a Kruskal-Wallis test with `lm` would be a bit like vacuuming with a wet mop: It's just not done, for very good reasons."
+)
+```
+
+```{r two-functions-to-do-anova, echo=FALSE}
+question("Which two functions can you use to run an analysis of variance?",
+         answer("`stats`", message = "`stats` is a package, not a function."),
+         answer("`aov`", correct = TRUE),
+         answer("`lm`", correct = TRUE),
+         answer("`car`", message = "`car` is a package, not a function."),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         incorrect = "",
+         correct = "You got it!"
+)
+```
+```{r two-packages-to-do-anova, echo=FALSE}
+question("Name two packages that can you use to run an analysis of variance (of course there are more---this is R).",
+         answer("`stats`", correct = TRUE),
+         answer("`anova`", message = "`anova` is a function, not a package."),
+         answer("`lm`", message = "`lm` is a function, not a package."),
+         answer("`car`", correct = TRUE),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         incorrect = "",
+         correct = "All your hard work is paying off!"
+)
+```
+
+
+```{r what-to-report, echo=FALSE}
+question("Which of these numbers do you include when you report the results of an ANOVA?",
+         answer("_p_", correct = TRUE),
+         answer("_F_", correct = TRUE),
+         answer("df", correct = TRUE),
+         answer("the mean squares"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE
+)
+```
+
+
+```{r two-ways-to-summarize-fit, echo=FALSE}
+question("Which lines of code result in a summary of the fit for an ANOVA?",
+         answer("`summary(aov(aam ~ location, data = long_mussels))`", correct = TRUE),
+         answer("`fit <- aov(aam ~ location, data = long_mussels); summary(fit)`", correct = TRUE),
+         answer("`fit <- aov(aam ~ location, data = long_mussels)`"),
+         answer("`aov(aam ~ location, data = long_mussels)`"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         incorrect = "Here's a hint: In R, you can put multiple commands on the same line using `;` to separate them.",
+         correct = "You are amazing!"
+)
+```
+
+
+```{r what-does-tukey-kramer-do, echo=FALSE}
+question("What does the Tukey-Kramer test tell you?",
+         answer("Which pairs of group means are different from each other.", correct = TRUE),
+         answer("Whether the critic Tukey liked the movie _Kramer vs. Kramer_."),
+         answer("Whether the non-parametric ANOVA is also significant."),
+         answer("Whether the ANOVA was significant under the assumptions."),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         correct = "Perfect!",
+         incorrect = "Not correct. Read the paragraph just above this question to find the answer."
+)
+```
+
+
+
+```{r bb, echo=FALSE}
+question("Which are examples of a one-way ANOVA null hypotheses?",
+         answer("Mean tibia length is the same for each age group of children", correct = TRUE),
+         answer("The average monthly electric bill is the same in major cities within the United States", correct = TRUE),
+         answer("The average monthly electric bill in Philadelphia, PA is less than what it is in Burlington, VT"),
+         answer("The average monthly electric bill in Philadelphia, PA is more than what it is in Burlington, VT"),
+         allow_retry = TRUE,
+         random_answer_order = TRUE,
+         incorrect = "Remember that the one-way ANOVA tests whether the means of the measurement variable are teh same for different groups.",
+         correct = "Yes!"
+)
+```
+
+
+
+```{r whentouseANOVA, echo=FALSE}
+question("Select the cases where ANOVA is appropriate",
+         answer("A professor has three classes and you want to compare the professor's assessment of the three classes in comparison with each other"),
+         answer("Three professors have one class each and you want to compare the mean class grades", correct = TRUE),
+         answer("You want to compare white blood cell counts as a response to medication for four groups of patients", correct = TRUE),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         incorrect = "You'll learn about independence between groups later, which matters for an ANOVA, but at this point, using common sense, you might be able to figure out why a design that uses only one professor to fill out assessments comparing three classes might introduce bias. Might comparing the classes against each cause a professor to inflate or deflate ratings to rank the classes rather than objectively assess them? And what about the categorical variable? How many categories does the variable `professor` have? If it has only one, then it is not a variable but a constant. Therefore there are not three groups to compare, but just one: and that just won't work."
+)
+```
+
+
+```{r select-variables, echo=FALSE}
+question("Which _explicit_ variables do we have in the `mussels` data as it is?",
+         answer("Tillamook", correct = TRUE),
+         answer("Newport", correct = TRUE),
+         answer("Petersburg", correct = TRUE),
+         answer("Magadan", correct = TRUE),
+         answer("Tvarminne", correct = TRUE),
+         answer("aam"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         correct = "You found them all!",
+         incorrect = "The column names in the dataset `mussels` are the variables."
+)
+```
+
+```{r how-to-modify-data, echo=FALSE}
+question("Which variables do we actually want to analyze?",
+         answer("location", correct = TRUE),
+         answer("aam", correct = TRUE),
+         answer("country"),
+         answer("city"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         correct = "That's right. Just two variables will do the trick.",
+         incorrect = "You need only two variables as described in the paragraph above these two questions."
+)
+```
+
+
+
+```{r predict-the-finding, echo=FALSE}
+question("Looking at the boxplot you just made, what do you think the results of an ANOVA will be?",
+         answer("Not all the means are the same among locations.", correct = TRUE),
+         answer("All the means are the same among locations.", message = "It's pretty clear from the boxplot that some `location` means are different from at least one other `location` mean."),
+         answer("Petersburg and Tvarminne have the same means", message = "Although an ANOVA tells us whether any pairs means differ from each other, it doesn't tell us which pairs. You need a post hoc test to get that additional information."),
+         answer("There are two groups of `aam` values", message = "Although you can see clear groups in the boxplot, an ANOVA does not tell you anything about groups. It tells you only that some means differ. You can run a post hoc test to find out more about groupings."),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         incorrect = "Unfortunately, no.",
+         correct = "Yes!"
+)
+```
+
+
+```{r what-is-alpha, echo=FALSE}
+question("What is `alpha` in the density plot above?",
+         answer("A value that tells us what is the cutoff for 'alpha variables'"),
+         answer("The family of the colors to use"),
+         answer("Color opacity", correct = TRUE),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         correct = "Good job!",
+         incorrect = "Nope. Try again."
+)
+```
+
+
+```{r where-can-we-use-lm, echo=FALSE}
+question("Which analyses can you do using the `lm` function?",
+         answer("linear regression", correct = TRUE),
+         answer("analysis of variance", correct = TRUE),
+         answer("analysis of covariance", correct = TRUE),
+         answer("Kruskal-Wallis test"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         correct = "`lm` is amazing. And so are you!",
+         incorrect = "Doing a Kruskal-Wallis test with `lm` would be a bit like vacuuming with a wet mop: It's just not done, for very good reasons."
+)
+```
+
+```{r two-functions-to-do-anova, echo=FALSE}
+question("Which two functions can you use to run an analysis of variance?",
+         answer("`stats`", message = "`stats` is a package, not a function."),
+         answer("`aov`", correct = TRUE),
+         answer("`lm`", correct = TRUE),
+         answer("`car`", message = "`car` is a package, not a function."),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         incorrect = "",
+         correct = "You got it!"
+)
+```
+```{r two-packages-to-do-anova, echo=FALSE}
+question("Name two packages that can you use to run an analysis of variance (of course there are more---this is R).",
+         answer("`stats`", correct = TRUE),
+         answer("`anova`", message = "`anova` is a function, not a package."),
+         answer("`lm`", message = "`lm` is a function, not a package."),
+         answer("`car`", correct = TRUE),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         incorrect = "",
+         correct = "All your hard work is paying off!"
+)
+```
+
+
+```{r what-to-report, echo=FALSE}
+question("Which of these numbers do you include when you report the results of an ANOVA?",
+         answer("_p_", correct = TRUE),
+         answer("_F_", correct = TRUE),
+         answer("df", correct = TRUE),
+         answer("the mean squares"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE
+)
+```
+
+
+```{r two-ways-to-summarize-fit, echo=FALSE}
+question("Which lines of code result in a summary of the fit for an ANOVA?",
+         answer("`summary(aov(aam ~ location, data = long_mussels))`", correct = TRUE),
+         answer("`fit <- aov(aam ~ location, data = long_mussels); summary(fit)`", correct = TRUE),
+         answer("`fit <- aov(aam ~ location, data = long_mussels)`"),
+         answer("`aov(aam ~ location, data = long_mussels)`"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         incorrect = "Here's a hint: In R, you can put multiple commands on the same line using `;` to separate them.",
+         correct = "You are amazing!"
+)
+```
+
+
+```{r what-does-tukey-kramer-do, echo=FALSE}
+question("What does the Tukey-Kramer test tell you?",
+         answer("Which pairs of group means are different from each other.", correct = TRUE),
+         answer("Whether the critic Tukey liked the movie _Kramer vs. Kramer_."),
+         answer("Whether the non-parametric ANOVA is also significant."),
+         answer("Whether the ANOVA was significant under the assumptions."),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         correct = "Perfect!",
+         incorrect = "Not correct. Read the paragraph just above this question to find the answer."
+)
+```
+
+
+
+```{r bb, echo=FALSE}
+question("Which are examples of a one-way ANOVA null hypotheses?",
+         answer("Mean tibia length is the same for each age group of children", correct = TRUE),
+         answer("The average monthly electric bill is the same in major cities within the United States", correct = TRUE),
+         answer("The average monthly electric bill in Philadelphia, PA is less than what it is in Burlington, VT"),
+         answer("The average monthly electric bill in Philadelphia, PA is more than what it is in Burlington, VT"),
+         allow_retry = TRUE,
+         random_answer_order = TRUE,
+         incorrect = "Remember that the one-way ANOVA tests whether the means of the measurement variable are teh same for different groups.",
+         correct = "Yes!"
+)
+```
+
+
+
+```{r whentouseANOVA, echo=FALSE}
+question("Select the cases where ANOVA is appropriate",
+         answer("A professor has three classes and you want to compare the professor's assessment of the three classes in comparison with each other"),
+         answer("Three professors have one class each and you want to compare the mean class grades", correct = TRUE),
+         answer("You want to compare white blood cell counts as a response to medication for four groups of patients", correct = TRUE),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         incorrect = "You'll learn about independence between groups later, which matters for an ANOVA, but at this point, using common sense, you might be able to figure out why a design that uses only one professor to fill out assessments comparing three classes might introduce bias. Might comparing the classes against each cause a professor to inflate or deflate ratings to rank the classes rather than objectively assess them? And what about the categorical variable? How many categories does the variable `professor` have? If it has only one, then it is not a variable but a constant. Therefore there are not three groups to compare, but just one: and that just won't work."
+)
+```
+
+
+```{r select-variables, echo=FALSE}
+question("Which _explicit_ variables do we have in the `mussels` data as it is?",
+         answer("Tillamook", correct = TRUE),
+         answer("Newport", correct = TRUE),
+         answer("Petersburg", correct = TRUE),
+         answer("Magadan", correct = TRUE),
+         answer("Tvarminne", correct = TRUE),
+         answer("aam"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         correct = "You found them all!",
+         incorrect = "The column names in the dataset `mussels` are the variables."
+)
+```
+
+```{r how-to-modify-data, echo=FALSE}
+question("Which variables do we actually want to analyze?",
+         answer("location", correct = TRUE),
+         answer("aam", correct = TRUE),
+         answer("country"),
+         answer("city"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         correct = "That's right. Just two variables will do the trick.",
+         incorrect = "You need only two variables as described in the paragraph above these two questions."
+)
+```
+
+
+
+```{r predict-the-finding, echo=FALSE}
+question("Looking at the boxplot you just made, what do you think the results of an ANOVA will be?",
+         answer("Not all the means are the same among locations.", correct = TRUE),
+         answer("All the means are the same among locations.", message = "It's pretty clear from the boxplot that some `location` means are different from at least one other `location` mean."),
+         answer("Petersburg and Tvarminne have the same means", message = "Although an ANOVA tells us whether any pairs means differ from each other, it doesn't tell us which pairs. You need a post hoc test to get that additional information."),
+         answer("There are two groups of `aam` values", message = "Although you can see clear groups in the boxplot, an ANOVA does not tell you anything about groups. It tells you only that some means differ. You can run a post hoc test to find out more about groupings."),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         incorrect = "Unfortunately, no.",
+         correct = "Yes!"
+)
+```
+
+
+```{r what-is-alpha, echo=FALSE}
+question("What is `alpha` in the density plot above?",
+         answer("A value that tells us what is the cutoff for 'alpha variables'"),
+         answer("The family of the colors to use"),
+         answer("Color opacity", correct = TRUE),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         correct = "Good job!",
+         incorrect = "Nope. Try again."
+)
+```
+
+
+```{r where-can-we-use-lm, echo=FALSE}
+question("Which analyses can you do using the `lm` function?",
+         answer("linear regression", correct = TRUE),
+         answer("analysis of variance", correct = TRUE),
+         answer("analysis of covariance", correct = TRUE),
+         answer("Kruskal-Wallis test"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         correct = "`lm` is amazing. And so are you!",
+         incorrect = "Doing a Kruskal-Wallis test with `lm` would be a bit like vacuuming with a wet mop: It's just not done, for very good reasons."
+)
+```
+
+```{r two-functions-to-do-anova, echo=FALSE}
+question("Which two functions can you use to run an analysis of variance?",
+         answer("`stats`", message = "`stats` is a package, not a function."),
+         answer("`aov`", correct = TRUE),
+         answer("`lm`", correct = TRUE),
+         answer("`car`", message = "`car` is a package, not a function."),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         incorrect = "",
+         correct = "You got it!"
+)
+```
+```{r two-packages-to-do-anova, echo=FALSE}
+question("Name two packages that can you use to run an analysis of variance (of course there are more---this is R).",
+         answer("`stats`", correct = TRUE),
+         answer("`anova`", message = "`anova` is a function, not a package."),
+         answer("`lm`", message = "`lm` is a function, not a package."),
+         answer("`car`", correct = TRUE),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         incorrect = "",
+         correct = "All your hard work is paying off!"
+)
+```
+
+
+```{r what-to-report, echo=FALSE}
+question("Which of these numbers do you include when you report the results of an ANOVA?",
+         answer("_p_", correct = TRUE),
+         answer("_F_", correct = TRUE),
+         answer("df", correct = TRUE),
+         answer("the mean squares"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE
+)
+```
+
+
+```{r two-ways-to-summarize-fit, echo=FALSE}
+question("Which lines of code result in a summary of the fit for an ANOVA?",
+         answer("`summary(aov(aam ~ location, data = long_mussels))`", correct = TRUE),
+         answer("`fit <- aov(aam ~ location, data = long_mussels); summary(fit)`", correct = TRUE),
+         answer("`fit <- aov(aam ~ location, data = long_mussels)`"),
+         answer("`aov(aam ~ location, data = long_mussels)`"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         incorrect = "Here's a hint: In R, you can put multiple commands on the same line using `;` to separate them.",
+         correct = "You are amazing!"
+)
+```
+
+
+```{r what-does-tukey-kramer-do, echo=FALSE}
+question("What does the Tukey-Kramer test tell you?",
+         answer("Which pairs of group means are different from each other.", correct = TRUE),
+         answer("Whether the critic Tukey liked the movie _Kramer vs. Kramer_."),
+         answer("Whether the non-parametric ANOVA is also significant."),
+         answer("Whether the ANOVA was significant under the assumptions."),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         correct = "Perfect!",
+         incorrect = "Not correct. Read the paragraph just above this question to find the answer."
+)
+```
+
+
+```{r bb, echo=FALSE}
+question("Which are examples of a one-way ANOVA null hypotheses?",
+         answer("Mean tibia length is the same for each age group of children", correct = TRUE),
+         answer("The average monthly electric bill is the same in major cities within the United States", correct = TRUE),
+         answer("The average monthly electric bill in Philadelphia, PA is less than what it is in Burlington, VT"),
+         answer("The average monthly electric bill in Philadelphia, PA is more than what it is in Burlington, VT"),
+         allow_retry = TRUE,
+         random_answer_order = TRUE,
+         incorrect = "Remember that the one-way ANOVA tests whether the means of the measurement variable are teh same for different groups.",
+         correct = "Yes!"
+)
+```
+
+
+
+```{r whentouseANOVA, echo=FALSE}
+question("Select the cases where ANOVA is appropriate",
+         answer("A professor has three classes and you want to compare the professor's assessment of the three classes in comparison with each other"),
+         answer("Three professors have one class each and you want to compare the mean class grades", correct = TRUE),
+         answer("You want to compare white blood cell counts as a response to medication for four groups of patients", correct = TRUE),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         incorrect = "You'll learn about independence between groups later, which matters for an ANOVA, but at this point, using common sense, you might be able to figure out why a design that uses only one professor to fill out assessments comparing three classes might introduce bias. Might comparing the classes against each cause a professor to inflate or deflate ratings to rank the classes rather than objectively assess them? And what about the categorical variable? How many categories does the variable `professor` have? If it has only one, then it is not a variable but a constant. Therefore there are not three groups to compare, but just one: and that just won't work."
+)
+```
+
+
+```{r select-variables, echo=FALSE}
+question("Which _explicit_ variables do we have in the `mussels` data as it is?",
+         answer("Tillamook", correct = TRUE),
+         answer("Newport", correct = TRUE),
+         answer("Petersburg", correct = TRUE),
+         answer("Magadan", correct = TRUE),
+         answer("Tvarminne", correct = TRUE),
+         answer("aam"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         correct = "You found them all!",
+         incorrect = "The column names in the dataset `mussels` are the variables."
+)
+```
+
+```{r how-to-modify-data, echo=FALSE}
+question("Which variables do we actually want to analyze?",
+         answer("location", correct = TRUE),
+         answer("aam", correct = TRUE),
+         answer("country"),
+         answer("city"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         correct = "That's right. Just two variables will do the trick.",
+         incorrect = "You need only two variables as described in the paragraph above these two questions."
+)
+```
+
+
+
+```{r predict-the-finding, echo=FALSE}
+question("Looking at the boxplot you just made, what do you think the results of an ANOVA will be?",
+         answer("Not all the means are the same among locations.", correct = TRUE),
+         answer("All the means are the same among locations.", message = "It's pretty clear from the boxplot that some `location` means are different from at least one other `location` mean."),
+         answer("Petersburg and Tvarminne have the same means", message = "Although an ANOVA tells us whether any pairs means differ from each other, it doesn't tell us which pairs. You need a post hoc test to get that additional information."),
+         answer("There are two groups of `aam` values", message = "Although you can see clear groups in the boxplot, an ANOVA does not tell you anything about groups. It tells you only that some means differ. You can run a post hoc test to find out more about groupings."),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         incorrect = "Unfortunately, no.",
+         correct = "Yes!"
+)
+```
+
+
+```{r what-is-alpha, echo=FALSE}
+question("What is `alpha` in the density plot above?",
+         answer("A value that tells us what is the cutoff for 'alpha variables'"),
+         answer("The family of the colors to use"),
+         answer("Color opacity", correct = TRUE),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         correct = "Good job!",
+         incorrect = "Nope. Try again."
+)
+```
+
+
+```{r where-can-we-use-lm, echo=FALSE}
+question("Which analyses can you do using the `lm` function?",
+         answer("linear regression", correct = TRUE),
+         answer("analysis of variance", correct = TRUE),
+         answer("analysis of covariance", correct = TRUE),
+         answer("Kruskal-Wallis test"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         correct = "`lm` is amazing. And so are you!",
+         incorrect = "Doing a Kruskal-Wallis test with `lm` would be a bit like vacuuming with a wet mop: It's just not done, for very good reasons."
+)
+```
+
+```{r two-functions-to-do-anova, echo=FALSE}
+question("Which two functions can you use to run an analysis of variance?",
+         answer("`stats`", message = "`stats` is a package, not a function."),
+         answer("`aov`", correct = TRUE),
+         answer("`lm`", correct = TRUE),
+         answer("`car`", message = "`car` is a package, not a function."),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         incorrect = "",
+         correct = "You got it!"
+)
+```
+```{r two-packages-to-do-anova, echo=FALSE}
+question("Name two packages that can you use to run an analysis of variance (of course there are more---this is R).",
+         answer("`stats`", correct = TRUE),
+         answer("`anova`", message = "`anova` is a function, not a package."),
+         answer("`lm`", message = "`lm` is a function, not a package."),
+         answer("`car`", correct = TRUE),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         incorrect = "",
+         correct = "All your hard work is paying off!"
+)
+```
+
+
+```{r what-to-report, echo=FALSE}
+question("Which of these numbers do you include when you report the results of an ANOVA?",
+         answer("_p_", correct = TRUE),
+         answer("_F_", correct = TRUE),
+         answer("df", correct = TRUE),
+         answer("the mean squares"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE
+)
+```
+
+
+```{r two-ways-to-summarize-fit, echo=FALSE}
+question("Which lines of code result in a summary of the fit for an ANOVA?",
+         answer("`summary(aov(aam ~ location, data = long_mussels))`", correct = TRUE),
+         answer("`fit <- aov(aam ~ location, data = long_mussels); summary(fit)`", correct = TRUE),
+         answer("`fit <- aov(aam ~ location, data = long_mussels)`"),
+         answer("`aov(aam ~ location, data = long_mussels)`"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         incorrect = "Here's a hint: In R, you can put multiple commands on the same line using `;` to separate them.",
+         correct = "You are amazing!"
+)
+```
+
+
+```{r what-does-tukey-kramer-do, echo=FALSE}
+question("What does the Tukey-Kramer test tell you?",
+         answer("Which pairs of group means are different from each other.", correct = TRUE),
+         answer("Whether the critic Tukey liked the movie _Kramer vs. Kramer_."),
+         answer("Whether the non-parametric ANOVA is also significant."),
+         answer("Whether the ANOVA was significant under the assumptions."),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         correct = "Perfect!",
+         incorrect = "Not correct. Read the paragraph just above this question to find the answer."
+)
+```
+
+
+```{r bb, echo=FALSE}
+question("Which are examples of a one-way ANOVA null hypotheses?",
+         answer("Mean tibia length is the same for each age group of children", correct = TRUE),
+         answer("The average monthly electric bill is the same in major cities within the United States", correct = TRUE),
+         answer("The average monthly electric bill in Philadelphia, PA is less than what it is in Burlington, VT"),
+         answer("The average monthly electric bill in Philadelphia, PA is more than what it is in Burlington, VT"),
+         allow_retry = TRUE,
+         random_answer_order = TRUE,
+         incorrect = "Remember that the one-way ANOVA tests whether the means of the measurement variable are teh same for different groups.",
+         correct = "Yes!"
+)
+```
+
+
+
+```{r whentouseANOVA, echo=FALSE}
+question("Select the cases where ANOVA is appropriate",
+         answer("A professor has three classes and you want to compare the professor's assessment of the three classes in comparison with each other"),
+         answer("Three professors have one class each and you want to compare the mean class grades", correct = TRUE),
+         answer("You want to compare white blood cell counts as a response to medication for four groups of patients", correct = TRUE),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         incorrect = "You'll learn about independence between groups later, which matters for an ANOVA, but at this point, using common sense, you might be able to figure out why a design that uses only one professor to fill out assessments comparing three classes might introduce bias. Might comparing the classes against each cause a professor to inflate or deflate ratings to rank the classes rather than objectively assess them? And what about the categorical variable? How many categories does the variable `professor` have? If it has only one, then it is not a variable but a constant. Therefore there are not three groups to compare, but just one: and that just won't work."
+)
+```
+
+
+```{r select-variables, echo=FALSE}
+question("Which _explicit_ variables do we have in the `mussels` data as it is?",
+         answer("Tillamook", correct = TRUE),
+         answer("Newport", correct = TRUE),
+         answer("Petersburg", correct = TRUE),
+         answer("Magadan", correct = TRUE),
+         answer("Tvarminne", correct = TRUE),
+         answer("aam"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         correct = "You found them all!",
+         incorrect = "The column names in the dataset `mussels` are the variables."
+)
+```
+
+```{r how-to-modify-data, echo=FALSE}
+question("Which variables do we actually want to analyze?",
+         answer("location", correct = TRUE),
+         answer("aam", correct = TRUE),
+         answer("country"),
+         answer("city"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         correct = "That's right. Just two variables will do the trick.",
+         incorrect = "You need only two variables as described in the paragraph above these two questions."
+)
+```
+
+
+
+```{r predict-the-finding, echo=FALSE}
+question("Looking at the boxplot you just made, what do you think the results of an ANOVA will be?",
+         answer("Not all the means are the same among locations.", correct = TRUE),
+         answer("All the means are the same among locations.", message = "It's pretty clear from the boxplot that some `location` means are different from at least one other `location` mean."),
+         answer("Petersburg and Tvarminne have the same means", message = "Although an ANOVA tells us whether any pairs means differ from each other, it doesn't tell us which pairs. You need a post hoc test to get that additional information."),
+         answer("There are two groups of `aam` values", message = "Although you can see clear groups in the boxplot, an ANOVA does not tell you anything about groups. It tells you only that some means differ. You can run a post hoc test to find out more about groupings."),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         incorrect = "Unfortunately, no.",
+         correct = "Yes!"
+)
+```
+
+
+```{r what-is-alpha, echo=FALSE}
+question("What is `alpha` in the density plot above?",
+         answer("A value that tells us what is the cutoff for 'alpha variables'"),
+         answer("The family of the colors to use"),
+         answer("Color opacity", correct = TRUE),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         correct = "Good job!",
+         incorrect = "Nope. Try again."
+)
+```
+
+
+```{r where-can-we-use-lm, echo=FALSE}
+question("Which analyses can you do using the `lm` function?",
+         answer("linear regression", correct = TRUE),
+         answer("analysis of variance", correct = TRUE),
+         answer("analysis of covariance", correct = TRUE),
+         answer("Kruskal-Wallis test"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         correct = "`lm` is amazing. And so are you!",
+         incorrect = "Doing a Kruskal-Wallis test with `lm` would be a bit like vacuuming with a wet mop: It's just not done, for very good reasons."
+)
+```
+
+```{r two-functions-to-do-anova, echo=FALSE}
+question("Which two functions can you use to run an analysis of variance?",
+         answer("`stats`", message = "`stats` is a package, not a function."),
+         answer("`aov`", correct = TRUE),
+         answer("`lm`", correct = TRUE),
+         answer("`car`", message = "`car` is a package, not a function."),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         incorrect = "",
+         correct = "You got it!"
+)
+```
+```{r two-packages-to-do-anova, echo=FALSE}
+question("Name two packages that can you use to run an analysis of variance (of course there are more---this is R).",
+         answer("`stats`", correct = TRUE),
+         answer("`anova`", message = "`anova` is a function, not a package."),
+         answer("`lm`", message = "`lm` is a function, not a package."),
+         answer("`car`", correct = TRUE),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         incorrect = "",
+         correct = "All your hard work is paying off!"
+)
+```
+
+
+```{r what-to-report, echo=FALSE}
+question("Which of these numbers do you include when you report the results of an ANOVA?",
+         answer("_p_", correct = TRUE),
+         answer("_F_", correct = TRUE),
+         answer("df", correct = TRUE),
+         answer("the mean squares"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE
+)
+```
+
+
+```{r two-ways-to-summarize-fit, echo=FALSE}
+question("Which lines of code result in a summary of the fit for an ANOVA?",
+         answer("`summary(aov(aam ~ location, data = long_mussels))`", correct = TRUE),
+         answer("`fit <- aov(aam ~ location, data = long_mussels); summary(fit)`", correct = TRUE),
+         answer("`fit <- aov(aam ~ location, data = long_mussels)`"),
+         answer("`aov(aam ~ location, data = long_mussels)`"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         incorrect = "Here's a hint: In R, you can put multiple commands on the same line using `;` to separate them.",
+         correct = "You are amazing!"
+)
+```
+
+
+```{r what-does-tukey-kramer-do, echo=FALSE}
+question("What does the Tukey-Kramer test tell you?",
+         answer("Which pairs of group means are different from each other.", correct = TRUE),
+         answer("Whether the critic Tukey liked the movie _Kramer vs. Kramer_."),
+         answer("Whether the non-parametric ANOVA is also significant."),
+         answer("Whether the ANOVA was significant under the assumptions."),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         correct = "Perfect!",
+         incorrect = "Not correct. Read the paragraph just above this question to find the answer."
+)
+```
+
+
+```{r bb, echo=FALSE}
+question("Which are examples of a one-way ANOVA null hypotheses?",
+         answer("Mean tibia length is the same for each age group of children", correct = TRUE),
+         answer("The average monthly electric bill is the same in major cities within the United States", correct = TRUE),
+         answer("The average monthly electric bill in Philadelphia, PA is less than what it is in Burlington, VT"),
+         answer("The average monthly electric bill in Philadelphia, PA is more than what it is in Burlington, VT"),
+         allow_retry = TRUE,
+         random_answer_order = TRUE,
+         incorrect = "Remember that the one-way ANOVA tests whether the means of the measurement variable are teh same for different groups.",
+         correct = "Yes!"
+)
+```
+
+
+
+```{r whentouseANOVA, echo=FALSE}
+question("Select the cases where ANOVA is appropriate",
+         answer("A professor has three classes and you want to compare the professor's assessment of the three classes in comparison with each other"),
+         answer("Three professors have one class each and you want to compare the mean class grades", correct = TRUE),
+         answer("You want to compare white blood cell counts as a response to medication for four groups of patients", correct = TRUE),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         incorrect = "You'll learn about independence between groups later, which matters for an ANOVA, but at this point, using common sense, you might be able to figure out why a design that uses only one professor to fill out assessments comparing three classes might introduce bias. Might comparing the classes against each cause a professor to inflate or deflate ratings to rank the classes rather than objectively assess them? And what about the categorical variable? How many categories does the variable `professor` have? If it has only one, then it is not a variable but a constant. Therefore there are not three groups to compare, but just one: and that just won't work."
+)
+```
+
+
+```{r select-variables, echo=FALSE}
+question("Which _explicit_ variables do we have in the `mussels` data as it is?",
+         answer("Tillamook", correct = TRUE),
+         answer("Newport", correct = TRUE),
+         answer("Petersburg", correct = TRUE),
+         answer("Magadan", correct = TRUE),
+         answer("Tvarminne", correct = TRUE),
+         answer("aam"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         correct = "You found them all!",
+         incorrect = "The column names in the dataset `mussels` are the variables."
+)
+```
+
+```{r how-to-modify-data, echo=FALSE}
+question("Which variables do we actually want to analyze?",
+         answer("location", correct = TRUE),
+         answer("aam", correct = TRUE),
+         answer("country"),
+         answer("city"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         correct = "That's right. Just two variables will do the trick.",
+         incorrect = "You need only two variables as described in the paragraph above these two questions."
+)
+```
+
+
+
+```{r predict-the-finding, echo=FALSE}
+question("Looking at the boxplot you just made, what do you think the results of an ANOVA will be?",
+         answer("Not all the means are the same among locations.", correct = TRUE),
+         answer("All the means are the same among locations.", message = "It's pretty clear from the boxplot that some `location` means are different from at least one other `location` mean."),
+         answer("Petersburg and Tvarminne have the same means", message = "Although an ANOVA tells us whether any pairs means differ from each other, it doesn't tell us which pairs. You need a post hoc test to get that additional information."),
+         answer("There are two groups of `aam` values", message = "Although you can see clear groups in the boxplot, an ANOVA does not tell you anything about groups. It tells you only that some means differ. You can run a post hoc test to find out more about groupings."),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         incorrect = "Unfortunately, no.",
+         correct = "Yes!"
+)
+```
+
+
+```{r what-is-alpha, echo=FALSE}
+question("What is `alpha` in the density plot above?",
+         answer("A value that tells us what is the cutoff for 'alpha variables'"),
+         answer("The family of the colors to use"),
+         answer("Color opacity", correct = TRUE),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         correct = "Good job!",
+         incorrect = "Nope. Try again."
+)
+```
+
+
+```{r where-can-we-use-lm, echo=FALSE}
+question("Which analyses can you do using the `lm` function?",
+         answer("linear regression", correct = TRUE),
+         answer("analysis of variance", correct = TRUE),
+         answer("analysis of covariance", correct = TRUE),
+         answer("Kruskal-Wallis test"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         correct = "`lm` is amazing. And so are you!",
+         incorrect = "Doing a Kruskal-Wallis test with `lm` would be a bit like vacuuming with a wet mop: It's just not done, for very good reasons."
+)
+```
+
+```{r two-functions-to-do-anova, echo=FALSE}
+question("Which two functions can you use to run an analysis of variance?",
+         answer("`stats`", message = "`stats` is a package, not a function."),
+         answer("`aov`", correct = TRUE),
+         answer("`lm`", correct = TRUE),
+         answer("`car`", message = "`car` is a package, not a function."),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         incorrect = "",
+         correct = "You got it!"
+)
+```
+```{r two-packages-to-do-anova, echo=FALSE}
+question("Name two packages that can you use to run an analysis of variance (of course there are more---this is R).",
+         answer("`stats`", correct = TRUE),
+         answer("`anova`", message = "`anova` is a function, not a package."),
+         answer("`lm`", message = "`lm` is a function, not a package."),
+         answer("`car`", correct = TRUE),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         incorrect = "",
+         correct = "All your hard work is paying off!"
+)
+```
+
+
+```{r what-to-report, echo=FALSE}
+question("Which of these numbers do you include when you report the results of an ANOVA?",
+         answer("_p_", correct = TRUE),
+         answer("_F_", correct = TRUE),
+         answer("df", correct = TRUE),
+         answer("the mean squares"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE
+)
+```
+
+
+```{r two-ways-to-summarize-fit, echo=FALSE}
+question("Which lines of code result in a summary of the fit for an ANOVA?",
+         answer("`summary(aov(aam ~ location, data = long_mussels))`", correct = TRUE),
+         answer("`fit <- aov(aam ~ location, data = long_mussels); summary(fit)`", correct = TRUE),
+         answer("`fit <- aov(aam ~ location, data = long_mussels)`"),
+         answer("`aov(aam ~ location, data = long_mussels)`"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         incorrect = "Here's a hint: In R, you can put multiple commands on the same line using `;` to separate them.",
+         correct = "You are amazing!"
+)
+```
+
+
+```{r what-does-tukey-kramer-do, echo=FALSE}
+question("What does the Tukey-Kramer test tell you?",
+         answer("Which pairs of group means are different from each other.", correct = TRUE),
+         answer("Whether the critic Tukey liked the movie _Kramer vs. Kramer_."),
+         answer("Whether the non-parametric ANOVA is also significant."),
+         answer("Whether the ANOVA was significant under the assumptions."),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         correct = "Perfect!",
+         incorrect = "Not correct. Read the paragraph just above this question to find the answer."
+)
+```
+
+
+```{r bb, echo=FALSE}
+question("Which are examples of a one-way ANOVA null hypotheses?",
+         answer("Mean tibia length is the same for each age group of children", correct = TRUE),
+         answer("The average monthly electric bill is the same in major cities within the United States", correct = TRUE),
+         answer("The average monthly electric bill in Philadelphia, PA is less than what it is in Burlington, VT"),
+         answer("The average monthly electric bill in Philadelphia, PA is more than what it is in Burlington, VT"),
+         allow_retry = TRUE,
+         random_answer_order = TRUE,
+         incorrect = "Remember that the one-way ANOVA tests whether the means of the measurement variable are teh same for different groups.",
+         correct = "Yes!"
+)
+```
+
+
+
+```{r whentouseANOVA, echo=FALSE}
+question("Select the cases where ANOVA is appropriate",
+         answer("A professor has three classes and you want to compare the professor's assessment of the three classes in comparison with each other"),
+         answer("Three professors have one class each and you want to compare the mean class grades", correct = TRUE),
+         answer("You want to compare white blood cell counts as a response to medication for four groups of patients", correct = TRUE),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         incorrect = "You'll learn about independence between groups later, which matters for an ANOVA, but at this point, using common sense, you might be able to figure out why a design that uses only one professor to fill out assessments comparing three classes might introduce bias. Might comparing the classes against each cause a professor to inflate or deflate ratings to rank the classes rather than objectively assess them? And what about the categorical variable? How many categories does the variable `professor` have? If it has only one, then it is not a variable but a constant. Therefore there are not three groups to compare, but just one: and that just won't work."
+)
+```
+
+
+```{r select-variables, echo=FALSE}
+question("Which _explicit_ variables do we have in the `mussels` data as it is?",
+         answer("Tillamook", correct = TRUE),
+         answer("Newport", correct = TRUE),
+         answer("Petersburg", correct = TRUE),
+         answer("Magadan", correct = TRUE),
+         answer("Tvarminne", correct = TRUE),
+         answer("aam"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         correct = "You found them all!",
+         incorrect = "The column names in the dataset `mussels` are the variables."
+)
+```
+
+```{r how-to-modify-data, echo=FALSE}
+question("Which variables do we actually want to analyze?",
+         answer("location", correct = TRUE),
+         answer("aam", correct = TRUE),
+         answer("country"),
+         answer("city"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         correct = "That's right. Just two variables will do the trick.",
+         incorrect = "You need only two variables as described in the paragraph above these two questions."
+)
+```
+
+
+
+```{r predict-the-finding, echo=FALSE}
+question("Looking at the boxplot you just made, what do you think the results of an ANOVA will be?",
+         answer("Not all the means are the same among locations.", correct = TRUE),
+         answer("All the means are the same among locations.", message = "It's pretty clear from the boxplot that some `location` means are different from at least one other `location` mean."),
+         answer("Petersburg and Tvarminne have the same means", message = "Although an ANOVA tells us whether any pairs means differ from each other, it doesn't tell us which pairs. You need a post hoc test to get that additional information."),
+         answer("There are two groups of `aam` values", message = "Although you can see clear groups in the boxplot, an ANOVA does not tell you anything about groups. It tells you only that some means differ. You can run a post hoc test to find out more about groupings."),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         incorrect = "Unfortunately, no.",
+         correct = "Yes!"
+)
+```
+
+
+```{r what-is-alpha, echo=FALSE}
+question("What is `alpha` in the density plot above?",
+         answer("A value that tells us what is the cutoff for 'alpha variables'"),
+         answer("The family of the colors to use"),
+         answer("Color opacity", correct = TRUE),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         correct = "Good job!",
+         incorrect = "Nope. Try again."
+)
+```
+
+
+```{r where-can-we-use-lm, echo=FALSE}
+question("Which analyses can you do using the `lm` function?",
+         answer("linear regression", correct = TRUE),
+         answer("analysis of variance", correct = TRUE),
+         answer("analysis of covariance", correct = TRUE),
+         answer("Kruskal-Wallis test"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         correct = "`lm` is amazing. And so are you!",
+         incorrect = "Doing a Kruskal-Wallis test with `lm` would be a bit like vacuuming with a wet mop: It's just not done, for very good reasons."
+)
+```
+
+```{r two-functions-to-do-anova, echo=FALSE}
+question("Which two functions can you use to run an analysis of variance?",
+         answer("`stats`", message = "`stats` is a package, not a function."),
+         answer("`aov`", correct = TRUE),
+         answer("`lm`", correct = TRUE),
+         answer("`car`", message = "`car` is a package, not a function."),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         incorrect = "",
+         correct = "You got it!"
+)
+```
+```{r two-packages-to-do-anova, echo=FALSE}
+question("Name two packages that can you use to run an analysis of variance (of course there are more---this is R).",
+         answer("`stats`", correct = TRUE),
+         answer("`anova`", message = "`anova` is a function, not a package."),
+         answer("`lm`", message = "`lm` is a function, not a package."),
+         answer("`car`", correct = TRUE),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         incorrect = "",
+         correct = "All your hard work is paying off!"
+)
+```
+
+
+```{r what-to-report, echo=FALSE}
+question("Which of these numbers do you include when you report the results of an ANOVA?",
+         answer("_p_", correct = TRUE),
+         answer("_F_", correct = TRUE),
+         answer("df", correct = TRUE),
+         answer("the mean squares"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE
+)
+```
+
+
+```{r two-ways-to-summarize-fit, echo=FALSE}
+question("Which lines of code result in a summary of the fit for an ANOVA?",
+         answer("`summary(aov(aam ~ location, data = long_mussels))`", correct = TRUE),
+         answer("`fit <- aov(aam ~ location, data = long_mussels); summary(fit)`", correct = TRUE),
+         answer("`fit <- aov(aam ~ location, data = long_mussels)`"),
+         answer("`aov(aam ~ location, data = long_mussels)`"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         incorrect = "Here's a hint: In R, you can put multiple commands on the same line using `;` to separate them.",
+         correct = "You are amazing!"
+)
+```
+
+
+```{r what-does-tukey-kramer-do, echo=FALSE}
+question("What does the Tukey-Kramer test tell you?",
+         answer("Which pairs of group means are different from each other.", correct = TRUE),
+         answer("Whether the critic Tukey liked the movie _Kramer vs. Kramer_."),
+         answer("Whether the non-parametric ANOVA is also significant."),
+         answer("Whether the ANOVA was significant under the assumptions."),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         correct = "Perfect!",
+         incorrect = "Not correct. Read the paragraph just above this question to find the answer."
+)
+```
+
+
+```{r bb, echo=FALSE}
+question("Which are examples of a one-way ANOVA null hypotheses?",
+         answer("Mean tibia length is the same for each age group of children", correct = TRUE),
+         answer("The average monthly electric bill is the same in major cities within the United States", correct = TRUE),
+         answer("The average monthly electric bill in Philadelphia, PA is less than what it is in Burlington, VT"),
+         answer("The average monthly electric bill in Philadelphia, PA is more than what it is in Burlington, VT"),
+         allow_retry = TRUE,
+         random_answer_order = TRUE,
+         incorrect = "Remember that the one-way ANOVA tests whether the means of the measurement variable are teh same for different groups.",
+         correct = "Yes!"
+)
+```
+
+
+
+```{r whentouseANOVA, echo=FALSE}
+question("Select the cases where ANOVA is appropriate",
+         answer("A professor has three classes and you want to compare the professor's assessment of the three classes in comparison with each other"),
+         answer("Three professors have one class each and you want to compare the mean class grades", correct = TRUE),
+         answer("You want to compare white blood cell counts as a response to medication for four groups of patients", correct = TRUE),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         incorrect = "You'll learn about independence between groups later, which matters for an ANOVA, but at this point, using common sense, you might be able to figure out why a design that uses only one professor to fill out assessments comparing three classes might introduce bias. Might comparing the classes against each cause a professor to inflate or deflate ratings to rank the classes rather than objectively assess them? And what about the categorical variable? How many categories does the variable `professor` have? If it has only one, then it is not a variable but a constant. Therefore there are not three groups to compare, but just one: and that just won't work."
+)
+```
+
+
+```{r select-variables, echo=FALSE}
+question("Which _explicit_ variables do we have in the `mussels` data as it is?",
+         answer("Tillamook", correct = TRUE),
+         answer("Newport", correct = TRUE),
+         answer("Petersburg", correct = TRUE),
+         answer("Magadan", correct = TRUE),
+         answer("Tvarminne", correct = TRUE),
+         answer("aam"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         correct = "You found them all!",
+         incorrect = "The column names in the dataset `mussels` are the variables."
+)
+```
+
+```{r how-to-modify-data, echo=FALSE}
+question("Which variables do we actually want to analyze?",
+         answer("location", correct = TRUE),
+         answer("aam", correct = TRUE),
+         answer("country"),
+         answer("city"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         correct = "That's right. Just two variables will do the trick.",
+         incorrect = "You need only two variables as described in the paragraph above these two questions."
+)
+```
+
+
+
+```{r predict-the-finding, echo=FALSE}
+question("Looking at the boxplot you just made, what do you think the results of an ANOVA will be?",
+         answer("Not all the means are the same among locations.", correct = TRUE),
+         answer("All the means are the same among locations.", message = "It's pretty clear from the boxplot that some `location` means are different from at least one other `location` mean."),
+         answer("Petersburg and Tvarminne have the same means", message = "Although an ANOVA tells us whether any pairs means differ from each other, it doesn't tell us which pairs. You need a post hoc test to get that additional information."),
+         answer("There are two groups of `aam` values", message = "Although you can see clear groups in the boxplot, an ANOVA does not tell you anything about groups. It tells you only that some means differ. You can run a post hoc test to find out more about groupings."),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         incorrect = "Unfortunately, no.",
+         correct = "Yes!"
+)
+```
+
+
+```{r what-is-alpha, echo=FALSE}
+question("What is `alpha` in the density plot above?",
+         answer("A value that tells us what is the cutoff for 'alpha variables'"),
+         answer("The family of the colors to use"),
+         answer("Color opacity", correct = TRUE),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         correct = "Good job!",
+         incorrect = "Nope. Try again."
+)
+```
+
+
+```{r where-can-we-use-lm, echo=FALSE}
+question("Which analyses can you do using the `lm` function?",
+         answer("linear regression", correct = TRUE),
+         answer("analysis of variance", correct = TRUE),
+         answer("analysis of covariance", correct = TRUE),
+         answer("Kruskal-Wallis test"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         correct = "`lm` is amazing. And so are you!",
+         incorrect = "Doing a Kruskal-Wallis test with `lm` would be a bit like vacuuming with a wet mop: It's just not done, for very good reasons."
+)
+```
+
+```{r two-functions-to-do-anova, echo=FALSE}
+question("Which two functions can you use to run an analysis of variance?",
+         answer("`stats`", message = "`stats` is a package, not a function."),
+         answer("`aov`", correct = TRUE),
+         answer("`lm`", correct = TRUE),
+         answer("`car`", message = "`car` is a package, not a function."),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         incorrect = "",
+         correct = "You got it!"
+)
+```
+```{r two-packages-to-do-anova, echo=FALSE}
+question("Name two packages that can you use to run an analysis of variance (of course there are more---this is R).",
+         answer("`stats`", correct = TRUE),
+         answer("`anova`", message = "`anova` is a function, not a package."),
+         answer("`lm`", message = "`lm` is a function, not a package."),
+         answer("`car`", correct = TRUE),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         incorrect = "",
+         correct = "All your hard work is paying off!"
+)
+```
+
+
+```{r what-to-report, echo=FALSE}
+question("Which of these numbers do you include when you report the results of an ANOVA?",
+         answer("_p_", correct = TRUE),
+         answer("_F_", correct = TRUE),
+         answer("df", correct = TRUE),
+         answer("the mean squares"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE
+)
+```
+
+
+```{r two-ways-to-summarize-fit, echo=FALSE}
+question("Which lines of code result in a summary of the fit for an ANOVA?",
+         answer("`summary(aov(aam ~ location, data = long_mussels))`", correct = TRUE),
+         answer("`fit <- aov(aam ~ location, data = long_mussels); summary(fit)`", correct = TRUE),
+         answer("`fit <- aov(aam ~ location, data = long_mussels)`"),
+         answer("`aov(aam ~ location, data = long_mussels)`"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         incorrect = "Here's a hint: In R, you can put multiple commands on the same line using `;` to separate them.",
+         correct = "You are amazing!"
+)
+```
+
+
+```{r what-does-tukey-kramer-do, echo=FALSE}
+question("What does the Tukey-Kramer test tell you?",
+         answer("Which pairs of group means are different from each other.", correct = TRUE),
+         answer("Whether the critic Tukey liked the movie _Kramer vs. Kramer_."),
+         answer("Whether the non-parametric ANOVA is also significant."),
+         answer("Whether the ANOVA was significant under the assumptions."),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         correct = "Perfect!",
+         incorrect = "Not correct. Read the paragraph just above this question to find the answer."
+)
+```
+
+
+```{r bb, echo=FALSE}
+question("Which are examples of a one-way ANOVA null hypotheses?",
+         answer("Mean tibia length is the same for each age group of children", correct = TRUE),
+         answer("The average monthly electric bill is the same in major cities within the United States", correct = TRUE),
+         answer("The average monthly electric bill in Philadelphia, PA is less than what it is in Burlington, VT"),
+         answer("The average monthly electric bill in Philadelphia, PA is more than what it is in Burlington, VT"),
+         allow_retry = TRUE,
+         random_answer_order = TRUE,
+         incorrect = "Remember that the one-way ANOVA tests whether the means of the measurement variable are teh same for different groups.",
+         correct = "Yes!"
+)
+```
+
+
+
+```{r whentouseANOVA, echo=FALSE}
+question("Select the cases where ANOVA is appropriate",
+         answer("A professor has three classes and you want to compare the professor's assessment of the three classes in comparison with each other"),
+         answer("Three professors have one class each and you want to compare the mean class grades", correct = TRUE),
+         answer("You want to compare white blood cell counts as a response to medication for four groups of patients", correct = TRUE),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         incorrect = "You'll learn about independence between groups later, which matters for an ANOVA, but at this point, using common sense, you might be able to figure out why a design that uses only one professor to fill out assessments comparing three classes might introduce bias. Might comparing the classes against each cause a professor to inflate or deflate ratings to rank the classes rather than objectively assess them? And what about the categorical variable? How many categories does the variable `professor` have? If it has only one, then it is not a variable but a constant. Therefore there are not three groups to compare, but just one: and that just won't work."
+)
+```
+
+
+```{r select-variables, echo=FALSE}
+question("Which _explicit_ variables do we have in the `mussels` data as it is?",
+         answer("Tillamook", correct = TRUE),
+         answer("Newport", correct = TRUE),
+         answer("Petersburg", correct = TRUE),
+         answer("Magadan", correct = TRUE),
+         answer("Tvarminne", correct = TRUE),
+         answer("aam"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         correct = "You found them all!",
+         incorrect = "The column names in the dataset `mussels` are the variables."
+)
+```
+
+```{r how-to-modify-data, echo=FALSE}
+question("Which variables do we actually want to analyze?",
+         answer("location", correct = TRUE),
+         answer("aam", correct = TRUE),
+         answer("country"),
+         answer("city"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         correct = "That's right. Just two variables will do the trick.",
+         incorrect = "You need only two variables as described in the paragraph above these two questions."
+)
+```
+
+
+
+```{r predict-the-finding, echo=FALSE}
+question("Looking at the boxplot you just made, what do you think the results of an ANOVA will be?",
+         answer("Not all the means are the same among locations.", correct = TRUE),
+         answer("All the means are the same among locations.", message = "It's pretty clear from the boxplot that some `location` means are different from at least one other `location` mean."),
+         answer("Petersburg and Tvarminne have the same means", message = "Although an ANOVA tells us whether any pairs means differ from each other, it doesn't tell us which pairs. You need a post hoc test to get that additional information."),
+         answer("There are two groups of `aam` values", message = "Although you can see clear groups in the boxplot, an ANOVA does not tell you anything about groups. It tells you only that some means differ. You can run a post hoc test to find out more about groupings."),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         incorrect = "Unfortunately, no.",
+         correct = "Yes!"
+)
+```
+
+
+```{r what-is-alpha, echo=FALSE}
+question("What is `alpha` in the density plot above?",
+         answer("A value that tells us what is the cutoff for 'alpha variables'"),
+         answer("The family of the colors to use"),
+         answer("Color opacity", correct = TRUE),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         correct = "Good job!",
+         incorrect = "Nope. Try again."
+)
+```
+
+
+```{r where-can-we-use-lm, echo=FALSE}
+question("Which analyses can you do using the `lm` function?",
+         answer("linear regression", correct = TRUE),
+         answer("analysis of variance", correct = TRUE),
+         answer("analysis of covariance", correct = TRUE),
+         answer("Kruskal-Wallis test"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         correct = "`lm` is amazing. And so are you!",
+         incorrect = "Doing a Kruskal-Wallis test with `lm` would be a bit like vacuuming with a wet mop: It's just not done, for very good reasons."
+)
+```
+
+```{r two-functions-to-do-anova, echo=FALSE}
+question("Which two functions can you use to run an analysis of variance?",
+         answer("`stats`", message = "`stats` is a package, not a function."),
+         answer("`aov`", correct = TRUE),
+         answer("`lm`", correct = TRUE),
+         answer("`car`", message = "`car` is a package, not a function."),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         incorrect = "",
+         correct = "You got it!"
+)
+```
+```{r two-packages-to-do-anova, echo=FALSE}
+question("Name two packages that can you use to run an analysis of variance (of course there are more---this is R).",
+         answer("`stats`", correct = TRUE),
+         answer("`anova`", message = "`anova` is a function, not a package."),
+         answer("`lm`", message = "`lm` is a function, not a package."),
+         answer("`car`", correct = TRUE),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         incorrect = "",
+         correct = "All your hard work is paying off!"
+)
+```
+
+
+```{r what-to-report, echo=FALSE}
+question("Which of these numbers do you include when you report the results of an ANOVA?",
+         answer("_p_", correct = TRUE),
+         answer("_F_", correct = TRUE),
+         answer("df", correct = TRUE),
+         answer("the mean squares"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE
+)
+```
+
+
+```{r two-ways-to-summarize-fit, echo=FALSE}
+question("Which lines of code result in a summary of the fit for an ANOVA?",
+         answer("`summary(aov(aam ~ location, data = long_mussels))`", correct = TRUE),
+         answer("`fit <- aov(aam ~ location, data = long_mussels); summary(fit)`", correct = TRUE),
+         answer("`fit <- aov(aam ~ location, data = long_mussels)`"),
+         answer("`aov(aam ~ location, data = long_mussels)`"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         incorrect = "Here's a hint: In R, you can put multiple commands on the same line using `;` to separate them.",
+         correct = "You are amazing!"
+)
+```
+
+
+```{r what-does-tukey-kramer-do, echo=FALSE}
+question("What does the Tukey-Kramer test tell you?",
+         answer("Which pairs of group means are different from each other.", correct = TRUE),
+         answer("Whether the critic Tukey liked the movie _Kramer vs. Kramer_."),
+         answer("Whether the non-parametric ANOVA is also significant."),
+         answer("Whether the ANOVA was significant under the assumptions."),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         correct = "Perfect!",
+         incorrect = "Not correct. Read the paragraph just above this question to find the answer."
+)
+```
+
+
+```{r bb, echo=FALSE}
+question("Which are examples of a one-way ANOVA null hypotheses?",
+         answer("Mean tibia length is the same for each age group of children", correct = TRUE),
+         answer("The average monthly electric bill is the same in major cities within the United States", correct = TRUE),
+         answer("The average monthly electric bill in Philadelphia, PA is less than what it is in Burlington, VT"),
+         answer("The average monthly electric bill in Philadelphia, PA is more than what it is in Burlington, VT"),
+         allow_retry = TRUE,
+         random_answer_order = TRUE,
+         incorrect = "Remember that the one-way ANOVA tests whether the means of the measurement variable are teh same for different groups.",
+         correct = "Yes!"
+)
+```
+
+
+
+```{r whentouseANOVA, echo=FALSE}
+question("Select the cases where ANOVA is appropriate",
+         answer("A professor has three classes and you want to compare the professor's assessment of the three classes in comparison with each other"),
+         answer("Three professors have one class each and you want to compare the mean class grades", correct = TRUE),
+         answer("You want to compare white blood cell counts as a response to medication for four groups of patients", correct = TRUE),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         incorrect = "You'll learn about independence between groups later, which matters for an ANOVA, but at this point, using common sense, you might be able to figure out why a design that uses only one professor to fill out assessments comparing three classes might introduce bias. Might comparing the classes against each cause a professor to inflate or deflate ratings to rank the classes rather than objectively assess them? And what about the categorical variable? How many categories does the variable `professor` have? If it has only one, then it is not a variable but a constant. Therefore there are not three groups to compare, but just one: and that just won't work."
+)
+```
+
+
+```{r select-variables, echo=FALSE}
+question("Which _explicit_ variables do we have in the `mussels` data as it is?",
+         answer("Tillamook", correct = TRUE),
+         answer("Newport", correct = TRUE),
+         answer("Petersburg", correct = TRUE),
+         answer("Magadan", correct = TRUE),
+         answer("Tvarminne", correct = TRUE),
+         answer("aam"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         correct = "You found them all!",
+         incorrect = "The column names in the dataset `mussels` are the variables."
+)
+```
+
+```{r how-to-modify-data, echo=FALSE}
+question("Which variables do we actually want to analyze?",
+         answer("location", correct = TRUE),
+         answer("aam", correct = TRUE),
+         answer("country"),
+         answer("city"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         correct = "That's right. Just two variables will do the trick.",
+         incorrect = "You need only two variables as described in the paragraph above these two questions."
+)
+```
+
+
+
+```{r predict-the-finding, echo=FALSE}
+question("Looking at the boxplot you just made, what do you think the results of an ANOVA will be?",
+         answer("Not all the means are the same among locations.", correct = TRUE),
+         answer("All the means are the same among locations.", message = "It's pretty clear from the boxplot that some `location` means are different from at least one other `location` mean."),
+         answer("Petersburg and Tvarminne have the same means", message = "Although an ANOVA tells us whether any pairs means differ from each other, it doesn't tell us which pairs. You need a post hoc test to get that additional information."),
+         answer("There are two groups of `aam` values", message = "Although you can see clear groups in the boxplot, an ANOVA does not tell you anything about groups. It tells you only that some means differ. You can run a post hoc test to find out more about groupings."),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         incorrect = "Unfortunately, no.",
+         correct = "Yes!"
+)
+```
+
+
+```{r what-is-alpha, echo=FALSE}
+question("What is `alpha` in the density plot above?",
+         answer("A value that tells us what is the cutoff for 'alpha variables'"),
+         answer("The family of the colors to use"),
+         answer("Color opacity", correct = TRUE),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         correct = "Good job!",
+         incorrect = "Nope. Try again."
+)
+```
+
+
+```{r where-can-we-use-lm, echo=FALSE}
+question("Which analyses can you do using the `lm` function?",
+         answer("linear regression", correct = TRUE),
+         answer("analysis of variance", correct = TRUE),
+         answer("analysis of covariance", correct = TRUE),
+         answer("Kruskal-Wallis test"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         correct = "`lm` is amazing. And so are you!",
+         incorrect = "Doing a Kruskal-Wallis test with `lm` would be a bit like vacuuming with a wet mop: It's just not done, for very good reasons."
+)
+```
+
+```{r two-functions-to-do-anova, echo=FALSE}
+question("Which two functions can you use to run an analysis of variance?",
+         answer("`stats`", message = "`stats` is a package, not a function."),
+         answer("`aov`", correct = TRUE),
+         answer("`lm`", correct = TRUE),
+         answer("`car`", message = "`car` is a package, not a function."),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         incorrect = "",
+         correct = "You got it!"
+)
+```
+```{r two-packages-to-do-anova, echo=FALSE}
+question("Name two packages that can you use to run an analysis of variance (of course there are more---this is R).",
+         answer("`stats`", correct = TRUE),
+         answer("`anova`", message = "`anova` is a function, not a package."),
+         answer("`lm`", message = "`lm` is a function, not a package."),
+         answer("`car`", correct = TRUE),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         incorrect = "",
+         correct = "All your hard work is paying off!"
+)
+```
+
+
+```{r what-to-report, echo=FALSE}
+question("Which of these numbers do you include when you report the results of an ANOVA?",
+         answer("_p_", correct = TRUE),
+         answer("_F_", correct = TRUE),
+         answer("df", correct = TRUE),
+         answer("the mean squares"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE
+)
+```
+
+
+```{r two-ways-to-summarize-fit, echo=FALSE}
+question("Which lines of code result in a summary of the fit for an ANOVA?",
+         answer("`summary(aov(aam ~ location, data = long_mussels))`", correct = TRUE),
+         answer("`fit <- aov(aam ~ location, data = long_mussels); summary(fit)`", correct = TRUE),
+         answer("`fit <- aov(aam ~ location, data = long_mussels)`"),
+         answer("`aov(aam ~ location, data = long_mussels)`"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         incorrect = "Here's a hint: In R, you can put multiple commands on the same line using `;` to separate them.",
+         correct = "You are amazing!"
+)
+```
+
+
+```{r what-does-tukey-kramer-do, echo=FALSE}
+question("What does the Tukey-Kramer test tell you?",
+         answer("Which pairs of group means are different from each other.", correct = TRUE),
+         answer("Whether the critic Tukey liked the movie _Kramer vs. Kramer_."),
+         answer("Whether the non-parametric ANOVA is also significant."),
+         answer("Whether the ANOVA was significant under the assumptions."),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         correct = "Perfect!",
+         incorrect = "Not correct. Read the paragraph just above this question to find the answer."
+)
+```
+
+
+```{r bb, echo=FALSE}
+question("Which are examples of a one-way ANOVA null hypotheses?",
+         answer("Mean tibia length is the same for each age group of children", correct = TRUE),
+         answer("The average monthly electric bill is the same in major cities within the United States", correct = TRUE),
+         answer("The average monthly electric bill in Philadelphia, PA is less than what it is in Burlington, VT"),
+         answer("The average monthly electric bill in Philadelphia, PA is more than what it is in Burlington, VT"),
+         allow_retry = TRUE,
+         random_answer_order = TRUE,
+         incorrect = "Remember that the one-way ANOVA tests whether the means of the measurement variable are teh same for different groups.",
+         correct = "Yes!"
+)
+```
+
+
+
+```{r whentouseANOVA, echo=FALSE}
+question("Select the cases where ANOVA is appropriate",
+         answer("A professor has three classes and you want to compare the professor's assessment of the three classes in comparison with each other"),
+         answer("Three professors have one class each and you want to compare the mean class grades", correct = TRUE),
+         answer("You want to compare white blood cell counts as a response to medication for four groups of patients", correct = TRUE),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         incorrect = "You'll learn about independence between groups later, which matters for an ANOVA, but at this point, using common sense, you might be able to figure out why a design that uses only one professor to fill out assessments comparing three classes might introduce bias. Might comparing the classes against each cause a professor to inflate or deflate ratings to rank the classes rather than objectively assess them? And what about the categorical variable? How many categories does the variable `professor` have? If it has only one, then it is not a variable but a constant. Therefore there are not three groups to compare, but just one: and that just won't work."
+)
+```
+
+
+```{r select-variables, echo=FALSE}
+question("Which _explicit_ variables do we have in the `mussels` data as it is?",
+         answer("Tillamook", correct = TRUE),
+         answer("Newport", correct = TRUE),
+         answer("Petersburg", correct = TRUE),
+         answer("Magadan", correct = TRUE),
+         answer("Tvarminne", correct = TRUE),
+         answer("aam"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         correct = "You found them all!",
+         incorrect = "The column names in the dataset `mussels` are the variables."
+)
+```
+
+```{r how-to-modify-data, echo=FALSE}
+question("Which variables do we actually want to analyze?",
+         answer("location", correct = TRUE),
+         answer("aam", correct = TRUE),
+         answer("country"),
+         answer("city"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         correct = "That's right. Just two variables will do the trick.",
+         incorrect = "You need only two variables as described in the paragraph above these two questions."
+)
+```
+
+
+
+```{r predict-the-finding, echo=FALSE}
+question("Looking at the boxplot you just made, what do you think the results of an ANOVA will be?",
+         answer("Not all the means are the same among locations.", correct = TRUE),
+         answer("All the means are the same among locations.", message = "It's pretty clear from the boxplot that some `location` means are different from at least one other `location` mean."),
+         answer("Petersburg and Tvarminne have the same means", message = "Although an ANOVA tells us whether any pairs means differ from each other, it doesn't tell us which pairs. You need a post hoc test to get that additional information."),
+         answer("There are two groups of `aam` values", message = "Although you can see clear groups in the boxplot, an ANOVA does not tell you anything about groups. It tells you only that some means differ. You can run a post hoc test to find out more about groupings."),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         incorrect = "Unfortunately, no.",
+         correct = "Yes!"
+)
+```
+
+
+```{r what-is-alpha, echo=FALSE}
+question("What is `alpha` in the density plot above?",
+         answer("A value that tells us what is the cutoff for 'alpha variables'"),
+         answer("The family of the colors to use"),
+         answer("Color opacity", correct = TRUE),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         correct = "Good job!",
+         incorrect = "Nope. Try again."
+)
+```
+
+
+```{r where-can-we-use-lm, echo=FALSE}
+question("Which analyses can you do using the `lm` function?",
+         answer("linear regression", correct = TRUE),
+         answer("analysis of variance", correct = TRUE),
+         answer("analysis of covariance", correct = TRUE),
+         answer("Kruskal-Wallis test"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         correct = "`lm` is amazing. And so are you!",
+         incorrect = "Doing a Kruskal-Wallis test with `lm` would be a bit like vacuuming with a wet mop: It's just not done, for very good reasons."
+)
+```
+
+```{r two-functions-to-do-anova, echo=FALSE}
+question("Which two functions can you use to run an analysis of variance?",
+         answer("`stats`", message = "`stats` is a package, not a function."),
+         answer("`aov`", correct = TRUE),
+         answer("`lm`", correct = TRUE),
+         answer("`car`", message = "`car` is a package, not a function."),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         incorrect = "",
+         correct = "You got it!"
+)
+```
+```{r two-packages-to-do-anova, echo=FALSE}
+question("Name two packages that can you use to run an analysis of variance (of course there are more---this is R).",
+         answer("`stats`", correct = TRUE),
+         answer("`anova`", message = "`anova` is a function, not a package."),
+         answer("`lm`", message = "`lm` is a function, not a package."),
+         answer("`car`", correct = TRUE),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         incorrect = "",
+         correct = "All your hard work is paying off!"
+)
+```
+
+
+```{r what-to-report, echo=FALSE}
+question("Which of these numbers do you include when you report the results of an ANOVA?",
+         answer("_p_", correct = TRUE),
+         answer("_F_", correct = TRUE),
+         answer("df", correct = TRUE),
+         answer("the mean squares"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE
+)
+```
+
+
+```{r two-ways-to-summarize-fit, echo=FALSE}
+question("Which lines of code result in a summary of the fit for an ANOVA?",
+         answer("`summary(aov(aam ~ location, data = long_mussels))`", correct = TRUE),
+         answer("`fit <- aov(aam ~ location, data = long_mussels); summary(fit)`", correct = TRUE),
+         answer("`fit <- aov(aam ~ location, data = long_mussels)`"),
+         answer("`aov(aam ~ location, data = long_mussels)`"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         incorrect = "Here's a hint: In R, you can put multiple commands on the same line using `;` to separate them.",
+         correct = "You are amazing!"
+)
+```
+
+
+```{r what-does-tukey-kramer-do, echo=FALSE}
+question("What does the Tukey-Kramer test tell you?",
+         answer("Which pairs of group means are different from each other.", correct = TRUE),
+         answer("Whether the critic Tukey liked the movie _Kramer vs. Kramer_."),
+         answer("Whether the non-parametric ANOVA is also significant."),
+         answer("Whether the ANOVA was significant under the assumptions."),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         correct = "Perfect!",
+         incorrect = "Not correct. Read the paragraph just above this question to find the answer."
+)
+```
+
+
+```{r bb, echo=FALSE}
+question("Which are examples of a one-way ANOVA null hypotheses?",
+         answer("Mean tibia length is the same for each age group of children", correct = TRUE),
+         answer("The average monthly electric bill is the same in major cities within the United States", correct = TRUE),
+         answer("The average monthly electric bill in Philadelphia, PA is less than what it is in Burlington, VT"),
+         answer("The average monthly electric bill in Philadelphia, PA is more than what it is in Burlington, VT"),
+         allow_retry = TRUE,
+         random_answer_order = TRUE,
+         incorrect = "Remember that the one-way ANOVA tests whether the means of the measurement variable are teh same for different groups.",
+         correct = "Yes!"
+)
+```
+
+
+
+```{r whentouseANOVA, echo=FALSE}
+question("Select the cases where ANOVA is appropriate",
+         answer("A professor has three classes and you want to compare the professor's assessment of the three classes in comparison with each other"),
+         answer("Three professors have one class each and you want to compare the mean class grades", correct = TRUE),
+         answer("You want to compare white blood cell counts as a response to medication for four groups of patients", correct = TRUE),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         incorrect = "You'll learn about independence between groups later, which matters for an ANOVA, but at this point, using common sense, you might be able to figure out why a design that uses only one professor to fill out assessments comparing three classes might introduce bias. Might comparing the classes against each cause a professor to inflate or deflate ratings to rank the classes rather than objectively assess them? And what about the categorical variable? How many categories does the variable `professor` have? If it has only one, then it is not a variable but a constant. Therefore there are not three groups to compare, but just one: and that just won't work."
+)
+```
+
+
+```{r select-variables, echo=FALSE}
+question("Which _explicit_ variables do we have in the `mussels` data as it is?",
+         answer("Tillamook", correct = TRUE),
+         answer("Newport", correct = TRUE),
+         answer("Petersburg", correct = TRUE),
+         answer("Magadan", correct = TRUE),
+         answer("Tvarminne", correct = TRUE),
+         answer("aam"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         correct = "You found them all!",
+         incorrect = "The column names in the dataset `mussels` are the variables."
+)
+```
+
+```{r how-to-modify-data, echo=FALSE}
+question("Which variables do we actually want to analyze?",
+         answer("location", correct = TRUE),
+         answer("aam", correct = TRUE),
+         answer("country"),
+         answer("city"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         correct = "That's right. Just two variables will do the trick.",
+         incorrect = "You need only two variables as described in the paragraph above these two questions."
+)
+```
+
+
+
+```{r predict-the-finding, echo=FALSE}
+question("Looking at the boxplot you just made, what do you think the results of an ANOVA will be?",
+         answer("Not all the means are the same among locations.", correct = TRUE),
+         answer("All the means are the same among locations.", message = "It's pretty clear from the boxplot that some `location` means are different from at least one other `location` mean."),
+         answer("Petersburg and Tvarminne have the same means", message = "Although an ANOVA tells us whether any pairs means differ from each other, it doesn't tell us which pairs. You need a post hoc test to get that additional information."),
+         answer("There are two groups of `aam` values", message = "Although you can see clear groups in the boxplot, an ANOVA does not tell you anything about groups. It tells you only that some means differ. You can run a post hoc test to find out more about groupings."),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         incorrect = "Unfortunately, no.",
+         correct = "Yes!"
+)
+```
+
+
+```{r what-is-alpha, echo=FALSE}
+question("What is `alpha` in the density plot above?",
+         answer("A value that tells us what is the cutoff for 'alpha variables'"),
+         answer("The family of the colors to use"),
+         answer("Color opacity", correct = TRUE),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         correct = "Good job!",
+         incorrect = "Nope. Try again."
+)
+```
+
+
+```{r where-can-we-use-lm, echo=FALSE}
+question("Which analyses can you do using the `lm` function?",
+         answer("linear regression", correct = TRUE),
+         answer("analysis of variance", correct = TRUE),
+         answer("analysis of covariance", correct = TRUE),
+         answer("Kruskal-Wallis test"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         correct = "`lm` is amazing. And so are you!",
+         incorrect = "Doing a Kruskal-Wallis test with `lm` would be a bit like vacuuming with a wet mop: It's just not done, for very good reasons."
+)
+```
+
+```{r two-functions-to-do-anova, echo=FALSE}
+question("Which two functions can you use to run an analysis of variance?",
+         answer("`stats`", message = "`stats` is a package, not a function."),
+         answer("`aov`", correct = TRUE),
+         answer("`lm`", correct = TRUE),
+         answer("`car`", message = "`car` is a package, not a function."),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         incorrect = "",
+         correct = "You got it!"
+)
+```
+```{r two-packages-to-do-anova, echo=FALSE}
+question("Name two packages that can you use to run an analysis of variance (of course there are more---this is R).",
+         answer("`stats`", correct = TRUE),
+         answer("`anova`", message = "`anova` is a function, not a package."),
+         answer("`lm`", message = "`lm` is a function, not a package."),
+         answer("`car`", correct = TRUE),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         incorrect = "",
+         correct = "All your hard work is paying off!"
+)
+```
+
+
+```{r what-to-report, echo=FALSE}
+question("Which of these numbers do you include when you report the results of an ANOVA?",
+         answer("_p_", correct = TRUE),
+         answer("_F_", correct = TRUE),
+         answer("df", correct = TRUE),
+         answer("the mean squares"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE
+)
+```
+
+
+```{r two-ways-to-summarize-fit, echo=FALSE}
+question("Which lines of code result in a summary of the fit for an ANOVA?",
+         answer("`summary(aov(aam ~ location, data = long_mussels))`", correct = TRUE),
+         answer("`fit <- aov(aam ~ location, data = long_mussels); summary(fit)`", correct = TRUE),
+         answer("`fit <- aov(aam ~ location, data = long_mussels)`"),
+         answer("`aov(aam ~ location, data = long_mussels)`"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         incorrect = "Here's a hint: In R, you can put multiple commands on the same line using `;` to separate them.",
+         correct = "You are amazing!"
+)
+```
+
+
+```{r what-does-tukey-kramer-do, echo=FALSE}
+question("What does the Tukey-Kramer test tell you?",
+         answer("Which pairs of group means are different from each other.", correct = TRUE),
+         answer("Whether the critic Tukey liked the movie _Kramer vs. Kramer_."),
+         answer("Whether the non-parametric ANOVA is also significant."),
+         answer("Whether the ANOVA was significant under the assumptions."),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         correct = "Perfect!",
+         incorrect = "Not correct. Read the paragraph just above this question to find the answer."
+)
+```
+
+
+```{r bb, echo=FALSE}
+question("Which are examples of a one-way ANOVA null hypotheses?",
+         answer("Mean tibia length is the same for each age group of children", correct = TRUE),
+         answer("The average monthly electric bill is the same in major cities within the United States", correct = TRUE),
+         answer("The average monthly electric bill in Philadelphia, PA is less than what it is in Burlington, VT"),
+         answer("The average monthly electric bill in Philadelphia, PA is more than what it is in Burlington, VT"),
+         allow_retry = TRUE,
+         random_answer_order = TRUE,
+         incorrect = "Remember that the one-way ANOVA tests whether the means of the measurement variable are teh same for different groups.",
+         correct = "Yes!"
+)
+```
+
+
+
+```{r whentouseANOVA, echo=FALSE}
+question("Select the cases where ANOVA is appropriate",
+         answer("A professor has three classes and you want to compare the professor's assessment of the three classes in comparison with each other"),
+         answer("Three professors have one class each and you want to compare the mean class grades", correct = TRUE),
+         answer("You want to compare white blood cell counts as a response to medication for four groups of patients", correct = TRUE),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         incorrect = "You'll learn about independence between groups later, which matters for an ANOVA, but at this point, using common sense, you might be able to figure out why a design that uses only one professor to fill out assessments comparing three classes might introduce bias. Might comparing the classes against each cause a professor to inflate or deflate ratings to rank the classes rather than objectively assess them? And what about the categorical variable? How many categories does the variable `professor` have? If it has only one, then it is not a variable but a constant. Therefore there are not three groups to compare, but just one: and that just won't work."
+)
+```
+
+
+```{r select-variables, echo=FALSE}
+question("Which _explicit_ variables do we have in the `mussels` data as it is?",
+         answer("Tillamook", correct = TRUE),
+         answer("Newport", correct = TRUE),
+         answer("Petersburg", correct = TRUE),
+         answer("Magadan", correct = TRUE),
+         answer("Tvarminne", correct = TRUE),
+         answer("aam"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         correct = "You found them all!",
+         incorrect = "The column names in the dataset `mussels` are the variables."
+)
+```
+
+```{r how-to-modify-data, echo=FALSE}
+question("Which variables do we actually want to analyze?",
+         answer("location", correct = TRUE),
+         answer("aam", correct = TRUE),
+         answer("country"),
+         answer("city"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         correct = "That's right. Just two variables will do the trick.",
+         incorrect = "You need only two variables as described in the paragraph above these two questions."
+)
+```
+
+
+
+```{r predict-the-finding, echo=FALSE}
+question("Looking at the boxplot you just made, what do you think the results of an ANOVA will be?",
+         answer("Not all the means are the same among locations.", correct = TRUE),
+         answer("All the means are the same among locations.", message = "It's pretty clear from the boxplot that some `location` means are different from at least one other `location` mean."),
+         answer("Petersburg and Tvarminne have the same means", message = "Although an ANOVA tells us whether any pairs means differ from each other, it doesn't tell us which pairs. You need a post hoc test to get that additional information."),
+         answer("There are two groups of `aam` values", message = "Although you can see clear groups in the boxplot, an ANOVA does not tell you anything about groups. It tells you only that some means differ. You can run a post hoc test to find out more about groupings."),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         incorrect = "Unfortunately, no.",
+         correct = "Yes!"
+)
+```
+
+
+```{r what-is-alpha, echo=FALSE}
+question("What is `alpha` in the density plot above?",
+         answer("A value that tells us what is the cutoff for 'alpha variables'"),
+         answer("The family of the colors to use"),
+         answer("Color opacity", correct = TRUE),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         correct = "Good job!",
+         incorrect = "Nope. Try again."
+)
+```
+
+
+```{r where-can-we-use-lm, echo=FALSE}
+question("Which analyses can you do using the `lm` function?",
+         answer("linear regression", correct = TRUE),
+         answer("analysis of variance", correct = TRUE),
+         answer("analysis of covariance", correct = TRUE),
+         answer("Kruskal-Wallis test"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         correct = "`lm` is amazing. And so are you!",
+         incorrect = "Doing a Kruskal-Wallis test with `lm` would be a bit like vacuuming with a wet mop: It's just not done, for very good reasons."
+)
+```
+
+```{r two-functions-to-do-anova, echo=FALSE}
+question("Which two functions can you use to run an analysis of variance?",
+         answer("`stats`", message = "`stats` is a package, not a function."),
+         answer("`aov`", correct = TRUE),
+         answer("`lm`", correct = TRUE),
+         answer("`car`", message = "`car` is a package, not a function."),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         incorrect = "",
+         correct = "You got it!"
+)
+```
+```{r two-packages-to-do-anova, echo=FALSE}
+question("Name two packages that can you use to run an analysis of variance (of course there are more---this is R).",
+         answer("`stats`", correct = TRUE),
+         answer("`anova`", message = "`anova` is a function, not a package."),
+         answer("`lm`", message = "`lm` is a function, not a package."),
+         answer("`car`", correct = TRUE),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         incorrect = "",
+         correct = "All your hard work is paying off!"
+)
+```
+
+
+```{r what-to-report, echo=FALSE}
+question("Which of these numbers do you include when you report the results of an ANOVA?",
+         answer("_p_", correct = TRUE),
+         answer("_F_", correct = TRUE),
+         answer("df", correct = TRUE),
+         answer("the mean squares"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE
+)
+```
+
+
+```{r two-ways-to-summarize-fit, echo=FALSE}
+question("Which lines of code result in a summary of the fit for an ANOVA?",
+         answer("`summary(aov(aam ~ location, data = long_mussels))`", correct = TRUE),
+         answer("`fit <- aov(aam ~ location, data = long_mussels); summary(fit)`", correct = TRUE),
+         answer("`fit <- aov(aam ~ location, data = long_mussels)`"),
+         answer("`aov(aam ~ location, data = long_mussels)`"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         incorrect = "Here's a hint: In R, you can put multiple commands on the same line using `;` to separate them.",
+         correct = "You are amazing!"
+)
+```
+
+
+```{r what-does-tukey-kramer-do, echo=FALSE}
+question("What does the Tukey-Kramer test tell you?",
+         answer("Which pairs of group means are different from each other.", correct = TRUE),
+         answer("Whether the critic Tukey liked the movie _Kramer vs. Kramer_."),
+         answer("Whether the non-parametric ANOVA is also significant."),
+         answer("Whether the ANOVA was significant under the assumptions."),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         correct = "Perfect!",
+         incorrect = "Not correct. Read the paragraph just above this question to find the answer."
+)
+```
+
+
+```{r bb, echo=FALSE}
+question("Which are examples of a one-way ANOVA null hypotheses?",
+         answer("Mean tibia length is the same for each age group of children", correct = TRUE),
+         answer("The average monthly electric bill is the same in major cities within the United States", correct = TRUE),
+         answer("The average monthly electric bill in Philadelphia, PA is less than what it is in Burlington, VT"),
+         answer("The average monthly electric bill in Philadelphia, PA is more than what it is in Burlington, VT"),
+         allow_retry = TRUE,
+         random_answer_order = TRUE,
+         incorrect = "Remember that the one-way ANOVA tests whether the means of the measurement variable are teh same for different groups.",
+         correct = "Yes!"
+)
+```
+
+
+
+```{r whentouseANOVA, echo=FALSE}
+question("Select the cases where ANOVA is appropriate",
+         answer("A professor has three classes and you want to compare the professor's assessment of the three classes in comparison with each other"),
+         answer("Three professors have one class each and you want to compare the mean class grades", correct = TRUE),
+         answer("You want to compare white blood cell counts as a response to medication for four groups of patients", correct = TRUE),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         incorrect = "You'll learn about independence between groups later, which matters for an ANOVA, but at this point, using common sense, you might be able to figure out why a design that uses only one professor to fill out assessments comparing three classes might introduce bias. Might comparing the classes against each cause a professor to inflate or deflate ratings to rank the classes rather than objectively assess them? And what about the categorical variable? How many categories does the variable `professor` have? If it has only one, then it is not a variable but a constant. Therefore there are not three groups to compare, but just one: and that just won't work."
+)
+```
+
+
+```{r select-variables, echo=FALSE}
+question("Which _explicit_ variables do we have in the `mussels` data as it is?",
+         answer("Tillamook", correct = TRUE),
+         answer("Newport", correct = TRUE),
+         answer("Petersburg", correct = TRUE),
+         answer("Magadan", correct = TRUE),
+         answer("Tvarminne", correct = TRUE),
+         answer("aam"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         correct = "You found them all!",
+         incorrect = "The column names in the dataset `mussels` are the variables."
+)
+```
+
+```{r how-to-modify-data, echo=FALSE}
+question("Which variables do we actually want to analyze?",
+         answer("location", correct = TRUE),
+         answer("aam", correct = TRUE),
+         answer("country"),
+         answer("city"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         correct = "That's right. Just two variables will do the trick.",
+         incorrect = "You need only two variables as described in the paragraph above these two questions."
+)
+```
+
+
+
+```{r predict-the-finding, echo=FALSE}
+question("Looking at the boxplot you just made, what do you think the results of an ANOVA will be?",
+         answer("Not all the means are the same among locations.", correct = TRUE),
+         answer("All the means are the same among locations.", message = "It's pretty clear from the boxplot that some `location` means are different from at least one other `location` mean."),
+         answer("Petersburg and Tvarminne have the same means", message = "Although an ANOVA tells us whether any pairs means differ from each other, it doesn't tell us which pairs. You need a post hoc test to get that additional information."),
+         answer("There are two groups of `aam` values", message = "Although you can see clear groups in the boxplot, an ANOVA does not tell you anything about groups. It tells you only that some means differ. You can run a post hoc test to find out more about groupings."),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         incorrect = "Unfortunately, no.",
+         correct = "Yes!"
+)
+```
+
+
+```{r what-is-alpha, echo=FALSE}
+question("What is `alpha` in the density plot above?",
+         answer("A value that tells us what is the cutoff for 'alpha variables'"),
+         answer("The family of the colors to use"),
+         answer("Color opacity", correct = TRUE),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         correct = "Good job!",
+         incorrect = "Nope. Try again."
+)
+```
+
+
+```{r where-can-we-use-lm, echo=FALSE}
+question("Which analyses can you do using the `lm` function?",
+         answer("linear regression", correct = TRUE),
+         answer("analysis of variance", correct = TRUE),
+         answer("analysis of covariance", correct = TRUE),
+         answer("Kruskal-Wallis test"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         correct = "`lm` is amazing. And so are you!",
+         incorrect = "Doing a Kruskal-Wallis test with `lm` would be a bit like vacuuming with a wet mop: It's just not done, for very good reasons."
+)
+```
+
+```{r two-functions-to-do-anova, echo=FALSE}
+question("Which two functions can you use to run an analysis of variance?",
+         answer("`stats`", message = "`stats` is a package, not a function."),
+         answer("`aov`", correct = TRUE),
+         answer("`lm`", correct = TRUE),
+         answer("`car`", message = "`car` is a package, not a function."),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         incorrect = "",
+         correct = "You got it!"
+)
+```
+```{r two-packages-to-do-anova, echo=FALSE}
+question("Name two packages that can you use to run an analysis of variance (of course there are more---this is R).",
+         answer("`stats`", correct = TRUE),
+         answer("`anova`", message = "`anova` is a function, not a package."),
+         answer("`lm`", message = "`lm` is a function, not a package."),
+         answer("`car`", correct = TRUE),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         incorrect = "",
+         correct = "All your hard work is paying off!"
+)
+```
+
+
+```{r what-to-report, echo=FALSE}
+question("Which of these numbers do you include when you report the results of an ANOVA?",
+         answer("_p_", correct = TRUE),
+         answer("_F_", correct = TRUE),
+         answer("df", correct = TRUE),
+         answer("the mean squares"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE
+)
+```
+
+
+```{r two-ways-to-summarize-fit, echo=FALSE}
+question("Which lines of code result in a summary of the fit for an ANOVA?",
+         answer("`summary(aov(aam ~ location, data = long_mussels))`", correct = TRUE),
+         answer("`fit <- aov(aam ~ location, data = long_mussels); summary(fit)`", correct = TRUE),
+         answer("`fit <- aov(aam ~ location, data = long_mussels)`"),
+         answer("`aov(aam ~ location, data = long_mussels)`"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         incorrect = "Here's a hint: In R, you can put multiple commands on the same line using `;` to separate them.",
+         correct = "You are amazing!"
+)
+```
+
+
+```{r what-does-tukey-kramer-do, echo=FALSE}
+question("What does the Tukey-Kramer test tell you?",
+         answer("Which pairs of group means are different from each other.", correct = TRUE),
+         answer("Whether the critic Tukey liked the movie _Kramer vs. Kramer_."),
+         answer("Whether the non-parametric ANOVA is also significant."),
+         answer("Whether the ANOVA was significant under the assumptions."),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         correct = "Perfect!",
+         incorrect = "Not correct. Read the paragraph just above this question to find the answer."
+)
+```
+
+
+```{r bb, echo=FALSE}
+question("Which are examples of a one-way ANOVA null hypotheses?",
+         answer("Mean tibia length is the same for each age group of children", correct = TRUE),
+         answer("The average monthly electric bill is the same in major cities within the United States", correct = TRUE),
+         answer("The average monthly electric bill in Philadelphia, PA is less than what it is in Burlington, VT"),
+         answer("The average monthly electric bill in Philadelphia, PA is more than what it is in Burlington, VT"),
+         allow_retry = TRUE,
+         random_answer_order = TRUE,
+         incorrect = "Remember that the one-way ANOVA tests whether the means of the measurement variable are teh same for different groups.",
+         correct = "Yes!"
+)
+```
+
+
+
+```{r whentouseANOVA, echo=FALSE}
+question("Select the cases where ANOVA is appropriate",
+         answer("A professor has three classes and you want to compare the professor's assessment of the three classes in comparison with each other"),
+         answer("Three professors have one class each and you want to compare the mean class grades", correct = TRUE),
+         answer("You want to compare white blood cell counts as a response to medication for four groups of patients", correct = TRUE),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         incorrect = "You'll learn about independence between groups later, which matters for an ANOVA, but at this point, using common sense, you might be able to figure out why a design that uses only one professor to fill out assessments comparing three classes might introduce bias. Might comparing the classes against each cause a professor to inflate or deflate ratings to rank the classes rather than objectively assess them? And what about the categorical variable? How many categories does the variable `professor` have? If it has only one, then it is not a variable but a constant. Therefore there are not three groups to compare, but just one: and that just won't work."
+)
+```
+
+
+```{r select-variables, echo=FALSE}
+question("Which _explicit_ variables do we have in the `mussels` data as it is?",
+         answer("Tillamook", correct = TRUE),
+         answer("Newport", correct = TRUE),
+         answer("Petersburg", correct = TRUE),
+         answer("Magadan", correct = TRUE),
+         answer("Tvarminne", correct = TRUE),
+         answer("aam"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         correct = "You found them all!",
+         incorrect = "The column names in the dataset `mussels` are the variables."
+)
+```
+
+```{r how-to-modify-data, echo=FALSE}
+question("Which variables do we actually want to analyze?",
+         answer("location", correct = TRUE),
+         answer("aam", correct = TRUE),
+         answer("country"),
+         answer("city"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         correct = "That's right. Just two variables will do the trick.",
+         incorrect = "You need only two variables as described in the paragraph above these two questions."
+)
+```
+
+
+
+```{r predict-the-finding, echo=FALSE}
+question("Looking at the boxplot you just made, what do you think the results of an ANOVA will be?",
+         answer("Not all the means are the same among locations.", correct = TRUE),
+         answer("All the means are the same among locations.", message = "It's pretty clear from the boxplot that some `location` means are different from at least one other `location` mean."),
+         answer("Petersburg and Tvarminne have the same means", message = "Although an ANOVA tells us whether any pairs means differ from each other, it doesn't tell us which pairs. You need a post hoc test to get that additional information."),
+         answer("There are two groups of `aam` values", message = "Although you can see clear groups in the boxplot, an ANOVA does not tell you anything about groups. It tells you only that some means differ. You can run a post hoc test to find out more about groupings."),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         incorrect = "Unfortunately, no.",
+         correct = "Yes!"
+)
+```
+
+
+```{r what-is-alpha, echo=FALSE}
+question("What is `alpha` in the density plot above?",
+         answer("A value that tells us what is the cutoff for 'alpha variables'"),
+         answer("The family of the colors to use"),
+         answer("Color opacity", correct = TRUE),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         correct = "Good job!",
+         incorrect = "Nope. Try again."
+)
+```
+
+
+```{r where-can-we-use-lm, echo=FALSE}
+question("Which analyses can you do using the `lm` function?",
+         answer("linear regression", correct = TRUE),
+         answer("analysis of variance", correct = TRUE),
+         answer("analysis of covariance", correct = TRUE),
+         answer("Kruskal-Wallis test"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         correct = "`lm` is amazing. And so are you!",
+         incorrect = "Doing a Kruskal-Wallis test with `lm` would be a bit like vacuuming with a wet mop: It's just not done, for very good reasons."
+)
+```
+
+```{r two-functions-to-do-anova, echo=FALSE}
+question("Which two functions can you use to run an analysis of variance?",
+         answer("`stats`", message = "`stats` is a package, not a function."),
+         answer("`aov`", correct = TRUE),
+         answer("`lm`", correct = TRUE),
+         answer("`car`", message = "`car` is a package, not a function."),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         incorrect = "",
+         correct = "You got it!"
+)
+```
+```{r two-packages-to-do-anova, echo=FALSE}
+question("Name two packages that can you use to run an analysis of variance (of course there are more---this is R).",
+         answer("`stats`", correct = TRUE),
+         answer("`anova`", message = "`anova` is a function, not a package."),
+         answer("`lm`", message = "`lm` is a function, not a package."),
+         answer("`car`", correct = TRUE),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         incorrect = "",
+         correct = "All your hard work is paying off!"
+)
+```
+
+
+```{r what-to-report, echo=FALSE}
+question("Which of these numbers do you include when you report the results of an ANOVA?",
+         answer("_p_", correct = TRUE),
+         answer("_F_", correct = TRUE),
+         answer("df", correct = TRUE),
+         answer("the mean squares"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE
+)
+```
+
+
+```{r two-ways-to-summarize-fit, echo=FALSE}
+question("Which lines of code result in a summary of the fit for an ANOVA?",
+         answer("`summary(aov(aam ~ location, data = long_mussels))`", correct = TRUE),
+         answer("`fit <- aov(aam ~ location, data = long_mussels); summary(fit)`", correct = TRUE),
+         answer("`fit <- aov(aam ~ location, data = long_mussels)`"),
+         answer("`aov(aam ~ location, data = long_mussels)`"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         incorrect = "Here's a hint: In R, you can put multiple commands on the same line using `;` to separate them.",
+         correct = "You are amazing!"
+)
+```
+
+
+```{r what-does-tukey-kramer-do, echo=FALSE}
+question("What does the Tukey-Kramer test tell you?",
+         answer("Which pairs of group means are different from each other.", correct = TRUE),
+         answer("Whether the critic Tukey liked the movie _Kramer vs. Kramer_."),
+         answer("Whether the non-parametric ANOVA is also significant."),
+         answer("Whether the ANOVA was significant under the assumptions."),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         correct = "Perfect!",
+         incorrect = "Not correct. Read the paragraph just above this question to find the answer."
+)
+```
