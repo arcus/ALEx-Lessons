@@ -25,7 +25,7 @@ knitr::opts_chunk$set(echo = FALSE)
 H<sub>A</sub> is that the observed data are different from the expected.
 
 >H<sub>0</sub> for a one-tailed test is that the observed number for one category is equal to or less than the expected.
-h<sub>A</sub> is that the observed number in that category is greater than expected.
+H<sub>A</sub> is that the observed number in that category is greater than expected.
 
 For example, if you do a genetic cross in which you expect a 3:1 ratio of green to yellow pea pods, and you have a total of 50 plants, your null hypothesis is that there are 37.5 plants with green pods and 12.5 with yellow pods.
 
