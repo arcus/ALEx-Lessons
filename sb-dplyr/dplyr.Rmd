@@ -11,6 +11,12 @@ options(digits = 3, scipen = 9999)
 if(!require(learnr)){install.packages("learnr")}
 library(learnr)
 library(dplyr)
+knitr::opts_chunk$set(echo = FALSE)
+options(digits = 3, scipen = 9999)
+tutorial_options(exercise.completion = FALSE,
+                 exercise.eval = TRUE,
+                 exercise.lines = 8,
+                 exercise.diagnostics = TRUE)
 url <- "https://raw.githubusercontent.com/genomicsclass/dagdata/master/inst/extdata/msleep_ggplot2.csv"
 msleep_fname <- basename(url)
 msleep <- read.csv(url)
@@ -39,12 +45,9 @@ If you are familiar with R, you are probably familiar with base R functions such
 
 ## How do I get `dplyr`? 
 
-To install `dplyr` use this syntax (which is typical for installing packages in R): `install.packages("dplyr")`. Remember the quotation marks, which you need for installing packages, though you don't need them for using the `library` function.
+To install `dplyr` use this syntax (which is typical for installing packages in R): `install.packages("dplyr")`. You can't install any packages because this lesson doesn't run on your computer (it's in the cloud, as you may have noticed), but you can copy the following code to your own RStudio on your own computer:
 
 ```{r a, exercise = TRUE, exercise.lines = 8}
-
-```
-```{r a-solution}
 install.packages("dplyr")
 ```
 
@@ -67,6 +70,8 @@ Download the `msleep` data set in CSV format from [here](https://raw.githubuserc
 url <- "https://raw.githubusercontent.com/genomicsclass/dagdata/master/inst/extdata/msleep_ggplot2.csv"
 msleep_fname <- basename(url)
 msleep <- read.csv(url)
+#Your code:
+
 ```
 ```{r c-solution}
 url <- "https://raw.githubusercontent.com/genomicsclass/dagdata/master/inst/extdata/msleep_ggplot2.csv"
@@ -93,6 +98,8 @@ Column Name | Description
 
 ## `dplyr` Verbs
 
+`dplyr` thinks of its function calls as verbs, and here they are:
+
 dplyr verbs | Description
 --- | ---
 `select` | select columns 
@@ -103,6 +110,17 @@ dplyr verbs | Description
 `group_by` | allows for group operations in the "split-apply-combine" concept
 
 The next sections will provide you with practice using `dplyr` verbs. We'll start with the two most basic functions, `select` (for choosing columns) and `filter` (for choosing rows). 
+
+```{r tf-verbs-functions, echo=FALSE}
+question("True or false: A verb by any other name is still a function call.",
+         answer("True", correct = TRUE),
+         answer("False"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         correct = "You are amazing!",
+         incorrect = "Actually, it is."
+)
+```
 
 ## Choosing Columns using `select`
 
