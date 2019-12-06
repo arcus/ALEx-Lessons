@@ -28,14 +28,19 @@ tutorial_options(exercise.completion = FALSE,
 
 ## We Shamelessly Link you to Someone Else's Work
 
-Daniel Smilkov and Shan Carter continued many people’s previous work (most notably Andrej Karpathy’s convnet.js demo and Chris Olah’s articles about neural networks) to create an online playground where you can learn about and play with neural nets. 
+Daniel Smilkov and Shan Carter continued many people’s previous work (most notably Andrej Karpathy’s convnet.js demo and [Chris Olah’s articles about neural networks](http://colah.github.io)) to create **an online playground** where you can learn about and play with neural nets. 
 
-### Um, What Is a Neural Network? 
+### Um, what is a neural network? 
 
 On their website, the authors say,
 
 >It’s a technique for building a computer program that learns from data. It is based very loosely on how we think the human brain works. First, a collection of software “neurons” are created and connected together, allowing them to send messages to each other. Next, the network is asked to solve a problem, which it attempts to do over and over, each time strengthening the connections that lead to success and diminishing those that lead to failure. For a more detailed introduction to neural networks, Michael Nielsen’s Neural Networks and Deep Learning is a good place to start. For a more technical overview, try Deep Learning by Ian Goodfellow, Yoshua Bengio, and Aaron Courville.
 
+
+### How can I play with one?
+
 Continuing a proud tradition of helping you benefit from other people's amazing work, [we happily link you to this playground so you can begin to learn about neural nets](http://playground.tensorflow.org/#activation=tanh&batchSize=10&dataset=circle&regDataset=reg-plane&learningRate=0.03&regularizationRate=0&noise=0&networkShape=4,2&seed=0.08968&showTestData=false&discretize=false&percTrainData=50&x=true&y=true&xTimesY=false&xSquared=false&ySquared=false&cosX=false&sinX=false&cosY=false&sinY=false&collectStats=false&problem=classification&initZero=false&hideText=false) by having fun with them. 
+
+## Giving Credit where Credit is Due
 
 Many thanks to Daniel Smilkov, Shan Carter, Andrej Karpathy, Chris Olah, D. Sculley, Fernanda Viégas, and Martin Wattenberg for their amazing work and for choosing an [Apache license](https://github.com/tensorflow/playground/blob/master/LICENSE) that lets us all freely make use of their contributions.
