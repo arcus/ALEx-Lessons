@@ -1,0 +1,125 @@
+---
+title: "One Way ANOVA"
+output: 
+ learnr::tutorial:
+      progressive: true
+      allow_skip: true
+runtime: shiny_prerendered
+---
+
+```{r setup, include=FALSE}
+library(learnr)
+library(data.table)
+library(dplyr)
+library(pwr)
+library(tidyr)
+library(stats)
+library(ggplot2)
+shhh <- suppressPackageStartupMessages
+shh <- suppressWarnings
+sh <- suppressMessages
+knitr::opts_chunk$set(echo = FALSE)
+options(digits = 3, scipen = 9999)
+tutorial_options(exercise.completion = FALSE,
+                 exercise.eval = TRUE,
+                 exercise.lines = 8,
+                 exercise.diagnostics = TRUE)
+
+Input = ("
+Tillamook Newport Petersburg  Magadan Tvarminne
+0.0571	0.0873	0.0974	0.1033	0.0703
+0.0813	0.0662	0.1352	0.0915	0.1026
+0.0831	0.0672	0.0817	0.0781	0.0956
+0.0976	0.0819	0.1016	0.0685	0.0973
+0.0817	0.0749	0.0968	0.0677	0.1039
+0.0859	0.0649	0.1064	0.0697	0.1045
+0.0735	0.0835	0.105	  0.0764	NA
+0.0659	0.0725	0.0689  NA  NA
+0.0923  NA  NA  NA  NA
+0.0836  NA  NA  NA  NA
+")
+mussels <- read.table(textConnection(Input), header = TRUE)
+rm(Input)
+long_mussels <- pivot_longer(data = mussels,
+                             cols = names(mussels),
+                             names_to = "location",
+                             values_to = "aam")
+long_mussels$location <- as.factor(long_mussels$location)
+```
+
+## Background
+
+One common way to look at the data in more detail after performing an ANOVA is to compare different pairs of means and see which are significantly different from each other. For the mussel shell example in [our ANOVA lesson](http://www.a-mess.org/sb-one-way-anova/), the overall _p_ value (.0036) piques our interest. We therefore want to follow up by asking whether the mean in Tillamook is different from the mean in Newport, whether Newport is different from Petersburg, and so on.
+
+## What kinds of Variables work with a Tukey-Kramer _Post Hoc_ Test
+
+You use the same variables for a Tukey-Kramer test that you used for the ANOVA test you're curious about. 
+
+>One [scalar (a.k.a. "measurement") variable](http://www.biostathandbook.com/variabletypes.html#measurement).     
+One [nominal (a.k.a. "categorical") variable](http://www.biostathandbook.com/variabletypes.html#nominal)   
+
+The nominal variable divides the measurements into two or more groups. The one-way ANOVA tests whether the means of the measurement variable are the same for the different groups, and the Tukey-Kramer test takes this one step further by identifying _which pairs_ of group means differ.
+
+## Null and Alternative Hypotheses
+
+>* **H<sub>0</sub>**: The observed difference between a pair of means is less than or equal to the minimum significant difference (MSD).     
+* **H<sub>A</sub>**: The observed difference between a pair of means is greater than the minimum significant difference.
+
+For a balanced design, all of the minimum significant differences will be the same; for an unbalanced design, pairs of groups with smaller sample sizes will have bigger minimum significant differences. 
+
+## When to use Tukey-Kramer Test
+
+Analysis of variance (ANOVA) is the most commonly used technique for __comparing the means of groups__ of measurement data. Suppose you have just run an ANOVA and you now know that a pair of means among the groups you're looking at differ. The ANOVA tells you what the differences are among the groups, but it doesn't tell you which of those differences are _significant_. That's where the Tukey-Kramer test (and other _post hoc_ tests) comes in.  
+
+## The Code
+
+Let's keep using the data set we used in [the ANOVA lesson](http://www.a-mess.org/sb-one-way-anova/). We'll recreate our ANOVA fit, then run the Tukey-Kramer test to see which pairs differ from each other.
+
+Please follow these steps:
+
+1. Place the `stats` package in the library.    
+2. Get the fit of the ANOVA analysis, if you don't already have it, by running `aov` with the formula `aam ~ location` and `data` set equal to `long_mussels` (which we've loaded into memory for you). Store the output in the variable `fit`.    
+3. Look at `fit` by passing it to `summary`.     
+4. Finally, pass `fit` to `TukeyHSD`.
+
+```{r tukeyhsd, exercise = TRUE, exercise.lines = 5}
+
+```
+```{r tukeyhsd-hint-1}
+```
+```{r tukeyhsd-hint-2}
+library(stats)
+fit <- aov(...)
+summary(...)
+```
+```{r tukeyhsd-hint-3}
+library(stats)
+fit <- aov(aam ~ location, data = long_mussels)
+summary(...)
+TukeyHSD(...)
+```
+```{r tukeyhsd-hint-4}
+library(stats)
+fit <- aov(aam ~ location, data = long_mussels)
+summary(fit)
+TukeyHSD(...)
+```
+```{r tukeyhsd-solution}
+library(stats)
+fit <- aov(aam ~ location, data = long_mussels)
+summary(fit)
+TukeyHSD(fit)
+```
+
+```{r check-output-1, echo=FALSE}
+question("How many pairs does `TukeyHSD` evaluate?",
+         answer("10", correct = TRUE),
+         answer("5"),
+         answer("45"),
+         answer("None"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         correct = "You are amazing!",
+         incorrect = "No."
+)
+```

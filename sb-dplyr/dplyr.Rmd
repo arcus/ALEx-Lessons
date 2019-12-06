@@ -1,5 +1,5 @@
 ---
-title: "Introduction to the Tidyverse: dplyr"
+title: "Introduction to the tidyverse: dplyr"
 output: 
  learnr::tutorial:
       progressive: true

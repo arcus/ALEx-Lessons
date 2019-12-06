@@ -1,9 +1,9 @@
 ---
 title: "One Way ANOVA"
 output: 
-  learnr::tutorial:
-    progressive: true
-    allow_skip: true
+ learnr::tutorial:
+      progressive: true
+      allow_skip: true
 runtime: shiny_prerendered
 ---
 
@@ -291,7 +291,6 @@ qplot(data = long_mussels,
 
 Many people choose to show their data as boxplots because boxplots are usuall cleaner visualizations. However, the density plot provides good information about our data:
 
-* Means vary from ~.07 to ~.10
 * Tvarminne is bi-modal    
 * Not all the levels are normally distributed    
 * 11 rows were deleted due to missingness, which means that not all the levels of `location` contain the same number of observations. 
@@ -387,7 +386,7 @@ summary(fit)
 
 (Hint: If you don't see any results, make sure you have asked to see a `summary` of `fit`.)
 
-What does all this mean? Most people quickly focus on the _p_ value, which here is .0036. Apparently we can reject the null hypothesis that the means within the groups are the same. 
+What does all this mean? Most people quickly focus on the _p_ value, which here is .0036. Apparently we can reject the null hypothesis that the means among the groups are the same. 
 
 We also have more information: the test statistic $\displaystyle F$ (4.78), the degrees of freedom (4, 34), and the sums of the squares and the mean square values for location and for the residuals. When you report ANOVA results, you typically report $\displaystyle F$, the degrees of freedom, and the $\displaystyle p$ statistic.
 
@@ -422,7 +421,7 @@ library(stats)
 aov(aam ~ location, data = long_mussels)
 ```
 
-This provides less information! That's why people usually summarize the fit. 
+This provides less information than when we summarized fit! That's why people usually do summarize the fit. 
 
 ```{r two-ways-to-summarize-fit, echo=FALSE}
 question("Which lines of code result in a summary of the fit for an ANOVA?",
@@ -439,7 +438,7 @@ question("Which lines of code result in a summary of the fit for an ANOVA?",
 
 ## You found something interesting! Now what?
  
-If the analysis of variance indicates an interesting effect of the independent variable (here, `location`), you can conduct multiple comparisons _among_ the levels of this factor using Tukey or Least Significant Difference (LSD) procedures. (The problem of inflating the Type I Error Rate when making multiple comparisons is discussed in the [Multiple Comparisons chapter](http://www.biostathandbook.com/multiplecomparisons.html) in John H. McDonald's ([Handbook of Biological Statistics](http://www.biostathandbook.com/chigof.html)))  
+If the analysis of variance indicates an interesting effect of the independent variable (here, `location`), you can conduct multiple comparisons _among_ the levels of this factor using Tukey-Kramer or Least Significant Difference (LSD) procedures. (The problem of inflating the Type I Error Rate when making multiple comparisons is discussed in the [Multiple Comparisons chapter](http://www.biostathandbook.com/multiplecomparisons.html) in John H. McDonald's ([Handbook of Biological Statistics](http://www.biostathandbook.com/chigof.html)))  
 
 R functions that make multiple comparisons usually allow for adjusting _p_ values. In R you can use the Benjamini–Hochberg (BH) or `fdr` procedure. See `?p.adjust` for more information.
 
@@ -455,26 +454,36 @@ Newport is different from Petersburg, and so on.
 ```{r what-does-tukey-kramer-do, echo=FALSE}
 question("What does the Tukey-Kramer test tell you?",
          answer("Which pairs of group means are different from each other.", correct = TRUE),
-         answer("Whether the critic Tukey liked the movie _Kramer vs. Kramer_."),
-         answer("Whether the non-parametric ANOVA is also significant."),
-         answer("Whether the ANOVA was significant under the assumptions."),
+         answer("Whether the critic Tukey liked the movie _Kramer vs. Kramer_.", message = "Really?"),
+         answer("Whether the non-parametric ANOVA is also significant.", message = "I'm afraid not."),
+         answer("Whether the ANOVA was significant under the assumptions.", message = "No, the Tukey-Kramer test doesn't say anything about assumptions. In fact, even we haven't said anything about assumptions yet. We'll get there, though."),
          random_answer_order = TRUE,
          allow_retry = TRUE,
          correct = "Perfect!",
-         incorrect = "Not correct. Read the paragraph just above this question to find the answer."
+         incorrect = ""
 )
 ```
 
 It might be tempting to use a simple two-sample t–test on each pairwise comparison
 that looks interesting to you. However, this can result in a lot of false positives. When
-there are a groups, there are $\displaystyle \frac{a^2 -a}$(a2–a)/2 possible pairwise comparisons, a number that quickly
-goes up as the number of groups increases. With 5 groups, there are 10 pairwise comparisons; with 10 groups, there are 45, and with 20 groups, there are 190 pairs. When you do multiple comparisons, you increase the probability that at least one will have a P value less than 0.05 purely by chance, even if the null hypothesis of each comparison is
-true.
+there are a groups, there are $\displaystyle \frac{a^2 -a}{2}$ possible pairwise comparisons, a number that quickly
+increases as the number of groups increases:
+
+* With 5 groups, you would have 10 pairwise comparisons     
+* With 10 groups, you would have 45     
+* With 20 groups, you would have 190 pairs    
+
+When you do multiple comparisons, you increase the probability that at least one will have a _p_ value less than 0.05 purely by chance, _even if_ the null hypothesis of each comparison is true.
 
 There are a number of different tests for pairwise comparisons after a one-way ANOVA,
 and each has advantages and disadvantages. The differences among their results are fairly
-subtle, so I will describe only one, the Tukey-Kramer test. It is probably the most
-commonly used post-hoc test after a one-way ANOVA, and it is fairly easy to understand.
+subtle, so I will describe only one, the Tukey-Kramer test. 
+
+
+The Tukey-Kramer test is probably the most
+commonly used post-hoc test used with a one-way ANOVA, and it is fairly easy to understand.
+
+
 In the Tukey–Kramer method, the minimum significant difference (MSD) is calculated
 for each pair of means. It depends on the sample size in each group, the average variation
 within the groups, and the total number of groups. For a balanced design, all of the MSDs

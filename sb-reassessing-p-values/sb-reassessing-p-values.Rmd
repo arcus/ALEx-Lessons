@@ -1,0 +1,68 @@
+---
+title: "Reassessing _p_ Values"
+output: 
+ learnr::tutorial:
+      progressive: true
+      allow_skip: true
+runtime: shiny_prerendered
+---
+
+```{r setup, include=FALSE}
+options(digits = 3, scipen = 9999)
+if(!require(learnr)){install.packages("learnr")}
+library(learnr)
+library(dplyr)
+library(tidyr)
+tutorial_options(exercise.completion = FALSE,
+                 exercise.eval = TRUE,
+                 exercise.lines = 5,
+                 exercise.diagnostics = TRUE)
+
+```
+
+## Why are we even talking about this?
+
+Since its founding in 1839 (180 years ago—making it the oldest professional organization in the United States as well as one of the most influential) the American Statistical Association (ASA) has had a policy of remaining neutral about statistical methods. 
+
+However, the organization broke its silence in 2016: As issues surrounding the use of _p_ values as a cutoff for “publish vs. don’t publish” or “fund vs. don’t fund” became more urgent, the ASA published [a statement recommending how to use _p_ values](https://www.amstat.org/asa/files/pdfs/P-ValueStatement.pdf). Then, in March 2019, they followed up with an edition of The American Statistician entitled “[Statistical Inference in the 21st Century: A World Beyond p < 0.05](https://amstat.tandfonline.com/toc/utas20/73/sup1)”,  which contains no less than 43 articles devoted to the matter of _p_ values. They have since followed up with two [webinars](https://youtu.be/Cw8BRNN1p8E) in which three lead authors of articles published in that special edition of The American Statistician gave short (20 minute) talks, answered follow-up questions, then discussed their various perspectives with each other during the final segment of the webinar. It’s hard to imagine how the ASA could have broken its silence with a more powerful megaphone than this combination of an official statement, a lengthy issue of [_The American Statistician_](https://amstat.tandfonline.com/toc/utas20/73/sup1), and widely published webinars [playing to packed houses](https://www.niss.org/news/niss-webinar-reviews-alternatives-traditional-p-value-packed-house).
+ 
+The ASA’s activities with regard to _p_ values point to a clear conclusion: They no longer support using _p_ all by itself as a cutoff point.
+ 
+What will replace the culturally embedded practice of classifying research by _p_ values? Can anything replace it? If so, what? What will be the long-term effects if the _p_ value is no longer used as the universal classifier for good vs. bad research? What governmental and private establishments (such as the Food and Drug Administration or financial and pharmaceutical companies) will be affected? What about funding for research? How will myriad decisions that were previously relatively simple to justify evolve with our new thinking about _p_ values?
+
+
+```{r important_questions, echo=FALSE}
+question("What are some important questions the ASA's actions have raised?",
+         answer("Can anything replace _p_ values for classifying research?", correct = TRUE),
+         answer("What will be the long-term effects if the _p_ value is no longer used as the universal classifier for good vs. bad research?", correct = TRUE),
+         answer("What governmental and private establishments (such as the Food and Drug Administration or financial and pharmaceutical companies) will be affected by a change in how we evaluate research?", correct = TRUE),
+         answer("How do I use _p_ values to get published?"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE
+)
+```
+
+```{r how-has-ASA-gone-public, echo=FALSE}
+question("How has the ASA been communicating with members and the public about the issue of _p_ values?",
+         answer("Through webinars", correct = TRUE),
+         answer("Through a special issue of _The American Statistician_", correct = TRUE),
+         answer("Using a megaphone (a literal one, not a metaphorical one)"),
+         answer("Through an official statement about how _p_ values ought to be used by researchers", correct = TRUE),
+         random_answer_order = TRUE,
+         allow_retry = TRUE
+)
+```
+
+
+### And by the Way
+ 
+The research affinity group METACHOP (Math, Engineering, and Technology at CHOP), in cooperation with [Arcus Education](https://education.arcus.chop.edu)'s Sheila Braun, is hosting an 8-part series _Reassessing p values_. The series is based on the ASA’s [webinars](https://youtu.be/Cw8BRNN1p8E). At each meeting, we spend roughly 20 minutes watching one recorded webinar speaker and the remaining time in small groups discussing that speaker’s position and reflecting on our own.
+ 
+The ASA speakers hold widely divergent, carefully considered positions. We hope to follow the their lead by promoting careful, honest, respectful conversation among participants, with the goal of cultivating innovative excellence in our own research.
+
+## Watch the First Webinar Video
+
+Can't wait for the METACHOP _Reassessing p values_ series? Prefer to watch the webinar on your own time? Don't particularly want to engage in discussion about the matter? You're in luck, because here is the first video.
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/Cw8BRNN1p8E" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
