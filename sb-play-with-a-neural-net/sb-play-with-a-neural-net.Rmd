@@ -20,10 +20,10 @@ shh <- suppressWarnings
 sh <- suppressMessages
 knitr::opts_chunk$set(echo = FALSE)
 options(digits = 3, scipen = 9999)
-tutorial_options(exercise.completion = FALSE,
-                 exercise.eval = TRUE,
-                 exercise.lines = 8,
-                 exercise.diagnostics = TRUE)
+# tutorial_options(exercise.completion = FALSE,
+#                  exercise.eval = TRUE,
+#                  exercise.lines = 8,
+#                  exercise.diagnostics = TRUE)
 ```
 
 ## We Shamelessly Link you to Someone Else's Work
