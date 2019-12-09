@@ -79,7 +79,7 @@ question("Which are examples of a one-way ANOVA null hypotheses?",
 
 ## When to use an ANOVA
 
-Analysis of variance (ANOVA) is the most commonly used technique for __comparing the means of groups__ of measurement data. You can analyze lots of different experimental designs with different kinds of ANOVA. Here we will discuss only the simplest ANOVA.
+Analysis of variance (ANOVA) is the most commonly used technique for __comparing the means of groups__ of measurement data. You can analyze lots of different experimental designs with different kinds of ANOVA. Here we will discuss only the simplest: the _one-way_ ANOVA.
 
 ```{r whentouseANOVA, echo=FALSE}
 question("Select the cases where ANOVA is appropriate",
@@ -97,15 +97,13 @@ question("Select the cases where ANOVA is appropriate",
 
 In a one-way ANOVA (also known as a _one-factor_, _single-factor_, or _single-classification_ ANOVA), there is one measurement variable and one nominal variable. You make multiple observations of the measurement variable for each value of the nominal variable. 
 
-For example, here is some data on a shell measurement (the length of the anterior adductor muscle scar, or AAM length, standardized by dividing by length) in the mussel *Mytilus trossulus* from five locations: Tillamook, Oregon; Newport, Oregon; Petersburg, Alaska; Magadan, Russia; and Tvarminne, Finland.
+For example, here is some data on a shell measurement (the length of the anterior adductor muscle scar, or AAM length, standardized by dividing by mean length) in the mussel *Mytilus trossulus* from five locations: Tillamook, Oregon; Newport, Oregon; Petersburg, Alaska; Magadan, Russia; and Tvarminne, Finland.
 
 ```{r data1, echo=FALSE}
 mussels
 ```
 
-The nominal variable is invisible but implicit in the data structure. It's `location`, with the five values `Tillamook`, `Newport`, `Petersburg`, `Magadan`, and `Tvarminne`. There are six to ten observations of the measurement variable, AAM length (`aam`), from each location. Again, `aam` is implicit: you won't find a column called "aam", but all the values in the columns we do have are values for `aam`. 
-
-The data needs a bit of munging to be ready for analysis. 
+The nominal variable is invisible but implicit in the data structure. It's `location`, with the five values `Tillamook`, `Newport`, `Petersburg`, `Magadan`, and `Tvarminne`. There are 6 to 10 observations of the measurement variable, AAM length (`aam`), from each location. Again, `aam` is implicit: you won't find a column called "aam" (until we make one), but all the values in the columns we _do_ have are values for `aam`. The data needs a bit of munging to be ready for analysis. 
 
 ```{r select-variables, echo=FALSE}
 question("Which _explicit_ variables do we have in the `mussels` data as it is?",
@@ -131,7 +129,7 @@ question("Which variables do we actually want to analyze?",
          random_answer_order = TRUE,
          allow_retry = TRUE,
          correct = "That's right. Just two variables will do the trick.",
-         incorrect = "You need only two variables as described in the paragraph above these two questions."
+         incorrect = "You need two variables as described in the paragraph above these two questions."
 )
 ```
 
@@ -149,11 +147,24 @@ Start by looking at the data again.
 mussels
 ```
 
-To use the language of `tidyverse`s `gather` and `spread` functions, we have a bunch of "key" variables that should actually be levels in a `location` variable. And we have a bunch of "values", anterior adductor muscle (AAM) scar lengths, that should actually be the `aam` variable. 
+To use the language of `tidyverse`'s `gather` and `spread` functions, we have a bunch of "key" variables that should actually be levels in a `location` variable. And we have a bunch of "values", anterior adductor muscle (AAM) scar lengths, that should actually be the `aam` variable. 
 
-In short, we will convert the implicit variable `location` into a factor variable and the implicit variable `aam` into a scalar variable. 
+To summarize, we will convert the implicit variable `location` into a _factor_ variable and the implicit variable `aam` into a _scalar_ variable. 
 
-The terms "key" and "value", as used in `gather` and `spread`, have proven difficult to communicate to many R users. The folks who created the `tidyverse` therefore set up some new functions, `pivot_longer` and `pivot_wider`, that they hoped would prove easier for people to understand. The `gather` and `spread` functions aren't being maintained any more. You might have learned them elsewhere, but you may want to learn the new functions now. 
+The terms "key" and "value" as used in `gather` and `spread` have proven difficult to communicate to many R users. The folks who created the `tidyverse` therefore set up some new functions, `pivot_longer` and `pivot_wider`, that they hoped would prove easier for people to understand. The `gather` and `spread` functions aren't being maintained any more. You might have learned them elsewhere, but you may want to learn the new functions now. 
+
+```{r gather-pivot, echo=FALSE}
+question("Which function replaces the `gather` function in the `tidyverse`?",
+         answer("pivot_longer", correct = TRUE),
+         answer("pivot_wider"),
+         answer("bring_together"),
+         answer("find_implicit_variable"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         correct = "You are amazing!",
+         incorrect = "Rather than gathering variables, Wickham & co. decided that 'pivot' was more intuitive. Perhaps it will help to think about which way gathering extends variables: along the _x_ axis or along the _y_ axis?"
+)
+```
 
 So your first step may be to check out our lesson [Pivot Longer](../sb-pivot-longer/) if you haven't used `pivot_longer` before to transform a wide data set to a narrower, longer one. Your work will still be here when you get back. 
 
@@ -229,17 +240,17 @@ You now have a beautiful, clean visualization to provide along with the results 
 ```{r predict-the-finding, echo=FALSE}
 question("Looking at the boxplot you just made, what do you think the results of an ANOVA will be?",
          answer("Not all the means are the same among locations.", correct = TRUE),
-         answer("All the means are the same among locations.", message = "It's pretty clear from the boxplot that some `location` means are different from at least one other `location` mean."),
-         answer("Petersburg and Tvarminne have the same means", message = "Although an ANOVA tells us whether any pairs means differ from each other, it doesn't tell us which pairs. You need a post hoc test to get that additional information."),
-         answer("There are two groups of `aam` values", message = "Although you can see clear groups in the boxplot, an ANOVA does not tell you anything about groups. It tells you only that some means differ. You can run a post hoc test to find out more about groupings."),
+         answer("All the means are the same among locations.", message = "It's pretty clear from the boxplot that at least one `location` mean is different from at least one other `location` mean."),
+         answer("Petersburg and Tvarminne have the same means", message = "Although an ANOVA tells us whether _any_ pairs of means differ from each other, it doesn't tell us _which_ pairs. You need a _post hoc_ test to get that additional information."),
+         answer("There are two groups of `aam` values", message = "Although you can see clear groups in the boxplot, an ANOVA does not tell you anything about groups. It tells you only that some means differ. You can run a _post hoc_ test to find out more about groupings."),
          random_answer_order = TRUE,
          allow_retry = TRUE,
          incorrect = "Unfortunately, no.",
-         correct = "Yes!"
+         correct = "You got it!"
 )
 ```
 
-To learn more about base plotting, see our lessons [Base Graphics](../swirl-base-graphics/) and [Base Plotting System](../swirl-base-plotting-system/). For a discussion of data visualization principles, see [Principles of Analytic Graphs](../swirl-principles-of-analytic-graphs/). To learn how to plot in `ggplot`, see [`ggplot2` Part 1](../swirl-ggplot2-part-1/), [`ggplot2` Part 2](../swirl-ggplot2-part-2/), [`ggplot2` Extras](../swirl-ggplot2-extras/), and [Exploratory Graphs](../swirl-exploratory-graphs/).
+To learn more about base plotting, see our lessons [Base Graphics](../swirl-base-graphics/) and [Base Plotting System](../swirl-base-plotting-system/). For a discussion of data visualization principles, see [Principles of Analytic Graphs](../swirl-principles-of-analytic-graphs/). To learn how to plot in `ggplot2`, see [`ggplot2` Part 1](../swirl-ggplot2-part-1/), [`ggplot2` Part 2](../swirl-ggplot2-part-2/), [`ggplot2` Extras](../swirl-ggplot2-extras/), and [Exploratory Graphs](../swirl-exploratory-graphs/).
 
 ### Quickly Visualize the Data with a Density Plot
 
@@ -289,7 +300,34 @@ qplot(data = long_mussels,
       alpha = .25)
 ```
 
-Many people choose to show their data as boxplots because boxplots are usuall cleaner visualizations. However, the density plot provides good information about our data:
+```{r which-is-bi-modal, echo=FALSE}
+question("From which location did we get bi-modal data with a small mode in the lower values and a large mode in the upper values?",
+         answer("Magadan"),
+         answer("Newport"),
+         answer("Petersburg"),
+         answer("Tillamook"),
+         answer("Tvarmine", correct = TRUE),
+            random_answer_order = TRUE,
+            allow_retry = TRUE,
+         correct = "That's right!",
+         incorrect = ""
+)
+```
+```{r meaning-of-bi-modal-data-in-small-data-set, echo=FALSE}
+question("With what information have our data visualizations provided us, given how few measurements we have and also given the fact that the data is imabalanced (i.e., we have fewer readings from some locations than from others)?",
+         answer("Nothing", message = "Although some might agree that the data is useless, we beg to differ."),
+         answer("Perhaps some hints about what kind of data to gather next", correct = TRUE),
+         answer("Since an ANOVA is robust to imbalanced design, the answer to whether the group means differ in the underlying populations of mussels for these locations", message = "A one-way ANOVA is _not_ robust to imbalanced design, especially if the standard deviations are different among the groups"),
+         answer("Data distributions in our specific data sets", correct = TRUE),
+         answer("Data distributions in the underlying populations at these locations", message = "You would need a hypothesis test to draw such a conclusion."),
+            random_answer_order = TRUE,
+            allow_retry = TRUE,
+         correct = "Yes! Even when a test has its problems, you can use it to direct your attention to the next step in your research process. Do you need to gather more data? Ask a slightly different question and gather the data for that? Further, we see what our _specific_ data looks like, which can be helpful, even if we can't make any inferences about the underlying population of mussels.",
+         incorrect = ""
+)
+```
+
+Many people choose to show their data as boxplots because boxplots are usually cleaner visualizations. However, the density plot provides good information about our data:
 
 * Tvarminne is bi-modal    
 * Not all the levels are normally distributed    
@@ -493,14 +531,77 @@ MSD, the pair of means is significantly different.
 
 Perform the analysis with the `TukeyHSD` function from the `stats` package.
 
-```{r tukey, exercise = TRUE}
+```{r tukeyHSD, exercise = TRUE, exercise.lines = 5}
+
+```
+```{r tukeyHSD-hint-1}
+library(stats)
+fit <- aov(...)
+summary(...)
+TukeyHSD(...)
+```
+```{r tukeyHSD-hint-2}
+library(stats)
+fit <- aov(aam ~ location, ...)
+summary(...)
+TukeyHSD(...)
+```
+```{r tukeyHSD-hint-3}
+library(stats)
+fit <- aov(aam ~ location, data = long_mussels)
+summary(...)
+TukeyHSD(...)
+```
+```{r tukeyHSD-hint-4}
+library(stats)
+fit <- aov(aam ~ location, data = long_mussels)
+summary(fit)
+TukeyHSD(...)
+```
+```{r tukeyHSD-solution}
 library(stats)
 fit <- aov(aam ~ location, data = long_mussels)
 summary(fit)
 TukeyHSD(fit)
 ```
 
+```{r how-to-interpret-tukey, echo=FALSE}
+question("How do you interpret `Newport-Magadan      -0.004514` (which should be in your `TukeyHSD` output`",
+         answer("The _p_ value is a negative number."),
+         answer("The confidence interval contains 0."),
+         answer("If you subtract Magadan's mean from Newport's, you would get -0.004514.", correct = TRUE),
+            random_answer_order = TRUE,
+            allow_retry = TRUE,
+         correct = "That's correct!"
+)
+```
 
+```{r conf-interval, echo=FALSE}
+question("What are the confidence interval bounds for Tillamook-Petersburg?",
+         answer("[-0.024872, 0.015843]"),
+         answer("[-0.018925, -0.037583]"),
+         answer("[-0.037583, -0.00026]", correct = TRUE),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         correct = "You are doing great!"
+)
+```
+
+```{r identify-sig-diffs, echo=FALSE}
+question("Which differences have _p_ < .05?",
+         answer("Newport-Magadan"),
+         answer("Petersburg-Magadan"),
+         answer("Tillamook-Magadan"),
+         answer("Petersburg-Newport", correct = TRUE),
+         answer("Tillamook-Newport"),
+         answer("Tillamook-Petersburg", correct = TRUE),
+         answer("Tvarminne-Petersburg"),
+         answer("Tvarminne-Tillamook"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         correct = "You got it!"
+)
+```
 
 ## Welch’s ANOVA
 
