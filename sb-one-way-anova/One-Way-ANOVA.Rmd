@@ -15,6 +15,7 @@ library(pwr)
 library(tidyr)
 library(stats)
 library(ggplot2)
+library(performance)
 shhh <- suppressPackageStartupMessages
 shh <- suppressWarnings
 sh <- suppressMessages
@@ -45,6 +46,7 @@ long_mussels <- pivot_longer(data = mussels,
                              names_to = "location",
                              values_to = "aam")
 long_mussels$location <- as.factor(long_mussels$location)
+fit <- aov(aam ~ location, long_mussels)
 ```
 
 ## Background
@@ -166,7 +168,7 @@ question("Which function replaces the `gather` function in the `tidyverse`?",
 )
 ```
 
-So your first step may be to check out our lesson [Pivot Longer](../sb-pivot-longer/) if you haven't used `pivot_longer` before to transform a wide data set to a narrower, longer one. Your work will still be here when you get back. 
+So your first step may be to check out our lesson about [pivot_longer](../sb-pivot-longer/), if you haven't used it before, to transform a wide data set to a narrower, longer one. Your work will still be here when you get back. 
 
 #### Convert Wide Data to Long Data by using `pivot_longer`
 
@@ -174,7 +176,7 @@ Using the method from [Pivot Longer](../sb-pivot-longer/), enter the code for ma
 
 Remember to set the new `location` variable in `long_mussels` to be a factor once you've created `long_mussels`.
 
-If you haven't time to do the [Pivot Longer](../sb-pivot-longer/) lesson, use the Hints buttons to teach yourself the proper syntax for the `pivot_longer` function.
+If you haven't time to do the [pivot_longer](../sb-pivot-longer/) lesson, use the Hints buttons to teach yourself the proper syntax for the `pivot_longer` function.
 
 Make sure you enclose your assignment commands in parentheses so you can see what they are doing without having to add another line to display results. 
 
@@ -353,7 +355,7 @@ If this plot makes you wonder whether our data violates assumptions of ANOVA, th
 
 Meanwhile, we soldier on. 
 
-## At Last, Perform the ANOVA 
+## Perform the ANOVA 
 
 The `lm` function in the native `stats` package fits a linear model by [least squares](https://rcompanion.org/handbook/G_05.html), and can be used for a variety of analyses: [regression](../sb-correlation-and-linear-regression/), analysis of variance (what we're doing now), and [analysis of covariance](https://rcompanion.org/rcompanion/e_04.html), for instance.  The analysis of variance is then conducted either with the `anova` function in the `car` package for [Type II or Type III sum of squares](https://rcompanion.org/rcompanion/d_04.html), or with the `aov` function in the native `stats` package for [Type I sum of squares](https://rcompanion.org/rcompanion/d_04.html). 
 
@@ -529,39 +531,15 @@ will be the same; for an unbalanced design, pairs of groups with smaller sample 
 have bigger MSDs. If the observed difference between a pair of means is greater than the
 MSD, the pair of means is significantly different. 
 
-Perform the analysis with the `TukeyHSD` function from the `stats` package.
+Perform the analysis with the `TukeyHSD` function from the `stats` package. You already have a model in the variable `fit`. Pass it to `TukeyHSD` and see what happens. Use the questions below to help you decode the results. 
 
 ```{r tukeyHSD, exercise = TRUE, exercise.lines = 5}
 
 ```
 ```{r tukeyHSD-hint-1}
-library(stats)
-fit <- aov(...)
-summary(...)
-TukeyHSD(...)
-```
-```{r tukeyHSD-hint-2}
-library(stats)
-fit <- aov(aam ~ location, ...)
-summary(...)
-TukeyHSD(...)
-```
-```{r tukeyHSD-hint-3}
-library(stats)
-fit <- aov(aam ~ location, data = long_mussels)
-summary(...)
-TukeyHSD(...)
-```
-```{r tukeyHSD-hint-4}
-library(stats)
-fit <- aov(aam ~ location, data = long_mussels)
-summary(fit)
 TukeyHSD(...)
 ```
 ```{r tukeyHSD-solution}
-library(stats)
-fit <- aov(aam ~ location, data = long_mussels)
-summary(fit)
 TukeyHSD(fit)
 ```
 
@@ -606,14 +584,144 @@ question("Which differences have _p_ < .05?",
 ## Welch’s ANOVA
 
 If the data show a lot of heteroscedasticity (different groups have different standard
-deviations), the one-way ANOVA can yield an inaccurate P value; the probability of a false
+deviations), the one-way ANOVA can yield an inaccurate _p_ value; the probability of a false
 positive may be much higher than 5%. In that case, you should use Welch’s ANOVA.
 
-Perform the analysis with the `oneway.test` function from the `stats` package. When the `var.equal` argument is set to `FALSE`, the Welch method is used. 
-
-```{r welch, exercise=TRUE}
-oneway.test(aam ~ location, data = long_mussels, var.equal=FALSE)
+```{r when-to-use-welches, echo=FALSE}
+question("Under what conditions should you use a Welch's ANOVA instead of a classic one-way ANOVA?",
+         answer("When different groups have different standard deviations (i.e., the data is heteroscedastic)", correct = TRUE),
+         answer("When different groups have different _n_s", correct = TRUE),
+         answer("Whenever the probability of a false positive is greater than 5%"),
+         answer("When you have a small data set with homoscedastic data"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         correct = "You got it right!",
+         incorrect = "Keep trying. Remember that the one-way ANOVA is not robust to an imbalanced design and it rests upon the assumption that group standard deviations are roughly similar."
+)
 ```
+
+Use the the `oneway.test` function from the `stats` package for a Welch's ANOVA. Whenever you set `var.equal` equal to `FALSE`, `oneway.test` runs the Welch's test. 
+
+Try it now following these steps:
+
+1. Ascertain that the `stats` package is in the library.    
+2. Call `oneway.test` and pass it these arguments:    
+   * the formula `aam ~ location`, as usual    
+   * the name of the dataset (`long_mussels`)       
+   * the argument `var.egual` set equal to `FALSE`    
+
+```{r welch-anova, exercise = TRUE, exercise.lines = 5}
+
+```
+```{r welch-anova-hint-1}
+oneway.test(...)
+```
+```{r welch-anova-hint-2}
+oneway.test(aam ~ location, 
+            ...)
+```
+```{r welch-anova-hint-3}
+oneway.test(aam ~ location, 
+            data = long_mussels, 
+            ...)
+```
+```{r welch-anova-hint-4}
+oneway.test(aam ~ location, 
+            data = long_mussels, 
+            var.equal = ...)
+```
+```{r welch-anova-solution}
+oneway.test(aam ~ location, 
+            data = long_mussels, 
+            var.equal = FALSE)
+```
+
+## ANOVA Assumptions and How to Check Them
+
+One-way ANOVA assumes that **the observations within each group are normally distributed**. This assumption applies to raw data rather than to residuals. 
+
+The ANOVA is _not_ particularly sensitive to deviations from this assumption; if you apply
+one-way ANOVA to data that are non-normal, your chance of getting a _p_ value less than
+0.05, if the null hypothesis is true, is still pretty close to 0.05. It’s better if your data are
+close to normal, so after you collect your data, you should calculate the residuals (the
+difference between each observation and the mean of its group) and plot them on a
+histogram, either using the [base plotting system](../sb-base-plotting-system/) or [`ggplot2`](../swirl-ggplot2-part-1/). If the residuals look severely non-normal, try various data transformations and see if one makes the data look more normal. 
+
+If you don't know what a transformation is, try guessing.
+
+```{r what-is-a-transformation, echo=FALSE}
+question("Which of these can be used to transform scalar data points?",
+         answer("take the natural log", correct = TRUE),
+         answer("square them", correct = TRUE),
+         answer("cube them", correct = TRUE),
+         answer("take the square root", correct = TRUE),
+         answer("take the cube root", correct = TRUE),
+         answer("add 1 to them", correct = TRUE),
+         answer("perform a _z_ transformation", correct = TRUE),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         correct = "That's right. Basically anything you can do to a number is a transformation of it. Some transformations are more useful than others, but you can try anything.",
+         incorrect = "Keep trying. Does a square root transform a number? Does adding 1 to it transform it?"
+)
+```
+
+Just for fun, try transformating `long_mussels$aam` in various ways in this little sandbox. Send your transformations, as well as the non-transformed data, to `histogram` and find out whether any of your transformations normalize your data. If you're feeling fancy, send the transformed data to `qplot` with the "density" `geom`. HINT: the `ln` function (for taking the natural log) is in the package `radiant.data`.
+
+```{r label, exercise = TRUE, exercise.lines = 5}
+
+```
+```{r label-solution}
+library(radiant.data)
+hist(long_mussels$aam)
+hist(ln(long_mussels$aam))
+qplot(data = long_mussels,
+      x = aam^2,
+      geom = "density")
+```
+
+If none of the transformations you try make the data look normal enough, you can use
+the Kruskal-Wallis test. Be aware that it makes the assumption that the different groups
+have the same shape of distribution, and that it doesn’t test the same null hypothesis as
+one-way ANOVA. Personally, I don’t like the Kruskal-Wallis test; I recommend that if you
+have non-normal data that can’t be fixed by transformation, you go ahead and use oneway
+ANOVA, but be cautious about rejecting the null hypothesis if the _p_ value is not very far
+below 0.05 and your data are extremely non-normal.
+One-way ANOVA also assumes that your data are homoscedastic, meaning the standard
+deviations are equal in the groups. You should examine the standard deviations in the
+different groups and see if there are big differences among them.
+If you have a balanced design, meaning that the number of observations is the same in
+each group, then one-way ANOVA is not very sensitive to heteroscedasticity (different
+standard deviations in the different groups). I haven’t found a thorough study of the
+effects of heteroscedasticity that considered all combinations of the number of groups,
+sample size per group, and amount of heteroscedasticity. I’ve done simulations with two
+groups, and they indicated that heteroscedasticity will give an excess proportion of false
+positives for a balanced design only if one standard deviation is at least three times the
+size of the other, and the sample size in each group is fewer than 10. I would guess that a
+similar rule would apply to one-way ANOVAs with more than two groups and balanced
+designs.
+
+Heteroscedasticity is a much bigger problem when you have an unbalanced design
+(unequal sample sizes in the groups). If the groups with smaller sample sizes also have
+larger standard deviations, you will get too many false positives. The difference in
+standard deviations does not have to be large; a smaller group could have a standard
+deviation that’s 50% larger, and your rate of false positives could be above 10% instead of
+at 5% where it belongs. If the groups with larger sample sizes have larger standard
+deviations, the error is in the opposite direction; you get too few false positives, which
+might seem like a good thing except it also means you lose power (get too many false
+negatives, if there is a difference in means).
+
+You should try really hard to have equal sample sizes in all of your groups. With a
+balanced design, you can safely use a one-way ANOVA unless the sample sizes per group
+are less than 10 and the standard deviations vary by threefold or more. If you have a
+balanced design with small sample sizes and very large variation in the standard
+deviations, you should use Welch’s ANOVA instead.
+
+If you have an unbalanced design, you should carefully examine the standard
+deviations. Unless the standard deviations are very similar, you should probably use
+Welch’s ANOVA. It is less powerful than one-way ANOVA for homoscedastic data, but it can
+be much more accurate for heteroscedastic data from an unbalanced design.
+
+
 
 ## Power Analysis
 
@@ -657,58 +765,7 @@ Alternatively, if you have no experimental data, you can use the `cohen.ES` func
 
 ```
 
-## ANOVA Assumptions
 
-One-way ANOVA assumes that the observations within each group are normally
-distributed. It is not particularly sensitive to deviations from this assumption; if you apply
-one-way ANOVA to data that are non-normal, your chance of getting a P value less than
-0.05, if the null hypothesis is true, is still pretty close to 0.05. It’s better if your data are
-close to normal, so after you collect your data, you should calculate the residuals (the
-difference between each observation and the mean of its group) and plot them on a
-histogram. If the residuals look severely non-normal, try data transformations and see if
-one makes the data look more normal.
-
-If none of the transformations you try make the data look normal enough, you can use
-the Kruskal-Wallis test. Be aware that it makes the assumption that the different groups
-have the same shape of distribution, and that it doesn’t test the same null hypothesis as
-one-way ANOVA. Personally, I don’t like the Kruskal-Wallis test; I recommend that if you
-have non-normal data that can’t be fixed by transformation, you go ahead and use oneway
-ANOVA, but be cautious about rejecting the null hypothesis if the P value is not very far
-below 0.05 and your data are extremely non-normal.
-One-way ANOVA also assumes that your data are homoscedastic, meaning the standard
-deviations are equal in the groups. You should examine the standard deviations in the
-different groups and see if there are big differences among them.
-If you have a balanced design, meaning that the number of observations is the same in
-each group, then one-way ANOVA is not very sensitive to heteroscedasticity (different
-standard deviations in the different groups). I haven’t found a thorough study of the
-effects of heteroscedasticity that considered all combinations of the number of groups,
-sample size per group, and amount of heteroscedasticity. I’ve done simulations with two
-groups, and they indicated that heteroscedasticity will give an excess proportion of false
-positives for a balanced design only if one standard deviation is at least three times the
-size of the other, and the sample size in each group is fewer than 10. I would guess that a
-similar rule would apply to one-way ANOVAs with more than two groups and balanced
-designs.
-
-Heteroscedasticity is a much bigger problem when you have an unbalanced design
-(unequal sample sizes in the groups). If the groups with smaller sample sizes also have
-larger standard deviations, you will get too many false positives. The difference in
-standard deviations does not have to be large; a smaller group could have a standard
-deviation that’s 50% larger, and your rate of false positives could be above 10% instead of
-at 5% where it belongs. If the groups with larger sample sizes have larger standard
-deviations, the error is in the opposite direction; you get too few false positives, which
-might seem like a good thing except it also means you lose power (get too many false
-negatives, if there is a difference in means).
-
-You should try really hard to have equal sample sizes in all of your groups. With a
-balanced design, you can safely use a one-way ANOVA unless the sample sizes per group
-are less than 10 and the standard deviations vary by threefold or more. If you have a
-balanced design with small sample sizes and very large variation in the standard
-deviations, you should use Welch’s ANOVA instead.
-
-If you have an unbalanced design, you should carefully examine the standard
-deviations. Unless the standard deviations are very similar, you should probably use
-Welch’s ANOVA. It is less powerful than one-way ANOVA for homoscedastic data, but it can
-be much more accurate for heteroscedastic data from an unbalanced design.
 
 ## But I like math. Where's the math?
 
