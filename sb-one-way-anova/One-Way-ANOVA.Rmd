@@ -47,6 +47,41 @@ long_mussels <- pivot_longer(data = mussels,
                              values_to = "aam")
 long_mussels$location <- as.factor(long_mussels$location)
 fit <- aov(aam ~ location, long_mussels)
+
+#Create and store a bunch of transformations (tx's)
+aam <- long_mussels$aam
+log_aam <- log(aam)
+log2_aam <- log2(aam)
+common_log_aam <- log10(aam)
+log1p_aam <- log1p(aam)
+log_base_7_aam <- log(aam, base = 7)
+aam_squared <- aam^2
+aam_cubed <- aam^3
+sqrt_aam <- sqrt(aam)
+exp_aam <- exp(aam)
+expm1_aam <- expm1(aam)
+
+#Make a list of tx's
+my_list <- list(aam, log_aam, log2_aam, common_log_aam, log1p_aam, log_base_7_aam,
+             aam_squared, aam_cubed, sqrt_aam, exp_aam, expm1_aam)
+
+# Create a function for plotting a single tx.
+# Input: one variable
+plot_this_tx <- function(this_tx) {
+   qplot(data = long_mussels,
+      x = this_tx,
+      geom = "density")
+}
+
+we_are_here <- aam[!is.na(aam) & aam < 0.1352] 
+# Create a function for plotting a single tx.
+# Input: one variable
+plot_this_tx <- function(this_tx) {
+   qplot(x = this_tx,
+         geom = "density")
+}
+
+
 ```
 
 ## Background
@@ -445,18 +480,18 @@ Take note of the fact that 11 observations were deleted due to missingness. The 
 
 Just for fun, run `aov` and allow the results to print without first storing them in `fit` and using `summary` to format them.
 
-```{r name, exercise = TRUE, exercise.lines = 5}
+```{r aov-again, exercise = TRUE, exercise.lines = 5}
 
 ```
-```{r name-hint-1}
+```{r aov-again-hint-1}
 library(stats)
 aov(...)
 ```
-```{r name-hint-2}
+```{r aov-again-hint-2}
 library(stats)
 aov(aam ~ location, ...)
 ```
-```{r name-solution}
+```{r aov-again-solution}
 library(stats)
 aov(aam ~ location, data = long_mussels)
 ```
@@ -638,14 +673,58 @@ oneway.test(aam ~ location,
 
 ## ANOVA Assumptions and How to Check Them
 
-One-way ANOVA assumes that **the observations within each group are normally distributed**. This assumption applies to raw data rather than to residuals. 
+All statistical tests rest upon assumptions about your data. In order to perform them properly, you need to know what assumptions you are making, and be certain that none of your assumptions violate the assumptions of the one-way ANOVA. 
 
-The ANOVA is _not_ particularly sensitive to deviations from this assumption; if you apply
-one-way ANOVA to data that are non-normal, your chance of getting a _p_ value less than
-0.05, if the null hypothesis is true, is still pretty close to 0.05. It’s better if your data are
-close to normal, so after you collect your data, you should calculate the residuals (the
-difference between each observation and the mean of its group) and plot them on a
-histogram, either using the [base plotting system](../sb-base-plotting-system/) or [`ggplot2`](../swirl-ggplot2-part-1/). If the residuals look severely non-normal, try various data transformations and see if one makes the data look more normal. 
+### Assumption: The Residuals are Normal
+
+One-way ANOVA assumes that **the residuals of the observations within each group are normally distributed**.
+
+
+```{r where_resids, echo=FALSE}
+question("HARD QUESTION: Where can you get a copy of the residuals in `long_mussels$aam`?",
+         answer("Calculate them by hand", message = "Just... no."),
+         answer("Run a regression analysis and hope they show up", message = "You could and they would, but if you think back, you already ran a linear model when you ran `aov` on the `long_mussel` data set. Try typing `str(fit)` (say 'structure of fit` in your head) to find out what is being stored in the model you got back from that procedure."),
+         answer("They are in `fit`, which you already created if you have been doing this tutorial step by step", correct = TRUE),
+         answer("Wherever lost socks go.", message = "Really?"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         correct = "That's right!",
+         incorrect = "No."
+)
+```
+
+
+You don't really need the residuals, though. Simply use `qqnorm` to make a qqplot. It calculates the residuals for you. 
+
+Try it now. Pass `long_mussels$aam` to `qqnorm`, then pass it again to `qqline`. If you can figure out how, ake the line red and give it a width of 2. HINT: Type `?qqline` at the prompt.
+
+```{r qqnormaam, exercise = TRUE, exercise.lines = 5}
+
+```
+```{r qqnormaam-hint-1}
+qqnorm(...)
+```
+```{r qqnormaam-hint-2}
+qqnorm(long_mussels$aam)
+```
+```{r qqnormaam-hint-3}
+qqnorm(long_mussels$aam)
+qqline(...)
+```
+```{r qqnormaam-solution}
+qqnorm(long_mussels$aam)
+qqline(long_mussels$aam, col = "red", lwd = 2)
+```
+
+`qqnorm` checks the residuals (the $\displaystyle y$ axis) against what they would be if they were normally distributed (the $\displaystyle x$ axis). Many statisticians use the "fat pencil rule" to decide whether the data points are close enough to the line to count as normally distributed. Imagine yourself laying a fat pencil along the red line. Does it cover all the dots? If so, you're good. 
+
+This distribution of residuals is right on the edge of acceptable. Let's pretend it's not to see what we can do about it.
+
+#### What to do When the Residuals Are not Normally Distributed
+
+Extensive simulations demonstrate that ANOVA is _not_ particularly sensitive to deviations from the assumption of normality; if you perform a one-way ANOVA on data with residuals that are non-normal, your chance of getting a _p_ value less than 0.05, if the null hypothesis is true, is still pretty close to 0.05. Nonetheless, it’s better if your data are close to normal. 
+
+Our next step is to transform the data to see if we can get a better set of residuals. 
 
 If you don't know what a transformation is, try guessing.
 
@@ -660,32 +739,223 @@ question("Which of these can be used to transform scalar data points?",
          answer("perform a _z_ transformation", correct = TRUE),
          random_answer_order = TRUE,
          allow_retry = TRUE,
-         correct = "That's right. Basically anything you can do to a number is a transformation of it. Some transformations are more useful than others, but you can try anything.",
+         correct = "That's right. Basically anything you can do to a number can operate as a transformation of your data. Some transformations are more useful than others, but you can _try_ anything.",
          incorrect = "Keep trying. Does a square root transform a number? Does adding 1 to it transform it?"
 )
 ```
 
-Just for fun, try transformating `long_mussels$aam` in various ways in this little sandbox. Send your transformations, as well as the non-transformed data, to `histogram` and find out whether any of your transformations normalize your data. If you're feeling fancy, send the transformed data to `qplot` with the "density" `geom`. HINT: the `ln` function (for taking the natural log) is in the package `radiant.data`.
+Just for fun, try transformating `long_mussels$aam` in various ways in the sandbox that follows. Send your transformationed data, as well as the non-transformed data, to `qplot` (see our [swirl `ggplot2` Part 1 lesson](../swirl-ggplot2-part-1/) to learn about `qplot`) to find out whether any of your transformations normalize your data. HINT: To take the natural log of a scalar variable, use `log(a_scalar_variable)`. `log` is in the base stats package. Type `?log` in the sandbox to learn how to play with other logarithms and with exponents. 
 
-```{r label, exercise = TRUE, exercise.lines = 5}
+You can use your own ideas or follow the code in the hints. The code I wrote includes what you can (or already did) learn in [swirl Part 4 - Vectors](../swirl-vectors/), [swirl Part 9 - Functions](../swirl-functions), [swirl Part 10 - `lapply` and `sapply`](../swirl-lapply-and-sapply/) and  [`ggplot2` Part 1](../swirl-ggplot2-part-1/). If my code doesn't make sense to you, try revisiting those lessons. 
+
+```{r practice-tx, exercise = TRUE, exercise.lines = 25}
 
 ```
-```{r label-solution}
-library(radiant.data)
-hist(long_mussels$aam)
-hist(ln(long_mussels$aam))
-qplot(data = long_mussels,
-      x = aam^2,
+```{r practice-tx-hint-1}
+aam <- long_mussels$aam
+```
+```{r practice-tx-hint-2}
+aam <- long_mussels$aam
+log_aam <- log(aam)
+log2_aam <- log2(aam)
+common_log_aam <- log10(aam)
+log1p_aam <- log1p(aam)
+log_base_7_aam <- log(aam, base = 7)
+aam_squared <- aam^2
+aam_cubed <- aam^3
+sqrt_aam <- sqrt(aam)
+exp_aam <- exp(aam)
+expm1_aam <- expm1(aam)
+```
+```{r practice-tx-hint-3}
+aam <- long_mussels$aam
+log_aam <- log(aam)
+log2_aam <- log2(aam)
+common_log_aam <- log10(aam)
+log1p_aam <- log1p(aam)
+log_base_7_aam <- log(aam, base = 7)
+aam_squared <- aam^2
+aam_cubed <- aam^3
+sqrt_aam <- sqrt(aam)
+exp_aam <- exp(aam)
+expm1_aam <- expm1(aam)
+my_list <- c(aam, log_aam, log2_aam, common_log_aam, log1p_aam, log_base_7_aam,
+             aam_squared, aam_cubed, sqrt_aam, exp_aam, expm1_aam)
+```
+```{r practice-tx-hint-4}
+#Create and store a bunch of transformations (tx's)
+aam <- long_mussels$aam
+log_aam <- log(aam)
+log2_aam <- log2(aam)
+common_log_aam <- log10(aam)
+log1p_aam <- log1p(aam)
+log_base_7_aam <- log(aam, base = 7)
+aam_squared <- aam^2
+aam_cubed <- aam^3
+sqrt_aam <- sqrt(aam)
+exp_aam <- exp(aam)
+expm1_aam <- expm1(aam)
+
+#Make a list of tx's
+my_list <- c(aam, log_aam, log2_aam, common_log_aam, log1p_aam, log_base_7_aam,
+             aam_squared, aam_cubed, sqrt_aam, exp_aam, expm1_aam)
+
+# Create a function for plotting a single tx
+plot_this_tx <- function(this_tx) {
+   qplot(data = long_mussels,
+      x = this_tx,
       geom = "density")
+}
+
+
+```
+```{r practice-tx-solution}
+#Create and store a bunch of transformations (tx's)
+aam <- long_mussels$aam
+log_aam <- log(aam)
+log2_aam <- log2(aam)
+common_log_aam <- log10(aam)
+log1p_aam <- log1p(aam)
+log_base_7_aam <- log(aam, base = 7)
+aam_squared <- aam^2
+aam_cubed <- aam^3
+sqrt_aam <- sqrt(aam)
+exp_aam <- exp(aam)
+expm1_aam <- expm1(aam)
+
+#Make a list of tx's
+my_list <- list(aam, log_aam, log2_aam, common_log_aam, log1p_aam, log_base_7_aam,
+             aam_squared, aam_cubed, sqrt_aam, exp_aam, expm1_aam)
+
+# Create a function for plotting a single tx.
+# Input: one variable
+plot_this_tx <- function(this_tx) {
+   qplot(data = long_mussels,
+      x = this_tx,
+      geom = "density")
+}
+
+# Now use lapply to apply the plot function to each element in my list
+lapply(my_list, plot_this_tx)
 ```
 
-If none of the transformations you try make the data look normal enough, you can use
-the Kruskal-Wallis test. Be aware that it makes the assumption that the different groups
-have the same shape of distribution, and that it doesn’t test the same null hypothesis as
-one-way ANOVA. Personally, I don’t like the Kruskal-Wallis test; I recommend that if you
+Now take the list of transformed copies of `aam` and `lapply` `qqnorm` and `qqline` to it. HINT: Create a function that does both `qqnorm` and `qqline` to whatever you pass it.
+
+```{r lapply-qqnorm-qqline, exercise = TRUE, exercise.lines = 5}
+
+```
+```{r lapply-qqnorm-qqline-hint}
+qq_this_tx <- function(this_tx) {
+   ...
+}
+lapply(...)
+```
+```{r lapply-qqnorm-qqline-solution}
+qq_this_tx <- function(this_tx) {
+   qqnorm(this_tx)
+   qqline(this_tx, col = "red", lwd = 2)
+}
+lapply(my_list, qq_this_tx)
+```
+
+#### Soapbox: The Outlier
+
+```{r did-you-notice, echo=FALSE}
+question("Did you notice the outlier?",
+         answer("Yes", correct = TRUE),
+         answer("No"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         correct = "Excellent.",
+         incorrect = "No? Go back and look at the results of `qqnorm`."
+)
+```
+
+No, you can't just delete it. Don't get me started.
+
+Too late: Let's talk about the outlier. 
+
+It's having an impact on the data set. Create a variable called `we_are_here` and assign to it `aam[!is.na(aam) < 0.135]` (all the members of `aam` that return `TRUE` for not being missing _and_ that are less than 0.135). The outlier has a value of 0.1352, so this [logic](../swirl-logic/) will exclude it. Then pass `we_are_here` to `qqnorm` and `qqline` (with the same parameters as before).
+
+```{r we-are-here, exercise = TRUE, exercise.lines = 5}
+
+```
+```{r we-are-here-hint-1}
+we_are_here <- ?
+```
+```{r we-are-here-hint-2}
+we_are_here <- aam[!is.na(aam) & aam < 0.1352] 
+qqnorm(...)
+qqline(..)
+```
+```{r we-are-here-hint-3}
+we_are_here <- aam[!is.na(aam) & aam < 0.1352] 
+qqnorm(we_are_here)
+qqline(...)
+```
+```{r we-are-here-hint-4}
+we_are_here <- aam[!is.na(aam) & aam < 0.1352] 
+qqnorm(we_are_here)
+qqline(we_are_here, ..., ...)
+```
+```{r we-are-here-solution}
+we_are_here <- aam[!is.na(aam) & aam < 0.1352] 
+qqnorm(we_are_here)
+qqline(we_are_here, col = "red", lwd = 2)
+```
+
+```{r better-or-worse, echo=FALSE}
+question("Does the new qqplot look better or worse?",
+         answer("Kinda better"),
+         answer("Kinda worse", correct = TRUE),
+         random_answer_order = TRUE,
+         allow_retry = TRUE
+)
+```
+
+Lesson learned: It doesn't necessarily help to get rid of outliers. 
+
+But there's more to it than that. Unless you have reason to believe the outlier is an erroneous measurement, leave it alone. If it's true, it's data. We don't trim outliers even if certain statistical programs (we name no names) give you the option to do so.
+
+Here's some code for checking to see if any of the transformations work better with the outlier gone.
+
+```{r practice-tx-take-2}
+#Create and store a bunch of transformations (tx's)
+log_we_are_here <- log(we_are_here)
+log2_we_are_here <- log2(we_are_here)
+common_log_we_are_here <- log10(we_are_here)
+log1p_we_are_here <- log1p(we_are_here)
+log_base_7_we_are_here <- log(we_are_here, base = 7)
+we_are_here_squared <- we_are_here^2
+we_are_here_cubed <- we_are_here^3
+sqrt_we_are_here <- sqrt(we_are_here)
+exp_we_are_here <- exp(we_are_here)
+expm1_we_are_here <- expm1(we_are_here)
+
+#Make a list of tx's
+my_list2 <- list(we_are_here, log_we_are_here, log2_we_are_here, common_log_we_are_here, 
+                 log1p_we_are_here, log_base_7_we_are_here, we_are_here_squared, we_are_here_cubed,
+                 sqrt_we_are_here, exp_we_are_here, expm1_we_are_here)
+
+# Now use lapply to apply the plot function to each element in my list
+lapply(my_list2, plot_this_tx)
+```
+
+### If no Transformations Produce Normally Distributed Residuals
+
+If none of the transformations you try make the data look _normal_ _enough_, you can use
+the [Kruskal-Wallis test](../sb-kruskal-wallis/). Be aware of these factors if you decide to performa a Kruskal-Wallis test:
+
+* that the Krusal-Wallis test makes the assumption that the different groups
+have the same shaped distributions (which we now already isn't true because we did a density plot earlier in this lesson that showed the shapes of the distributions for each level of `location` to be quite different)    
+* that the Krusal-Wallis test doesn’t test the same null hypothesis as
+one-way ANOVA. 
+
+Personally, we don’t like the Kruskal-Wallis test; we recommend that if you
 have non-normal data that can’t be fixed by transformation, you go ahead and use oneway
 ANOVA, but be cautious about rejecting the null hypothesis if the _p_ value is not very far
-below 0.05 and your data are extremely non-normal.
+below 0.05 and your data are extremely non-normal. You may even want to set alpha to something besides .05, say, .005. 
+
 One-way ANOVA also assumes that your data are homoscedastic, meaning the standard
 deviations are equal in the groups. You should examine the standard deviations in the
 different groups and see if there are big differences among them.
