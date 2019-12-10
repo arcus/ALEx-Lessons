@@ -86,14 +86,14 @@ plot_this_tx <- function(this_tx) {
 
 ## Background
 
-This lesson is both a reference and a tutorial. It contains all the code samples you need to perform a one-way ANOVA on your own data as well as background information such as how to interpret output and which graphs you might want to use to demonstrate results (and in some cases which graphs _not_ to use). 
+This lesson is both a reference and a tutorial. It contains all the code samples you need to perform a oneway ANOVA on your own data as well as background information such as how to interpret output and which graphs you might want to use to demonstrate results (and in some cases which graphs _not_ to use). 
 
-## What kinds of Variables work with One-Way ANOVA
+## What kinds of Variables work with oneway ANOVA
 
 >One [scalar (a.k.a. "measurement") variable](http://www.biostathandbook.com/variabletypes.html#measurement).     
 One [nominal (a.k.a. "categorical") variable](http://www.biostathandbook.com/variabletypes.html#nominal)   
 
-The nominal variable divides the measurements into two or more groups. The one-way ANOVA tests whether the means of the measurement variable are the same for the different groups.
+The nominal variable divides the measurements into two or more groups. The oneway ANOVA tests whether the means of the measurement variable are the same for the different groups.
 
 ## Null and Alternative Hypotheses
 
@@ -102,21 +102,21 @@ same for the different categories in the nominal (a.k.a. "categorical") variable
 * **H<sub>A</sub>**: The means are not all the same for the different categories in the categorical variable.   
 
 ```{r bb, echo=FALSE}
-question("Which are examples of a one-way ANOVA null hypotheses?",
+question("Which are examples of a oneway ANOVA null hypotheses?",
          answer("Mean tibia length is the same for each age group of children", correct = TRUE),
          answer("The average monthly electric bill is the same in major cities within the United States", correct = TRUE),
          answer("The average monthly electric bill in Philadelphia, PA is less than what it is in Burlington, VT"),
          answer("The average monthly electric bill in Philadelphia, PA is more than what it is in Burlington, VT"),
          allow_retry = TRUE,
          random_answer_order = TRUE,
-         incorrect = "Remember that the one-way ANOVA tests whether the means of the measurement variable are the same for different groups.",
+         incorrect = "Remember that the oneway ANOVA tests whether the means of the measurement variable are the same for different groups.",
          correct = "Yes!"
 )
 ```
 
 ## When to use an ANOVA
 
-Analysis of variance (ANOVA) is the most commonly used technique for __comparing the means of groups__ of measurement data. You can analyze lots of different experimental designs with different kinds of ANOVA. Here we will discuss only the simplest: the _one-way_ ANOVA.
+Analysis of variance (ANOVA) is the most commonly used technique for __comparing the means of groups__ of measurement data. You can analyze lots of different experimental designs with different kinds of ANOVA. Here we will discuss only the simplest: the _oneway_ ANOVA.
 
 ```{r whentouseANOVA, echo=FALSE}
 question("Select the cases where ANOVA is appropriate",
@@ -132,7 +132,7 @@ question("Select the cases where ANOVA is appropriate",
 **Hint:** If you have just one professor and three classes, then the nominal variable (`professor`) is a constant. You need a nominal variable with two or more groups and a [measurement](http://www.biostathandbook.com/variabletypes.html#measurement) variable to perform an ANOVA.
 </div>
 
-In a one-way ANOVA (also known as a _one-factor_, _single-factor_, or _single-classification_ ANOVA), there is one measurement variable and one nominal variable. You make multiple observations of the measurement variable for each value of the nominal variable. 
+In a oneway ANOVA (also known as a _one-factor_, _single-factor_, or _single-classification_ ANOVA), there is one measurement variable and one nominal variable. You make multiple observations of the measurement variable for each value of the nominal variable. 
 
 For example, here is some data on a shell measurement (the length of the anterior adductor muscle scar, or AAM length, standardized by dividing by mean length) in the mussel *Mytilus trossulus* from five locations: Tillamook, Oregon; Newport, Oregon; Petersburg, Alaska; Magadan, Russia; and Tvarminne, Finland.
 
@@ -171,7 +171,7 @@ question("Which variables do we actually want to analyze?",
 ```
 
 
-## How to Prepare your Data for a One-Way ANOVA in R
+## How to Prepare your Data for a oneway ANOVA in R
 
 You should, before any call to a statistical function, ensure that the data is in the correct format for running the analysis. For an ANOVA, remember, you should have one [nominal (a.k.a. "categorical") variable](http://www.biostathandbook.com/variabletypes.html#nominal) variable with 2 or more categories and one [measurement (a.k.a. "scalar")](http://www.biostathandbook.com/variabletypes.html#measurement) variable. 
 
@@ -354,7 +354,7 @@ question("From which location did we get bi-modal data with a small mode in the 
 question("With what information have our data visualizations provided us, given how few measurements we have and also given the fact that the data is imabalanced (i.e., we have fewer readings from some locations than from others)?",
          answer("Nothing", message = "Although some might agree that the data is useless, we beg to differ."),
          answer("Perhaps some hints about what kind of data to gather next", correct = TRUE),
-         answer("Since an ANOVA is robust to imbalanced design, the answer to whether the group means differ in the underlying populations of mussels for these locations", message = "A one-way ANOVA is _not_ robust to imbalanced design, especially if the standard deviations are different among the groups"),
+         answer("Since an ANOVA is robust to imbalanced design, the answer to whether the group means differ in the underlying populations of mussels for these locations", message = "A oneway ANOVA is _not_ robust to imbalanced design, especially if the standard deviations are different among the groups"),
          answer("Data distributions in our specific data sets", correct = TRUE),
          answer("Data distributions in the underlying populations at these locations", message = "You would need a hypothesis test to draw such a conclusion."),
             random_answer_order = TRUE,
@@ -550,13 +550,13 @@ increases as the number of groups increases:
 
 When you do multiple comparisons, you increase the probability that at least one will have a _p_ value less than 0.05 purely by chance, _even if_ the null hypothesis of each comparison is true.
 
-There are a number of different tests for pairwise comparisons after a one-way ANOVA,
+There are a number of different tests for pairwise comparisons after a oneway ANOVA,
 and each has advantages and disadvantages. The differences among their results are fairly
 subtle, so I will describe only one, the Tukey-Kramer test. 
 
 
 The Tukey-Kramer test is probably the most
-commonly used post-hoc test used with a one-way ANOVA, and it is fairly easy to understand.
+commonly used post-hoc test used with a oneway ANOVA, and it is fairly easy to understand.
 
 
 In the Tukey–Kramer method, the minimum significant difference (MSD) is calculated
@@ -619,11 +619,11 @@ question("Which differences have _p_ < .05?",
 ## Welch’s ANOVA
 
 If the data show a lot of heteroscedasticity (different groups have different standard
-deviations), the one-way ANOVA can yield an inaccurate _p_ value; the probability of a false
+deviations), the oneway ANOVA can yield an inaccurate _p_ value; the probability of a false
 positive may be much higher than 5%. In that case, you should use Welch’s ANOVA.
 
 ```{r when-to-use-welches, echo=FALSE}
-question("Under what conditions should you use a Welch's ANOVA instead of a classic one-way ANOVA?",
+question("Under what conditions should you use a Welch's ANOVA instead of a classic oneway ANOVA?",
          answer("When different groups have different standard deviations (i.e., the data is heteroscedastic)", correct = TRUE),
          answer("When different groups have different _n_s", correct = TRUE),
          answer("Whenever the probability of a false positive is greater than 5%"),
@@ -631,7 +631,7 @@ question("Under what conditions should you use a Welch's ANOVA instead of a clas
          random_answer_order = TRUE,
          allow_retry = TRUE,
          correct = "You got it right!",
-         incorrect = "Keep trying. Remember that the one-way ANOVA is not robust to an imbalanced design and it rests upon the assumption that group standard deviations are roughly similar."
+         incorrect = "Keep trying. Remember that the oneway ANOVA is not robust to an imbalanced design and it rests upon the assumption that group standard deviations are roughly similar."
 )
 ```
 
@@ -673,11 +673,11 @@ oneway.test(aam ~ location,
 
 ## ANOVA Assumptions and How to Check Them
 
-All statistical tests rest upon assumptions about your data. In order to perform them properly, you need to know what assumptions you are making, and be certain that none of your assumptions violate the assumptions of the one-way ANOVA. 
+All statistical tests rest upon assumptions about your data. In order to perform them properly, you need to know what assumptions you are making, and be certain that none of your assumptions violate the assumptions of the oneway ANOVA. 
 
 ### Assumption: The Residuals are Normal
 
-One-way ANOVA assumes that **the residuals of the observations within each group are normally distributed**.
+oneway ANOVA assumes that **the residuals of the observations within each group are normally distributed**.
 
 
 ```{r where_resids, echo=FALSE}
@@ -696,7 +696,7 @@ question("HARD QUESTION: Where can you get a copy of the residuals in `long_muss
 
 You don't really need the residuals, though. Simply use `qqnorm` to make a qqplot. It calculates the residuals for you. 
 
-Try it now. Pass `long_mussels$aam` to `qqnorm`, then pass it again to `qqline`. If you can figure out how, ake the line red and give it a width of 2. HINT: Type `?qqline` at the prompt.
+Try it now. Pass `long_mussels$aam` to `qqnorm`, then pass it again to `qqline`. If you can figure out how, make the line red and give it a width of 2. HINT: Type `?qqline` at the prompt or just peek at the hints.
 
 ```{r qqnormaam, exercise = TRUE, exercise.lines = 5}
 
@@ -722,7 +722,7 @@ This distribution of residuals is right on the edge of acceptable. Let's pretend
 
 #### What to do When the Residuals Are not Normally Distributed
 
-Extensive simulations demonstrate that ANOVA is _not_ particularly sensitive to deviations from the assumption of normality; if you perform a one-way ANOVA on data with residuals that are non-normal, your chance of getting a _p_ value less than 0.05, if the null hypothesis is true, is still pretty close to 0.05. Nonetheless, it’s better if your data are close to normal. 
+Extensive simulations demonstrate that ANOVA is _not_ particularly sensitive to deviations from the assumption of normality; if you perform a oneway ANOVA on data with residuals that are non-normal, your chance of getting a _p_ value less than 0.05, if the null hypothesis is true, is still pretty close to 0.05. Nonetheless, it’s better if your data are close to normal. 
 
 Our next step is to transform the data to see if we can get a better set of residuals. 
 
@@ -909,7 +909,9 @@ question("Does the new qqplot look better or worse?",
          answer("Kinda better"),
          answer("Kinda worse", correct = TRUE),
          random_answer_order = TRUE,
-         allow_retry = TRUE
+         allow_retry = TRUE,
+         correct = "You got it!",
+         incorrect = "Kinda not really."
 )
 ```
 
@@ -917,9 +919,9 @@ Lesson learned: It doesn't necessarily help to get rid of outliers.
 
 But there's more to it than that. Unless you have reason to believe the outlier is an erroneous measurement, leave it alone. If it's true, it's data. We don't trim outliers even if certain statistical programs (we name no names) give you the option to do so.
 
-Here's some code for checking to see if any of the transformations work better with the outlier gone.
+Here's some code for checking to see if any of the transformations works better with the outlier gone.
 
-```{r practice-tx-take-2}
+```{r practice-tx-take-2, echo = TRUE, include = TRUE}
 #Create and store a bunch of transformations (tx's)
 log_we_are_here <- log(we_are_here)
 log2_we_are_here <- log2(we_are_here)
@@ -934,41 +936,71 @@ expm1_we_are_here <- expm1(we_are_here)
 
 #Make a list of tx's
 my_list2 <- list(we_are_here, log_we_are_here, log2_we_are_here, common_log_we_are_here, 
-                 log1p_we_are_here, log_base_7_we_are_here, we_are_here_squared, we_are_here_cubed,
-                 sqrt_we_are_here, exp_we_are_here, expm1_we_are_here)
+                 log1p_we_are_here, log_base_7_we_are_here, we_are_here_squared,
+                 we_are_here_cubed, sqrt_we_are_here, exp_we_are_here, expm1_we_are_here)
 
 # Now use lapply to apply the plot function to each element in my list
 lapply(my_list2, plot_this_tx)
 ```
 
+See? It wasn't worth it. We gained nothing; in fact we caused the bimodal nature of the data set become more of an issue.
+
+Don't. Delete. Outliers. (Unless they are wrong. Dead wrong. As in input wrong.)
+
 ### If no Transformations Produce Normally Distributed Residuals
 
-If none of the transformations you try make the data look _normal_ _enough_, you can use
+If none of the transformations you tried made the data look _normal_ _enough_, you have a couple of choices: run the ANOVA anyway or use
 the [Kruskal-Wallis test](../sb-kruskal-wallis/). Be aware of these factors if you decide to performa a Kruskal-Wallis test:
 
 * that the Krusal-Wallis test makes the assumption that the different groups
-have the same shaped distributions (which we now already isn't true because we did a density plot earlier in this lesson that showed the shapes of the distributions for each level of `location` to be quite different)    
+have the same shaped distributions (which we now already isn't true because we did a density plot earlier in this lesson that showed the shapes of the distributions for each level of `location` to be different)    
 * that the Krusal-Wallis test doesn’t test the same null hypothesis as
-one-way ANOVA. 
+oneway ANOVA. 
 
-Personally, we don’t like the Kruskal-Wallis test; we recommend that if you
+Personally, we don’t like the Kruskal-Wallis test; We recommend that if you
 have non-normal data that can’t be fixed by transformation, you go ahead and use oneway
-ANOVA, but be cautious about rejecting the null hypothesis if the _p_ value is not very far
-below 0.05 and your data are extremely non-normal. You may even want to set alpha to something besides .05, say, .005. 
+ANOVA; but be cautious about rejecting the null hypothesis if the _p_ value is not very far
+below 0.05 and if your data are extremely non-normal. You may even want to set alpha to something besides .05, say, .005 (see [Reassessing p Values](../sb-reassessing-p-values/) for why this particular number might be a good choice).
 
-One-way ANOVA also assumes that your data are homoscedastic, meaning the standard
+```{r whynot-kw, echo=FALSE}
+question("Why might the Kruskal-Wallis test NOT be a good non-parametric substitute for a oneway ANOVA?",
+         answer("Because it has a different null hypothesis than the oneway ANOVA", correct = TRUE),
+         answer("Because it relies on a homescedastic scalar variable across all the groups in the categorical variable", correct = TRUE),
+         answer("Because we find it personally offensive"),
+         answer("Because it is best designed for truly ranked data (like grade levels), not just non-parametric data; translating data from values to ranks causes a loss of precision. Hence it is a poor substitute for a oneway ANOVA, even if that ANOVA is a bit wobbly", correct = TRUE),
+            random_answer_order = TRUE,
+            allow_retry = TRUE,
+         correct = "You are amazing!",
+         incorrect = "Check out the Kruskal-Wallis lesson (linked above) to learn more, and read the paragraph just above this question."
+)
+```
+
+### Assumption: Homescedasticity
+
+oneway ANOVA also assumes that your data are homoscedastic, meaning the standard
 deviations are equal in the groups. You should examine the standard deviations in the
 different groups and see if there are big differences among them.
 If you have a balanced design, meaning that the number of observations is the same in
-each group, then one-way ANOVA is not very sensitive to heteroscedasticity (different
-standard deviations in the different groups). I haven’t found a thorough study of the
+each group, then oneway ANOVA is not very sensitive to heteroscedasticity (different
+standard deviations in the different groups). As of this writing, McDonald (from whom we have liberally borrowed [with permission] for this lesson) hasn't found a thorough study of the
 effects of heteroscedasticity that considered all combinations of the number of groups,
-sample size per group, and amount of heteroscedasticity. I’ve done simulations with two
+sample size per group, and amount of heteroscedasticity. He has done simulations with two
 groups, and they indicated that heteroscedasticity will give an excess proportion of false
-positives for a balanced design only if one standard deviation is at least three times the
-size of the other, and the sample size in each group is fewer than 10. I would guess that a
-similar rule would apply to one-way ANOVAs with more than two groups and balanced
+positives for a balanced design _only_ if one standard deviation is at least three times the
+size of the other, _and_ the sample size in each group is fewer than 10. I would guess that a
+similar rule would apply to oneway ANOVAs with more than two groups and balanced
 designs.
+
+```{r when-het-is-bad, echo=FALSE}
+question("When is heteroscedasticity really, really bad for an ANOVA?",
+         answer("When the design is also imbalanced", correct = TRUE),
+         answer("All the time"),
+         answer("Right now"),
+         answer("Next week"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE
+)
+```
 
 Heteroscedasticity is a much bigger problem when you have an unbalanced design
 (unequal sample sizes in the groups). If the groups with smaller sample sizes also have
@@ -981,21 +1013,21 @@ might seem like a good thing except it also means you lose power (get too many f
 negatives, if there is a difference in means).
 
 You should try really hard to have equal sample sizes in all of your groups. With a
-balanced design, you can safely use a one-way ANOVA unless the sample sizes per group
+balanced design, you can safely use a oneway ANOVA unless the sample sizes per group
 are less than 10 and the standard deviations vary by threefold or more. If you have a
 balanced design with small sample sizes and very large variation in the standard
 deviations, you should use Welch’s ANOVA instead.
 
 If you have an unbalanced design, you should carefully examine the standard
 deviations. Unless the standard deviations are very similar, you should probably use
-Welch’s ANOVA. It is less powerful than one-way ANOVA for homoscedastic data, but it can
+Welch’s ANOVA. It is less powerful than oneway ANOVA for homoscedastic data, but it can
 be much more accurate for heteroscedastic data from an unbalanced design.
 
 
 
 ## Power Analysis
 
-To do a power analysis for a one-way ANOVA is kind of tricky, because you need to
+To do a power analysis for a oneway ANOVA is kind of tricky, because you need to
 decide what kind of effect size you’re looking for. If you’re mainly interested in the overall
 significance test, the sample size needed is a function of the standard deviation of the
 group means. Your estimate of the standard deviation of means that you’re looking for
@@ -1022,7 +1054,7 @@ Perform the analysis with the `power.ANOVA.test` function from the `stats` packa
 #                  sig.level = 0.05, power = 0.80)
 ```
 
-Since there are five groups, you’d need 59 observations per group to have an 80% chance of having a significant (P<0.05) one-way ANOVA.
+Since there are five groups, you’d need 59 observations per group to have an 80% chance of having a significant (P<0.05) oneway ANOVA.
 
 Alternatively, if you have no experimental data, you can use the `cohen.ES` function to estimate effect sizes and the `pwr.ANOVA.test` function from the `pwr` package. 
 
