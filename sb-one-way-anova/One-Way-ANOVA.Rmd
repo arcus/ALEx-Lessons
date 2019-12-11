@@ -81,6 +81,8 @@ plot_this_tx <- function(this_tx) {
          geom = "density")
 }
 
+group_means <- c(10, 10, 15, 15, 15)
+experiment_var <- 12^2
 
 ```
 
@@ -1033,27 +1035,69 @@ group means. Your estimate of the standard deviation of means that you’re look
 may be based on a pilot experiment or published literature on similar experiments.
 If you’re mainly interested in the comparisons of means, there are other ways of
 expressing the effect size. Your effect could be a difference between the smallest and
-largest means, for example, that you would want to be significant by a Tukey-Kramer test.
+largest means, for example, that you would want to be significant according to a Tukey-Kramer test (see "You found something interesting! Now what?" above).
 
-As an example, let’s say you’re studying transcript amount of some gene in arm
-muscle, heart muscle, brain, liver, and lung. Based on previous research, you decide that
-you’d like the ANOVA to be significant if the means were 10 units in arm muscle, 10 units in
-heart muscle, 15 units in brain, 15 units in liver, and 15 units in lung. The standard
-deviation of transcript amount within a tissue type that you’ve seen in previous research
-is 12 units. 
+As an example, let’s say you’re studying transcript amount of some gene in these groups:
 
-Perform the analysis with the `power.ANOVA.test` function from the `stats` package. You need to specify the number of groups with the `groups` argument, within group *variance* with the `within.var` argument, between group *variance* with the `between.var` argument, the signficiance value with `sig.level` and power with `power`. Recall that standard deviation is the square root of variance. 
+1. arm
+muscle    
+2. heart muscle    
+3. brain    
+4. liver    
+5. lung. 
 
-```{r power, exercise=TRUE}
-# group_means <- c(10, 10, 15, 15, 15)
-# experiment_var <- 12^2
-# power.ANOVA.test(groups = 5, 
-#                  within.var = experiment_var, 
-#                  between.var = var(group_means), 
-#                  sig.level = 0.05, power = 0.80)
+Based on previous research, you decide that
+you’d like the ANOVA to be significant if the means are 
+
+1. 10 units in arm muscle    
+2. 10 units in    
+heart muscle, 
+3. 15 units in brain    
+4. 15 units in liver    
+5. 15 units in lung. 
+
+The standard deviation of transcript amount within a tissue type that you’ve seen in previous research is 12 units. 
+
+We have supplied two vectors for the analysis: `group_means` and `experiment_var`. See what they contain in this next code box.
+
+```{r see_vars, exercise = TRUE, exercise.lines = 5}
+
+```
+```{r see_vars-hint}
+group_means
+
+```
+```{r see_vars-solution}
+group_means
+experiment_var
 ```
 
-Since there are five groups, you’d need 59 observations per group to have an 80% chance of having a significant (P<0.05) oneway ANOVA.
+Perform an analysis with the `power.anova.test` function from the `stats` package. You need to specify the number of groups with the `groups` argument, *within group variance (`experiment_var`)* with the `within.var` argument, *between group variance `var(group_means)`* with the `between.var` argument, the signficiance value with `sig.level` (use a level of .005) and power with `power`. Recall that standard deviation is the square root of variance. 
+
+Store the results of `power.anova.test` in `pwr_results` and surround the entire statement with parentheses so you can see the results as they are stored in the variable. On the next line, type `str(pwr_results)` so you can see the structure of the results and the variable names you can use to access them. 
+
+```{r power, exercise=TRUE}
+library(stats)
+
+(pwr_results <- power.anova.test(groups = 5,
+                 within.var = experiment_var,
+                 between.var = var(group_means),
+                 sig.level = 0.005, power = 0.80))
+str(pwr_results)
+```
+
+```{r what-is-the-var-name, echo=FALSE}
+question("What is the variable name for the significance level you set in the previous exercise?",
+         answer("`sig_level`", correct = TRUE),
+         answer("`pwr_results$sig.level`"),
+         answer("`sig`"),
+         answer("`alpha`"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE
+)
+```
+
+*Interpretation*: Since there are `r pwr_results$groups` groups, you’d need `r pwr_results$n` observations per group to have an 80% chance of finding a significant result if a significant effect is actually there.
 
 Alternatively, if you have no experimental data, you can use the `cohen.ES` function to estimate effect sizes and the `pwr.ANOVA.test` function from the `pwr` package. 
 
