@@ -513,7 +513,7 @@ question("Which lines of code result in a summary of the fit for an ANOVA?",
 
 ## You found something interesting! Now what?
  
-If the analysis of variance indicates an interesting effect of the independent variable (here, `location`), you can conduct multiple comparisons _among_ the levels of this factor using Tukey-Kramer or Least Significant Difference (LSD) procedures. (The problem of inflating the Type I Error Rate when making multiple comparisons is discussed in the [Multiple Comparisons chapter](http://www.biostathandbook.com/multiplecomparisons.html) in John H. McDonald's ([Handbook of Biological Statistics](http://www.biostathandbook.com/chigof.html)))  
+If the analysis of variance indicates an interesting effect of the independent variable (here, `location`), you can conduct multiple comparisons _among_ the levels of this factor using Tukey-Kramer or Least Significant Difference (LSD) procedures. (The problem of inflating the Type I Error Rate when making multiple comparisons is discussed in the [Multiple Comparisons chapter](http://www.biostathandbook.com/multiplecomparisons.html) in John H. McDonald's [Handbook of Biological Statistics](http://www.biostathandbook.com/chigof.html))  
 
 R functions that make multiple comparisons usually allow for adjusting _p_ values. In R you can use the Benjamini–Hochberg (BH) or `fdr` procedure. See `?p.adjust` for more information.
 
@@ -1014,7 +1014,7 @@ negatives, if there is a difference in means).
 
 You should try really hard to have equal sample sizes in all of your groups. With a
 balanced design, you can safely use a oneway ANOVA unless the sample sizes per group
-are less than 10 and the standard deviations vary by threefold or more. If you have a
+are less than 10 _and_ the standard deviations vary by threefold or more. If you have a
 balanced design with small sample sizes and very large variation in the standard
 deviations, you should use Welch’s ANOVA instead.
 
@@ -1022,7 +1022,6 @@ If you have an unbalanced design, you should carefully examine the standard
 deviations. Unless the standard deviations are very similar, you should probably use
 Welch’s ANOVA. It is less powerful than oneway ANOVA for homoscedastic data, but it can
 be much more accurate for heteroscedastic data from an unbalanced design.
-
 
 
 ## Power Analysis
