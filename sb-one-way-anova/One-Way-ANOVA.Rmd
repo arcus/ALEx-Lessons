@@ -15,7 +15,6 @@ library(pwr)
 library(tidyr)
 library(stats)
 library(ggplot2)
-library(performance)
 shhh <- suppressPackageStartupMessages
 shh <- suppressWarnings
 sh <- suppressMessages
