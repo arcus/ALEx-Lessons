@@ -686,7 +686,7 @@ question("Do the results of your Welch's ANOVA indicate there might be differenc
 
 ## ANOVA Assumptions and How to Check Them
 
-All statistical tests rest upon assumptions about your data. In order to perform proper statistical analysis, you need to know what assumptions you are making, and be certain that none of your assumptions violate the assumptions of the oneway ANOVA. 
+All statistical tests rest upon assumptions about your data. In order to perform proper statistical analysis, you need to know what assumptions you are making and you need to be certain that none of your assumptions violate the assumptions of the oneway ANOVA. 
 
 ### Assumption: The Residuals are Normal
 
@@ -701,13 +701,13 @@ question("HARD QUESTION: Where can you get a copy of the residuals in `long_muss
          answer("Wherever lost socks go.", message = "Really?"),
          random_answer_order = TRUE,
          allow_retry = TRUE,
-         correct = "That's right!",
+         correct = "Well done!",
          incorrect = "No."
 )
 ```
 
 
-You don't really need the residuals, though. Simply use `qqnorm` to make a qqplot. It calculates the residuals for you. 
+You actually don't need to find the residuals. Instead, simply use `qqnorm` to make a qqplot. It calculates the residuals for you. 
 
 Try it now. Pass `long_mussels$aam` to `qqnorm`, then pass it again to `qqline`. If you can figure out how, make the line red and give it a width of 2. HINT: Type `?qqline` at the prompt or just peek at the hints.
 
@@ -729,9 +729,9 @@ qqnorm(long_mussels$aam)
 qqline(long_mussels$aam, col = "red", lwd = 2)
 ```
 
-`qqnorm` checks the residuals (the $\displaystyle y$ axis) against what they would be if they were normally distributed (the $\displaystyle x$ axis). Many statisticians use the "fat pencil rule" to decide whether the data points are close enough to the line to count as normally distributed. Imagine yourself laying a fat pencil along the red line. Does it cover all the dots? If so, you're good. 
+`qqnorm` checks the residuals (the $\displaystyle y$ axis) against what the same data points would be if they were normally distributed (the $\displaystyle x$ axis). Many statisticians use the "fat pencil rule" to decide whether the data points are close enough to the line to count as normally distributed. Imagine yourself laying a fat pencil along the red line. Does it cover all the dots? If so, you're good. 
 
-This distribution of residuals is right on the edge of acceptable. Let's pretend it's not to see what we can do about it.
+This distribution of residuals is right on the edge of acceptable. Let's pretend it's not acceptable to learn what we can do about it.
 
 #### What to do When the Residuals Are not Normally Distributed
 
@@ -966,19 +966,19 @@ If none of the transformations you tried made the data look _normal_ _enough_, y
 the [Kruskal-Wallis test](../sb-kruskal-wallis/). Be aware of these factors if you decide to performa a Kruskal-Wallis test:
 
 * that the Krusal-Wallis test makes the assumption that the different groups
-have the same shaped distributions (which we now already isn't true because we did a density plot earlier in this lesson that showed the shapes of the distributions for each level of `location` to be different)    
+have the same shaped distributions (which we know already isn't true because we did a density plot earlier in this lesson that showed that the shapes of the distributions for each level of `location` are different)    
 * that the Krusal-Wallis test doesn’t test the same null hypothesis as
-oneway ANOVA. 
+the oneway ANOVA    
 
 Personally, we don’t like the Kruskal-Wallis test; We recommend that if you
 have non-normal data that can’t be fixed by transformation, you go ahead and use oneway
 ANOVA; but be cautious about rejecting the null hypothesis if the _p_ value is not very far
-below 0.05 and if your data are extremely non-normal. You may even want to set alpha to something besides .05, say, .005 (see [Reassessing p Values](../sb-reassessing-p-values/) for why this particular number might be a good choice).
+below 0.05 and if your data is extremely non-normal. You may even want to set alpha to something besides .05, say, .005 (see [Reassessing p Values](../sb-reassessing-p-values/) for why this particular number might be a good choice).
 
 ```{r whynot-kw, echo=FALSE}
 question("Why might the Kruskal-Wallis test NOT be a good non-parametric substitute for a oneway ANOVA?",
          answer("Because it has a different null hypothesis than the oneway ANOVA", correct = TRUE),
-         answer("Because it relies on a homescedastic scalar variable across all the groups in the categorical variable", correct = TRUE),
+         answer("Because it relies on a homoscedastic scalar variable across all the groups in the categorical variable", correct = TRUE),
          answer("Because we find it personally offensive"),
          answer("Because it is best designed for truly ranked data (like grade levels), not just non-parametric data; translating data from values to ranks causes a loss of precision. Hence it is a poor substitute for a oneway ANOVA, even if that ANOVA is a bit wobbly", correct = TRUE),
             random_answer_order = TRUE,
@@ -988,14 +988,44 @@ question("Why might the Kruskal-Wallis test NOT be a good non-parametric substit
 )
 ```
 
-### Assumption: Homescedasticity
+### Assumption: Homoscedasticity
 
-oneway ANOVA also assumes that your data are homoscedastic, meaning the standard
+A oneway ANOVA assumes that your data are homoscedastic, meaning the standard
 deviations are equal in the groups. You should examine the standard deviations in the
-different groups and see if there are big differences among them.
-If you have a balanced design, meaning that the number of observations is the same in
-each group, then oneway ANOVA is not very sensitive to heteroscedasticity (different
-standard deviations in the different groups). As of this writing, McDonald (from whom we have liberally borrowed [with permission] for this lesson) hasn't found a thorough study of the
+different groups and see if there are big differences among them. Try that now with `mussels`. Use `sapply` to check the sd for each column of `mussels`. Remember that `sd` needs to know what to do with `NA`s. Wrap the whole function call in a call to `range`. 
+
+```{r checksd, exercise = TRUE, exercise.lines = 5}
+
+```
+```{r checksd-hint-1}
+range(...)
+```
+```{r checksd-hint-2}
+range(sapply(...))
+```
+```{r checksd-hint-3}
+range(sapply(mussels, ...))
+```
+```{r checksd-hint-4}
+range(sapply(mussels, sd, ..))
+```
+```{r checksd-solution}
+range(sapply(mussels, sd, na.rm = TRUE))
+```
+
+```{r times3, echo=FALSE}
+question("Is the highest standard deviation at least 3 times the lowest?",
+         answer("Yes"),
+         answer("No", correct = TRUE),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         incorrect = "You can use the R console in any code box as a calculator."
+)
+```
+
+If you have a balanced design, meaning that the number of observations (_n_) is the same in
+each group, then a oneway ANOVA is not very sensitive to heteroscedasticity (different
+standard deviations in the different groups). As of this writing, McDonald, from whom we have liberally borrowed (with permission) for this lesson, hasn't found a thorough study of the
 effects of heteroscedasticity that considered all combinations of the number of groups,
 sample size per group, and amount of heteroscedasticity. He has done simulations with two
 groups, and they indicated that heteroscedasticity will give an excess proportion of false
