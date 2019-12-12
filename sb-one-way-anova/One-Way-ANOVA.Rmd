@@ -349,7 +349,7 @@ question("From which location did we get bi-modal data with a small mode in the 
             random_answer_order = TRUE,
             allow_retry = TRUE,
          correct = "That's right!",
-         incorrect = ""
+         incorrect = "Look again. It's pink."
 )
 ```
 ```{r meaning-of-bi-modal-data-in-small-data-set, echo=FALSE}
@@ -362,7 +362,7 @@ question("With what information have our data visualizations provided us, given 
             random_answer_order = TRUE,
             allow_retry = TRUE,
          correct = "Yes! Even when a test has its problems, you can use it to direct your attention to the next step in your research process. Do you need to gather more data? Ask a slightly different question and gather the data for that? Further, we see what our _specific_ data looks like, which can be helpful, even if we can't make any inferences about the underlying population of mussels.",
-         incorrect = ""
+         incorrect = "No."
 )
 ```
 
@@ -377,13 +377,13 @@ Some of the problems we see are common in small data sets. The fact that we lost
 What is alpha? See [`ggplot2` Part 1](../swirl-ggplot2-part-1/), [`ggplot2` Part 2](../swirl-ggplot2-part-2/), [`ggplot2` Extras](../swirl-ggplot2-extras/) to find out. But you can also guess.
 
 ```{r what-is-alpha, echo=FALSE}
-question("What is `alpha` in the density plot above?",
+question("What is `alpha` in the code for the density plot above?",
          answer("A value that tells us what is the cutoff for 'alpha variables'"),
          answer("The family of the colors to use"),
          answer("Color opacity", correct = TRUE),
          random_answer_order = TRUE,
          allow_retry = TRUE,
-         correct = "Good job!",
+         correct = "Excellent!",
          incorrect = "Nope. Try again."
 )
 ```
@@ -598,7 +598,7 @@ question("What are the confidence interval bounds for Tillamook-Petersburg?",
          answer("[-0.037583, -0.00026]", correct = TRUE),
          random_answer_order = TRUE,
          allow_retry = TRUE,
-         correct = "You are doing great!"
+         correct = "You are doing so well!"
 )
 ```
 
@@ -622,7 +622,7 @@ question("Which differences have _p_ < .05?",
 
 If the data show a lot of heteroscedasticity (different groups have different standard
 deviations), the oneway ANOVA can yield an inaccurate _p_ value; the probability of a false
-positive may be much higher than 5%. In that case, you should use Welch’s ANOVA.
+positive may be much higher than 5%. In that case, you could use Welch’s ANOVA. If, in addition, the different groups have different _n_s, you _should_ use a Welch's ANOVA instead of a oneway.  
 
 ```{r when-to-use-welches, echo=FALSE}
 question("Under what conditions should you use a Welch's ANOVA instead of a classic oneway ANOVA?",
