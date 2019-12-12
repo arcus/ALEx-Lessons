@@ -673,9 +673,20 @@ oneway.test(aam ~ location,
             var.equal = FALSE)
 ```
 
+```{r did-welchs-show-something, echo=FALSE}
+question("Do the results of your Welch's ANOVA indicate there might be differences among the groups?",
+         answer("Yes", correct = TRUE),
+         answer("No"),
+            random_answer_order = TRUE,
+            allow_retry = TRUE,
+         correct = "You are amazing!",
+         incorrect = "Since _p_ < .05, the results suggest we ought to investigate the difference between at least two groups."
+)
+```
+
 ## ANOVA Assumptions and How to Check Them
 
-All statistical tests rest upon assumptions about your data. In order to perform them properly, you need to know what assumptions you are making, and be certain that none of your assumptions violate the assumptions of the oneway ANOVA. 
+All statistical tests rest upon assumptions about your data. In order to perform proper statistical analysis, you need to know what assumptions you are making, and be certain that none of your assumptions violate the assumptions of the oneway ANOVA. 
 
 ### Assumption: The Residuals are Normal
 
