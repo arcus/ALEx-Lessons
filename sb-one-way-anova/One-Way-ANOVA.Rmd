@@ -637,7 +637,7 @@ question("Does the new qqplot look better or worse?",
          answer("Kinda worse", correct = TRUE),
          random_answer_order = TRUE,
          allow_retry = TRUE,
-         correct = "You got it!",
+         correct = "Mm hm.",
          incorrect = "Kinda not really."
 )
 ```
@@ -679,9 +679,9 @@ Don't. Delete. Outliers. (Unless they are wrong. Dead wrong. As in input wrong.)
 If none of the transformations you tried made the data look _normal_ _enough_, you have a couple of choices: run the ANOVA anyway or use
 the [Kruskal-Wallis test](../sb-kruskal-wallis/). Be aware of these factors if you decide to performa a Kruskal-Wallis test:
 
-* that the Krusal-Wallis test makes the assumption that the different groups
+* the Krusal-Wallis test makes the assumption that the different groups
 have the same shaped distributions (which we know already isn't true because we did a density plot earlier in this lesson that showed that the shapes of the distributions for each level of `location` are different)    
-* that the Krusal-Wallis test doesn’t test the same null hypothesis as
+* the Krusal-Wallis test doesn’t test the same null hypothesis as
 the one-way ANOVA    
 
 Personally, we don’t like the Kruskal-Wallis test; We recommend that if you
