@@ -18,9 +18,7 @@ tutorial_options(exercise.completion = FALSE,
 
 ```
 
-## Why?
-
-Why does everybody who uses R Markdown rave about it? 
+## Why should I learn this?
 
 From Garret Grolemund,
 
@@ -28,9 +26,9 @@ From Garret Grolemund,
 
 To learn more about why rave about RMarkdown, [check out the RMardown website](https://rmarkdown.rstudio.com) or [see samples of some of the things you can do with RMarkdown in this gallery](https://rmarkdown.rstudio.com/gallery.html).
 
-## How? Roger Peng's Video
+## Another Shameless Link to Someone Else's Work
 
-Roger Peng's introduction to R Markdown remains the best video to start with. Follow along in RStudio to create and run your own Markdown file. 
+Roger Peng's introduction to R Markdown remains the best video about R Markdown that I have found in cyberspace. Follow along in RStudio to create and run your own R Markdown file. 
 
 ![Roger Peng's Video about RMarkdown](https://www.youtube.com/watch?v=DNS7i2m4sB0)
 
