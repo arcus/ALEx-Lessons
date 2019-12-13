@@ -45,7 +45,7 @@ If you are familiar with R, you are probably familiar with base R functions such
 
 ## How do I get `dplyr`? 
 
-To install `dplyr` use this syntax (which is typical for installing packages in R): `install.packages("dplyr")`. You can't install any packages because this lesson doesn't run on your computer (it's in the cloud, as you may have noticed), but you can copy the following code to your own RStudio on your own computer:
+To install `dplyr` use this syntax (which is typical for installing packages in R): `install.packages("dplyr")`. You can't install any packages because this lesson doesn't run on your computer (it's in the cloud, as you may have noticed), but you can copy our code to your own RStudio on your own computer. Here it is again, all by itself where it is easy to copy:
 
 `install.packages("dplyr")`
 
