@@ -170,7 +170,7 @@ Some additional options to select columns based on a specific criteria include
 
 ## Choosing Rows using `filter`
 
-Filter the rows for mammals that sleep a total of more than 16 hours. Use the `filter` function and pass it the data set name `msleep` and then a condition the `sleep_total` be greater than or equal to 16. 
+Filter the rows for mammals that sleep a total of more than 16 hours. Use the `filter` function and pass it the data set name `msleep` and then a condition that `sleep_total` be greater than or equal to 16. 
 
 You can use the boolean operators (e.g. >, <, >=, <=, !=, %in%) to create the logical tests. If you are not familiar with how to use conditional logic, download and run the [Logic](https://console.cloud.google.com/storage/browser/_details/public-braunsb-media/Arcus-Education-Assets/Lessons/Logic.Rmd?project=arcus-edu-public-c62a737c) lesson for some practice. It's based on the `swirl` lesson of the same name. 
 
