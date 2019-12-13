@@ -12,12 +12,13 @@ set.seed(1)
 ints <- sample(10)
 ```
 
-# Logic
-This lesson is meant to be a short introduction to logical operations in R.
+## Logic
 
-There are two logical values in R, also called "boolean values." They are `TRUE` and `FALSE`. In R you can construct logical expressions which will evaluate to either `TRUE` or `FALSE`.
+This lesson is a short introduction to logical operations in R.
 
-Many of the questions in this lesson will involve evaluating logical expressions. It may be useful to experiment with some of these expressions. You can do that in the same code boxes in which you do the exercises.
+There are two "logical values" in R; they are also called "boolean values": `TRUE` and `FALSE`. In R, you can construct logical expressions which evaluate to either `TRUE` or `FALSE`.
+
+Many of the questions in this lesson involve evaluating logical expressions. It may be useful to experiment with some of these expressions. You can do that in the same code boxes in which you do the exercises. When you think you have the correct solution, click on the Solution button to compare your answer with ours. 
 
 ## Logical Operators
 
