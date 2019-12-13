@@ -404,7 +404,7 @@ All statistical tests rest upon assumptions about your data. In order to perform
 
 ### Assumption: The Residuals are Normal
 
-one-way ANOVA assumes that **the residuals of the observations within each group are normally distributed**.
+The one-way ANOVA assumes that **the residuals of the observations within each group are normally distributed**.
 
 
 ```{r where_resids, echo=FALSE}
@@ -1026,12 +1026,12 @@ question("Under what conditions should you use a Welch's ANOVA instead of a clas
 )
 ```
 
-Use the the `one-way.test` function from the `stats` package for a Welch's ANOVA. Whenever you set `var.equal` equal to `FALSE`, `one-way.test` runs the Welch's test. 
+Use the the `oneway.test` function from the `stats` package for a Welch's ANOVA. Whenever you set `var.equal` equal to `FALSE`, `oneway.test` runs the Welch's test. 
 
 Try it now following these steps:
 
 1. Ascertain that the `stats` package is in the library.    
-2. Call `one-way.test` and pass it these arguments:    
+2. Call `oneway.test` and pass it these arguments:    
    * the formula `aam ~ location`, as usual    
    * the name of the dataset (`long_mussels`)       
    * the argument `var.egual` set equal to `FALSE`    
@@ -1040,24 +1040,24 @@ Try it now following these steps:
 
 ```
 ```{r welch-anova-hint-1}
-one-way.test(...)
+oneway.test(...)
 ```
 ```{r welch-anova-hint-2}
-one-way.test(aam ~ location, 
+oneway.test(aam ~ location, 
             ...)
 ```
 ```{r welch-anova-hint-3}
-one-way.test(aam ~ location, 
+oneway.test(aam ~ location, 
             data = long_mussels, 
             ...)
 ```
 ```{r welch-anova-hint-4}
-one-way.test(aam ~ location, 
+oneway.test(aam ~ location, 
             data = long_mussels, 
             var.equal = ...)
 ```
 ```{r welch-anova-solution}
-one-way.test(aam ~ location, 
+oneway.test(aam ~ location, 
             data = long_mussels, 
             var.equal = FALSE)
 ```
