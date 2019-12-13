@@ -172,7 +172,7 @@ Some additional options to select columns based on a specific criteria include
 
 Filter the rows for mammals that sleep a total of more than 16 hours. Use the `filter` function and pass it the data set name `msleep` and then a condition that `sleep_total` be greater than or equal to 16. 
 
-You can use the boolean operators (e.g. >, <, >=, <=, !=, %in%) to create the logical tests. If you are not familiar with how to use conditional logic, see our [Logic](../swirl-logic/) lesson for some practice. It's based on the `swirl` lesson of the same name. 
+You can use the boolean operators (e.g. `>`, `<`, `>=`, `<=`, `!=`, `%in%`) to create the logical tests. If you are not familiar with how to use conditional logic, see our [Logic](../swirl-logic/) lesson for some practice. It's based on the `swirl` lesson of the same name. 
 
 ```{r h, exercise = TRUE, exercise.lines = 8}
 
