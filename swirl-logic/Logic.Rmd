@@ -139,7 +139,7 @@ question("What do you think the following expression will evaluate to?: `(TRUE !
 
 ## Multiple Logical Expressions
 
-At some point you may need to examine relationships between multiple logical expressions. This is where the `AND` and `OR` operators come in.
+At some point, you may need to examine relationships between multiple logical expressions. This is where the `AND` and `OR` operators come in.
 
 Let's look at how the `AND` operator works. There are two `AND` operators in R, `&` and `&&`. Both operators work similarly, if the right and left operands of `AND` are both `TRUE`, the entire expression is `TRUE`; otherwise it is `FALSE`. For example, `TRUE & TRUE` evaluates to `TRUE`. Try typing `FALSE & FALSE` to how it is evaluated.
 
