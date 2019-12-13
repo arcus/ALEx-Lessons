@@ -94,14 +94,14 @@ power_results <- power.anova.test(groups = 5,
 
 ## Background
 
-This lesson is both a reference and a tutorial. It contains all the code samples you need to perform a oneway ANOVA on your own data as well as background information such as how to interpret output and which graphs you might want to use to demonstrate results (and in some cases which graphs _not_ to use). 
+This lesson is both a reference and a tutorial. It contains all the code samples you need to perform a one-way ANOVA on your own data as well as background information such as how to interpret output and which graphs you might want to use to demonstrate results (and in some cases which graphs _not_ to use). 
 
-## What kinds of Variables work with oneway ANOVA
+## What kinds of Variables work with one-way ANOVA
 
 >One [scalar (a.k.a. "measurement") variable](http://www.biostathandbook.com/variabletypes.html#measurement).     
 One [nominal (a.k.a. "categorical") variable](http://www.biostathandbook.com/variabletypes.html#nominal)   
 
-The nominal variable divides the measurements into two or more groups. The oneway ANOVA tests whether the means of the measurement variable are the same for the different groups.
+The nominal variable divides the measurements into two or more groups. The one-way ANOVA tests whether the means of the measurement variable are the same for the different groups.
 
 ## Null and Alternative Hypotheses
 
@@ -110,21 +110,21 @@ same for the different categories in the nominal (a.k.a. "categorical") variable
 * **H<sub>A</sub>**: The means are not all the same for the different categories in the categorical variable.   
 
 ```{r bb, echo=FALSE}
-question("Which are examples of a oneway ANOVA null hypotheses?",
+question("Which are examples of a one-way ANOVA null hypotheses?",
          answer("Mean tibia length is the same for each age group of children", correct = TRUE),
          answer("The average monthly electric bill is the same in major cities within the United States", correct = TRUE),
          answer("The average monthly electric bill in Philadelphia, PA is less than what it is in Burlington, VT"),
          answer("The average monthly electric bill in Philadelphia, PA is more than what it is in Burlington, VT"),
          allow_retry = TRUE,
          random_answer_order = TRUE,
-         incorrect = "Remember that the oneway ANOVA tests whether the means of the measurement variable are the same for different groups.",
+         incorrect = "Remember that the one-way ANOVA tests whether the means of the measurement variable are the same for different groups.",
          correct = "Yes!"
 )
 ```
 
 ## When to use an ANOVA
 
-Analysis of variance (ANOVA) is the most commonly used technique for __comparing the means of groups__ of measurement data. You can analyze lots of different experimental designs with different kinds of ANOVA. Here we will discuss only the simplest: the _oneway_ ANOVA.
+Analysis of variance (ANOVA) is the most commonly used technique for __comparing the means of groups__ of measurement data. You can analyze lots of different experimental designs with different kinds of ANOVA. Here we will discuss only the simplest: the _one-way_ ANOVA.
 
 ```{r whentouseANOVA, echo=FALSE}
 question("Select the cases where ANOVA is appropriate",
@@ -140,7 +140,7 @@ question("Select the cases where ANOVA is appropriate",
 **Hint:** If you have just one professor and three classes, then the nominal variable (`professor`) is a constant. You need a nominal variable with two or more groups and a [measurement](http://www.biostathandbook.com/variabletypes.html#measurement) variable to perform an ANOVA.
 </div>
 
-In a oneway ANOVA (also known as a _one-factor_, _single-factor_, or _single-classification_ ANOVA), there is one measurement variable and one nominal variable. You make multiple observations of the measurement variable for each value of the nominal variable. 
+In a one-way ANOVA (also known as a _one-factor_, _single-factor_, or _single-classification_ ANOVA), there is one measurement variable and one nominal variable. You make multiple observations of the measurement variable for each value of the nominal variable. 
 
 For example, here is some data on a shell measurement (the length of the anterior adductor muscle scar, or AAM length, standardized by dividing by mean length) in the mussel *Mytilus trossulus* from five locations: Tillamook, Oregon; Newport, Oregon; Petersburg, Alaska; Magadan, Russia; and Tvarminne, Finland.
 
@@ -179,7 +179,7 @@ question("Which variables do we actually want to analyze?",
 ```
 
 
-## How to Prepare your Data for a oneway ANOVA in R
+## How to Prepare your Data for a one-way ANOVA in R
 
 You should, before any call to a statistical function, ensure that the data is in the correct format for running the analysis. For an ANOVA, remember, you should have one [nominal (a.k.a. "categorical") variable](http://www.biostathandbook.com/variabletypes.html#nominal) variable with 2 or more categories and one [measurement (a.k.a. "scalar")](http://www.biostathandbook.com/variabletypes.html#measurement) variable. 
 
@@ -362,7 +362,7 @@ question("From which location did we get bi-modal data with a small mode in the 
 question("With what information have our data visualizations provided us, given how few measurements we have and also given the fact that the data is imabalanced (i.e., we have fewer readings from some locations than from others)?",
          answer("Nothing", message = "Although some might agree that the data is useless, we beg to differ."),
          answer("Perhaps some hints about what kind of data to gather next", correct = TRUE),
-         answer("Since an ANOVA is robust to imbalanced design, the answer to whether the group means differ in the underlying populations of mussels for these locations", message = "A oneway ANOVA is _not_ robust to imbalanced design, especially if the standard deviations are different among the groups"),
+         answer("Since an ANOVA is robust to imbalanced design, the answer to whether the group means differ in the underlying populations of mussels for these locations", message = "A one-way ANOVA is _not_ robust to imbalanced design, especially if the standard deviations are different among the groups"),
          answer("Data distributions in our specific data sets", correct = TRUE),
          answer("Data distributions in the underlying populations at these locations", message = "You would need a hypothesis test to draw such a conclusion."),
             random_answer_order = TRUE,
@@ -398,305 +398,13 @@ If this plot makes you wonder whether our data violates assumptions of ANOVA, th
 
 Meanwhile, we soldier on. 
 
-## Perform the ANOVA 
-
-The `lm` function in the native `stats` package fits a linear model by [least squares](https://rcompanion.org/handbook/G_05.html), and can be used for a variety of analyses: [regression](../sb-correlation-and-linear-regression/), analysis of variance (what we're doing now), and [analysis of covariance](https://rcompanion.org/rcompanion/e_04.html), for instance.  The analysis of variance is then conducted either with the `anova` function in the `car` package for [Type II or Type III sum of squares](https://rcompanion.org/rcompanion/d_04.html), or with the `aov` function in the native `stats` package for [Type I sum of squares](https://rcompanion.org/rcompanion/d_04.html). 
-
-```{r where-can-we-use-lm, echo=FALSE}
-question("Which analyses can you do using the `lm` function?",
-         answer("linear regression", correct = TRUE),
-         answer("analysis of variance", correct = TRUE),
-         answer("analysis of covariance", correct = TRUE),
-         answer("Kruskal-Wallis test"),
-         random_answer_order = TRUE,
-         allow_retry = TRUE,
-         correct = "`lm` is amazing. And so are you!",
-         incorrect = "Doing a Kruskal-Wallis test with `lm` would be a bit like vacuuming with a wet mop: It's just not done, for very good reasons."
-)
-```
-
-```{r two-functions-to-do-anova, echo=FALSE}
-question("Which two functions can you use to run an analysis of variance?",
-         answer("`stats`", message = "`stats` is a package, not a function."),
-         answer("`aov`", correct = TRUE),
-         answer("`lm`", correct = TRUE),
-         answer("`car`", message = "`car` is a package, not a function."),
-         random_answer_order = TRUE,
-         allow_retry = TRUE,
-         incorrect = "",
-         correct = "You got it!"
-)
-```
-```{r two-packages-to-do-anova, echo=FALSE}
-question("Name two packages that can you use to run an analysis of variance (of course there are more---this is R).",
-         answer("`stats`", correct = TRUE),
-         answer("`anova`", message = "`anova` is a function, not a package."),
-         answer("`lm`", message = "`lm` is a function, not a package."),
-         answer("`car`", correct = TRUE),
-         random_answer_order = TRUE,
-         allow_retry = TRUE,
-         incorrect = "",
-         correct = "All your hard work is paying off!"
-)
-```
-
-The simplest way to perform the analysis of variance procedure is using `aov` from the native `stats` package, accepting all its defaults. To see what the defaults are, type `?aov` at the command line.
-
-Try running `aov` here. First, make sure that you have `stats` in the library. 
-
-Next, store the results of your call to `aov` (which calls `lm`, among other things) in the variable `fit`. Pass `aov` the formula of interest (the measurement variable "across" or `~` the categorical variable) and the name of the data set in the form `data = long_mussels`. 
-
-Finally, use `summary(fit)` to see the results. 
-
-```{r aov-for-fun, exercise = TRUE, exercise.lines = 5}
-
-```
-```{r aov-for-fun-hint-1}
-library(stats)
-fit <- ?
-summary(fit)
-```
-```{r aov-for-fun-hint-2}
-library(stats)
-fit <- aov(...)
-summary(fit)
-```
-```{r aov-for-fun-solution}
-library(stats)
-fit <- aov(aam ~ location, data = long_mussels)
-summary(fit)
-```
-
-(Hint: If you don't see any results, make sure you have asked to see a `summary` of `fit`.)
-
-What does all this mean? Most people quickly focus on the _p_ value, which here is .0036. Apparently we can reject the null hypothesis that the means among the groups are the same. 
-
-We also have more information: the test statistic $\displaystyle F$ (4.78), the degrees of freedom (4, 34), and the sums of the squares and the mean square values for location and for the residuals. When you report ANOVA results, you typically report $\displaystyle F$, the degrees of freedom, and the $\displaystyle p$ statistic.
-
-```{r what-to-report, echo=FALSE}
-question("Which of these numbers do you include when you report the results of an ANOVA?",
-         answer("_p_", correct = TRUE),
-         answer("_F_", correct = TRUE),
-         answer("df", correct = TRUE),
-         answer("the mean squares"),
-         random_answer_order = TRUE,
-         allow_retry = TRUE
-)
-```
-
-Take note of the fact that 11 observations were deleted due to missingness. The levels do not all have the same number of values in them. Is this a problem? Perhaps. We'll talk more about that later.
-
-Just for fun, run `aov` and allow the results to print without first storing them in `fit` and using `summary` to format them.
-
-```{r aov-again, exercise = TRUE, exercise.lines = 5}
-
-```
-```{r aov-again-hint-1}
-library(stats)
-aov(...)
-```
-```{r aov-again-hint-2}
-library(stats)
-aov(aam ~ location, ...)
-```
-```{r aov-again-solution}
-library(stats)
-aov(aam ~ location, data = long_mussels)
-```
-
-This provides less information than when we summarized fit! That's why people usually do summarize the fit. 
-
-```{r two-ways-to-summarize-fit, echo=FALSE}
-question("Which lines of code result in a summary of the fit for an ANOVA?",
-         answer("`summary(aov(aam ~ location, data = long_mussels))`", correct = TRUE),
-         answer("`fit <- aov(aam ~ location, data = long_mussels); summary(fit)`", correct = TRUE),
-         answer("`fit <- aov(aam ~ location, data = long_mussels)`"),
-         answer("`aov(aam ~ location, data = long_mussels)`"),
-         random_answer_order = TRUE,
-         allow_retry = TRUE,
-         incorrect = "Here's a hint: In R, you can put multiple commands on the same line using `;` to separate them.",
-         correct = "You are amazing!"
-)
-```
-
-## You found something interesting! Now what?
- 
-If the analysis of variance indicates an interesting effect of the independent variable (here, `location`), you can conduct multiple comparisons _among_ the levels of this factor using Tukey-Kramer or Least Significant Difference (LSD) procedures. (The problem of inflating the Type I Error Rate when making multiple comparisons is discussed in the [Multiple Comparisons chapter](http://www.biostathandbook.com/multiplecomparisons.html) in John H. McDonald's [Handbook of Biological Statistics](http://www.biostathandbook.com/chigof.html))  
-
-R functions that make multiple comparisons usually allow for adjusting _p_ values. In R you can use the Benjamini–Hochberg (BH) or `fdr` procedure. See `?p.adjust` for more information.
-
-Let's take a quick look at one method for identifying _which_ pairs of means differ from each other. 
-
-## Tukey-Kramer _post hoc_ Test
-
-One common way to look at the data in more detail after performing an ANOVA is to compare different pairs of means and see which are significantly different from each other. For the mussel shell
-example, the overall _p_ value piques our interest. We therefore want to follow up
-by asking whether the mean in Tillamook is different from the mean in Newport, whether
-Newport is different from Petersburg, and so on.
-
-```{r what-does-tukey-kramer-do, echo=FALSE}
-question("What does the Tukey-Kramer test tell you?",
-         answer("Which pairs of group means are different from each other.", correct = TRUE),
-         answer("Whether the critic Tukey liked the movie _Kramer vs. Kramer_.", message = "Really?"),
-         answer("Whether the non-parametric ANOVA is also significant.", message = "I'm afraid not."),
-         answer("Whether the ANOVA was significant under the assumptions.", message = "No, the Tukey-Kramer test doesn't say anything about assumptions. In fact, even we haven't said anything about assumptions yet. We'll get there, though."),
-         random_answer_order = TRUE,
-         allow_retry = TRUE,
-         correct = "Perfect!",
-         incorrect = ""
-)
-```
-
-It might be tempting to use a simple two-sample t–test on each pairwise comparison
-that looks interesting to you. However, this can result in a lot of false positives. When
-there are a groups, there are $\displaystyle \frac{a^2 -a}{2}$ possible pairwise comparisons, a number that quickly
-increases as the number of groups increases:
-
-* With 5 groups, you would have 10 pairwise comparisons     
-* With 10 groups, you would have 45     
-* With 20 groups, you would have 190 pairs    
-
-When you do multiple comparisons, you increase the probability that at least one will have a _p_ value less than 0.05 purely by chance, _even if_ the null hypothesis of each comparison is true.
-
-There are a number of different tests for pairwise comparisons after a oneway ANOVA,
-and each has advantages and disadvantages. The differences among their results are fairly
-subtle, so I will describe only one, the Tukey-Kramer test. 
-
-
-The Tukey-Kramer test is probably the most
-commonly used post-hoc test used with a oneway ANOVA, and it is fairly easy to understand.
-
-
-In the Tukey–Kramer method, the minimum significant difference (MSD) is calculated
-for each pair of means. It depends on the sample size in each group, the average variation
-within the groups, and the total number of groups. For a balanced design, all of the MSDs
-will be the same; for an unbalanced design, pairs of groups with smaller sample sizes will
-have bigger MSDs. If the observed difference between a pair of means is greater than the
-MSD, the pair of means is significantly different. 
-
-Perform the analysis with the `TukeyHSD` function from the `stats` package. You already have a model in the variable `fit`. Pass it to `TukeyHSD` and see what happens. Use the questions below to help you decode the results. 
-
-```{r tukeyHSD, exercise = TRUE, exercise.lines = 5}
-
-```
-```{r tukeyHSD-hint-1}
-TukeyHSD(...)
-```
-```{r tukeyHSD-solution}
-TukeyHSD(fit)
-```
-
-```{r how-to-interpret-tukey, echo=FALSE}
-question("How do you interpret `Newport-Magadan      -0.004514` (which should be in your `TukeyHSD` output`",
-         answer("The _p_ value is a negative number."),
-         answer("The confidence interval contains 0."),
-         answer("If you subtract Magadan's mean from Newport's, you would get -0.004514.", correct = TRUE),
-            random_answer_order = TRUE,
-            allow_retry = TRUE,
-         correct = "That's correct!"
-)
-```
-
-```{r conf-interval, echo=FALSE}
-question("What are the confidence interval bounds for Tillamook-Petersburg?",
-         answer("[-0.024872, 0.015843]"),
-         answer("[-0.018925, -0.037583]"),
-         answer("[-0.037583, -0.00026]", correct = TRUE),
-         random_answer_order = TRUE,
-         allow_retry = TRUE,
-         correct = "You are doing so well!"
-)
-```
-
-```{r identify-sig-diffs, echo=FALSE}
-question("Which differences have _p_ < .05?",
-         answer("Newport-Magadan"),
-         answer("Petersburg-Magadan"),
-         answer("Tillamook-Magadan"),
-         answer("Petersburg-Newport", correct = TRUE),
-         answer("Tillamook-Newport"),
-         answer("Tillamook-Petersburg", correct = TRUE),
-         answer("Tvarminne-Petersburg"),
-         answer("Tvarminne-Tillamook"),
-         random_answer_order = TRUE,
-         allow_retry = TRUE,
-         correct = "You got it!"
-)
-```
-
-## Welch’s ANOVA
-
-If the data show a lot of heteroscedasticity (different groups have different standard
-deviations), the oneway ANOVA can yield an inaccurate _p_ value; the probability of a false
-positive may be much higher than 5%. In that case, you could use Welch’s ANOVA. If, in addition, the different groups have different _n_s, you _should_ use a Welch's ANOVA instead of a oneway.  
-
-```{r when-to-use-welches, echo=FALSE}
-question("Under what conditions should you use a Welch's ANOVA instead of a classic oneway ANOVA?",
-         answer("When different groups have different standard deviations (i.e., the data is heteroscedastic)", correct = TRUE),
-         answer("When different groups have different _n_s", correct = TRUE),
-         answer("Whenever the probability of a false positive is greater than 5%"),
-         answer("When you have a small data set with homoscedastic data"),
-         random_answer_order = TRUE,
-         allow_retry = TRUE,
-         correct = "You got it right!",
-         incorrect = "Keep trying. Remember that the oneway ANOVA is not robust to an imbalanced design and it rests upon the assumption that group standard deviations are roughly similar."
-)
-```
-
-Use the the `oneway.test` function from the `stats` package for a Welch's ANOVA. Whenever you set `var.equal` equal to `FALSE`, `oneway.test` runs the Welch's test. 
-
-Try it now following these steps:
-
-1. Ascertain that the `stats` package is in the library.    
-2. Call `oneway.test` and pass it these arguments:    
-   * the formula `aam ~ location`, as usual    
-   * the name of the dataset (`long_mussels`)       
-   * the argument `var.egual` set equal to `FALSE`    
-
-```{r welch-anova, exercise = TRUE, exercise.lines = 5}
-
-```
-```{r welch-anova-hint-1}
-oneway.test(...)
-```
-```{r welch-anova-hint-2}
-oneway.test(aam ~ location, 
-            ...)
-```
-```{r welch-anova-hint-3}
-oneway.test(aam ~ location, 
-            data = long_mussels, 
-            ...)
-```
-```{r welch-anova-hint-4}
-oneway.test(aam ~ location, 
-            data = long_mussels, 
-            var.equal = ...)
-```
-```{r welch-anova-solution}
-oneway.test(aam ~ location, 
-            data = long_mussels, 
-            var.equal = FALSE)
-```
-
-```{r did-welchs-show-something, echo=FALSE}
-question("Do the results of your Welch's ANOVA indicate there might be differences among the groups?",
-         answer("Yes", correct = TRUE),
-         answer("No"),
-            random_answer_order = TRUE,
-            allow_retry = TRUE,
-         correct = "You are amazing!",
-         incorrect = "Since _p_ < .05, the results suggest we ought to investigate the difference between at least two groups."
-)
-```
-
 ## ANOVA Assumptions and How to Check Them
 
-All statistical tests rest upon assumptions about your data. In order to perform proper statistical analysis, you need to know what assumptions you are making and you need to be certain that none of your assumptions violate the assumptions of the oneway ANOVA. 
+All statistical tests rest upon assumptions about your data. In order to perform proper statistical analysis, you need to know what assumptions you are making and you need to be certain that none of your assumptions violate the assumptions of the one-way ANOVA. 
 
 ### Assumption: The Residuals are Normal
 
-oneway ANOVA assumes that **the residuals of the observations within each group are normally distributed**.
+one-way ANOVA assumes that **the residuals of the observations within each group are normally distributed**.
 
 
 ```{r where_resids, echo=FALSE}
@@ -741,7 +449,7 @@ This distribution of residuals is right on the edge of acceptable. Let's pretend
 
 #### What to do When the Residuals Are not Normally Distributed
 
-Extensive simulations demonstrate that ANOVA is _not_ particularly sensitive to deviations from the assumption of normality; if you perform a oneway ANOVA on data with residuals that are non-normal, your chance of getting a _p_ value less than 0.05, if the null hypothesis is true, is still pretty close to 0.05. Nonetheless, it’s better if your data are close to normal. 
+Extensive simulations demonstrate that ANOVA is _not_ particularly sensitive to deviations from the assumption of normality; if you perform a one-way ANOVA on data with residuals that are non-normal, your chance of getting a _p_ value less than 0.05, if the null hypothesis is true, is still pretty close to 0.05. Nonetheless, it’s better if your data are close to normal. 
 
 Our next step is to transform the data to see if we can get a better set of residuals. 
 
@@ -974,19 +682,19 @@ the [Kruskal-Wallis test](../sb-kruskal-wallis/). Be aware of these factors if y
 * that the Krusal-Wallis test makes the assumption that the different groups
 have the same shaped distributions (which we know already isn't true because we did a density plot earlier in this lesson that showed that the shapes of the distributions for each level of `location` are different)    
 * that the Krusal-Wallis test doesn’t test the same null hypothesis as
-the oneway ANOVA    
+the one-way ANOVA    
 
 Personally, we don’t like the Kruskal-Wallis test; We recommend that if you
-have non-normal data that can’t be fixed by transformation, you go ahead and use oneway
+have non-normal data that can’t be fixed by transformation, you go ahead and use one-way
 ANOVA; but be cautious about rejecting the null hypothesis if the _p_ value is not very far
 below 0.05 and if your data is extremely non-normal. You may even want to set alpha to something besides .05, say, .005 (see [Reassessing p Values](../sb-reassessing-p-values/) for why this particular number might be a good choice).
 
 ```{r whynot-kw, echo=FALSE}
-question("Why might the Kruskal-Wallis test NOT be a good non-parametric substitute for a oneway ANOVA?",
-         answer("Because it has a different null hypothesis than the oneway ANOVA", correct = TRUE),
+question("Why might the Kruskal-Wallis test NOT be a good non-parametric substitute for a one-way ANOVA?",
+         answer("Because it has a different null hypothesis than the one-way ANOVA", correct = TRUE),
          answer("Because it relies on a homoscedastic scalar variable across all the groups in the categorical variable", correct = TRUE),
          answer("Because we find it personally offensive"),
-         answer("Because it is best designed for truly ranked data (like grade levels), not just non-parametric data; translating data from values to ranks causes a loss of precision. Hence it is a poor substitute for a oneway ANOVA, even if that ANOVA is a bit wobbly", correct = TRUE),
+         answer("Because it is best designed for truly ranked data (like grade levels), not just non-parametric data; translating data from values to ranks causes a loss of precision. Hence it is a poor substitute for a one-way ANOVA, even if that ANOVA is a bit wobbly", correct = TRUE),
             random_answer_order = TRUE,
             allow_retry = TRUE,
          correct = "You are amazing!",
@@ -996,7 +704,7 @@ question("Why might the Kruskal-Wallis test NOT be a good non-parametric substit
 
 ### Assumption: Homoscedasticity
 
-A oneway ANOVA assumes that your data are homoscedastic, meaning the standard
+A one-way ANOVA assumes that your data are homoscedastic, meaning the standard
 deviations are equal in the groups. You should examine the standard deviations in the
 different groups and see if there are big differences among them. Try that now with `mussels`. Use `sapply` to check the sd for each column of `mussels`. Remember that `sd` needs to know what to do with `NA`s. Wrap the whole function call in a call to `range`. 
 
@@ -1030,14 +738,14 @@ question("Is the highest standard deviation at least 3 times the lowest?",
 ```
 
 If you have a balanced design, meaning that the number of observations (_n_) is the same in
-each group, then a oneway ANOVA is not very sensitive to heteroscedasticity (different
+each group, then a one-way ANOVA is not very sensitive to heteroscedasticity (different
 standard deviations in the different groups). As of this writing, McDonald, from whom we have liberally borrowed (with permission) for this lesson, hasn't found a thorough study of the
 effects of heteroscedasticity that considered all combinations of the number of groups,
 sample size per group, and amount of heteroscedasticity. He has done simulations with two
 groups, and they indicated that heteroscedasticity will give an excess proportion of false
 positives for a balanced design _only_ if one standard deviation is at least three times the
 size of the other, _and_ the sample size in each group is fewer than 10. I would guess that a
-similar rule would apply to oneway ANOVAs with more than two groups and balanced
+similar rule would apply to one-way ANOVAs with more than two groups and balanced
 designs.
 
 ```{r when-het-is-bad, echo=FALSE}
@@ -1062,27 +770,319 @@ might seem like a good thing except it also means you lose power (get too many f
 negatives, if there is a difference in means).
 
 You should try really hard to have equal sample sizes in all of your groups. With a
-balanced design, you can safely use a oneway ANOVA unless the sample sizes per group
+balanced design, you can safely use a one-way ANOVA unless the sample sizes per group
 are less than 10 _and_ the standard deviations vary by threefold or more. If you have a
 balanced design with small sample sizes and very large variation in the standard
 deviations, you should use Welch’s ANOVA instead.
 
 If you have an unbalanced design, you should carefully examine the standard
 deviations. Unless the standard deviations are very similar, you should probably use
-Welch’s ANOVA. It is less powerful than oneway ANOVA for homoscedastic data, but it can
+Welch’s ANOVA. It is less powerful than one-way ANOVA for homoscedastic data, but it can
 be much more accurate for heteroscedastic data from an unbalanced design.
 
 
+## Perform the ANOVA 
+
+The `lm` function in the native `stats` package fits a linear model by [least squares](https://rcompanion.org/handbook/G_05.html), and can be used for a variety of analyses: [regression](../sb-correlation-and-linear-regression/), analysis of variance (what we're doing now), and [analysis of covariance](https://rcompanion.org/rcompanion/e_04.html), for instance.  The analysis of variance is then conducted either with the `anova` function in the `car` package for [Type II or Type III sum of squares](https://rcompanion.org/rcompanion/d_04.html), or with the `aov` function in the native `stats` package for [Type I sum of squares](https://rcompanion.org/rcompanion/d_04.html). 
+
+```{r where-can-we-use-lm, echo=FALSE}
+question("Which analyses can you do using the `lm` function?",
+         answer("linear regression", correct = TRUE),
+         answer("analysis of variance", correct = TRUE),
+         answer("analysis of covariance", correct = TRUE),
+         answer("Kruskal-Wallis test"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         correct = "`lm` is amazing. And so are you!",
+         incorrect = "Doing a Kruskal-Wallis test with `lm` would be a bit like vacuuming with a wet mop: It's just not done, for very good reasons."
+)
+```
+
+```{r two-functions-to-do-anova, echo=FALSE}
+question("Which two functions can you use to run an analysis of variance?",
+         answer("`stats`", message = "`stats` is a package, not a function."),
+         answer("`aov`", correct = TRUE),
+         answer("`lm`", correct = TRUE),
+         answer("`car`", message = "`car` is a package, not a function."),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         incorrect = "",
+         correct = "You got it!"
+)
+```
+```{r two-packages-to-do-anova, echo=FALSE}
+question("Name two packages that can you use to run an analysis of variance (of course there are more---this is R).",
+         answer("`stats`", correct = TRUE),
+         answer("`anova`", message = "`anova` is a function, not a package."),
+         answer("`lm`", message = "`lm` is a function, not a package."),
+         answer("`car`", correct = TRUE),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         incorrect = "",
+         correct = "All your hard work is paying off!"
+)
+```
+
+The simplest way to perform the analysis of variance procedure is using `aov` from the native `stats` package, accepting all its defaults. To see what the defaults are, type `?aov` at the command line.
+
+Try running `aov` here. First, make sure that you have `stats` in the library. 
+
+Next, store the results of your call to `aov` (which calls `lm`, among other things) in the variable `fit`. Pass `aov` the formula of interest (the measurement variable "across" or `~` the categorical variable) and the name of the data set in the form `data = long_mussels`. 
+
+Finally, use `summary(fit)` to see the results. 
+
+```{r aov-for-fun, exercise = TRUE, exercise.lines = 5}
+
+```
+```{r aov-for-fun-hint-1}
+library(stats)
+fit <- ?
+summary(fit)
+```
+```{r aov-for-fun-hint-2}
+library(stats)
+fit <- aov(...)
+summary(fit)
+```
+```{r aov-for-fun-solution}
+library(stats)
+fit <- aov(aam ~ location, data = long_mussels)
+summary(fit)
+```
+
+(Hint: If you don't see any results, make sure you have asked to see a `summary` of `fit`.)
+
+What does all this mean? Most people quickly focus on the _p_ value, which here is .0036. Apparently we can reject the null hypothesis that the means among the groups are the same. 
+
+We also have more information: the test statistic $\displaystyle F$ (4.78), the degrees of freedom (4, 34), and the sums of the squares and the mean square values for location and for the residuals. When you report ANOVA results, you typically report $\displaystyle F$, the degrees of freedom, and the $\displaystyle p$ statistic.
+
+```{r what-to-report, echo=FALSE}
+question("Which of these numbers do you include when you report the results of an ANOVA?",
+         answer("_p_", correct = TRUE),
+         answer("_F_", correct = TRUE),
+         answer("df", correct = TRUE),
+         answer("the mean squares"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE
+)
+```
+
+Take note of the fact that 11 observations were deleted due to missingness. The levels do not all have the same number of values in them. Is this a problem? Perhaps. We'll talk more about that later.
+
+Just for fun, run `aov` and allow the results to print without first storing them in `fit` and using `summary` to format them.
+
+```{r aov-again, exercise = TRUE, exercise.lines = 5}
+
+```
+```{r aov-again-hint-1}
+library(stats)
+aov(...)
+```
+```{r aov-again-hint-2}
+library(stats)
+aov(aam ~ location, ...)
+```
+```{r aov-again-solution}
+library(stats)
+aov(aam ~ location, data = long_mussels)
+```
+
+This provides less information than when we summarized fit! That's why people usually do summarize the fit. 
+
+```{r two-ways-to-summarize-fit, echo=FALSE}
+question("Which lines of code result in a summary of the fit for an ANOVA?",
+         answer("`summary(aov(aam ~ location, data = long_mussels))`", correct = TRUE),
+         answer("`fit <- aov(aam ~ location, data = long_mussels); summary(fit)`", correct = TRUE),
+         answer("`fit <- aov(aam ~ location, data = long_mussels)`"),
+         answer("`aov(aam ~ location, data = long_mussels)`"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         incorrect = "Here's a hint: In R, you can put multiple commands on the same line using `;` to separate them.",
+         correct = "You are amazing!"
+)
+```
+
+## You found something interesting! Now what?
+ 
+If the analysis of variance indicates an interesting effect of the independent variable (here, `location`), you can conduct multiple comparisons _among_ the levels of this factor using Tukey-Kramer or Least Significant Difference (LSD) procedures. (The problem of inflating the Type I Error Rate when making multiple comparisons is discussed in the [Multiple Comparisons chapter](http://www.biostathandbook.com/multiplecomparisons.html) in John H. McDonald's [Handbook of Biological Statistics](http://www.biostathandbook.com/chigof.html))  
+
+R functions that make multiple comparisons usually allow for adjusting _p_ values. In R you can use the Benjamini–Hochberg (BH) or `fdr` procedure. See `?p.adjust` for more information.
+
+Let's take a quick look at one method for identifying _which_ pairs of means differ from each other. 
+
+## Tukey-Kramer _post hoc_ Test
+
+One common way to look at the data in more detail after performing an ANOVA is to compare different pairs of means and see which are significantly different from each other. For the mussel shell
+example, the overall _p_ value piques our interest. We therefore want to follow up
+by asking whether the mean in Tillamook is different from the mean in Newport, whether
+Newport is different from Petersburg, and so on.
+
+```{r what-does-tukey-kramer-do, echo=FALSE}
+question("What does the Tukey-Kramer test tell you?",
+         answer("Which pairs of group means are different from each other.", correct = TRUE),
+         answer("Whether the critic Tukey liked the movie _Kramer vs. Kramer_.", message = "Really?"),
+         answer("Whether the non-parametric ANOVA is also significant.", message = "I'm afraid not."),
+         answer("Whether the ANOVA was significant under the assumptions.", message = "No, the Tukey-Kramer test doesn't say anything about assumptions. In fact, even we haven't said anything about assumptions yet. We'll get there, though."),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         correct = "Perfect!",
+         incorrect = ""
+)
+```
+
+It might be tempting to use a simple two-sample t–test on each pairwise comparison
+that looks interesting to you. However, this can result in a lot of false positives. When
+there are a groups, there are $\displaystyle \frac{a^2 -a}{2}$ possible pairwise comparisons, a number that quickly
+increases as the number of groups increases:
+
+* With 5 groups, you would have 10 pairwise comparisons     
+* With 10 groups, you would have 45     
+* With 20 groups, you would have 190 pairs    
+
+When you do multiple comparisons, you increase the probability that at least one will have a _p_ value less than 0.05 purely by chance, _even if_ the null hypothesis of each comparison is true.
+
+There are a number of different tests for pairwise comparisons after a one-way ANOVA,
+and each has advantages and disadvantages. The differences among their results are fairly
+subtle, so I will describe only one, the Tukey-Kramer test. 
+
+
+The Tukey-Kramer test is probably the most
+commonly used post-hoc test used with a one-way ANOVA, and it is fairly easy to understand.
+
+
+In the Tukey–Kramer method, the minimum significant difference (MSD) is calculated
+for each pair of means. It depends on the sample size in each group, the average variation
+within the groups, and the total number of groups. For a balanced design, all of the MSDs
+will be the same; for an unbalanced design, pairs of groups with smaller sample sizes will
+have bigger MSDs. If the observed difference between a pair of means is greater than the
+MSD, the pair of means is significantly different. 
+
+Perform the analysis with the `TukeyHSD` function from the `stats` package. You already have a model in the variable `fit`. Pass it to `TukeyHSD` and see what happens. Use the questions below to help you decode the results. 
+
+```{r tukeyHSD, exercise = TRUE, exercise.lines = 5}
+
+```
+```{r tukeyHSD-hint-1}
+TukeyHSD(...)
+```
+```{r tukeyHSD-solution}
+TukeyHSD(fit)
+```
+
+```{r how-to-interpret-tukey, echo=FALSE}
+question("How do you interpret `Newport-Magadan      -0.004514` (which should be in your `TukeyHSD` output`",
+         answer("The _p_ value is a negative number."),
+         answer("The confidence interval contains 0."),
+         answer("If you subtract Magadan's mean from Newport's, you would get -0.004514.", correct = TRUE),
+            random_answer_order = TRUE,
+            allow_retry = TRUE,
+         correct = "That's correct!"
+)
+```
+
+```{r conf-interval, echo=FALSE}
+question("What are the confidence interval bounds for Tillamook-Petersburg?",
+         answer("[-0.024872, 0.015843]"),
+         answer("[-0.018925, -0.037583]"),
+         answer("[-0.037583, -0.00026]", correct = TRUE),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         correct = "You are doing so well!"
+)
+```
+
+```{r identify-sig-diffs, echo=FALSE}
+question("Which differences have _p_ < .05?",
+         answer("Newport-Magadan"),
+         answer("Petersburg-Magadan"),
+         answer("Tillamook-Magadan"),
+         answer("Petersburg-Newport", correct = TRUE),
+         answer("Tillamook-Newport"),
+         answer("Tillamook-Petersburg", correct = TRUE),
+         answer("Tvarminne-Petersburg"),
+         answer("Tvarminne-Tillamook"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         correct = "You got it!"
+)
+```
+
+## Welch’s ANOVA
+
+If the data show a lot of heteroscedasticity (different groups have different standard
+deviations), the one-way ANOVA can yield an inaccurate _p_ value; the probability of a false
+positive may be much higher than 5%. In that case, you could use Welch’s ANOVA. If, in addition, the different groups have different _n_s, you _should_ use a Welch's ANOVA instead of a one-way.  
+
+```{r when-to-use-welches, echo=FALSE}
+question("Under what conditions should you use a Welch's ANOVA instead of a classic one-way ANOVA?",
+         answer("When different groups have different standard deviations (i.e., the data is heteroscedastic)", correct = TRUE),
+         answer("When different groups have different _n_s", correct = TRUE),
+         answer("Whenever the probability of a false positive is greater than 5%"),
+         answer("When you have a small data set with homoscedastic data"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         correct = "You got it right!",
+         incorrect = "Keep trying. Remember that the one-way ANOVA is not robust to an imbalanced design and it rests upon the assumption that group standard deviations are roughly similar."
+)
+```
+
+Use the the `one-way.test` function from the `stats` package for a Welch's ANOVA. Whenever you set `var.equal` equal to `FALSE`, `one-way.test` runs the Welch's test. 
+
+Try it now following these steps:
+
+1. Ascertain that the `stats` package is in the library.    
+2. Call `one-way.test` and pass it these arguments:    
+   * the formula `aam ~ location`, as usual    
+   * the name of the dataset (`long_mussels`)       
+   * the argument `var.egual` set equal to `FALSE`    
+
+```{r welch-anova, exercise = TRUE, exercise.lines = 5}
+
+```
+```{r welch-anova-hint-1}
+one-way.test(...)
+```
+```{r welch-anova-hint-2}
+one-way.test(aam ~ location, 
+            ...)
+```
+```{r welch-anova-hint-3}
+one-way.test(aam ~ location, 
+            data = long_mussels, 
+            ...)
+```
+```{r welch-anova-hint-4}
+one-way.test(aam ~ location, 
+            data = long_mussels, 
+            var.equal = ...)
+```
+```{r welch-anova-solution}
+one-way.test(aam ~ location, 
+            data = long_mussels, 
+            var.equal = FALSE)
+```
+
+```{r did-welchs-show-something, echo=FALSE}
+question("Do the results of your Welch's ANOVA indicate there might be differences among the groups?",
+         answer("Yes", correct = TRUE),
+         answer("No"),
+            random_answer_order = TRUE,
+            allow_retry = TRUE,
+         correct = "You are amazing!",
+         incorrect = "Since _p_ < .05, the results suggest we ought to investigate the difference between at least two groups."
+)
+```
+
 ## Power Analysis
 
-To do a power analysis for a oneway ANOVA is kind of tricky, because you need to
+To do a power analysis for a one-way ANOVA is kind of tricky, because you need to
 decide what kind of effect size you’re looking for. If you’re mainly interested in the overall
 significance test, the sample size needed is a function of the standard deviation of the
 group means. Your estimate of the standard deviation of means that you’re looking for
 may be based on a pilot experiment or published literature on similar experiments.
 If you’re mainly interested in the comparisons of means, there are other ways of
 expressing the effect size. Your effect could be a difference between the smallest and
-largest means, for example, that you would want to be significant according to a Tukey-Kramer test (see "You found something interesting! Now what?" above).
+largest means, for example, that you would want to be significant according to a Tukey-Kramer test (see [You found something interesting! Now what?](../sb-one-way-anova/#section-you-found-something-interesting-now-what) earlier in this lesson).
 
 As an example, let’s say you’re studying transcript amount of some gene in these groups:
 
@@ -1206,19 +1206,63 @@ question("What is the variable name for the significance level you set in the pr
 )
 ```
 
-*Interpretation*: Since there are `r power_results$groups` groups, you’d need `r power_results$n` observations per group to have an 80% chance of finding a significant result at $\displaystyle \alpha = $) `r power_results$sig.level` if an effect is actually there.
+*Interpretation*: Since there are `r power_results$groups` groups, you’d need `r power_results$n` observations per group to have an 80% chance of finding a significant result at alpha = `r power_results$sig.level` if an effect is actually there.
 
-Alternatively, if you have no experimental data, you can use the `cohen.ES` function to estimate effect sizes and the `pwr.ANOVA.test` function from the `pwr` package. 
+Alternatively, if you have no experimental data, you can use the `cohen.ES` function to estimate effect sizes and the `pwr.anova.test` function from the `pwr` package. 
 
-```{r cohen, exercise=TRUE}
-# library(pwr)
-# effect_size <- cohen.ES(test="anov",size="small")$effect.size
-# pwr.ANOVA.test(k = 5, 
-#                f = effect_size,
-#                sig.level = 0.05, power = 0.80)
+First, put `pwr` in the library.
+
+Next, assign to a variable called `effect_size` the results of a call to `cohen.ES` with the arguments `test` set equal to "anov" and `size` set equal to "small". Add `$effect.size` to that function call so you set `effect_size` equal not to the entire results of the function call, but just to the bit in the results named `effect.size`. It will look odd, but it will work.
+
+Now you can make the call to `pwr.anova.test`. Pass it `k` set equal to 5, `f` set equal to the variable `effect_size` you just made, `sig.level` set equal to .005, and `power` set equal to 0.80.
+
+Run this code and look at the results. 
+
+```{r pwr_anova_test, exercise = TRUE, exercise.lines = 5}
 
 ```
+```{r pwr_anova_test-hint-1}
+library(pwr)
+effect_size <- ?
+pwr.anova.test(...)
+```
+```{r pwr_anova_test-hint-2}
+library(pwr)
+effect_size <- cohen.ES(...)$effect.size
+pwr.anova.test(...)
+```
+```{r pwr_anova_test-hint-3}
+library(pwr)
+effect_size <- cohen.ES(test = "anov", size = "small")$effect.size
+pwr.anova.test(...)
+```
+```{r pwr_anova_test-hint-4}
+library(pwr)
+effect_size <- cohen.ES(test = "anov", size = "small")$effect.size
+pwr.anova.test(k = 5,
+               f = effect_size,
+               ...)
+```
+```{r pwr_anova_test-solution}
+library(pwr)
+effect_size <- cohen.ES(test = "anov", size = "small")$effect.size
+pwr.anova.test(k = 5,
+               f = effect_size,
+               sig.level = .005,
+               power = 0.80)
+```
 
+```{r whysolarge, echo=FALSE}
+question("Why do you suppose you need so many samples to get the power you want?",
+         answer("because p < .005 rather than .05", correct = TRUE),
+         answer("because we decided to look for a small effect size", correct = TRUE),
+         answer("because we made a mistake"),
+         answer("because power analyses are generally irrational"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         correct = "Your are amazing!",
+)
+```
 
 
 ## But I like math. Where's the math?
