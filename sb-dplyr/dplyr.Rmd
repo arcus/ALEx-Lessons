@@ -47,7 +47,7 @@ If you are familiar with R, you are probably familiar with base R functions such
 
 To install `dplyr` use this syntax (which is typical for installing packages in R): `install.packages("dplyr")`. You can't install any packages because this lesson doesn't run on your computer (it's in the cloud, as you may have noticed), but you can copy the following code to your own RStudio on your own computer:
 
-```{r a, exercise = TRUE, exercise.lines = 8}
+```{r a, include = FALSE, echo = TRUE}
 install.packages("dplyr")
 ```
 
