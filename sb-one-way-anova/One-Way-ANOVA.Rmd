@@ -1135,15 +1135,22 @@ question_rank(
 )
 ```
 ```{r which-p-recommended, echo=FALSE}
-question("Which _p_ value is recommended by Jim Berger in his article in The American Statistician *Beyond _p_ < .05* volume?",
+question("Which _p_ value is recommended by Daniel J. Benjamin and James O. Berger in 'Three Recommendations for Improving the Use of p-Values' in The American Statistician's volume **Beyond _p_ < .05**?",
          answer("p < .10"),
          answer("p < .05"),
          answer("p. < .005", correct = TRUE),
          answer("p < .001"),
          random_answer_order = TRUE,
-         allow_retry = TRUE
+         allow_retry = TRUE,
+         incorrect = "Go to this URL and find out: https://amstat.tandfonline.com/doi/full/10.1080/00031305.2018.1543135#.XfPzRi3MzOQ."
 )
 ```
+
+Benjamin and Berger said
+
+>In statistical practice, perhaps the single biggest problem with p-values is that they are often misinterpreted in ways that lead to overstating the evidence against the null hypothesis.
+
+[Find out more!](https://amstat.tandfonline.com/doi/full/10.1080/00031305.2018.1543135#.XfPzni3MzOR)
 
 Perform an analysis with the `power.anova.test` function from the `stats` package. You need to specify the number of groups with the `groups` argument, *within group variance (`experiment_var`)* with the `within.var` argument, *between group variance `var(group_means)`* with the `between.var` argument, the signficiance value with `sig.level` (use a level of .005) and power with `power`. Recall that standard deviation is the square root of variance. 
 
