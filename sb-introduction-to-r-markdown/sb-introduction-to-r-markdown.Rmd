@@ -1,5 +1,5 @@
 ---
-title: "Introduction to RMarkdown"
+title: "Introduction to R Markdown"
 output: 
   learnr::tutorial:
     progressive: true
@@ -20,7 +20,7 @@ tutorial_options(exercise.completion = FALSE,
 
 ## Why?
 
-Why does everybody who uses RMarkdown rave about it? 
+Why does everybody who uses R Markdown rave about it? 
 
 From Garret Grolemund,
 
