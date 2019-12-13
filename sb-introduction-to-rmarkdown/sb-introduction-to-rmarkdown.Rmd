@@ -1,0 +1,36 @@
+---
+title: "Introduction to RMarkdown"
+output: 
+  learnr::tutorial:
+    progressive: true
+    allow_skip: true
+runtime: shiny_prerendered
+---
+
+```{r setup, include=FALSE}
+library(learnr)
+knitr::opts_chunk$set(echo = FALSE)
+options(digits = 3, scipen = 9999)
+tutorial_options(exercise.completion = FALSE,
+                 exercise.eval = TRUE,
+                 exercise.lines = 8,
+                 exercise.diagnostics = TRUE)
+
+```
+
+## Why?
+
+Why does everybody who uses RMarkdown rave about it? From Garret Grolemund,
+
+>R Markdown documents implement Donald’s Knuth’s idea of literate programming and take the manual labor out of writing and maintaining reports. Moreover, they are quick to learn. (2015)
+
+To learn more about why people use it, [check out the RMardown website](https://rmarkdown.rstudio.com) or [see samples of some of the things you can do with RMarkdown in this gallery](https://rmarkdown.rstudio.com/gallery.html).
+
+## How? Roger Peng's Video
+
+This remains the best introduction to RMarkdown. Use it to get started with your own RMarkdown file. 
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/DNS7i2m4sB0" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+
+

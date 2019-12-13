@@ -38,7 +38,7 @@ question("Check all that you have NOT done:",
   answer("used R before", message = "* Run Code"),
   answer("None of the above. I've done them all.", correct = TRUE, message = "You can skip this tutorial!"),
   type = "multiple",
-  incorrect = "This tutorial is here to help! To get set up read:"
+  incorrect = "This tutorial is here to help! To get set up, read"
 )
 ```
 
@@ -141,3 +141,21 @@ quiz(caption = "Quiz - Working with Packages",
   )
 )
 ```
+
+## Run Code
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/ufzQxIqNuwM" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+```{r how-to-clear-the-console, echo=FALSE}
+question("How do you clear the console in RStudio?",
+         answer("`ctrl-l`", correct = TRUE),
+         answer("`ctrl-n`"),
+         answer("`cmnd-l`"),
+         answer("`clear_console()`"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         correct = "You are amazing!",
+         incorrect = "No. Maybe you need to watch the video (or watch it again)."
+)
+```
+
