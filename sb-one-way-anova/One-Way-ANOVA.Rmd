@@ -1260,7 +1260,7 @@ question("Why do you suppose you need so many samples to get the power you want?
          answer("because power analyses are generally irrational"),
          random_answer_order = TRUE,
          allow_retry = TRUE,
-         correct = "Your are amazing!",
+         correct = "Your are amazing!"
 )
 ```
 
