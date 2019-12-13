@@ -47,11 +47,9 @@ If you are familiar with R, you are probably familiar with base R functions such
 
 To install `dplyr` use this syntax (which is typical for installing packages in R): `install.packages("dplyr")`. You can't install any packages because this lesson doesn't run on your computer (it's in the cloud, as you may have noticed), but you can copy the following code to your own RStudio on your own computer:
 
-```{r a, include = FALSE, echo = TRUE}
-install.packages("dplyr")
-```
+`install.packages("dplyr")`
 
-To load `dplyr` into the library, type `library(dplyr)`. You don't need quotation marks this time. 
+To load `dplyr` into the library, type `library(dplyr)`. You don't need quotation marks this time. You can try it here:
 
 ```{r b, exercise = TRUE, exercise.lines = 8}
 
