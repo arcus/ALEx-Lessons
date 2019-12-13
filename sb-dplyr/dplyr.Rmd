@@ -132,6 +132,8 @@ sleepData <- select(msleep, name, sleep_total)
 head(sleepData)
 ```
 
+Instead of using a separate call, you can surround `sleepData <- select(msleep, name, sleep_total)` with parentheses thus: `(sleepData <- select(msleep, name, sleep_total))` to see the results of the function call at the same time as assigning those results to a variable. 
+
 To choose all the columns *except* a specific column, use the "-" (subtraction) operator (also known as negative indexing). Do this now with the `msleep` data set: take everything except `name`. Pass the call to `select` to `head` in a nested fashion so you see the first six lines of the results. 
 
 ```{r e, exercise = TRUE, exercise.lines = 8}
