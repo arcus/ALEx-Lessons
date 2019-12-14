@@ -8,6 +8,7 @@ runtime: shiny_prerendered
 options(digits = 3, scipen = 9999)
 if(!require(learnr)){install.packages("learnr")}
 library(learnr)
+library(dplyr)
 this_Input =("
 Group Value
 2pm    69    
@@ -73,7 +74,7 @@ class(ht$section)
 class(ht$inches)
 ```
 
-`section` is a factor. Factors are excellent grouping variables. `inches` is an integer, which means we can perform mathematical functions, such as `mean` or `sd`, on it.
+`section` is a factor. Factors are excellent grouping variables. `inches` is an integer, which means we can perform mathematical functions such as `mean` or `sd` on it.
 
 To find out more about why variable types are important to understand at the outset of any examination of your data, see our [Variables lesson](http://a-mess.org/sb-variables/). 
 
