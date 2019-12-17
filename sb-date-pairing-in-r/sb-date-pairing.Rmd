@@ -1,0 +1,320 @@
+---
+title: "Date Pairing in R"
+output: 
+ learnr::tutorial:
+      progressive: true
+      allow_skip: true
+runtime: shiny_prerendered
+---
+
+```{r setup, include=FALSE}
+library(learnr)
+library(data.table)
+library(dplyr)
+library(pwr)
+library(tidyr)
+library(stats)
+library(ggplot2)
+library(sortable)
+shhh <- suppressPackageStartupMessages
+shh <- suppressWarnings
+sh <- suppressMessages
+knitr::opts_chunk$set(echo = FALSE)
+options(digits = 3, scipen = 9999)
+tutorial_options(exercise.completion = FALSE,
+                 exercise.eval = TRUE,
+                 exercise.lines = 8,
+                 exercise.diagnostics = TRUE)
+
+math <- read.csv("https://raw.githubusercontent.com/pm0kjp/datastore/master/fakeMath.csv")
+lang <- read.csv("https://raw.githubusercontent.com/pm0kjp/datastore/master/fakeLang.csv")
+
+# # debugging
+# math <- read.csv("/Users/braunsb/Documents/GitHub/a-MESS Lessons/sb-date-pairing-in-r/math.csv")
+# lang <- read.csv("/Users/braunsb/Documents/GitHub/a-MESS Lessons/sb-date-pairing-in-r/lang.csv")
+
+mathr <- rename(.data = math, id = subjectID, date = testDate, score = mathScore)
+langr <- rename(.data = lang, id = subjectID, date = testDate, score = languageScore)
+
+
+```
+
+## The Problem
+
+Let’s say **you want to look at two measurements** for a patient or a research participant to find some relationship between them (like a score on an anxiety measure for one variable and triglyceride levels for a few others); but some patients have **multiple records for one or both instruments or measures**. 
+
+**How can you find the right records to use in your research?** If you don’t limit which repeated measures you use, you’ll end up with more than one row per patient, which you don’t want.
+
+Maybe you want the two measurements to be as close as possible in time. Or maybe you want the earliest anxiety measure and whatever triglyceride is nearest it (say, 40 days earlier), even if that *interval* isn’t the smallest (say the patient later had an anxiety workup and lipids lab on the same day). There are lots of possibilities here, and they all depend on your research purpose.
+
+```{r what-problems-to-solve, echo=FALSE}
+question("What problem do we want to solve by pairing dates?",
+         answer("We want to compare two variables but we have multiple records for some patients, either in the responses to one instrument or in two or more instruments", correct = TRUE),
+         answer("There is no research question", message = "We may not have a research question, but more study and thought rather than pairing dates will help us solve that problem."),
+         answer("2008/1.33", message = "That's a math problem. Date pairing will not help you. Try typing it into the console if you really want to solve it."),
+         answer("We want to identify unique cases and keep only those", message = "You can solve this by widening both data sets, binding their rows, and passing the new data set name to `unique`. Date pairing will not help you."),
+     correct = "You are amazing!",
+     incorrect = "Incorrect.",
+     random_answer_order = TRUE,
+     allow_retry = TRUE
+)
+```
+
+## Example Data
+
+Let’s consider some fake data [Joy Payton](education.arcus.chop.edu) created for illustration purposes: 500 records of fake math scores and fake language scores. Joy stored them on her github repo. 
+
+Uncomment the lines in the code box below. 
+
+[HINT: In RStudio, you can select all the lines you want to uncomment or comment, then press `cmd` (if you have a Mac) or `ctrl` (if you have a PC) along with `shift-c`. This key combination is a toggle: a great way to uncomment or comment large blocks of code. You can't do that here, though. Here, delete the `#` and any accompanying spaces at the beginning of each line to uncomment code.]
+
+[ANOTHER HINT: Press `option` (Mac) or `alt` (PC) and select the first 2 _columns_ of the three lines of code. The cursor should grow or multiply in the direction you move it as long as you hold down the `option/alt` key while selecting. This really cool feature from the RStudio team allows you to select items in sequence---while _not_ holding down the `option/alt` key while you select---_or_ in rectangles---while holding down the `option/alt` key while you select.]
+
+After uncommenting the lines, run the code: Press `cmd` or `ctrl` and `Enter` at the same time or click on the "Run Code" button. These commands download the two data files and stores them in the two tibbles named `math` and `lang`.
+
+```{r load-data, exercise = TRUE, exercise.lines = 5}
+# library(tidyverse)
+# math <- as_tibble(read.csv("https://raw.githubusercontent.com/pm0kjp/datastore/master/fakeMath.csv"))
+# lang <- as_tibble(read.csv("https://raw.githubusercontent.com/pm0kjp/datastore/master/fakeLang.csv"))
+```
+```{r load-data-solution}
+library(tidyverse)
+math <- as_tibble(read.csv("https://raw.githubusercontent.com/pm0kjp/datastore/master/fakeMath.csv"))
+lang <- as_tibble(read.csv("https://raw.githubusercontent.com/pm0kjp/datastore/master/fakeLang.csv"))
+```
+
+We store the data in two tibbles, which are data frames that are nicely formatted. Have a look at them by typing their names, one per line, and executing the code. 
+
+```{r seemath-lang, exercise = TRUE, exercise.lines = 5}
+
+```
+```{r seemath-lang-hint}
+math
+...
+```
+```{r seemath-lang-solution}
+math
+lang
+```
+
+If you have worked with non-tibble data frames before, you might prefer tibble output. I do. I try to put all my data frames in tibble format except when I come across the odd function that prefers to be passed the traditional data frame format. If that happens, I wrap the tibble in `as.data.frame` before passing it to the fussy function.
+
+>The tidyverse prefers tibbles.
+
+You've already put [the `tidyverse` packages](https://tidyverse.tidyverse.org) in the library, so you don't have to do that again. Note that `tidyverse` is not a single package but is, as is stated on its website,
+
+>a group of packages that work in harmony because they share common representations and [API design](https://mattgemmell.com/api-design/).
+
+
+(You can [learn more about APIs](https://mattgemmell.com/api-design/) or simply replace the word "API" in your head with "user interface for developers" when you come it.)
+
+### Simplify Variable Names
+
+We're lazy programmers, so let's simplify our variable names and make sure they are all in lowercase letters. This is good coding practice because, if you lowercase everything, although you will find yourself checking the spelling of variables, you will never find yourself checking to see which letters are upper- and which are lowercase. 
+
+We'll use the `tidyverse`'s `rename` function. 
+
+The format for using `rename` is to type the function name, then pass it the arguments `data = math` or `lang` and `id = subjectID`. The correct syntax involves putting the "to" variable name first, then setting it equal to the "from" variable.
+
+Do this for both tibbles, renaming `subjectID` to `id`, `testDate` to `date`, and the score variables to `score`. Make sure you store the results in modified tibble names, the same names as before with an "r" on the end. 
+
+```{r rename-vars, exercise = TRUE, exercise.lines = 5}
+
+```
+```{r rename-vars-hint-1}
+mathr <- rename(...)
+```
+```{r rename-vars-hint-2}
+mathr <- rename(.data = math, ...)
+rename(.data = lang, ...)
+```
+```{r rename-vars-hint-3}
+mathr <- rename(.data = math, id = subjectID, ...)
+langr <- rename(.data = lang, ...)
+```
+```{r rename-vars-solution}
+mathr <- rename(.data = math, id = subjectID, date = testDate, score = mathScore)
+langr <- rename(.data = lang, id = subjectID, date = testDate, score = languageScore)
+```
+
+You won't see anything happen because the output is going to the new tibble names, `math` and `lang`.
+
+### The Data
+
+The data has the following qualities:
+
+* Each of the two data sets `math` and `lang` has 500 samples and 3 variables    
+* IDs are integers between 1 and 1000    
+* dates are randomly and uniformly distributed between January 1, 2005 and January 1, 2016    
+* each `id` may have one or more `date`s associated with it because people can take the tests repeatedly
+* scores follow a triangular distribution with     
+  - a minimum of 25 (indicates full guessing)    
+  - a maximum of 100    
+  - a mode of 80
+* scores are rounded
+
+## Look at the Data
+
+You can learn more about looking at data by going through our [Looking at Data lesson](http://a-mess.org/swirl-looking-at-data/). We'll be using some of the methods from that lesson here.
+
+Let's use a variety of functions to confirm what we told you about the data. 
+
+### 1. Prepare: Get the `names` to Pass to Other Functions
+
+Find the variable names in `mathr` and `langr` by passing each one to the `names` function. Separate the two calls to `names` using a `;`. That's how you put two R commands on a single line. I don't do it often, but ocassionally, as here, it's more readable to put simple, repetitive statements together on the same line.
+
+You should see three names for each data set as a result. Each data set has the _same_ set of three names. 
+
+```{r names, exercise = TRUE, exercise.lines = 5}
+
+```
+```{r names-hint-1}
+names(...)
+```
+```{r names-hint-2}
+names(...); names(...)
+```
+```{r names-hint-3}
+names(mathr); names(...)
+```
+```{r names-solution}
+names(mathr); names(langr)
+```
+
+### 2. Confirm the Number of Samples with `dim`
+
+Do something similar to what you did with `names`, but this time, replace the calls to `names` with calls to `dim`. 
+
+You can copy your code from the previous code chunk and replace just two words.
+
+
+```{r dims, exercise = TRUE, exercise.lines = 5}
+
+```
+```{r dims-hint-1}
+dim(...)
+```
+```{r dims-hint-2}
+dim(...); dim(...)
+```
+```{r dims-hint-3}
+dim(mathr); dim(...)
+```
+```{r dims-solution}
+dim(mathr); dim(langr)
+```
+
+### 3. Confirm the Range of `id` and `score` with `range`
+
+Use the function `range`, passing it `mathr$id`, then `langr$id`. Repeat that line with `mathr$score` and `langr$score`.
+
+```{r range, exercise = TRUE, exercise.lines = 5}
+
+```
+```{r range-hint-1}
+range(...)
+range(...)
+```
+```{r range-hint-2}
+range(...); range(...)
+range(...); range(...)
+```
+```{r range-hint-3}
+range(mathr$id); range(langr$id)
+range(...)
+```
+```{r range-solution}
+range(mathr$id); range(langr$id)
+range(mathr$score); range(langr$score)
+```
+
+```{r range_id, echo=FALSE}
+question("Do all the values in `id` fall within the expected range for both data sets?",
+         answer("Yes", correct = TRUE),
+         answer("No", message = "Check the hints in the code block to see where you may have gone wrong."),
+         answer("third_answer", message = "message_wrong_2"),
+         answer("fourth_answer", message = "message_wrong_3"),
+     correct = "Well done.",
+     incorrect = "They do.",
+     random_answer_order = TRUE,
+     allow_retry = TRUE
+)
+```
+
+
+
+### 4. `class`
+
+Find out what class the `dates` variable is for each data set. The correct function is `class`. You can separate the two calls by a semicolon as you did with `dim` and `names` above. Pass the `date` variables to `class`. We want them to be dates.
+
+
+### 5. `head`
+
+Look at the top of the `date` variables by passing them to `head`.
+
+
+### 6. 
+
+```{r confirm-data-shapes, exercise = TRUE, exercise.lines = 5}
+
+```
+```{r confirm-data-shapes-hint-1}
+dim(mathr); dim(langr)
+
+names(mathr); names(langr)
+range(c(mathr$id, langr$id))
+range(c(mathr$score, langr$score))
+head(levels(mathr$date)); head(levels(langr$date))
+class(mathr$date); class(langr$date)
+levels(c(mathr$id))
+range(c(langr$id))
+qplot(data = mathr, y = scores, geom = "density")
+qplot(data = langr, y = scores, geom = "density")
+summary(mathr$score)
+summary(langr$score)
+```
+```{r confirm-data-shapes-hint-2}
+
+
+```
+```{r confirm-data-shapes-hint-3}
+
+
+```
+```{r confirm-data-shapes-hint-4}
+
+
+```
+```{r confirm-data-shapes-solution}
+
+
+
+```
+
+```{r are-the-dates-date-objects, echo=FALSE}
+question("Are the dates in the two data sets `mathr` and `langr` formatted as dates?",
+         answer("No", correct = TRUE),
+         answer("Yes", message = "If you have forgotten, try typing `class(mathr$date)` at the console to remind yourself."),
+     correct = "You got it!",
+     incorrect = "I'm afraid not.",
+     random_answer_order = TRUE,
+     allow_retry = TRUE
+)
+```
+
+```{r what-next-if-out-of-range, echo=FALSE}
+question("What would you have done if the range of `id`s had been outside of 1 - 1000?",
+         answer("Find out which of the two variables had elements outside that range", correct = TRUE),
+         answer("Assume that both variables are not as we thought", message = "Any time you hear or think 'assume`, ask yourself how you can ascertain the truth of the assumption."),
+         answer("Move along because `id` is not an important variable", message = "Have you any reason to believe that this is an unimportant variable besides the fact that it is called `id`?"),
+         answer("Reset all the `id`s in both data sets so they fall within the expected range", message = "Have you ascertained that each `id` is used only once? Until you know more, you should leave their values alone."),
+         random_answer_order = TRUE,
+         allow_retry = TRUE
+)
+```
+
+
+
+## References 
+
+The originator of this lesson as well as the author of the data is Joy Payton. You can find [Joy's original lesson here](https://education.arcus.chop.edu/date-pairing-in-r/).

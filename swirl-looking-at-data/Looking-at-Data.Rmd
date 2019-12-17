@@ -104,7 +104,7 @@ The `head` function allows you to preview the top of the dataset. Give it a try 
 head(plants)
 ```
 
-Take a minute to look through and understand the output above. Each row is labeled with the observation number and each column with the variable name. Your screen is probably not wide enough to view all 10 columns side by side, in which case R displays as many columns as it can on each line before continuing on the next.
+Take a minute to look through and understand the output above. Each row is labeled with the observation number and each column with the variable name. Your screen is probably not wide enough to view all 10 columns side by side, in which case R displays as many columns as it can on each line. Click the little black arrow in the top right to scroll along the $\displaystyle x$ axis.
 
 By default, `head` shows you the first six rows of the data. You can alter this behavior by passing as a second argument the number of rows you'd like to view. Use `head` to preview the first 10 rows of plants.
 
@@ -159,6 +159,6 @@ str(plants)
 
 The beauty of `str` is that it combines many of the features of the other functions you've already seen, all in a concise and readable format. At the very top, it tells us that the class of plants is 'data.frame' and that it has 5166 observations and 10 variables. It then gives us the name and class of each variable, as well as a preview of its contents.
 
-`str` is actually a very general function that you can use on most objects in R. Any time you want to understand the structure of something (a dataset, a function, or whatever---even a function),` str` is a good place to start.
+`str` is actually a very general function that you can use on most objects in R. Any time you want to understand the structure of something (a dataset, a function, or whatever---even a function), `str` is a good place to start.
 
 In this lesson, you learned how to get a feel for the structure and contents of a new dataset using a collection of simple and useful functions. Taking the time to do this upfront can save you time and frustration later on in your analysis.
