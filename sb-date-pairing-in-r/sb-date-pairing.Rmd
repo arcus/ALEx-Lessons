@@ -53,10 +53,10 @@ question("What problem do we want to solve by pairing dates?",
          answer("There is no research question", message = "We may not have a research question, but more study and thought rather than pairing dates will help us solve that problem."),
          answer("2008/1.33", message = "That's a math problem. Date pairing will not help you. Try typing it into the console if you really want to solve it."),
          answer("We want to identify unique cases and keep only those", message = "You can solve this by widening both data sets, binding their rows, and passing the new data set name to `unique`. Date pairing will not help you."),
-     correct = "You are amazing!",
-     incorrect = "Incorrect.",
-     random_answer_order = TRUE,
-     allow_retry = TRUE
+         correct = "You are amazing!",
+         incorrect = "Incorrect.",
+         random_answer_order = TRUE,
+         allow_retry = TRUE
 )
 ```
 
@@ -145,9 +145,9 @@ The data has the following qualities:
 
 * Each of the two data sets `math` and `lang` has 500 samples and 3 variables    
 * IDs are integers between 1 and 1000    
-* dates are randomly and uniformly distributed between January 1, 2005 and January 1, 2016    
-* each `id` may have one or more `date`s associated with it because people can take the tests repeatedly
-* scores follow a triangular distribution with     
+* Dates are randomly and uniformly distributed between January 1, 2005 and January 1, 2016    
+* Each `id` may have one or more `date`s associated with it because people can take the tests repeatedly
+* Scores follow a triangular distribution with     
   - a minimum of 25 (indicates full guessing)    
   - a maximum of 100    
   - a mode of 80
@@ -232,80 +232,17 @@ range(mathr$score); range(langr$score)
 question("Do all the values in `id` fall within the expected range for both data sets?",
          answer("Yes", correct = TRUE),
          answer("No", message = "Check the hints in the code block to see where you may have gone wrong."),
-         answer("third_answer", message = "message_wrong_2"),
-         answer("fourth_answer", message = "message_wrong_3"),
-     correct = "Well done.",
-     incorrect = "They do.",
-     random_answer_order = TRUE,
-     allow_retry = TRUE
-)
-```
-
-
-
-### 4. `class`
-
-Find out what class the `dates` variable is for each data set. The correct function is `class`. You can separate the two calls by a semicolon as you did with `dim` and `names` above. Pass the `date` variables to `class`. We want them to be dates.
-
-
-### 5. `head`
-
-Look at the top of the `date` variables by passing them to `head`.
-
-
-### 6. 
-
-```{r confirm-data-shapes, exercise = TRUE, exercise.lines = 5}
-
-```
-```{r confirm-data-shapes-hint-1}
-dim(mathr); dim(langr)
-
-names(mathr); names(langr)
-range(c(mathr$id, langr$id))
-range(c(mathr$score, langr$score))
-head(levels(mathr$date)); head(levels(langr$date))
-class(mathr$date); class(langr$date)
-levels(c(mathr$id))
-range(c(langr$id))
-qplot(data = mathr, y = scores, geom = "density")
-qplot(data = langr, y = scores, geom = "density")
-summary(mathr$score)
-summary(langr$score)
-```
-```{r confirm-data-shapes-hint-2}
-
-
-```
-```{r confirm-data-shapes-hint-3}
-
-
-```
-```{r confirm-data-shapes-hint-4}
-
-
-```
-```{r confirm-data-shapes-solution}
-
-
-
-```
-
-```{r are-the-dates-date-objects, echo=FALSE}
-question("Are the dates in the two data sets `mathr` and `langr` formatted as dates?",
-         answer("No", correct = TRUE),
-         answer("Yes", message = "If you have forgotten, try typing `class(mathr$date)` at the console to remind yourself."),
-     correct = "You got it!",
-     incorrect = "I'm afraid not.",
-     random_answer_order = TRUE,
-     allow_retry = TRUE
+         correct = "Well done.",
+         incorrect = "They do.",
+         random_answer_order = TRUE,
+         allow_retry = TRUE
 )
 ```
 
 ```{r what-next-if-out-of-range, echo=FALSE}
-question("What would you have done if the range of `id`s had been outside of 1 - 1000?",
-         answer("Find out which of the two variables had elements outside that range", correct = TRUE),
-         answer("Assume that both variables are not as we thought", message = "Any time you hear or think 'assume`, ask yourself how you can ascertain the truth of the assumption."),
+question("What would you have done if the range of `id`s had been outside of 1 through 1000?",
+         answer("Look more closely at the data to figure out why.", correct = TRUE),
+         answer("Assume that both variables are not as we thought", message = "Any time you hear or think 'assume' anything, don't stop there. Ask yourself how you can ascertain the truth of the assumption."),
          answer("Move along because `id` is not an important variable", message = "Have you any reason to believe that this is an unimportant variable besides the fact that it is called `id`?"),
          answer("Reset all the `id`s in both data sets so they fall within the expected range", message = "Have you ascertained that each `id` is used only once? Until you know more, you should leave their values alone."),
          random_answer_order = TRUE,
@@ -314,6 +251,228 @@ question("What would you have done if the range of `id`s had been outside of 1 -
 ```
 
 
+### Is `date` a Date?
+
+Find out what class the `date` variable is for each data set using the `class` function. You can separate the two calls (one each for `mathr` and `langr`) by a semicolon as you did with `dim` and `names` above. 
+
+```{r check-date-class, exercise = TRUE, exercise.lines = 5}
+
+```
+```{r check-date-class-hint-1}
+class(...)
+```
+```{r check-date-class-hint-2}
+class(mathr$date); class(...)
+```
+```{r check-date-class-solution}
+class(mathr$date); class(langr$date)
+```
+
+```{r is-date-date, echo=FALSE}
+question("Is the variable `date` a date class in either data set?",
+         answer("No", correct = TRUE),
+         answer("Yes", message = "Type `class(mathr$date); class(langr$date)`"),
+         correct = "That's absolutely right.",
+         incorrect = "No.",
+         random_answer_order = TRUE,
+         allow_retry = TRUE
+)
+```
+
+
+### 5. See the `head` of the `date`s
+
+Look at the top of the `date` variables by passing them to `head`.
+
+```{r head-date, exercise = TRUE, exercise.lines = 5}
+
+```
+```{r head-date-hint-1}
+head(...)
+```
+```{r head-date-hint-2}
+head(mathr$date); head(...)
+```
+```{r head-date-solution}
+head(mathr$date); head(langr$date)
+```
+
+### 6. Check `score` Distributions (and Find the Modes)
+
+```{r check-score-distros, exercise = TRUE, exercise.lines = 5}
+
+```
+```{r check-score-distros-hint-1}
+hist(...)
+```
+```{r check-score-distros-hint-2}
+hist(...); hist(...)
+```
+```{r check-score-distros-hint-3}
+hist(mathr$score); hist(...)
+```
+```{r check-score-distros-solution}
+hist(mathr$score); hist(langr$score)
+```
+
+```{r triangular-yn, echo=FALSE}
+question("Do the `score` distributions look triangular?",
+         answer("Yes", correct = TRUE),
+         answer("No", message = "Type `hist(mathr$score); hist(langr$score)` and look carefully."),
+         correct = "That's right!",
+         incorrect = "Incorrect.",
+         random_answer_order = TRUE,
+         allow_retry = TRUE
+)
+```
+```{r wheremode, echo=FALSE}
+question("Where are the `score` modes (as shown by the histograms)?",
+         answer("Around 80", correct = TRUE),
+         answer("Around 60"),
+         answer("Around 0"),
+         correct = "You are doing so well!",
+         incorrect = "Actually no. Look for the tallest bars in each of the histograms",
+         random_answer_order = TRUE,
+         allow_retry = TRUE
+)
+```
+
+### Fix One Thing
+
+```{r fix-one-thing, echo=FALSE}
+question("If you could fix one thing about the data set, what would it be?",
+         answer("Change the date from a factor to a date object", correct = TRUE),
+         answer("Eliminate all duplicate `id`s", message = "Duplicate `id`s exist because each person may have taken the test more than once."),
+         answer("Make `mathr` wider", message = "`mathr` doesn't contain any implicit variables."),
+         answer("Make `langr` wider", message = "`langr` doesn't contain any implicit variables."),
+         correct = "You got it!",
+         incorrect = "That's not the answer I was looking for.",
+         random_answer_order = TRUE,
+         allow_retry = TRUE
+)
+```
+
+## Identify Duplicates using `dplyr`
+
+What’s the duplicate situation in each table? We can use dplyr to group by subject ID, find the how big each group is, and display that in a table by group size.
+
+library(dplyr)
+
+math %>% group_by(subjectID) %>% group_size() %>% table()
+	.
+	  1   2   3   4 
+	329  76   5   1
+Lots of duplication here – one subject took the math test four times. Still, most (329) only have one admin.
+
+lang %>% group_by(subjectID) %>% group_size() %>% table()
+	.
+	  1   2   3 
+	295  86  11
+Similar here – lots of dupes. If we were to merge these data frames by ID without limiting by dates, we would have geometric growth. For example, consider subject 697. This subject has 3 administrations each of math and language, and merge will match each possible combination, for 3 X 3 or 9 rows. This usually causes problems with analysis, which assumes a single observation or combination of observations per subject. So, how can we limit the number of rows returned when we combine the math and language scores to just one row per subject?
+
+We can imagine several ways to accomplish this:
+
+“Give me the earliest language score, if any, and the math score closest in time to that language score. If no language score, omit.”
+
+“I don’t care if it’s a first test or a subsequent readministration, just give me the smallest time interval between a language and a math for each subject that has both.”
+
+“Give me the closest math score and the closest language score to this subject’s MRI date, which I’ll give you.”
+
+“Give me the closest math date after language – if math precedes language, I don’t want to see it.”
+
+We have to keep a few things in mind: some instruments (like some psychometric instruments) should only really be administered once, so we will probably want to disregard administrations 2-n, no matter when they occurred. Some instruments, like lab results, have roughly defined “expiration dates” – they reflect a moment in time, and must be selected carefully to make sure you’re measuring what you want, when you want. An expired measurement may be worse than no data at all in this case. Some instruments might need to be administered in order – for example, we might want an instrument that requires deception to be administered before other measures that tend to tip participants off to the purpose of the deceptive instrument. It is very important to understand our precise research goals as well as the specifications of the measurement when working with data that needs to have multiple administrations resolved.
+
+Let’s take a look at some common tactics with date-based resolution!
+
+We begin by making sure that dates are dates:
+
+math$testDate <- as.Date(math$testDate)
+lang$testDate <- as.Date(lang$testDate)
+OPTION 1: Closest pairs
+
+Let’s consider what we would do if we just wanted to get the closest date-matched set of math and language scores – maybe we are doing research into the correlation of scores between the two tests. If subjects have only one of the two, leave them out of the set.
+
+First we merge. R’s merge command by default only takes the intersection (the overlap in the Venn diagram) of two datasets, as defined by their “by” field. Since our two data frames have the same column name for the date of administration, we’ll want to add suffixes to clarify which is which.
+
+pairs <- merge(math, lang, by="subjectID", suffixes=c(".math", ".lang"))
+Check out the data frame:
+
+head(pairs)
+	  subjectID testDate.math mathScore testDate.lang languageScore
+	1        12    2006-06-24        64    2009-10-30            86
+	2        20    2008-08-23        72    2015-12-17            62
+	3        20    2008-08-23        72    2008-10-14            56
+	4        35    2015-11-25        76    2005-04-04            82
+	5        45    2005-05-03        71    2010-08-06            53
+	6        48    2007-03-24        83    2007-01-02            63
+The pairs data frame consists of rows that each have a math and a lang score, but some subjects have multiple rows. Confirm this by asking dplyr to group, count, and then display in descending order the number of rows for each subject.
+
+pairs %>% 
+  group_by(subjectID) %>% 
+  summarise(size = n()) %>% 
+  arrange(desc(size)) %>%
+  ungroup()
+	# A tibble: 161 x 2
+	   subjectID  size
+	       <int> <int>
+	 1       697     9
+	 2       119     4
+	 3       216     4
+	 4       329     4
+	 5       726     4
+	 6       878     4
+	 7       985     4
+	 8       262     3
+	 9       485     3
+	10       623     3
+	# ... with 151 more rows
+Yep, the dratted 697 is there. How will we select the closest pair for each subject?
+
+One easy way is to use dplyr. We’ve already merged all the options, so now we just want to filter pairs such that within each ID, the only row we keep is the one with the smallest time interval. That’s fairly simple. We don’t care about order, so we just look for the smallest absolute value in date difference, or, to say it another way, the difference that is the same as the minimum difference for this ID.
+
+Note that we have to think about ties – say, there’s a math test 200 days prior to and one 200 days after the language test. In our case, it doesn’t matter which one we pick, so we just take the first one, using dplyr’s slice(). Finally, we’ll ungroup the resultant data frame.
+
+closestPairs <- pairs %>% 
+  group_by(subjectID) %>%
+  filter(abs(testDate.lang - testDate.math) == min(abs(testDate.lang - testDate.math))) %>%
+  slice(1) %>% 
+  ungroup()
+How big is this data?
+
+dim(closestPairs)
+	[1] 161   5
+closestPairs only has 161 rows, as compared to 250 for pairs. Let’s confirm that there are no duplications:
+
+table(duplicated(closestPairs$subjectID))
+	FALSE 
+	  161
+All false. We have a data frame that consists of only the subjects that have both tests, and from those administrations, only the pair that has the smallest interval of time.
+
+OPTION 2: Earliest math and nearest language (if any)
+
+Here we want all subjects that have a math score. We’ll take their first one, then find the nearest language score (if there is one) to that.
+
+Here, we’ll merge more than just the intersection – we’ll also include cases in which math is present but language is absent. In other words, we want ALL the math rows, regardless of whether there’s a corresponding language row. We can’t say the same about language.
+
+earliestMath <- merge(x=math, y=lang, by="subjectID", 
+                      all.x = TRUE, suffixes = c(".math", ".lang"))
+Now we’ll do something similar to option 1 above, as far as selecting the smallest absolute value, but we’ll have to include cases where there is no date distance (it’s na), because there isn’t a language date to use to calculate from. We use the vertical pipe (|) to symbolize OR: is.na(testDate.lang - testDate.math)`.
+
+firstMathMaybeLanguage <- earliestMath %>% 
+  group_by(subjectID) %>%
+  filter(abs(testDate.lang - testDate.math) == min(abs(testDate.lang - testDate.math)) | is.na(testDate.lang - testDate.math)) %>%
+  slice(1) %>% 
+  ungroup()
+Again, let’s look at how large our data is.
+
+dim(firstMathMaybeLanguage)
+	[1] 411   5
+firstMathMaybeLanguage has 411 rows. Let’s confirm that there are no duplicates:
+
+table(duplicated(firstMathMaybeLanguage$subjectID))
+	FALSE 
+	  411
+Great, we have data with no duplicated subjects.
 
 ## References 
 
