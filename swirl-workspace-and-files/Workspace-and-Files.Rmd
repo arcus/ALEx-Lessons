@@ -12,7 +12,7 @@ knitr::opts_chunk$set(echo = FALSE)
 
 If you need to understand how to affect your files and workspace from within RStudio and R, we recommend that you run this lesson directly within your own copy of RStudio by typing the following commands into the console:
 
-1. `install.packages(swirl)` #You can skip this if you already installed swirl    
+1. `install.packages("swirl")` #You can skip this if you already installed swirl    
 
 2. `library(swirl)`          
 
