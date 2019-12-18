@@ -6,10 +6,9 @@ runtime: shiny_prerendered
 
 ```{r setup, include=FALSE}
 library(learnr)
-library(data)
 ```
 
-One of the greatest strengths of R, relative to other programming languages, is the ease with which we can create publication-quality graphics. In this lesson, you'll learn about base graphics in R.
+One of the greatest strengths of R relative to other programming languages, is the ease with which we can create publication-quality graphics. In this lesson, you'll learn about base graphics in R.
 
 We do not cover the more advanced portions of graphics in R in this lesson. For now, we're excluding `lattice`, `ggplot2` and `ggvis`. They will appear later, though. 
 

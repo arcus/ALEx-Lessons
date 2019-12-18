@@ -1,0 +1,145 @@
+---
+title: "Pivot Wider"
+output: 
+ learnr::tutorial:
+      progressive: true
+      allow_skip: true
+runtime: shiny_prerendered
+---
+
+```{r setup, include=FALSE}
+options(digits = 3, scipen = 9999)
+if(!require(learnr)){install.packages("learnr")}
+library(learnr)
+library(dplyr)
+library(tidyr)
+tutorial_options(exercise.completion = FALSE,
+                 exercise.eval = TRUE,
+                 exercise.lines = 5,
+                 exercise.diagnostics = TRUE)
+```
+
+This lesson is a partner to our [`pivot_longer` lesson](../sb-pivot-longer/) lesson. 
+
+## Background
+
+This lesson is based on materials from the [`pivot_wider` vignette](https://tidyr.tidyverse.org/articles/pivot.html). The goal of `pivot_wider` is to improve the usability of the old `spread` functions in the tidyverse. 
+
+In the vignette, Hadley Wickham wrote this:
+
+>For some time, it’s been obvious that there is something fundamentally wrong with the design of `spread()` and `gather()`. Many people don’t find the names intuitive and find it hard to remember which direction corresponds to spreading and which to gathering. It also seems surprisingly hard to remember the arguments to these functions, meaning that many people (including me!) have to consult the documentation every time.
+
+The two pivot functions, `pivot_longer` and `pivot_wider`, are the solution.
+
+## The Problem
+
+Data is tidy when
+
+1. Every column is variable    
+2. Every row is an observation    
+3. Every cell is a single value
+
+It’s relatively rare to need `pivot_wider` to make _tidy_ data, but it’s often useful for creating summary tables for presentation, or to put data into a format needed by other tools. Let's walk through a practical example using census data from the `tidycensus` package. Specifically, we'll look at the dataset `us_rent_income`. First, type the name of the data set to see what it looks like.
+
+```{r tidycensus, exercise = TRUE, exercise.lines = 5}
+
+```
+```{r tidycensus-solution}
+us_rent_income
+```
+
+The us_rent_income dataset contains information about median income and rent for each state in the US for 2017 (from the American Community Survey).
+
+
+Check out this data set. It's called `mussels`:
+
+```{r echo = FALSE, include = TRUE}
+mussels
+```
+
+```{r is-it-tidy, echo=FALSE}
+question("Is it tidy?",
+         answer("Yes"),
+         answer("No", correct = TRUE),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         incorrect = "Of what do the rows consist? If it isn't obvious, consider the possibility that you are not looking at a tidy data set.",
+         correct = "You are amazing!"
+)
+```
+
+How do we get `mussels` into tidy format? 
+
+## The Solution: `pivot_longer`
+
+First, let's decide what our variables actually should be.
+
+```{r what-is-the-other-variable, echo=FALSE}
+question("Which variables are we actually interested in from the `mussels` data set?",
+         answer("length of the anterior adductor muscle scar", correct = TRUE),
+         answer("location of the mussel when it was measured", correct = TRUE),
+         answer("number of mussels"),
+         answer("status of the mussel when it was measured (dead or alive)"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         correct = "You are really getting good at this!"
+)
+```
+
+In the `mussel` data, each column is a _level_ of an implicit variable, `location`. Use your browser's "back" button to go back and see it. You won't lose any of the work you've done on this page.
+
+The values in the cells are the standardized lengths of individual mussels' anterior adductor muscle scars (`aam`).
+
+### Go from Wide to Long Data
+
+Let's make our "wide" data "narrow", using `tidyr`'s function `pivot_longer`.
+
+We want to create a new, narrow data set with two variables: `location`, which has the levels `Tillamook`, `Newport`, `Petersburg`, `Magadan`, and `Tvarminne`; and `aam`, which contains a list of standardized anterior adductor muscle lengths, sorted and matched by the various `location` levels. 
+
+This plan looks and sounds like it will be complicated, but it won't be.
+
+Call `pivot_longer` and pass it the argument `data = ` the name of our data set. Then set the argument `cols` equal to the column names we would like to include as levels in our new `location` variable. The easy way to get those column names is to call `names` with the argument `mussels`. The next argument, `names_to` tells `pivot_longer` what variable we would like those "names to" become levels for. In our case, `names_to = "location"`. Finally, we tell `pivot_longer` what we want the "values to" become data for. Set `values_to` equal to `"aam"`. 
+
+Assign the output from `pivot_longer` to the data name `long_mussels`. Surround the entire assignment, from beginning to end, with parentheses so you can see what the new data set looks like when `pivot_longer` is done with it. 
+
+```{r pivot-longer, exercise = TRUE, exercise.lines = 10}
+
+```
+```{r pivot-longer-solution}
+(long_mussels <- pivot_longer(data = mussels,
+                             cols = names(mussels),
+                             names_to = "location",
+                             values_to = "aam"))
+```
+
+We need to fix just one more thing: `long_mussels$location` is a character variable. Turn it into a factor variable by replacing it with itself being passed to `as.factor`. Surround that with parentheses, too, so you can see what happens. 
+
+```{r make-a-factor, exercise = TRUE, exercise.lines = 5}
+
+```
+```{r make-a-factor-solution}
+(long_mussels$location <- as.factor(long_mussels$location))
+```
+
+Now have a look at the data frame we just made, `long_mussels`. To look at the data, use any of the functions you have previously learned. If you haven't learned any, try our lesson [Looking at Data](../swirl-looking-at-data/).
+
+```{r prepare-look-at-long_mussels}
+long_mussels$location <- as.factor(long_mussels$location)
+```
+```{r look-at-long_mussels, exercise = TRUE, exercise.lines = 5, exercise.setup = "prepare-look-at-long_mussels"}
+
+```
+```{r look-at-long_mussels-solution}
+long_mussels
+str(long_mussels)
+head(long_mussels)
+tail(long_mussels)
+```
+
+As you can see, you now have a nice long data set. Why did you do that? So you can perform a [one-way ANOVA](../sb-one-way-anova/), of course. Have fun!
+
+## References
+
+[R for Data Science](https://r4ds.had.co.nz/tidy-data.html#spreading-and-gathering)
+
+This lesson is heavily based with thanks on the works of John H. McDonald ([Handbook of Biological Statistics](http://www.biostathandbook.com/chigof.html)) and Salvatore S. Mangiafico ([R Companion to the Biostats Handbook](https://rcompanion.org/rcompanion/b_03.html)).

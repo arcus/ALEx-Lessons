@@ -29,10 +29,6 @@ tutorial_options(exercise.completion = FALSE,
 math <- read.csv("https://raw.githubusercontent.com/pm0kjp/datastore/master/fakeMath.csv")
 lang <- read.csv("https://raw.githubusercontent.com/pm0kjp/datastore/master/fakeLang.csv")
 
-# # debugging
-# math <- read.csv("/Users/braunsb/Documents/GitHub/a-MESS Lessons/sb-date-pairing-in-r/math.csv")
-# lang <- read.csv("/Users/braunsb/Documents/GitHub/a-MESS Lessons/sb-date-pairing-in-r/lang.csv")
-
 mathr <- rename(.data = math, id = subjectID, date = testDate, score = mathScore)
 langr <- rename(.data = lang, id = subjectID, date = testDate, score = languageScore)
 
@@ -354,21 +350,135 @@ question("If you could fix one thing about the data set, what would it be?",
 
 ## Identify Duplicates using `dplyr`
 
-What’s the duplicate situation in each table? We can use dplyr to group by subject ID, find the how big each group is, and display that in a table by group size.
+First, let's find out if you need to review `dplyr`.
 
+```{r select-verbs, echo=FALSE}
+question("Which of these are `dplyr` verbs? Select six.",
+         answer("`select`", correct = TRUE),
+         answer("`unselect`"),
+         answer("`disregard`"),
+         answer("`rename`", correct = TRUE),
+         answer("`mutate`", correct = TRUE),
+         answer("`filter`", correct = TRUE),
+         answer("`summarise`", correct = TRUE),
+         answer("`arrange`", correct = TRUE),
+         correct = "You are amazing!",
+         incorrect = "Check out `dplyr.tidyverse.org` for the answer.",
+         random_answer_order = TRUE,
+         allow_retry = TRUE
+)
+```
+```{r whatsapipe, echo=FALSE}
+question("What does a `dplyr` pipe look like?",
+         answer("%>%", correct = TRUE),
+         answer("%->%", message = "message_wrong_1"),
+         answer("%=%", message = "message_wrong_2"),
+         answer("%<%", message = "message_wrong_3"),
+         correct = "Yes!",
+         incorrect = "No, that's not a pipe in `dplyr` terms. Check out `dplyr.tidyverse.org` to find out more",
+         random_answer_order = TRUE,
+         allow_retry = TRUE
+)
+```
+
+If you struggled to figure out the answers to these questions, please see [our `dplyr`](../sb-dplyr/) and [Piping and Summarizing](../sb-piping-and-summarizing/) lessons before continuing. The rest of this lesson assumes you have an understanding of those concepts.
+
+Our two data sets are tables (matrices). How many duplicates have we in each table? We can use `dplyr` to group by subject `id`, find the how big each group is, and display results in a table, ordered by group size. Follow these steps:
+
+1. Make sure `dplyr` is in the library by typing `library(dplyr)`.     
+2. Start with `mathr` and pipe it to `group_by`.    
+3. Pass `id` to `group_by`, then add another pipe.    
+4. Call the function `group_size`, then add another pipe.    
+5. Call the function `table`.
+
+```{r first-piping, exercise = TRUE, exercise.lines = 7}
+
+```
+```{r first-piping-hint-1}
+library(...)
+```
+```{r first-piping-hint-2}
 library(dplyr)
+mathr %>% 
+  ...
+```
+```{r first-piping-hint-3}
+library(dplyr)
+mathr %>% 
+  group_by(...) %>%
+  ...
+```
+```{r first-piping-hint-4}
+library(dplyr)
+mathr %>% 
+  group_by(id) %>%
+  group_size %>%
+  ...
+```
+```{r first-piping-solution}
+library(dplyr)
+mathr %>% 
+  group_by(id) %>%
+  group_size %>%
+  table
+```
 
-math %>% group_by(subjectID) %>% group_size() %>% table()
-	.
-	  1   2   3   4 
-	329  76   5   1
-Lots of duplication here – one subject took the math test four times. Still, most (329) only have one admin.
+Lots of duplication here. One participant took the math test four times! Still, most (329) made only one attempt.
 
-lang %>% group_by(subjectID) %>% group_size() %>% table()
-	.
-	  1   2   3 
-	295  86  11
-Similar here – lots of dupes. If we were to merge these data frames by ID without limiting by dates, we would have geometric growth. For example, consider subject 697. This subject has 3 administrations each of math and language, and merge will match each possible combination, for 3 X 3 or 9 rows. This usually causes problems with analysis, which assumes a single observation or combination of observations per subject. So, how can we limit the number of rows returned when we combine the math and language scores to just one row per subject?
+Go ahead and use this code chunk to run the same series of steps with `langr` as input data.
+
+```{r langr-piping, exercise = TRUE, exercise.lines = 5}
+
+```
+```{r langr-piping-hint-1}
+langr %>%
+  ...
+```
+```{r langr-piping-hint-2}
+langr %>%
+  group_by(...) %>%
+```
+```{r langr-piping-hint-3}
+langr %>%
+  group_by(id) %>%
+  group_size %>%
+  ...
+```
+```{r langr-piping-solution}
+langr %>%
+  group_by(id) %>%
+  group_size %>%
+  table
+```
+
+Similar here – lots of people took the tests more than once. 
+
+```{r howmanythisthat, echo=FALSE}
+question("How many people took the language test twice?",
+         answer("86", correct = TRUE),
+         answer("295", message = "That's how many took it once."),
+         answer("11", message = "That's how many took it 3 times."),
+         answer("0", message = "I'm afraid something went seriously wrong with your code if you have a 0 somewhere."),
+     correct = "That's right!",
+     incorrect = "No.",
+     random_answer_order = TRUE,
+     allow_retry = TRUE
+)
+```
+```{r howmanymath, echo=FALSE}
+question("How many people took the math test at least twice?",
+         answer("82", correct = TRUE),
+         answer("76", message = "That's how many people took it twice. I asked how many people too the test _at least_ twice."),
+         answer("5", message = "That's how many people took the test 3 times. Add a few more to the total and you'll get the right answer."),
+         answer("1", message = "Four times is _at least_ twice, but you should add in those who took it twice and three times as well."),
+     correct = "You got it!",
+     incorrect = "No.",
+     random_answer_order = TRUE,
+     allow_retry = TRUE
+)
+```
+
+If we were to merge these data frames by ID without limiting by dates, we would have geometric growth. For example, consider subject 697. This subject has 3 administrations each of math and language, and merge will match each possible combination, for 3 X 3 or 9 rows. This usually causes problems with analysis, which assumes a single observation or combination of observations per subject. So, how can we limit the number of rows returned when we combine the math and language scores to just one row per subject?
 
 We can imagine several ways to accomplish this:
 
