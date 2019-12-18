@@ -43,7 +43,7 @@ We'll use the second workhorse function in the package, `ggplot`, as well as oth
 
 
 ```{r ggplot-stands-for, echo=FALSE}
-question("Do you remember what the gg of ggplot2 stands for?",
+question("Do you remember what the 'gg' of `ggplot2` stands for?",
          answer("goto graphics"),
          answer("grammar of graphics", correct = TRUE),
          answer("good grief"),

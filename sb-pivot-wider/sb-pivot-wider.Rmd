@@ -17,9 +17,223 @@ tutorial_options(exercise.completion = FALSE,
                  exercise.eval = TRUE,
                  exercise.lines = 5,
                  exercise.diagnostics = TRUE)
+Input = ("
+TagID	Station	seen
+4842	Release	1
+4843	Release	1
+4844	Release	1
+4845	Release	1
+4847	Release	1
+4848	Release	1
+4849	Release	1
+4850	Release	1
+4851	Release	1
+4854	Release	1
+4855	Release	1
+4857	Release	1
+4858	Release	1
+4859	Release	1
+4861	Release	1
+4862	Release	1
+4863	Release	1
+4864	Release	1
+4865	Release	1
+4842	I80_1	1
+4843	I80_1	1
+4844	I80_1	1
+4845	I80_1	1
+4847	I80_1	1
+4848	I80_1	1
+4849	I80_1	1
+4850	I80_1	1
+4851	I80_1	1
+4854	I80_1	1
+4855	I80_1	1
+4857	I80_1	1
+4858	I80_1	1
+4859	I80_1	1
+4861	I80_1	1
+4862	I80_1	1
+4863	I80_1	1
+4864	I80_1	1
+4865	I80_1	1
+4842	Lisbon	1
+4843	Lisbon	1
+4844	Lisbon	1
+4845	Lisbon	1
+4847	Lisbon	1
+4848	Lisbon	1
+4849	Lisbon	0
+4850	Lisbon	0
+4851	Lisbon	0
+4854	Lisbon	0
+4855	Lisbon	1
+4857	Lisbon	1
+4858	Lisbon	1
+4859	Lisbon	1
+4861	Lisbon	1
+4862	Lisbon	1
+4863	Lisbon	0
+4864	Lisbon	0
+4865	Lisbon	1
+4842	Rstr	1
+4843	Rstr	1
+4844	Rstr	1
+4845	Rstr	1
+4847	Rstr	0
+4848	Rstr	1
+4849	Rstr	0
+4850	Rstr	1
+4851	Rstr	0
+4854	Rstr	0
+4855	Rstr	1
+4857	Rstr	1
+4858	Rstr	1
+4859	Rstr	1
+4861	Rstr	1
+4862	Rstr	1
+4863	Rstr	0
+4864	Rstr	0
+4865	Rstr	0
+4842	Base_TD	1
+4843	Base_TD	1
+4844	Base_TD	1
+4845	Base_TD	1
+4847	Base_TD	0
+4848	Base_TD	0
+4849	Base_TD	0
+4850	Base_TD	1
+4851	Base_TD	0
+4854	Base_TD	0
+4855	Base_TD	1
+4857	Base_TD	1
+4858	Base_TD	1
+4859	Base_TD	1
+4861	Base_TD	1
+4862	Base_TD	1
+4863	Base_TD	0
+4864	Base_TD	0
+4865	Base_TD	0
+4842	BCE	1
+4843	BCE	1
+4844	BCE	1
+4845	BCE	0
+4847	BCE	0
+4848	BCE	0
+4849	BCE	0
+4850	BCE	1
+4851	BCE	0
+4854	BCE	0
+4855	BCE	0
+4857	BCE	1
+4858	BCE	1
+4859	BCE	0
+4861	BCE	1
+4862	BCE	1
+4863	BCE	0
+4864	BCE	0
+4865	BCE	0
+4842	BCW	1
+4843	BCW	1
+4844	BCW	1
+4845	BCW	0
+4847	BCW	0
+4848	BCW	0
+4849	BCW	0
+4850	BCW	1
+4851	BCW	0
+4854	BCW	0
+4855	BCW	0
+4857	BCW	1
+4858	BCW	1
+4859	BCW	0
+4861	BCW	1
+4862	BCW	1
+4863	BCW	0
+4864	BCW	0
+4865	BCW	0
+4842	BCE2	1
+4843	BCE2	1
+4844	BCE2	1
+4845	BCE2	0
+4847	BCE2	0
+4848	BCE2	0
+4849	BCE2	0
+4850	BCE2	0
+4851	BCE2	0
+4854	BCE2	0
+4855	BCE2	0
+4857	BCE2	1
+4858	BCE2	1
+4859	BCE2	0
+4861	BCE2	1
+4862	BCE2	1
+4863	BCE2	0
+4864	BCE2	0
+4865	BCE2	0
+4842	BCW2	1
+4843	BCW2	1
+4844	BCW2	1
+4845	BCW2	0
+4847	BCW2	0
+4848	BCW2	0
+4849	BCW2	0
+4850	BCW2	0
+4851	BCW2	0
+4854	BCW2	0
+4855	BCW2	0
+4857	BCW2	1
+4858	BCW2	1
+4859	BCW2	0
+4861	BCW2	1
+4862	BCW2	1
+4863	BCW2	0
+4864	BCW2	0
+4865	BCW2	0
+4842	MAE	1
+4843	MAE	1
+4844	MAE	1
+4845	MAE	0
+4847	MAE	0
+4848	MAE	0
+4849	MAE	0
+4850	MAE	0
+4851	MAE	0
+4854	MAE	0
+4855	MAE	0
+4857	MAE	0
+4858	MAE	1
+4859	MAE	0
+4861	MAE	1
+4862	MAE	0
+4863	MAE	0
+4864	MAE	0
+4865	MAE	0
+4842	MAW	1
+4843	MAW	1
+4844	MAW	1
+4845	MAW	0
+4847	MAW	0
+4848	MAW	0
+4849	MAW	0
+4850	MAW	0
+4851	MAW	0
+4854	MAW	0
+4855	MAW	0
+4857	MAW	0
+4858	MAW	1
+4859	MAW	0
+4861	MAW	1
+4862	MAW	0
+4863	MAW	0
+4864	MAW	0
+4865	MAW	0
+")
+fish_encounters <- read.table(textConnection(Input), header = TRUE); rm(Input)
+fish_encounters <- as_tibble(fish_encounters)
 ```
 
-This lesson is a partner to our [`pivot_longer` lesson](../sb-pivot-longer/) lesson. 
+This lesson is a partner to our [`pivot_longer` lesson](../sb-pivot-longer/). We suggest you start with that one, as this lesson assumes you are familiar with basic `pivot` syntax.
 
 ## Background
 
@@ -29,9 +243,9 @@ In the vignette, Hadley Wickham wrote this:
 
 >For some time, it’s been obvious that there is something fundamentally wrong with the design of `spread()` and `gather()`. Many people don’t find the names intuitive and find it hard to remember which direction corresponds to spreading and which to gathering. It also seems surprisingly hard to remember the arguments to these functions, meaning that many people (including me!) have to consult the documentation every time.
 
-The two pivot functions, `pivot_longer` and `pivot_wider`, are the solution.
+The two pivot functions, [`pivot_longer`](../sb-pivot-longer/) and `pivot_wider`, are the solution.
 
-## The Problem
+## The Problem that is not so Much of a Problem
 
 Data is tidy when
 
@@ -39,7 +253,85 @@ Data is tidy when
 2. Every row is an observation    
 3. Every cell is a single value
 
-It’s relatively rare to need `pivot_wider` to make _tidy_ data, but it’s often useful for creating summary tables for presentation, or to put data into a format needed by other tools. Let's walk through a practical example using census data from the `tidycensus` package. Specifically, we'll look at the dataset `us_rent_income`. First, type the name of the data set to see what it looks like.
+It’s relatively rare to need `pivot_wider` to make _tidy_ data, but it’s often useful for creating summary tables for presentation, or to put data into a format needed by other tools. 
+
+## Examples
+
+The fish_encounters dataset, contributed by [Myfanwy Johnston](https://fishsciences.github.io/post/visualizing-fish-encounter-histories/), describes when fish swimming down a river are detected by automatic monitoring stations. Type `fishencounters` in the code block below.
+
+```{r fishencounters-of-the-first-kind, exercise = TRUE, exercise.lines = 5}
+
+```
+```{r fishencounters-of-the-first-kind-solution}
+fish_encounters
+```
+
+Many tools used to analyse this data need it in a form in which each station is a column. The basic `pivot_wider` syntax is this:
+
+>`pivot_wider(names_from = var1, names_to = var2)`
+
+This process is a bit like creating dummy variables with 1s & 0s when you want all your regression input to be scalar in one form or another (see our [Correlation and Regression lesson](../sb-correlation-and-regression/) to learn more). 
+
+Basically, you figure out which new variables you want from the _levels_ of varibles that are already present in the data set. That's where you get your new variables _names from_. Then you figure out where the values for those new variables are stored before the pivot, and you tell `pivot_wider` that's where you want the _values from_. `pivot_wider` creates new variables and populates them with data from the variable you told it to take the values from.
+
+You'll end up with more columns and fewer rows in the data set.
+
+Let's try it with the `fish_encounters` data set. Pipe the data set to `pivot_wider` and tell it to take the names from the station values and the values `value`. Use the hints if you have trouble.
+
+First, though, change all the names to lowercase using the statement `names(fish_encounters) <- tolower(names(fish_encounters))`. 
+
+```{r changefishyformats, exercise = TRUE, exercise.lines = 8}
+
+```
+```{r changefishyformats-hint-1}
+names(fish_encounters) <- tolower(names(...))
+fish_encounters %>% ...
+```
+```{r changefishyformats-hint-2}
+names(fish_encounters) <- tolower(names(fish_encounters))
+fish_encounters %>% 
+  pivot_wider(...)
+```
+```{r changefishyformats-hint-3}
+names(fish_encounters) <- tolower(names(fish_encounters))
+fish_encounters %>% 
+  pivot_wider(names_from = station, 
+              values_from = ...)
+```
+```{r changefishyformats-solution}
+names(fish_encounters) <- tolower(names(fish_encounters))
+fish_encounters %>% 
+  pivot_wider(names_from = station, 
+              values_from = seen)
+```
+
+
+```{r arrangevars, echo = FALSE}
+library(sortable)
+var_order <- c(
+  "tagid",
+  "Release",
+  "I80_1",
+  "Lisbon",
+  "Rstr",
+  "Base_TD",
+  "BCE",
+  "BCW",
+  "BCE2",
+  "BCW2",
+  "MAE",
+  "MAW"
+  )
+# Initialize the question
+question_rank(
+  "Please arrange these variable names into the order you have in your output from the previous code chunk. If you see variables you don't have in your output, or if you have strange characters in your output, have another go at the code.",
+  answer(var_order, correct = TRUE),
+  answer(rev(var_order), correct = FALSE, message = "Other direction."),
+  allow_retry = TRUE
+)
+```
+
+Let's walk through another practical example using census data from the `tidycensus` package. Specifically, we'll look at the dataset `us_rent_income`. First, type the name of the data set to see what it looks like.
 
 ```{r tidycensus, exercise = TRUE, exercise.lines = 5}
 
@@ -50,96 +342,51 @@ us_rent_income
 
 The us_rent_income dataset contains information about median income and rent for each state in the US for 2017 (from the American Community Survey).
 
+Both `estimate` and `moe` are values columns, so we can supply them to `values_from` in a `pivot_wider` call. Use piping to do this. Start with the dataset `us_rent_income` and let the results print to the console. Specifically, 
 
-Check out this data set. It's called `mussels`:
+1. Start with `us_rent_income` and a pipe operator    
+2. Call `pivot_wider` with the following arguments
+   - `names_from` set equal to the variable that contains the two values "rent" and "income"
+   - `values_from` set equal to a concatenation of the varible that contains estimates and the variable `moe`
 
-```{r echo = FALSE, include = TRUE}
-mussels
+```{r rent-income-piped-once, exercise = TRUE, exercise.lines = 5}
+
+```
+```{r rent-income-piped-once-hint-1}
+us_rent_income %>% 
+  pivot_wider(...)
+```
+```{r rent-income-piped-once-hint-2}
+us_rent_income %>% 
+  pivot_wider(.., ...)
+```
+```{r rent-income-piped-once-hint-3}
+us_rent_income %>% 
+  pivot_wider(names_from = variable, ...)
+```
+```{r rent-income-piped-once-hint-4}
+us_rent_income %>% 
+  pivot_wider(names_from = variable, values_from = c(...))
+```
+```{r rent-income-piped-once-solution}
+us_rent_income %>% 
+  pivot_wider(names_from = variable, values_from = c(estimate, moe))
 ```
 
-```{r is-it-tidy, echo=FALSE}
-question("Is it tidy?",
-         answer("Yes"),
-         answer("No", correct = TRUE),
+```{r estimate, echo=FALSE}
+question("What is the estimated income for Connecticut?",
+         answer("35326", correct = TRUE),
+         answer("24476"),
+         answer("25952"),
+         answer("31560"),
+         correct = "Yes, that's the income I was looking for.",
+         incorrect = "Sorry, you're looking at the wrong row or your `pivot_wider` command has given some odd output.",
          random_answer_order = TRUE,
-         allow_retry = TRUE,
-         incorrect = "Of what do the rows consist? If it isn't obvious, consider the possibility that you are not looking at a tidy data set.",
-         correct = "You are amazing!"
+         allow_retry = TRUE
 )
 ```
 
-How do we get `mussels` into tidy format? 
 
-## The Solution: `pivot_longer`
+## See Also
 
-First, let's decide what our variables actually should be.
-
-```{r what-is-the-other-variable, echo=FALSE}
-question("Which variables are we actually interested in from the `mussels` data set?",
-         answer("length of the anterior adductor muscle scar", correct = TRUE),
-         answer("location of the mussel when it was measured", correct = TRUE),
-         answer("number of mussels"),
-         answer("status of the mussel when it was measured (dead or alive)"),
-         random_answer_order = TRUE,
-         allow_retry = TRUE,
-         correct = "You are really getting good at this!"
-)
-```
-
-In the `mussel` data, each column is a _level_ of an implicit variable, `location`. Use your browser's "back" button to go back and see it. You won't lose any of the work you've done on this page.
-
-The values in the cells are the standardized lengths of individual mussels' anterior adductor muscle scars (`aam`).
-
-### Go from Wide to Long Data
-
-Let's make our "wide" data "narrow", using `tidyr`'s function `pivot_longer`.
-
-We want to create a new, narrow data set with two variables: `location`, which has the levels `Tillamook`, `Newport`, `Petersburg`, `Magadan`, and `Tvarminne`; and `aam`, which contains a list of standardized anterior adductor muscle lengths, sorted and matched by the various `location` levels. 
-
-This plan looks and sounds like it will be complicated, but it won't be.
-
-Call `pivot_longer` and pass it the argument `data = ` the name of our data set. Then set the argument `cols` equal to the column names we would like to include as levels in our new `location` variable. The easy way to get those column names is to call `names` with the argument `mussels`. The next argument, `names_to` tells `pivot_longer` what variable we would like those "names to" become levels for. In our case, `names_to = "location"`. Finally, we tell `pivot_longer` what we want the "values to" become data for. Set `values_to` equal to `"aam"`. 
-
-Assign the output from `pivot_longer` to the data name `long_mussels`. Surround the entire assignment, from beginning to end, with parentheses so you can see what the new data set looks like when `pivot_longer` is done with it. 
-
-```{r pivot-longer, exercise = TRUE, exercise.lines = 10}
-
-```
-```{r pivot-longer-solution}
-(long_mussels <- pivot_longer(data = mussels,
-                             cols = names(mussels),
-                             names_to = "location",
-                             values_to = "aam"))
-```
-
-We need to fix just one more thing: `long_mussels$location` is a character variable. Turn it into a factor variable by replacing it with itself being passed to `as.factor`. Surround that with parentheses, too, so you can see what happens. 
-
-```{r make-a-factor, exercise = TRUE, exercise.lines = 5}
-
-```
-```{r make-a-factor-solution}
-(long_mussels$location <- as.factor(long_mussels$location))
-```
-
-Now have a look at the data frame we just made, `long_mussels`. To look at the data, use any of the functions you have previously learned. If you haven't learned any, try our lesson [Looking at Data](../swirl-looking-at-data/).
-
-```{r prepare-look-at-long_mussels}
-long_mussels$location <- as.factor(long_mussels$location)
-```
-```{r look-at-long_mussels, exercise = TRUE, exercise.lines = 5, exercise.setup = "prepare-look-at-long_mussels"}
-
-```
-```{r look-at-long_mussels-solution}
-long_mussels
-str(long_mussels)
-head(long_mussels)
-tail(long_mussels)
-```
-
-As you can see, you now have a nice long data set. Why did you do that? So you can perform a [one-way ANOVA](../sb-one-way-anova/), of course. Have fun!
-
-## References
-
-[R for Data Science](https://r4ds.had.co.nz/tidy-data.html#spreading-and-gathering)
-
-This lesson is heavily based with thanks on the works of John H. McDonald ([Handbook of Biological Statistics](http://www.biostathandbook.com/chigof.html)) and Salvatore S. Mangiafico ([R Companion to the Biostats Handbook](https://rcompanion.org/rcompanion/b_03.html)).
+Now you know the basics of pivot wider, [see the article by Hadley Wickham & co.](https://tidyr.tidyverse.org/articles/pivot.html) for even more examples of pivoting, including how to use `pivot_wider` to do aggregation. 

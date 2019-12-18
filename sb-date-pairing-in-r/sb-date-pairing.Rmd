@@ -478,7 +478,29 @@ question("How many people took the math test at least twice?",
 )
 ```
 
-If we were to merge these data frames by ID without limiting by dates, we would have geometric growth. For example, consider subject 697. This subject has 3 administrations each of math and language, and merge will match each possible combination, for 3 X 3 or 9 rows. This usually causes problems with analysis, which assumes a single observation or combination of observations per subject. So, how can we limit the number of rows returned when we combine the math and language scores to just one row per subject?
+If we were to merge these data frames by `id` without limiting by dates, we would have geometric growth. For example, consider subject 697. This subject has 3 took both the math and the language tests three times. A traditional `merge` function will match each _possible_ combination, for 3 X 3 or 9 rows in the resulting data set. Let's try that. 
+
+```{r merge3x3, exercise = TRUE, exercise.lines = 5}
+
+```
+```{r merge3x3-hint-1}
+code
+```
+```{r merge3x3-hint-2}
+code
+```
+```{r merge3x3-hint-3}
+code
+```
+```{r merge3x3-hint-4}
+code
+```
+```{r merge3x3-solution}
+code
+```
+
+
+Having so much repetition can causes problems with analyses that assume one observation or one combination of observations per subject. So, how can we limit the number of rows returned when we combine the math and language scores to just one row per subject?
 
 We can imagine several ways to accomplish this:
 
