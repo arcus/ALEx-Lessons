@@ -31,7 +31,11 @@ lang <- read.csv("https://raw.githubusercontent.com/pm0kjp/datastore/master/fake
 
 mathr <- rename(.data = math, id = subjectID, date = testDate, score = mathScore)
 langr <- rename(.data = lang, id = subjectID, date = testDate, score = languageScore)
+new_math <- mathr %>% mutate(data = "Math")
+new_lang <- langr %>% mutate(data = "Language")
 
+merged_df <- merge(mathr, langr, all = TRUE)
+best_df <- merge(new_math, new_lang, all = TRUE)
 
 ```
 
@@ -392,7 +396,7 @@ question("If you could fix one thing about the data set, what would it be?",
 )
 ```
 
-Let's do it. Use what you know about R to change the class of `date` in the two data sets from a factor to a date class object. If you need to review how to do this, check out the [swirl lesson about dates in R](../swirl-dates-and-times/).
+We'll do this later in the lesson. If you want to find out how, check out the [swirl lesson about dates in R](../swirl-dates-and-times/).
 
 ## Identify Duplicates using `dplyr`
 
@@ -524,49 +528,188 @@ question("How many people took the math test at least twice?",
 )
 ```
 
-If we were to merge these data frames by `id` without limiting by dates, we would have geometric growth. For example, consider subject 697. This subject has 3 took both the math and the language tests three times. A traditional `merge` function will match each _possible_ combination, for 3 X 3 or 9 rows in the resulting data set. Let's try that. 
+## Merge the Math and Language Score Data into One Dataset
+
+If we were to merge these data frames by `id` without limiting by dates, we would have geometric growth. For example, consider subject 697. This subject has 3 took both the math and the language tests three times. A traditional `merge` function will match each _possible_ combination, for 3 X 3 or 9 rows in the resulting data set. Let's try that. Pass `mathr` and `langr` to `merge` and set `all` equal to `TRUE`. Send the results to a new data fram, `merged_df`.
 
 ```{r merge3x3, exercise = TRUE, exercise.lines = 5}
 
 ```
 ```{r merge3x3-hint-1}
-code
+merged_df <- ?
 ```
 ```{r merge3x3-hint-2}
-code
+merged_df <- merge(mathr, ...)
 ```
 ```{r merge3x3-hint-3}
-code
+merged_df <- merge(mathr, langr, ...)
 ```
 ```{r merge3x3-hint-4}
-code
+merged_df <- merge(mathr, langr, all = ...)
 ```
 ```{r merge3x3-solution}
-code
+merged_df <- merge(mathr, langr, all = TRUE)
 ```
 
+Check out `merged_df`'s dimensions, then look at the top of the newly merged data set.
 
-Having so much repetition can causes problems with analyses that assume one observation or one combination of observations per subject. So, how can we limit the number of rows returned when we combine the math and language scores to just one row per subject?
 
-We can imagine several ways to accomplish this:
+```{r mergeddfidtab, exercise = TRUE, exercise.lines = 5}
 
-“Give me the earliest language score, if any, and the math score closest in time to that language score. If no language score, omit.”
+```
+```{r mergeddfidtab-hint-1}
+dim(...)
+```
+```{r mergeddfidtab-hint-2}
+dim(...)
+table(...)
+```
+```{r mergeddfidtab-hint-3}
+dim(...)
+head(...)
+```
+```{r mergeddfidtab-solution}
+dim(merged_df)
+head(merged_df)
+```
 
-“I don’t care if it’s a first test or a subsequent readministration, just give me the smallest time interval between a language and a math for each subject that has both.”
+Oh dear. Which score is which? Let's make sure we can find out after the merge by creating one new column per data file: `data = "Math"` for the `mathr` matrix and `data = "Language"` for the `langr` matrix. You can do this by piping each matrix to `mutate` to create the new constant. Save the mutate results in `math` and `lang` respectively.
 
-“Give me the closest math score and the closest language score to this subject’s MRI date, which I’ll give you.”
+```{r whichscoreiswhich, exercise = TRUE, exercise.lines = 5}
 
-“Give me the closest math date after language – if math precedes language, I don’t want to see it.”
+```
+```{r whichscoreiswhich-hint-1}
+mathr %>% ...
+```
+```{r whichscoreiswhich-hint-2}
+mathr %>% mutate(...)
+```
+```{r whichscoreiswhich-hint-3}
+mathr %>% mutate(data = "Math")
+langr %>% mutate(data = ...)
+```
+```{r whichscoreiswhich-hint-4}
+mathr %>% mutate(data = "Math")
+langr %>% mutate(data = "Language")
+```
+```{r whichscoreiswhich-solution}
+new_math <- mathr %>% mutate(data = "Math")
+new_lang <- langr %>% mutate(data = "Language")
+```
 
-We have to keep a few things in mind: some instruments (like some psychometric instruments) should only really be administered once, so we will probably want to disregard administrations 2-n, no matter when they occurred. Some instruments, like lab results, have roughly defined “expiration dates” – they reflect a moment in time, and must be selected carefully to make sure you’re measuring what you want, when you want. An expired measurement may be worse than no data at all in this case. Some instruments might need to be administered in order – for example, we might want an instrument that requires deception to be administered before other measures that tend to tip participants off to the purpose of the deceptive instrument. It is very important to understand our precise research goals as well as the specifications of the measurement when working with data that needs to have multiple administrations resolved.
+Now we can merge again and look at the top of the file.
 
-Let’s take a look at some common tactics with date-based resolution!
+```{r mergeagain, exercise = TRUE, exercise.lines = 5}
 
-We begin by making sure that dates are dates:
+```
+```{r mergeagain-hint-1}
+best_df <- ?
+```
+```{r mergeagain-hint-2}
+best_df <- merge(...)
+head(...)
+```
+```{r mergeagain-hint-3}
+best_df <- merge(new_math, ...)
+head(...)
+```
+```{r mergeagain-hint-4}
+best_df <- merge(new_math, new_lang, ...)
+head(best_df)
+```
+```{r mergeagain-solution}
+best_df <- merge(new_math, new_lang, all = TRUE)
+head(best_df)
+```
 
-math$testDate <- as.Date(math$testDate)
-lang$testDate <- as.Date(lang$testDate)
-OPTION 1: Closest pairs
+Now let's see how much repetition there is in `id`s and `date`s. We can add up how many elements of a vector are `duplicated` by `sum`ming them.
+
+```{r sumdup-id, exercise = TRUE, exercise.lines = 5}
+
+```
+```{r sumdup-id-hint-1}
+sum(duplicated(merged))
+```
+```{r sumdup-id-hint-2}
+sum(duplicated(merged))
+```
+```{r sumdup-id-solution}
+sum(duplicated(merged_df$id))
+sum(duplicated(merged_df$date))
+```
+
+**EXTRA CREDIT** Write some code to check that the sums of all the `date`s and `id`s add up to the total length of `merged_df`. Your output should be a logical: `TRUE` or `FALSE`.
+
+```{r sumdupcheck, exercise = TRUE, exercise.lines = 5}
+
+```
+```{r sumdupcheck-hint-1}
+length(...) + sum(...) == ?
+```
+```{r sumdupcheck-hint-2}
+length(unique(...)) + sum(duplicated(...)) == ?
+length(...) + sum(...) == ?
+```
+```{r sumdupcheck-hint-3}
+length(unique(merged_df$id)) + sum(duplicated(merged_df$id)) == nrow(...)
+length(...) + sum(...) == nrow(...)
+```
+```{r sumdupcheck-hint-4}
+length(unique(merged_df$id)) + sum(duplicated(merged_df$id)) == nrow(merged_df)
+length(...) + sum(duplicated(...)) == nrow(...)
+```
+```{r sumdupcheck-solution}
+length(unique(merged_df$id)) + sum(duplicated(merged_df$id)) == nrow(merged_df)
+length(unique(merged_df$date)) + sum(duplicated(merged_df$date)) == nrow(merged_df)
+```
+
+## How do we Deal with all the Repetition?
+
+It's clear that we have much repetition of `id`s and `date`s.
+
+Having so much repetition can causes problems with analyses that assume one observation or one combination of observations per subject. So how can we query the data but limit the number of rows returned to just one row per subject?
+
+There are several ways to accomplish this:
+
+1. "Give me the earliest language score, if any, and the math score closest in time to that language score. If no language score exists, omit.”    
+1. “I don’t care if it’s a first test or a subsequent readministration, just give me the smallest time interval between a language and a math for each subject that has both.”    
+1. “Give me the closest math score and the closest language score to this subject’s MRI date, which I’ll give you.”    
+1. “Give me the closest math date after language---and if math _precedes_ language, I don’t want to see it.”    
+
+We have to keep a few things in mind: 
+
+* Our instruments should be administered only once, so we will probably want to disregard administrations 2-n, no matter when they occurred.     
+* Some instruments, like lab results, have roughly defined “expiration dates”---they reflect a moment in time, and must be selected carefully to make sure you’re measuring what you want, when you want it. An expired measurement may be worse than no data at all.    
+* Some instruments need to be administered in order: for example, we might want an instrument that requires an instrument requiring deception to be administered before others that could tip participants off to the purpose of the deceptive instrument. 
+
+A good analyst and coder understands precise research goals as well as the specifications of the measurement when working with data that needs to have multiple administrations resolved.
+
+Let’s take a look at some common tactics with date-based resolution.
+
+## Date-Based Resolution
+
+We begin by making sure that dates are dates. Change the class of `date` to "date", then check it.
+
+```{r date_class, exercise = TRUE, exercise.lines = 5}
+
+```
+```{r date_class-hint-1}
+merged_df$date <- ?
+```
+```{r date_class-hint-2}
+merged_df$date <- as.Date(...)
+class(merged_df$date)
+```
+```{r date_class-solution}
+merged_df$date <- as.Date(merged_df$date)
+class(merged_df$date)
+```
+
+If your output was `"Date"`, you did it right.
+
+Now let's explore our options. 
+
+### OPTION 1: Closest pairs
 
 Let’s consider what we would do if we just wanted to get the closest date-matched set of math and language scores – maybe we are doing research into the correlation of scores between the two tests. If subjects have only one of the two, leave them out of the set.
 
