@@ -291,6 +291,18 @@ question("Is the variable `date` a date class in either data set?",
          allow_retry = TRUE
 )
 ```
+```{r isdatefunction, echo=FALSE}
+question("What class is the date variable?",
+         answer("factor", correct = TRUE),
+         answer("function", message = "You seem to have forgotten to use the `date` variable that is in the dataset. If you just asked for `class(date)`, you will have been told the class of the function `date`, which is outside the data set."),
+         answer("character", message = "You'll probably need to look at the hints to fix your code."),
+         answer("analog", message = "I don't know of any data structures in R called 'analog', though I'm sure we could make one."),
+     correct = "Yes!",
+     incorrect = "Incorrect.",
+     random_answer_order = TRUE,
+     allow_retry = TRUE
+)
+```
 
 
 ### 5. See the `head` of the `date`s
@@ -310,7 +322,22 @@ head(mathr$date); head(...)
 head(mathr$date); head(langr$date)
 ```
 
+```{r howmanylevelsdates, echo=FALSE}
+question("How many levels are in the two date variables for `mathr` and `langr`?",
+         answer("468 and 470", correct = TRUE),
+         answer("3 and 9", message = "There are many, many more than that"),
+         answer("470 and 468", message = "That's backwards."),
+         answer("2005-08-15 and 2006-07-22", message = "Those are dates, not numbers of levels."),
+     correct = "That's the answer I was looking for!",
+     incorrect = "No.",
+     random_answer_order = TRUE,
+     allow_retry = TRUE
+)
+```
+
 ### 6. Check `score` Distributions (and Find the Modes)
+
+Use `hist` to find the distributions of values for `mathr$score` and `langr$score`. 
 
 ```{r check-score-distros, exercise = TRUE, exercise.lines = 5}
 
@@ -329,7 +356,7 @@ hist(mathr$score); hist(langr$score)
 ```
 
 ```{r triangular-yn, echo=FALSE}
-question("Do the `score` distributions look triangular?",
+question("We were told the distributions were triangular. Are they?",
          answer("Yes", correct = TRUE),
          answer("No", message = "Type `hist(mathr$score); hist(langr$score)` and look carefully."),
          correct = "That's right!",
@@ -364,6 +391,8 @@ question("If you could fix one thing about the data set, what would it be?",
          allow_retry = TRUE
 )
 ```
+
+Let's do it. Use what you know about R to change the class of `date` in the two data sets from a factor to a date class object. If you need to review how to do this, check out the [swirl lesson about dates in R](../swirl-dates-and-times/).
 
 ## Identify Duplicates using `dplyr`
 
