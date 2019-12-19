@@ -409,25 +409,25 @@ question("Which of these are `dplyr` verbs? Select six.",
          answer("`summarise`", correct = TRUE),
          answer("`arrange`", correct = TRUE),
          correct = "You are amazing!",
-         incorrect = "Check out `dplyr.tidyverse.org` for the answer.",
+         incorrect = "It might help if you review [our `dplyr` lesson](../sb-dplyr/).",
          random_answer_order = TRUE,
          allow_retry = TRUE
 )
 ```
 ```{r whatsapipe, echo=FALSE}
 question("What does a `dplyr` pipe look like?",
-         answer("%>%", correct = TRUE),
-         answer("%->%", message = "message_wrong_1"),
-         answer("%=%", message = "message_wrong_2"),
-         answer("%<%", message = "message_wrong_3"),
+         answer("`%>%`", correct = TRUE),
+         answer("`%->%`"),
+         answer("`%=%`"),
+         answer("`%<%`"),
          correct = "Yes!",
-         incorrect = "No, that's not a pipe in `dplyr` terms. Check out `dplyr.tidyverse.org` to find out more",
+         incorrect = "No, that's not a pipe in `dplyr` terms. Check out [our `dplyr` lesson](../sb-dplyr/).",
          random_answer_order = TRUE,
          allow_retry = TRUE
 )
 ```
 
-If you struggled to figure out the answers to these questions, please see [our `dplyr`](../sb-dplyr/) and [Piping and Summarizing](../sb-piping-and-summarizing/) lessons before continuing. The rest of this lesson assumes you have an understanding of those concepts.
+If you struggled to figure out the answers to these questions, please see [our `dplyr`](../sb-dplyr/) and [Piping and Summarizing](../sb-piping-and-summarizing/) lessons before continuing. The rest of this lesson assumes you have an understanding of the concepts covered in those lessons.
 
 Our two data sets are tables (matrices). How many duplicates have we in each table? We can use `dplyr` to group by subject `id`, find the how big each group is, and display results in a table, ordered by group size. Follow these steps:
 
@@ -514,7 +514,7 @@ question("How many people took the language test twice?",
 ```{r howmanymath, echo=FALSE}
 question("How many people took the math test at least twice?",
          answer("82", correct = TRUE),
-         answer("76", message = "That's how many people took it twice. I asked how many people too the test _at least_ twice."),
+         answer("76", message = "That's how many people took it twice---but the question is how many people too the test _at least_ twice."),
          answer("5", message = "That's how many people took the test 3 times. Add a few more to the total and you'll get the right answer."),
          answer("1", message = "Four times is _at least_ twice, but you should add in those who took it twice and three times as well."),
      correct = "You got it!",
