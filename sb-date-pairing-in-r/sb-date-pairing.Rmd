@@ -37,7 +37,7 @@ langr <- rename(.data = lang, id = subjectID, date = testDate, score = languageS
 
 ## The Problem
 
-Let’s say **you want to look at two measurements** for a patient or a research participant to find some relationship between them (like a score on an anxiety measure for one variable and triglyceride levels for a few others); but some patients have **multiple records for one or both instruments or measures**. 
+Let’s say **you want to look at two measurements** for a patient or a research participant to find some relationship between them, like a score on an anxiety measure for one variable and triglyceride levels for a few other variables---but some patients have **multiple records for one or both instruments or measures**. 
 
 **How can you find the right records to use in your research?** If you don’t limit which repeated measures you use, you’ll end up with more than one row per patient, which you don’t want.
 
@@ -58,7 +58,7 @@ question("What problem do we want to solve by pairing dates?",
 
 ## Example Data
 
-Let’s consider some fake data [Joy Payton](education.arcus.chop.edu) created for illustration purposes: 500 records of fake math scores and fake language scores. Joy stored them on her github repo. 
+Let’s consider some fake data [Joy Payton](http://education.arcus.chop.edu) created for illustration purposes: 500 records of fake math scores and fake language scores. Joy stored them on her github repo. 
 
 Uncomment the lines in the code box below. 
 
@@ -79,7 +79,7 @@ math <- as_tibble(read.csv("https://raw.githubusercontent.com/pm0kjp/datastore/m
 lang <- as_tibble(read.csv("https://raw.githubusercontent.com/pm0kjp/datastore/master/fakeLang.csv"))
 ```
 
-We store the data in two tibbles, which are data frames that are nicely formatted. Have a look at them by typing their names, one per line, and executing the code. 
+We store the data in two _tibbles_, or nicely formatted data frames. Have a look at them by typing their names, one per line, and executing the code. 
 
 ```{r seemath-lang, exercise = TRUE, exercise.lines = 5}
 
@@ -151,7 +151,7 @@ The data has the following qualities:
 
 ## Look at the Data
 
-You can learn more about looking at data by going through our [Looking at Data lesson](http://a-mess.org/swirl-looking-at-data/). We'll be using some of the methods from that lesson here.
+You can learn more about looking at data by going through our [Looking at Data lesson](http://a-mess.org/swirl-looking-at-data/). We'll be using some of the methods from that lesson here. If you want to take the time to do that now, don't worry---everything you've put in this lesson will be here when you get back. 
 
 Let's use a variety of functions to confirm what we told you about the data. 
 
@@ -198,6 +198,23 @@ dim(mathr); dim(...)
 ```
 ```{r dims-solution}
 dim(mathr); dim(langr)
+```
+
+Most packages in R (including base R and the [`tidyverse`](https://tidyverse.tidyverse.org/)) provide results in R, C format: first the rows, then the columns. This output shows us that each data set has 500 rows and 3 columns.
+
+```{r rowcolumnorder, echo = FALSE}
+# Define the answer options
+rc_list <- c(
+  "Rows",
+  "Columns"
+  )
+# Initialize the question
+question_rank(
+  "Please place these in the order in which you can usually expect R to present them to you in output. If they are already in the right order, just leave them alone.",
+  answer(rc_list, correct = TRUE),
+  answer(rev(rc_list), correct = FALSE, message = "Other direction."),
+  allow_retry = TRUE
+)
 ```
 
 ### 3. Confirm the Range of `id` and `score` with `range`
