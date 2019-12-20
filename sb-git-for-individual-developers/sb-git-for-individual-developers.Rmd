@@ -143,7 +143,7 @@ I have a really cool terminal setup called [iTerm2](https://iterm2.com). The pro
 ```{r iTerm2, echo = FALSE}
 knitr::include_graphics("www/iTerm2.png", 
                           auto_pdf = getOption("knitr.graphics.auto_pdf", 
-                                                FALSE), dpi = NULL)
+                                                FALSE), dpi = NA)
 ```
 
 ## `git commit`: Advance a Repo
