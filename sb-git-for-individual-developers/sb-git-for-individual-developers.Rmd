@@ -134,13 +134,9 @@ knitr::include_graphics("www/finditanyway.png",
 
 Of course you can. 
 
-Now let's go back into RStudio. Save `scores` as "scores.csv" in your lovely new repo.
+Now let's go back into RStudio. Save `scores` as "scores.csv" in your lovely new repo using the command `write.csv(scores, "/your_path_here/scores.csv")`.
 
-```{r saveit, echo = TRUE, include = FALSE}
-
-write.csv(scores, "/Users/braunsb/Documents/GitHub/scores/scores.csv")
-
-```
+Now you have a repo that has something in it. Cool!
 
 I have a really cool terminal setup called [iTerm2](https://iterm2.com). The prompt changes to include not only my directory's name, but also the fact that I'm in a `git` repo, which branch of the repo I'm currently using (the `master` branch---and more about branches later), and whether or not I have uncommitted material in the repo (see the ex?).  
 
