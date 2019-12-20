@@ -136,7 +136,7 @@ Of course you can.
 
 Now let's go back into RStudio. Save `scores` as "scores.csv" in your lovely new repo.
 
-```{r saveit, echo = TRUE, include = TRUE}
+```{r saveit, echo = TRUE, include = FALSE}
 
 write.csv(scores, "/Users/braunsb/Documents/GitHub/scores/scores.csv")
 
