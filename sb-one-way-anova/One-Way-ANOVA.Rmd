@@ -412,7 +412,7 @@ question("HARD QUESTION: Where can you get a copy of the residuals in `long_muss
          answer("Calculate them by hand", message = "Just... no."),
          answer("Run a regression analysis and hope they show up", message = "You could and they would, but if you think back, you already ran a linear model when you ran `aov` on the `long_mussel` data set. Try typing `str(fit)` (say 'structure of fit` in your head) to find out what is being stored in the model you got back from that procedure."),
          answer("They are in `fit`, which you already created if you have been doing this tutorial step by step", correct = TRUE),
-         answer("Wherever lost socks go.", message = "Really?"),
+         answer("Wherever lost socks go", message = "Really?"),
          random_answer_order = TRUE,
          allow_retry = TRUE,
          correct = "Well done!",
@@ -637,7 +637,7 @@ question("Does the new qqplot look better or worse?",
          answer("Kinda worse", correct = TRUE),
          random_answer_order = TRUE,
          allow_retry = TRUE,
-         correct = "Mm hm.",
+         correct = "Mmhm.",
          incorrect = "Kinda not really."
 )
 ```
@@ -1318,4 +1318,4 @@ This lesson is heavily based with thanks on the works of John H. McDonald ([Hand
 
 ## See Also 
 
-[Kruskall Wallis test](../Kruskal-Wallis/).
+[Kruskall Wallis test](../sb-kruskal-wallis/).
