@@ -1,5 +1,5 @@
 ---
-title: "Set Up"
+title: "Set Up R"
 output: 
   learnr::tutorial:
     progressive: true

@@ -1,0 +1,190 @@
+---
+title: "Git for Individual Developers"
+output: 
+ learnr::tutorial:
+      progressive: true
+      allow_skip: true
+runtime: shiny_prerendered
+---
+
+```{r setup, include=FALSE}
+library(learnr)
+library(data.table)
+library(dplyr)
+library(pwr)
+library(tidyr)
+library(stats)
+library(ggplot2)
+library(sortable)
+shhh <- suppressPackageStartupMessages
+shh <- suppressWarnings
+sh <- suppressMessages
+knitr::opts_chunk$set(echo = FALSE)
+options(digits = 3, scipen = 9999)
+tutorial_options(exercise.completion = FALSE,
+                 exercise.eval = TRUE,
+                 exercise.lines = 8,
+                 exercise.diagnostics = TRUE)
+
+########################### Setup for this lesson #######################################
+# download Joy's scores data
+math <- read.csv("https://raw.githubusercontent.com/pm0kjp/datastore/master/fakeMath.csv")
+lang <- read.csv("https://raw.githubusercontent.com/pm0kjp/datastore/master/fakeLang.csv")
+
+# play around with it a bit.
+mathr <- rename(.data = math, id = subjectID, date = testDate, score = mathScore)
+langr <- rename(.data = lang, id = subjectID, date = testDate, score = languageScore)
+new_math <- mathr %>% mutate(subject = "Math")
+new_lang <- langr %>% mutate(subject = "Language")
+df <- merge(new_math, new_lang, all = TRUE)
+scores <- as_tibble(df)
+scores$date <- as.Date(scores$date)
+scores$id <- factor(scores$id)
+scores$subject <- factor(scores$subject)
+```
+
+## Is this lesson right for you?
+
+```{r git-indiv-right-for-you, echo=FALSE}
+question("Check all of these that you have NOT done in `git`:",
+         answer("Made a new repository (repo)", message = "* `git init`: Make a New Repo"),
+         answer("Used branching", message = "* `git checkout` and `git branch`: Switching Branches"),
+         answer("Committed a repo and known what happened when you did it", message = "* `git commit`: Advance a Repo"),
+         answer("Checked out a repo", message = "* `git reset` and `git checkout`: Undoing Changes"),
+         answer("Managed an index file", message = "* `git add`: Managing the Index File"),
+         answer("Read a repo's log", message = "* What's in the log?"),
+         answer("Tracked what you were doing", message = "* `git diff` and `git status`: Seeing what you're Doing"),
+         answer("Merged two branches`", message = "* Merging Local Branches"),
+         answer("Managed a 'topic branch'", "* `git rebase`: Maintaining Topic Branches"),
+         answer("Marked a point in a repo", message = "* `git tag`: Marking a Point"),
+         answer("None of the above. I've done them all.", correct = TRUE, message = "You can skip this tutorial, but remember that you can also use it as a reference."),
+         type = "multiple",
+         correct = "You've already learned all you need to know to operate as an individual developer using `git`.",
+         incorrect = "On the left you can see the topics covered by this tutorial. Here are the ones you should visit to fill the gaps in your knowledge of using `git` as an individual developer:",
+         allow_retry = TRUE
+)
+```
+
+### What you Need for this Lesson
+
+1. An open terminal window like this one:  
+
+```{r github, echo = FALSE}
+knitr::include_graphics("www/terminal.png", 
+                          auto_pdf = getOption("knitr.graphics.auto_pdf", 
+                                                FALSE), dpi = NULL)
+```
+
+2. Data, which I have loaded for you in the tibble `scores`. Type `scores` and run the code to see what's in it. 
+
+```{r scores-see-ha-ha, exercise = TRUE, exercise.lines = 5}
+
+```
+```{r scores-see-ha-ha-solution}
+scores
+```
+
+
+We'll use your terminal window and the data to work through some `git` basics.
+
+
+## `git init`: Make a New Repoo
+
+1. Place yourself in a directory where you can create another directory that you'll make into a `git` "repository" or, as many people say, "repo." I like to put all my repos in the folder `GitHub`, which resides in `Documents` on my computer. 
+
+```{r myterminal, echo = FALSE}
+knitr::include_graphics("www/github.png", 
+                          auto_pdf = getOption("knitr.graphics.auto_pdf", 
+                                                FALSE), dpi = NULL)
+```
+
+From your terminal window, create a directory called `scores` and navigate into it. It should be empty.
+
+```{r mkdir, echo = FALSE}
+knitr::include_graphics("www/mkdir.png", 
+                          auto_pdf = getOption("knitr.graphics.auto_pdf", 
+                                                FALSE), dpi = NULL)
+```
+
+Now execute two `git` commands:
+
+1. `git init`    
+2. `git add .`
+
+The dot is a true dot, not a period at the end of a sentence.
+
+Then see what's in the directory. Specifically, look for the directory `.git`. 
+
+3. `ls` 
+4. `ls *.git`
+
+```{r gitinitgitadd, echo = FALSE}
+knitr::include_graphics("www/gitinitgitadd.png", 
+                          auto_pdf = getOption("knitr.graphics.auto_pdf", 
+                                                FALSE), dpi = NULL)
+```
+
+An empty directory, right? `cd` into `.git` just to see if you can. 
+
+```{r finditanyway, echo = FALSE}
+knitr::include_graphics("www/finditanyway.png", 
+                          auto_pdf = getOption("knitr.graphics.auto_pdf", 
+                                                FALSE), dpi = NULL)
+```
+
+Of course you can. 
+
+Now let's go back into RStudio. Save `scores` as "scores.csv" in your lovely new repo.
+
+```{r saveit, echo = TRUE, include = TRUE}
+
+write.csv(scores, "/Users/braunsb/Documents/GitHub/scores/scores.csv")
+
+```
+
+I have a really cool terminal setup called [iTerm2](https://iterm2.com). The prompt changes to include not only my directory's name, but also the fact that I'm in a `git` repo, which branch of the repo I'm currently using (the `master` branch---and more about branches later), and whether or not I have uncommitted material in the repo (see the ex?).  
+
+```{r iTerm2, echo = FALSE}
+knitr::include_graphics("www/iTerm2.png", 
+                          auto_pdf = getOption("knitr.graphics.auto_pdf", 
+                                                FALSE), dpi = NULL)
+```
+
+## `git commit`: Advance a Repo
+
+
+## `git checkout` and `git branch`: Switching Branches
+
+Sorry, this section isn't ready yet. Check back soon because I'm currently working on this lesson. I will add to it every day until it is done.
+
+## `git reset` and `git checkout`: Undoing Changes
+
+Sorry, this section isn't ready yet. Check back soon because I'm currently working on this lesson. I will add to it every day until it is done.
+
+## `git add`: Managing the Index File
+
+Sorry, this section isn't ready yet. Check back soon because I'm currently working on this lesson. I will add to it every day until it is done.
+
+## What's in the log? 
+
+Sorry, this section isn't ready yet. Check back soon because I'm currently working on this lesson. I will add to it every day until it is done.
+
+## `git diff` and `git status`: Seeing what you're Doing
+
+Sorry, this section isn't ready yet. Check back soon because I'm currently working on this lesson. I will add to it every day until it is done.
+
+## Merging Local Branches
+
+Sorry, this section isn't ready yet. Check back soon because I'm currently working on this lesson. I will add to it every day until it is done.
+
+## `git rebase`: Maintaining Topic Branches
+
+Sorry, this section isn't ready yet. Check back soon because I'm currently working on this lesson. I will add to it every day until it is done.
+
+## `git tag`: Marking a Point
+
+Sorry, this section isn't ready yet. Check back soon because I'm currently working on this lesson. I will add to it every day until it is done.
+
+## References
+
+
