@@ -1,4 +1,4 @@
-# Arcus Modular Education Support System (MESS)
+# Arcus Learning Exchange (ALEx)
 
 #### Designer and agile project owner, Sheila Braun; Proof of Concept Code, Ian Campbell, MD PhD. Based on ideas formed at the Summer 2019 Arcus Education Retreat attended by Joy Payton and Sheila Braun. Other contributors are Zoë Wilkinson-Saldaña, Patrick Dibussolo, and Lara Lechtenberg, all of the Children's Hospital of Philadelphia (CHOP).
 
@@ -16,13 +16,13 @@ To answer this question in a practical way, we are currently using R packages su
 
 The software for this tool is in the [Personalized Learning Plan](https://github.research.chop.edu/braunsb/Arcus-Education-Lessons-and-Learning-Plan-Generator/tree/master/Personalized-Learning-Plan) folder. Individual lessons are in [Lessons](https://github.com/braunsb/Lessons). 
 
-### MESS Around: Come to a Workshop or other Learning Event!
+### Come to a Workshop or to another learning event!
 
 All CHOP and Penn employees are welcome to attend our workshops. Registration is required. [Click here to find out more and to register](https://redcap.chop.edu/surveys/?s=EYWKYA48KT). 
 
-### Be MESSy: Become a Contributor!
+### Become a Contributor!
 
-[New Lessons](https://github.research.chop.edu/braunsb/Arcus-Education-Lessons-and-Learning-Plan-Generator/tree/master/New-Lessons) is a folder for you, should you wish to become a MESS contributor. Please add your educational material to this folder. If you are a genetics expert, teach us about genetics; if you want people to know how to use a package you just created, create a lesson about it and add it. If you want to teach about Python, put your Python lessons there.
+[New Lessons](https://github.research.chop.edu/braunsb/Arcus-Education-Lessons-and-Learning-Plan-Generator/tree/master/New-Lessons) is a folder for you, should you wish to become an ALEx contributor. Please add your educational material to this folder. If you are a genetics expert, teach us about genetics; if you want people to know how to use a package you just created, create a lesson about it and add it. If you want to teach about Python, put your Python lessons there.
 
 NOTE: The New Lessons link works for CHOP employees only at the moment. 
 
@@ -34,7 +34,7 @@ These are our requirements for a lesson:
 
 Our editors will check your lesson and add it to the list of options available to learners if we believe it is in line with our mission to educate learners at CHOP. 
 
-## For Arcus Education Instructors: How to Add a Lesson
+## For Instructors: How to Add a Lesson
 
 Ian Campbell has provided [documentation in a wiki](https://github.com/ianmcampbell/Arcus-Modular-Education-Support-System/wiki). Check it out!
 
