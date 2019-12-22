@@ -249,7 +249,7 @@ range(mathr$score); range(langr$score)
 question("Do all the values in `id` fall within the expected range for both data sets?",
          answer("Yes", correct = TRUE),
          answer("No", message = "Check the hints in the code block to see where you may have gone wrong."),
-         correct = "Well done.",
+         correct = random_praise(),
          incorrect = "They do.",
          random_answer_order = TRUE,
          allow_retry = TRUE
@@ -289,8 +289,8 @@ class(mathr$date); class(langr$date)
 question("Is the variable `date` a date class in either data set?",
          answer("No", correct = TRUE),
          answer("Yes", message = "Type `class(mathr$date); class(langr$date)`"),
-         correct = "That's absolutely right.",
-         incorrect = "No.",
+         correct = random_praise(),
+         incorrect = "Don't give up now. Try again.",
          random_answer_order = TRUE,
          allow_retry = TRUE
 )
@@ -301,8 +301,8 @@ question("What class is the date variable?",
          answer("function", message = "You seem to have forgotten to use the `date` variable that is in the dataset. If you just asked for `class(date)`, you will have been told the class of the function `date`, which is outside the data set."),
          answer("character", message = "You'll probably need to look at the hints to fix your code."),
          answer("analog", message = "I don't know of any data structures in R called 'analog', though I'm sure we could make one."),
-     correct = "Yes!",
-     incorrect = "Incorrect.",
+     correct = "Correct. Lovely job.",
+     incorrect = "Try again. Next time's the charm!",
      random_answer_order = TRUE,
      allow_retry = TRUE
 )
@@ -332,8 +332,8 @@ question("How many levels are in the two date variables for `mathr` and `langr`?
          answer("3 and 9", message = "There are many, many more than that"),
          answer("470 and 468", message = "That's backwards."),
          answer("2005-08-15 and 2006-07-22", message = "Those are dates, not numbers of levels."),
-     correct = "That's the answer I was looking for!",
-     incorrect = "No.",
+     correct = "That's the answer I was looking for.",
+     incorrect = "Try again. Perseverence is one of the keys to success",
      random_answer_order = TRUE,
      allow_retry = TRUE
 )
@@ -363,8 +363,8 @@ hist(mathr$score); hist(langr$score)
 question("We were told the distributions were triangular. Are they?",
          answer("Yes", correct = TRUE),
          answer("No", message = "Type `hist(mathr$score); hist(langr$score)` and look carefully."),
-         correct = "That's right!",
-         incorrect = "Incorrect.",
+         correct = "Correct! You should be proud",
+         incorrect = "No need to fret; try again.",
          random_answer_order = TRUE,
          allow_retry = TRUE
 )
@@ -374,7 +374,7 @@ question("Where are the `score` modes (as shown by the histograms)?",
          answer("Around 80", correct = TRUE),
          answer("Around 60"),
          answer("Around 0"),
-         correct = "You are doing so well!",
+         correct = "Correct! That's a first-class answer.",
          incorrect = "Actually no. Look for the tallest bars in each of the histograms",
          random_answer_order = TRUE,
          allow_retry = TRUE
@@ -389,8 +389,8 @@ question("If you could fix one thing about the data set, what would it be?",
          answer("Eliminate all duplicate `id`s", message = "Duplicate `id`s exist because each person may have taken the test more than once."),
          answer("Make `mathr` wider", message = "`mathr` doesn't contain any implicit variables."),
          answer("Make `langr` wider", message = "`langr` doesn't contain any implicit variables."),
-         correct = "You got it!",
-         incorrect = "That's not the answer I was looking for.",
+         correct = "Correct! What first-rate work!",
+         incorrect = "That's okay: You learn just as much from mistakes as from successes. Try again.",
          random_answer_order = TRUE,
          allow_retry = TRUE
 )
@@ -424,7 +424,7 @@ question("What does a `dplyr` pipe look like?",
          answer("`%->%`"),
          answer("`%=%`"),
          answer("`%<%`"),
-         correct = "Yes!",
+         correct = "Correct! Absolutely fabulous!",
          incorrect = "No, that's not a pipe in `dplyr` terms. Check out [our `dplyr` lesson](../sb-dplyr/).",
          random_answer_order = TRUE,
          allow_retry = TRUE
@@ -509,8 +509,8 @@ question("How many people took the language test twice?",
          answer("295", message = "That's how many took it once."),
          answer("11", message = "That's how many took it 3 times."),
          answer("0", message = "I'm afraid something went seriously wrong with your code if you have a 0 somewhere."),
-     correct = "That's right!",
-     incorrect = "No.",
+     correct = "Correct! :)",
+     incorrect = "Please try again.",
      random_answer_order = TRUE,
      allow_retry = TRUE
 )
@@ -521,8 +521,8 @@ question("How many people took the math test at least twice?",
          answer("76", message = "That's how many people took it twice---but the question is how many people too the test _at least_ twice."),
          answer("5", message = "That's how many people took the test 3 times. Add a few more to the total and you'll get the right answer."),
          answer("1", message = "Four times is _at least_ twice, but you should add in those who took it twice and three times as well."),
-     correct = "You got it!",
-     incorrect = "No.",
+     correct = "You got it! Great work.",
+     incorrect = "Try again.",
      random_answer_order = TRUE,
      allow_retry = TRUE
 )

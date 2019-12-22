@@ -4,6 +4,7 @@ output:
  learnr::tutorial:
       progressive: true
       allow_skip: true
+      css: https://github.research.chop.edu/pages/CQI/chop-bootstrap/bootstrap-3/bootstrap.min.css
 runtime: shiny_prerendered
 ---
 
@@ -69,7 +70,7 @@ question("Check all of these that you have NOT done in `git`:",
 
 1. An open terminal window like this one:  
 
-```{r github, echo = FALSE}
+```{r github, echo = FALSE, fig.width = 3}
 knitr::include_graphics("www/terminal.png", 
                           auto_pdf = getOption("knitr.graphics.auto_pdf", 
                                                 FALSE), dpi = NULL)
