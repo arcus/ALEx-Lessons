@@ -674,13 +674,7 @@ There are several ways to accomplish this:
 
 1. "Give me the earliest language score, if any, and the math score closest in time to that language score. If no language score exists, omit.” 
 
-
 1. “I don’t care if it’s a first test or a subsequent readministration, just give me the smallest time interval between a math and a language score for each subject that has both.”   
-
-
-1. “Give me the closest math score and the closest language score to this subject’s MRI date, which I’ll give you.”    
-
-1. “Give me the closest math date after language---and if math _precedes_ language, I don’t want to see it.”    
 
 There are other aspects of this data we need to keep in mind: 
 
@@ -720,7 +714,7 @@ class(df$date_lang)
 
 If your output was `"Date"`, you did it right.
 
-## Strategy 1: Closest pairs
+## OPTION 1: Closest pairs
 
 >"Give me the earliest language score, if any, and the math score closest in time to that language score. If no language score exists, omit.”
 
@@ -885,11 +879,11 @@ All false, with 0 duplicates.
 
 We now have a tibble that consists of _only_ the subjects that have both tests, and from those administrations, _only_ the pair that has the smallest time interval.
 
-## Strategy 2: Earliest Math Test and Nearest Language Test (if any)
+## OPTION 2: Earliest Math Test and Nearest Language Test (if any)
 
 >“I don’t care if it’s a first test or a subsequent readministration, just give me the smallest time interval between the _first_ math and _any_ language score for each subject that has both.” 
 
-```{r firstquestion, echo=FALSE}
+```{r secondquestion, echo=FALSE}
 question("Which elements are part of the preceding question?",
          answer("Report only paired scores: Don't include instances of only one score or the other. ", correct = TRUE),
          answer("Find the earliest score (be it language or math).", correct = TRUE),
@@ -911,7 +905,7 @@ The easiest way to tackle this problem is to
 
 1. Filter again
 
-We’ll merge more than just the intersection of the two data sets: we’ll also include cases in which math is present but language is absent. In other words, we want ALL the math rows, regardless of whether there’s a corresponding language row. We can’t say the same about language. And remember to wrap the merge in `as_tibble` so we have more manageable results.
+We’ll merge more than just the intersection of the two data sets: we’ll also include cases in which math is present but language is absent. In other words, we want ALL the math rows, regardless of whether there’s a corresponding language row. We can’t say the same about language. And remember to wrap the merge in `as_tibble` so we have more manageable results. And here's another trick: Wrap the entire assignment in parentheses so you can see what it looks like without having to add another line of code.
 
 ```{r earliest_math, exercise = TRUE, exercise.lines = 5}
 
@@ -938,34 +932,91 @@ earliest_math <- as_tibble(merge(x = mathr,
                                  suffixes = c(...)))
 ```
 ```{r earliest_math-solution}
-earliest_math <- as_tibble(merge(x = mathr, 
+(earliest_math <- as_tibble(merge(x = mathr, 
                                  y = langr,
                                  by = "id",
                                  all.x = TRUE,
-                                 suffixes = c("_math", "_lang")))
+                                 suffixes = c("_math", "_lang"))))
 ```
 
-earliestMath <- merge(x=math, y=lang, by="subjectID", 
-                      all.x = TRUE, suffixes = c(".math", ".lang"))
-                      
-                      
-Now we’ll do something similar to option 1 above, as far as selecting the smallest absolute value, but we’ll have to include cases where there is no date distance (it’s na), because there isn’t a language date to use to calculate from. We use the vertical pipe (|) to symbolize OR: is.na(testDate.lang - testDate.math)`.
+Now we’ll do something similar to option 1 above, as far as selecting the smallest absolute value, but we’ll have to include cases where there is no date distance (it’s `NA`), because there isn’t a language date to use to calculate from. We use the vertical pipe (`|`) to symbolize "or" for a statement like (exactly like) this: `is.na(testDate.lang - testDate.math)`
 
-firstMathMaybeLanguage <- earliestMath %>% 
-  group_by(subjectID) %>%
-  filter(abs(testDate.lang - testDate.math) == min(abs(testDate.lang - testDate.math)) | is.na(testDate.lang - testDate.math)) %>%
-  slice(1) %>% 
-  ungroup()
-Again, let’s look at how large our data is.
+See if you can put it all together in the next code block. Check the hints if you get stuck. 
 
-dim(firstMathMaybeLanguage)
-	[1] 411   5
-firstMathMaybeLanguage has 411 rows. Let’s confirm that there are no duplicates:
+```{r allmath, exercise = TRUE, exercise.lines = 5}
 
-table(duplicated(firstMathMaybeLanguage$subjectID))
-	FALSE 
-	  411
-Great, we have data with no duplicated subjects.
+```
+```{r allmath-hint-1}
+first_math_maybe_language <- earliest_math %>%
+  group_by(id) %>%
+  filter(abs(date_lang - date_math) == min(abs(date_lang - date_math)) | 
+           is.na(date_lang - date_math)) %>%
+  slice(1) %>%
+  ungroup
+```
+```{r allmath-hint-2}
+first_math_maybe_language <- earliest_math %>%
+  group_by(id) %>%
+  filter(abs(date_lang - date_math) == min(abs(date_lang - date_math)) | 
+           is.na(date_lang - date_math)) %>%
+  slice(1) %>%
+  ungroup
+```
+```{r allmath-hint-3}
+first_math_maybe_language <- earliest_math %>%
+  group_by(id) %>%
+  filter(abs(date_lang - date_math) == min(abs(date_lang - date_math)) | 
+           is.na(date_lang - date_math)) %>%
+  slice(1) %>%
+  ungroup
+```
+```{r allmath-hint-4}
+first_math_maybe_language <- earliest_math %>%
+  group_by(id) %>%
+  filter(abs(date_lang - date_math) == min(abs(date_lang - date_math)) | 
+           is.na(date_lang - date_math)) %>%
+  slice(1) %>%
+  ungroup
+```
+```{r allmath-solution}
+first_math_maybe_language <- earliest_math %>%
+  group_by(id) %>%
+  filter(abs(date_lang - date_math) == min(abs(date_lang - date_math)) | 
+           is.na(date_lang - date_math)) %>%
+  slice(1) %>%
+  ungroup
+```
+
+Again, let’s look at how large our dataset is.
+
+```{r dimnewone, exercise = TRUE, exercise.lines = 5}
+
+```
+```{r dimnewone-hint}
+dim(...)
+```
+```{r dimnewone-solution}
+dim(first_math_maybe_language)
+```
+
+`first_math_maybe_language` has 411 rows. Let’s confirm that there are no duplicates. Use the code you wrote to check for duplcates before. That same code will work here, too, with the new tibble name. You can also just sum up the duplicates. 
+
+```{r table_duped_again, exercise = TRUE, exercise.lines = 5}
+
+```
+```{r table_duped_again-hint-1}
+table(...)
+```
+```{r table_duped_again-hint-2}
+table(duplicated(...))
+```
+```{r table_duped_again-solution}
+table(duplicated(first_math_maybe_language$id))
+sum(duplicated(first_math_maybe_language$id))
+```
+
+Great! We have data with no duplicated `id`s.
+
 
 ## References 
 
