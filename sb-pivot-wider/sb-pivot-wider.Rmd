@@ -237,7 +237,7 @@ This lesson is a partner to our [`pivot_longer` lesson](../sb-pivot-longer/). We
 
 ## Background
 
-This lesson is based on materials from the [`pivot_wider` vignette](https://tidyr.tidyverse.org/articles/pivot.html). The goal of `pivot_wider` is to improve the usability of the old `spread` functions in the tidyverse. 
+This lesson is based on materials from the [`pivot` vignette](https://tidyr.tidyverse.org/articles/pivot.html). The goal of `pivot_wider` is to improve the usability of the old `spread` functions in the tidyverse. 
 
 In the vignette, Hadley Wickham wrote this:
 
@@ -250,14 +250,14 @@ The two pivot functions, [`pivot_longer`](../sb-pivot-longer/) and `pivot_wider`
 Data is tidy when
 
 1. Every column is variable    
-2. Every row is an observation    
-3. Every cell is a single value
+1. Every row is an observation    
+1. Every cell is a single value
 
 It’s relatively rare to need `pivot_wider` to make _tidy_ data, but it’s often useful for creating summary tables for presentation, or to put data into a format needed by other tools. 
 
 ## Examples
 
-The fish_encounters dataset, contributed by [Myfanwy Johnston](https://fishsciences.github.io/post/visualizing-fish-encounter-histories/), describes when fish swimming down a river are detected by automatic monitoring stations. Type `fishencounters` in the code block below.
+The `fish_encounters` dataset, contributed by [Myfanwy Johnston](https://fishsciences.github.io/post/visualizing-fish-encounter-histories/), describes when fish swimming down a river are detected by automatic monitoring stations. Type `fish_encounters` in the code block below.
 
 ```{r fishencounters-of-the-first-kind, exercise = TRUE, exercise.lines = 5}
 
@@ -268,7 +268,7 @@ fish_encounters
 
 Many tools used to analyse this data need it in a form in which each station is a column. The basic `pivot_wider` syntax is this:
 
->`pivot_wider(names_from = var1, names_to = var2)`
+>`pivot_wider(names_from = var1, values_from = var2)`
 
 This process is a bit like creating dummy variables with 1s & 0s when you want all your regression input to be scalar in one form or another (see our [Correlation and Regression lesson](../sb-correlation-and-regression/) to learn more). 
 
@@ -276,7 +276,7 @@ Basically, you figure out which new variables you want from the _levels_ of vari
 
 You'll end up with more columns and fewer rows in the data set.
 
-Let's try it with the `fish_encounters` data set. Pipe the data set to `pivot_wider` and tell it to take the names from the station values and the values `value`. Use the hints if you have trouble.
+Let's try it with the `fish_encounters` data set. Pipe the data set to `pivot_wider` and tell it to take the `names_from` the `station` variable and the `values_from` `seen`. Use the hints if you have trouble.
 
 First, though, change all the names to lowercase using the statement `names(fish_encounters) <- tolower(names(fish_encounters))`. 
 
@@ -340,14 +340,16 @@ Let's walk through another practical example using census data from the `tidycen
 us_rent_income
 ```
 
-The us_rent_income dataset contains information about median income and rent for each state in the US for 2017 (from the American Community Survey).
+The `us_rent_income` dataset contains information about median income and rent for each state in the US for 2017 (from the American Community Survey).
 
-Both `estimate` and `moe` are values columns, so we can supply them to `values_from` in a `pivot_wider` call. Use piping to do this. Start with the dataset `us_rent_income` and let the results print to the console. Specifically, 
+Both `estimate` and `moe` are values columns, so we can supply them to `values_from` in a `pivot_wider` call. 
 
-1. Start with `us_rent_income` and a pipe operator    
-2. Call `pivot_wider` with the following arguments
+Use piping to do this. Start with the dataset `us_rent_income` and let the results print to the console. Specifically, 
+
+1. Start with `us_rent_income` and a pipe operator  
+1. Call `pivot_wider` with the following arguments
    - `names_from` set equal to the variable that contains the two values "rent" and "income"
-   - `values_from` set equal to a concatenation of the varible that contains estimates and the variable `moe`
+   - `values_from` set equal to a concatenation of the variable that contains estimates and the variable `moe`
 
 ```{r rent-income-piped-once, exercise = TRUE, exercise.lines = 5}
 
@@ -389,4 +391,4 @@ question("What is the estimated income for Connecticut?",
 
 ## See Also
 
-Now you know the basics of pivot wider, [see the article by Hadley Wickham & co.](https://tidyr.tidyverse.org/articles/pivot.html) for even more examples of pivoting, including how to use `pivot_wider` to do aggregation. 
+Now you know the basics of pivot wider, [see the article by Hadley Wickham et al.](https://tidyr.tidyverse.org/articles/pivot.html) for even more examples of pivoting, including how to use `pivot_wider` to do aggregation. 
