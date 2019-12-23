@@ -1,14 +1,15 @@
 ---
 title: "Genomic Variant Basics"
 output: 
- learnr::tutorial:
-      progressive: true
-      allow_skip: true
-      css:
-            - https://github.research.chop.edu/pages/CQI/chop-bootstrap/bootstrap-3/bootstrap.min.css
-            - https://github.research.chop.edu/pages/CQI/flexdashboard-theme/css/flexdashboard.min.css
-runtime: shiny_prerendered
+  html_document: 
+    toc: true
+    toc_depth: 2
+    toc_float: true
+    css: 
+      - https://github.research.chop.edu/pages/CQI/chop-bootstrap/bootstrap-3/bootstrap.min.css
+      - https://github.research.chop.edu/pages/CQI/flexdashboard-theme/css/flexdashboard.min.css
 ---
+
 ```{r, echo=FALSE}
 library(rmarkdown)
 library(shiny)
