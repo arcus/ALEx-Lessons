@@ -39,6 +39,12 @@ langr <- rename(.data = lang, id = subjectID, date = testDate, score = languageS
 
 df <- merge(mathr, langr, by = "id", suffixes = c("_math", "_lang"))
 
+earliest_math <- as_tibble(merge(x = mathr, 
+                                 y = langr,
+                                 by = "id",
+                                 all.x = TRUE,
+                                 suffixes = c("_math", "_lang")))
+
 shh(closest_pairs <- df %>%
       group_by(id) %>%
       filter(abs(date_lang - date_math) == min(abs(date_lang - date_math))) %>%
@@ -861,11 +867,11 @@ suppressWarnings(closest_pairs <- df %>%
                    slice(1) %>%
                    ungroup)
 
-(earliest_math <- as_tibble(merge(x = mathr, 
+earliest_math <- as_tibble(merge(x = mathr, 
                                  y = langr,
                                  by = "id",
                                  all.x = TRUE,
-                                 suffixes = c("_math", "_lang"))))
+                                 suffixes = c("_math", "_lang")))
 
 ```
 
