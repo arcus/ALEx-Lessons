@@ -26,13 +26,15 @@ tutorial_options(exercise.completion = FALSE,
                  exercise.lines = 8,
                  exercise.diagnostics = TRUE)
 
+############################### Data for this lesson ###########################################
+
 math <- read.csv("https://raw.githubusercontent.com/pm0kjp/datastore/master/fakeMath.csv")
 lang <- read.csv("https://raw.githubusercontent.com/pm0kjp/datastore/master/fakeLang.csv")
 
 mathr <- rename(.data = math, id = subjectID, date = testDate, score = mathScore)
 langr <- rename(.data = lang, id = subjectID, date = testDate, score = languageScore)
-new_math <- mathr %>% mutate(data = "Math")
-new_lang <- langr %>% mutate(data = "Language")
+new_math <- mathr %>% mutate(test = "Math")
+new_lang <- langr %>% mutate(test = "Language")
 
 merged_df <- merge(mathr, langr, all = TRUE)
 best_df <- merge(new_math, new_lang, all = TRUE)
@@ -106,15 +108,15 @@ You've already put [the `tidyverse` packages](https://tidyverse.tidyverse.org) i
 >a group of packages that work in harmony because they share common representations and [API design](https://mattgemmell.com/api-design/).
 
 
-(You can [learn more about APIs](https://mattgemmell.com/api-design/) or simply replace the word "API" in your head with "user interface for developers" when you come it.)
+(You can [learn more about APIs](https://mattgemmell.com/api-design/) or simply replace the word "API" in your head with "user interface for developers" whenever you come across it.)
 
 ### Simplify Variable Names
 
 We're lazy programmers, so let's simplify our variable names and make sure they are all in lowercase letters. This is good coding practice because, if you lowercase everything, although you will find yourself checking the spelling of variables, you will never find yourself checking to see which letters are upper- and which are lowercase. 
 
-We'll use the `tidyverse`'s `rename` function. 
+We'll use the `tidyverse`'s `rename` function because we want to rename _and_ lowercase the variable names.
 
-The format for using `rename` is to type the function name, then pass it the arguments `data = math` or `lang` and `id = subjectID`. The correct syntax involves putting the "to" variable name first, then setting it equal to the "from" variable.
+The format for using `rename` is to type its name then pass it the arguments `.data = math` or `lang` and `id = subjectID`. The correct syntax involves putting the "to" variable name first, then setting it equal to the "from" variable.
 
 Do this for both tibbles, renaming `subjectID` to `id`, `testDate` to `date`, and the score variables to `score`. Make sure you store the results in modified tibble names, the same names as before with an "r" on the end. 
 
@@ -137,16 +139,35 @@ mathr <- rename(.data = math, id = subjectID, date = testDate, score = mathScore
 langr <- rename(.data = lang, id = subjectID, date = testDate, score = languageScore)
 ```
 
-You won't see anything happen because the output is going to the new tibble names, `math` and `lang`.
+If you see anything happen, you might have forgottone to assign the output to the new tibble names, `mathr` and `langr`.
 
-### The Data
+Now use `str(mathr)` and `str(langr)` to find out more about our data set. 
+
+```{r strdata, exercise = TRUE, exercise.lines = 5}
+
+```
+```{r strdata-hint-1}
+str(...)
+```
+```{r strdata-hint-2}
+str(...)
+str(...)
+```
+```{r strdata-hint-3}
+str(mathr)
+str(...)
+```
+```{r strdata-solution}
+str(mathr)
+str(langr)
+```
 
 The data has the following qualities:
 
 * Each of the two data sets `math` and `lang` has 500 samples and 3 variables    
 * IDs are integers between 1 and 1000    
 * Dates are randomly and uniformly distributed between January 1, 2005 and January 1, 2016    
-* Each `id` may have one or more `date`s associated with it because people can take the tests repeatedly
+* Each `id` may have one or more `date`s associated with it because people could take the tests repeatedly
 * Scores follow a triangular distribution with     
   - a minimum of 25 (indicates full guessing)    
   - a maximum of 100    
@@ -333,7 +354,7 @@ question("How many levels are in the two date variables for `mathr` and `langr`?
          answer("470 and 468", message = "That's backwards."),
          answer("2005-08-15 and 2006-07-22", message = "Those are dates, not numbers of levels."),
      correct = "That's the answer I was looking for.",
-     incorrect = "Try again. Perseverence is one of the keys to success",
+     incorrect = "Try again. Perseverence is one of the keys to success.",
      random_answer_order = TRUE,
      allow_retry = TRUE
 )
@@ -363,7 +384,7 @@ hist(mathr$score); hist(langr$score)
 question("We were told the distributions were triangular. Are they?",
          answer("Yes", correct = TRUE),
          answer("No", message = "Type `hist(mathr$score); hist(langr$score)` and look carefully."),
-         correct = "Correct! You should be proud",
+         correct = "Correct! You should be proud.",
          incorrect = "No need to fret; try again.",
          random_answer_order = TRUE,
          allow_retry = TRUE
@@ -374,7 +395,7 @@ question("Where are the `score` modes (as shown by the histograms)?",
          answer("Around 80", correct = TRUE),
          answer("Around 60"),
          answer("Around 0"),
-         correct = "Correct! That's a first-class answer.",
+         correct = "Well done.",
          incorrect = "Actually no. Look for the tallest bars in each of the histograms",
          random_answer_order = TRUE,
          allow_retry = TRUE
@@ -435,10 +456,14 @@ If you struggled to figure out the answers to these questions, please see [our `
 
 Our two data sets are tables (matrices). How many duplicates have we in each table? We can use `dplyr` to group by subject `id`, find the how big each group is, and display results in a table, ordered by group size. Follow these steps:
 
-1. Make sure `dplyr` is in the library by typing `library(dplyr)`.     
+1. Make sure `dplyr` is in the library by typing `library(dplyr)`. 
+
 2. Start with `mathr` and pipe it to `group_by`.    
+
 3. Pass `id` to `group_by`, then add another pipe.    
+
 4. Call the function `group_size`, then add another pipe.    
+
 5. Call the function `table`.
 
 ```{r first-piping, exercise = TRUE, exercise.lines = 7}
@@ -530,7 +555,7 @@ question("How many people took the math test at least twice?",
 
 ## Merge the Math and Language Score Data into One Dataset
 
-If we were to merge these data frames by `id` without limiting by dates, we would have geometric growth. For example, consider subject 697. This subject has 3 took both the math and the language tests three times. A traditional `merge` function will match each _possible_ combination, for 3 X 3 or 9 rows in the resulting data set. Let's try that. Pass `mathr` and `langr` to `merge` and set `all` equal to `TRUE`. Send the results to a new data fram, `merged_df`.
+If we were to merge these data frames by `id` without limiting by dates, we would have geometric growth. For example, consider case 697. This person took both the math and the language tests three times. A traditional `merge` function will match each _possible_ combination, for 3 X 3 or 9 rows in the resulting data set. Let's try that. Pass `mathr` and `langr` to `merge` and set `all` equal to `TRUE`. Send the results to a new data fram, `merged_df`.
 
 ```{r merge3x3, exercise = TRUE, exercise.lines = 5}
 
@@ -573,7 +598,7 @@ dim(merged_df)
 head(merged_df)
 ```
 
-Oh dear. Which score is which? Let's make sure we can find out after the merge by creating one new column per data file: `data = "Math"` for the `mathr` matrix and `data = "Language"` for the `langr` matrix. You can do this by piping each matrix to `mutate` to create the new constant. Save the mutate results in `math` and `lang` respectively.
+Oh dear. Which score is which? Let's make sure we can find out after the merge by creating one new column per data file: `test ="Math"` for the `mathr` matrix and `test ="Language"` for the `langr` matrix. You can do this by piping each matrix to `mutate` to create the new constant. Save the mutate results in `new_math` and `new_lang` respectively.
 
 ```{r whichscoreiswhich, exercise = TRUE, exercise.lines = 5}
 
@@ -585,19 +610,19 @@ mathr %>% ...
 mathr %>% mutate(...)
 ```
 ```{r whichscoreiswhich-hint-3}
-mathr %>% mutate(data = "Math")
-langr %>% mutate(data = ...)
+mathr %>% mutate(test ="Math")
+langr %>% mutate(test =...)
 ```
 ```{r whichscoreiswhich-hint-4}
-mathr %>% mutate(data = "Math")
-langr %>% mutate(data = "Language")
+mathr %>% mutate(test ="Math")
+langr %>% mutate(test ="Language")
 ```
 ```{r whichscoreiswhich-solution}
-new_math <- mathr %>% mutate(data = "Math")
-new_lang <- langr %>% mutate(data = "Language")
+new_math <- mathr %>% mutate(test ="Math")
+new_lang <- langr %>% mutate(test ="Language")
 ```
 
-Now we can merge again and look at the top of the file.
+Now we can merge again and look at the top of the file. Save your merged data to `best_df`.
 
 ```{r mergeagain, exercise = TRUE, exercise.lines = 5}
 
@@ -628,17 +653,18 @@ Now let's see how much repetition there is in `id`s and `date`s. We can add up h
 
 ```
 ```{r sumdup-id-hint-1}
-sum(duplicated(merged))
+sum(duplicated(...))
 ```
 ```{r sumdup-id-hint-2}
-sum(duplicated(merged))
+sum(duplicated(best_df$id))
+sum(duplicated(...))
 ```
 ```{r sumdup-id-solution}
-sum(duplicated(merged_df$id))
-sum(duplicated(merged_df$date))
+sum(duplicated(best_df$id))
+sum(duplicated(best_df$date))
 ```
 
-**EXTRA CREDIT** Write some code to check that the sums of all the `date`s and `id`s add up to the total length of `merged_df`. Your output should be a logical: `TRUE` or `FALSE`.
+**EXTRA CREDIT** Write some code to check whether the sums of all the unique and duplicated `date`s and `id`s add up to the total length of `best_df`. Your output should be a logical: `TRUE` or `FALSE`.
 
 ```{r sumdupcheck, exercise = TRUE, exercise.lines = 5}
 
@@ -667,19 +693,24 @@ length(unique(merged_df$date)) + sum(duplicated(merged_df$date)) == nrow(merged_
 
 It's clear that we have much repetition of `id`s and `date`s.
 
-Having so much repetition can causes problems with analyses that assume one observation or one combination of observations per subject. So how can we query the data but limit the number of rows returned to just one row per subject?
+Having so much repetition can cause problems with analyses that assume one observation or one combination of observations per subject. So how can we query the data but limit the number of rows returned to just one row per subject?
 
 There are several ways to accomplish this:
 
-1. "Give me the earliest language score, if any, and the math score closest in time to that language score. If no language score exists, omit.”    
-1. “I don’t care if it’s a first test or a subsequent readministration, just give me the smallest time interval between a language and a math for each subject that has both.”    
+1. "Give me the earliest language score, if any, and the math score closest in time to that language score. If no language score exists, omit.” 
+
+1. “I don’t care if it’s a first test or a subsequent readministration, just give me the smallest time interval between a language and a math for each subject that has both.”   
+
 1. “Give me the closest math score and the closest language score to this subject’s MRI date, which I’ll give you.”    
+
 1. “Give me the closest math date after language---and if math _precedes_ language, I don’t want to see it.”    
 
-We have to keep a few things in mind: 
+Keep a few things in mind: 
 
-* Our instruments should be administered only once, so we will probably want to disregard administrations 2-n, no matter when they occurred.     
+* Our instruments should be administered only once, so we will probably want to disregard administrations $\displaystyle 2$ through $\displaystyle n$ no matter when they occurred.     
+
 * Some instruments, like lab results, have roughly defined “expiration dates”---they reflect a moment in time, and must be selected carefully to make sure you’re measuring what you want, when you want it. An expired measurement may be worse than no data at all.    
+
 * Some instruments need to be administered in order: for example, we might want an instrument that requires an instrument requiring deception to be administered before others that could tip participants off to the purpose of the deceptive instrument. 
 
 A good analyst and coder understands precise research goals as well as the specifications of the measurement when working with data that needs to have multiple administrations resolved.
@@ -706,6 +737,10 @@ class(merged_df$date)
 ```
 
 If your output was `"Date"`, you did it right.
+
+Let's save some typing by assigning `best_df` to `df`. This name is commonly used in places like [stackoverflow](https://stackoverflow.com), where you can find some of the best documentation on functions and procedures. 
+
+I try to use the name `df` whenever my code involves a single data set.
 
 Now let's explore our options. 
 
