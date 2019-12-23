@@ -2,11 +2,11 @@
 title: "Date Pairing in R"
 output: 
  learnr::tutorial:
-      progressive: true
-      allow_skip: true
-      css:
-            - https://github.research.chop.edu/pages/CQI/chop-bootstrap/bootstrap-3/bootstrap.min.css
-            - https://github.research.chop.edu/pages/CQI/flexdashboard-theme/css/flexdashboard.min.css
+    progressive: true
+    allow_skip: true
+    css:
+      - https://github.research.chop.edu/pages/CQI/chop-bootstrap/bootstrap-3/bootstrap.min.css
+      - https://github.research.chop.edu/pages/CQI/flexdashboard-theme/css/flexdashboard.min.css
 runtime: shiny_prerendered
 ---
 
@@ -36,12 +36,8 @@ lang <- read.csv("https://raw.githubusercontent.com/pm0kjp/datastore/master/fake
 
 mathr <- rename(.data = math, id = subjectID, date = testDate, score = mathScore)
 langr <- rename(.data = lang, id = subjectID, date = testDate, score = languageScore)
-new_math <- mathr %>% mutate(test = "Math")
-new_lang <- langr %>% mutate(test = "Language")
 
-merged_df <- merge(mathr, langr, all = TRUE)
-best_df <- merge(new_math, new_lang, all = TRUE)
-
+df <- merge(mathr, langr, by = "id", suffixes = c("_math", "_lang"))
 ```
 
 ## The Problem
@@ -205,12 +201,13 @@ names(mathr); names(...)
 names(mathr); names(langr)
 ```
 
+Now let's see if the dataset has the correct dimensions.
+
 ### 2. Confirm the Number of Samples with `dim`
 
 Do something similar to what you did with `names`, but this time, replace the calls to `names` with calls to `dim`. 
 
 You can copy your code from the previous code chunk and replace just two words.
-
 
 ```{r dims, exercise = TRUE, exercise.lines = 5}
 
@@ -333,7 +330,7 @@ question("What class is the date variable?",
 ```
 
 
-### 5. See the `head` of the `date`s
+### 5. See the `head` of `date`
 
 Look at the top of the `date` variables by passing them to `head`.
 
@@ -424,7 +421,7 @@ We'll do this later in the lesson. If you want to find out how, check out the [s
 
 ## Identify Duplicates using `dplyr`
 
-First, let's find out if you need to review `dplyr`.
+Do you need to review `dplyr`? Let's find out. Try your hand at these two questions.
 
 ```{r select-verbs, echo=FALSE}
 question("Which of these are `dplyr` verbs? Select six.",
@@ -455,7 +452,7 @@ question("What does a `dplyr` pipe look like?",
 )
 ```
 
-If you struggled to figure out the answers to these questions, please see [our `dplyr`](../sb-dplyr/) and [Piping and Summarizing](../sb-piping-and-summarizing/) lessons before continuing. The rest of this lesson assumes you have an understanding of the concepts covered in those lessons.
+If you struggled to figure out the answers, please see [our `dplyr`](../sb-dplyr/) and [Piping and Summarizing](../sb-piping-and-summarizing/) lessons before continuing. The rest of this lesson assumes you have an understanding of the concepts covered in those lessons.
 
 Our two data sets are tables (matrices). How many duplicates have we in each table? We can use `dplyr` to group by subject `id`, find the how big each group is, and display results in a table, ordered by group size. Follow these steps:
 
@@ -556,31 +553,57 @@ question("How many people took the math test at least twice?",
 )
 ```
 
-## Merge the Math and Language Score Data into One Dataset
 
-If we were to merge these data frames by `id` without limiting by dates, we would have geometric growth. For example, consider case 697. This person took both the math and the language tests three times. A traditional `merge` function will match each _possible_ combination, for 3 X 3 or 9 rows in the resulting data set. Let's try that. Pass `mathr` and `langr` to `merge` and set `all` equal to `TRUE`. Send the results to a new data fram, `merged_df`.
+One person (`id` = 697) took the math and the language tests each three times. Let's merge our two data sets and see how many records we get for that person. 
+
+1. Start by passing `merge` the two dataset names (`mathr` and `langr`).
+
+1. Tell it to merge `by = id`. 
+
+1. We want to keep the scores and dates straight for the two data sets (which currently have the same names for `date` and `score`), so set `suffixes` equal to `c("_math", "_lang")`. 
+
+1. Wrap the merge in `as_tibble` so you get nicely formatted data. 
+
+1. Save the tibbled output in `df`. 
 
 ```{r merge3x3, exercise = TRUE, exercise.lines = 5}
 
 ```
 ```{r merge3x3-hint-1}
-merged_df <- ?
+df <- ?
 ```
 ```{r merge3x3-hint-2}
-merged_df <- merge(mathr, ...)
+df <- merge(mathr, ...)
 ```
 ```{r merge3x3-hint-3}
-merged_df <- merge(mathr, langr, ...)
+df <- merge(mathr, langr, by = ...)
 ```
 ```{r merge3x3-hint-4}
-merged_df <- merge(mathr, langr, all = ...)
+df <- merge(mathr, langr, by = "id", suffixes = ...)
 ```
 ```{r merge3x3-solution}
-merged_df <- merge(mathr, langr, all = TRUE)
+df <- as_tibble(merge(mathr, langr, by = "id", suffixes = c("_math", "_lang")))
 ```
 
-Check out `merged_df`'s dimensions, then look at the top of the newly merged data set.
+```{r checkthemerge, echo = FALSE}
+# Define the answer options
+mergevarorder <- c(
+  "id",
+  "date_math",
+  "score_math",
+  "date_lang",
+  "score_lang"
+  )
+# Initialize the question
+question_rank(
+  "Please arrange these column names to match your output.",
+  answer(mergevarorder, correct = TRUE),
+  answer(rev(mergevarorder), correct = FALSE, message = "Other direction."),
+  allow_retry = TRUE
+)
+```
 
+Check out `df`'s dimensions, then look at the top of the newly merged data set.
 
 ```{r mergeddfidtab, exercise = TRUE, exercise.lines = 5}
 
@@ -597,77 +620,26 @@ dim(...)
 head(...)
 ```
 ```{r mergeddfidtab-solution}
-dim(merged_df)
-head(merged_df)
+dim(df)
+head(df)
 ```
 
-Oh dear. Which score is which? Let's make sure we can find out after the merge by creating one new column per data file: `test ="Math"` for the `mathr` matrix and `test ="Language"` for the `langr` matrix. You can do this by piping each matrix to `mutate` to create the new constant. Save the mutate results in `new_math` and `new_lang` respectively.
-
-```{r whichscoreiswhich, exercise = TRUE, exercise.lines = 5}
-
-```
-```{r whichscoreiswhich-hint-1}
-mathr %>% ...
-```
-```{r whichscoreiswhich-hint-2}
-mathr %>% mutate(...)
-```
-```{r whichscoreiswhich-hint-3}
-mathr %>% mutate(test ="Math")
-langr %>% mutate(test =...)
-```
-```{r whichscoreiswhich-hint-4}
-mathr %>% mutate(test ="Math")
-langr %>% mutate(test ="Language")
-```
-```{r whichscoreiswhich-solution}
-new_math <- mathr %>% mutate(test ="Math")
-new_lang <- langr %>% mutate(test ="Language")
-```
-
-Now we can merge again and look at the top of the file. Save your merged data to `best_df`.
-
-```{r mergeagain, exercise = TRUE, exercise.lines = 5}
-
-```
-```{r mergeagain-hint-1}
-best_df <- ?
-```
-```{r mergeagain-hint-2}
-best_df <- merge(...)
-head(...)
-```
-```{r mergeagain-hint-3}
-best_df <- merge(new_math, ...)
-head(...)
-```
-```{r mergeagain-hint-4}
-best_df <- merge(new_math, new_lang, ...)
-head(best_df)
-```
-```{r mergeagain-solution}
-best_df <- merge(new_math, new_lang, all = TRUE)
-head(best_df)
-```
-
-Now let's see how much repetition there is in `id`s and `date`s. We can add up how many elements of a vector are `duplicated` by `sum`ming them.
+Now let's see how much repetition there is in `id`. We can add up how many elements of a vector are `duplicated` by `sum`ming them.
 
 ```{r sumdup-id, exercise = TRUE, exercise.lines = 5}
 
 ```
 ```{r sumdup-id-hint-1}
-sum(duplicated(...))
+sum(...)
 ```
 ```{r sumdup-id-hint-2}
-sum(duplicated(best_df$id))
 sum(duplicated(...))
 ```
 ```{r sumdup-id-solution}
-sum(duplicated(best_df$id))
-sum(duplicated(best_df$date))
+sum(duplicated(df$id))
 ```
 
-**EXTRA CREDIT** Write some code to check whether the sums of all the unique and duplicated `date`s and `id`s add up to the total length of `best_df`. Your output should be a logical: `TRUE` or `FALSE`.
+**EXTRA CREDIT** Write some code to check whether the sums of all the unique and duplicated `id`s add up to the total length of `df`. Your output should be a logical: `TRUE` or `FALSE`. 
 
 ```{r sumdupcheck, exercise = TRUE, exercise.lines = 5}
 
@@ -677,38 +649,40 @@ length(...) + sum(...) == ?
 ```
 ```{r sumdupcheck-hint-2}
 length(unique(...)) + sum(duplicated(...)) == ?
-length(...) + sum(...) == ?
 ```
 ```{r sumdupcheck-hint-3}
-length(unique(merged_df$id)) + sum(duplicated(merged_df$id)) == nrow(...)
-length(...) + sum(...) == nrow(...)
+length(unique(df$id)) + sum(duplicated(df$id)) == nrow(...)
 ```
 ```{r sumdupcheck-hint-4}
-length(unique(merged_df$id)) + sum(duplicated(merged_df$id)) == nrow(merged_df)
-length(...) + sum(duplicated(...)) == nrow(...)
+length(unique(df$id)) + sum(duplicated(df$id)) == nrow(df)
 ```
 ```{r sumdupcheck-solution}
-length(unique(merged_df$id)) + sum(duplicated(merged_df$id)) == nrow(merged_df)
-length(unique(merged_df$date)) + sum(duplicated(merged_df$date)) == nrow(merged_df)
+length(unique(df$id)) + sum(duplicated(df$id)) == nrow(df)
 ```
+
+Little explorations like these may seem like  waste of time, but actually they help you know your data better and they validate your work. 
+
+By the way: I hope you got `TRUE`.
 
 ## How do we Deal with all the Repetition?
 
-It's clear that we have much repetition of `id`s and `date`s.
+It's clear that we have much repetition of `id`s.
 
-Having so much repetition can cause problems with analyses that assume one observation or one combination of observations per subject. So how can we query the data but limit the number of rows returned to just one row per subject?
+Having so much repetition can cause problems with analyses that assume that there is only one observation or one combination of observations per subject. How can we query the data but limit the number of rows returned to just one row per subject?
 
 There are several ways to accomplish this:
 
 1. "Give me the earliest language score, if any, and the math score closest in time to that language score. If no language score exists, omit.” 
 
-1. “I don’t care if it’s a first test or a subsequent readministration, just give me the smallest time interval between a language and a math for each subject that has both.”   
+
+1. “I don’t care if it’s a first test or a subsequent readministration, just give me the smallest time interval between a math and a language score for each subject that has both.”   
+
 
 1. “Give me the closest math score and the closest language score to this subject’s MRI date, which I’ll give you.”    
 
 1. “Give me the closest math date after language---and if math _precedes_ language, I don’t want to see it.”    
 
-Keep a few things in mind: 
+There are other aspects of this data we need to keep in mind: 
 
 * Our instruments should be administered only once, so we will probably want to disregard administrations $\displaystyle 2$ through $\displaystyle n$ no matter when they occurred.     
 
@@ -720,101 +694,261 @@ A good analyst and coder understands precise research goals as well as the speci
 
 Let’s take a look at some common tactics with date-based resolution.
 
-## Date-Based Resolution
+We'll use date-based resolution to make this query to the data set.
 
-We begin by making sure that dates are dates. Change the class of `date` to "date", then check it.
+Begin by making sure that dates are dates. Change the class of `date` to "date", then check it.
 
 ```{r date_class, exercise = TRUE, exercise.lines = 5}
 
 ```
 ```{r date_class-hint-1}
-merged_df$date <- ?
+df$date_math <- ?
+df$date_lang <- ?
 ```
 ```{r date_class-hint-2}
-merged_df$date <- as.Date(...)
-class(merged_df$date)
+df$date_math <- as.Date(...)
+df$date_lang <- as.Date(...)
+class(df$date_math)
+class(...)
 ```
 ```{r date_class-solution}
-merged_df$date <- as.Date(merged_df$date)
-class(merged_df$date)
+df$date_math <- as.Date(df$date_math)
+df$date_lang <- as.Date(df$date_lang)
+class(df$date_math)
+class(df$date_lang)
 ```
 
 If your output was `"Date"`, you did it right.
 
-Let's save some typing by assigning `best_df` to `df`. This name is commonly used in places like [stackoverflow](https://stackoverflow.com), where you can find some of the best documentation on functions and procedures. 
+## Strategy 1: Closest pairs
 
-I try to use the name `df` whenever my code involves a single data set.
+>"Give me the earliest language score, if any, and the math score closest in time to that language score. If no language score exists, omit.”
 
-Now let's explore ways to query the data but limit the number of rows returned to just one row per subject. We'll go into detail about each of the strategies 
 
-### OPTION 1: Closest pairs
+```{r firstquestion, echo=FALSE}
+question("Which elements are part of the preceding question?",
+         answer("Report only paired scores: Don't include instances of only one score or the other. ", correct = TRUE),
+         answer("Find the earliest language score first.", correct = TRUE),
+         answer("Match a given language score with a math score for the same `id` (person).", correct = TRUE),
+         answer("Calculate the distance (in time) between the language and math tests.", correct = TRUE),
+         answer("If you have more than one pair of language and math scores, show me the one that has the smallest distance value (distance in time, that is).", correct = TRUE),
+     correct = "Well done. That's a run-on sentence pared down to a list of things to do. All we have to do is get the order right and use relevant functions with correct syntax.",
+     incorrect = "Sorry, not quite.",
+     random_answer_order = TRUE,
+     allow_retry = TRUE
+)
+```
 
-Let’s consider what we would do if we just wanted to get the closest date-matched set of math and language scores – maybe we are doing research into the correlation of scores between the two tests. If subjects have only one of the two, leave them out of the set.
 
-First we merge. R’s merge command by default only takes the intersection (the overlap in the Venn diagram) of two datasets, as defined by their “by” field. Since our two data frames have the same column name for the date of administration, we’ll want to add suffixes to clarify which is which.
+Let’s consider what we would do if we just wanted to get the _closest_ (in time) date-matched set of math and language scores---maybe we are doing research into the correlation of scores between the two tests. If study participants have only one of the two tests, math or language, we want to leave them out of the set.
 
-pairs <- merge(math, lang, by="subjectID", suffixes=c(".math", ".lang"))
-Check out the data frame:
+We have already merged the two data sets.
 
-head(pairs)
-	  subjectID testDate.math mathScore testDate.lang languageScore
-	1        12    2006-06-24        64    2009-10-30            86
-	2        20    2008-08-23        72    2015-12-17            62
-	3        20    2008-08-23        72    2008-10-14            56
-	4        35    2015-11-25        76    2005-04-04            82
-	5        45    2005-05-03        71    2010-08-06            53
-	6        48    2007-03-24        83    2007-01-02            63
-The pairs data frame consists of rows that each have a math and a lang score, but some subjects have multiple rows. Confirm this by asking dplyr to group, count, and then display in descending order the number of rows for each subject.
+Check out the tibble we created earlier by typing its name (`df`) and running the code (`cmd-Enter` for a Mac, `ctrl-Enter` for a PC).
 
-pairs %>% 
-  group_by(subjectID) %>% 
-  summarise(size = n()) %>% 
+
+```{r headdf, exercise = TRUE, exercise.lines = 5}
+
+```
+```{r headdf-solution}
+df
+```
+
+We want to figure out how many tests each person took. Use [piping and summarizing](../sb-piping-and-summarizing/) to figure that out. Start with `df`, pipe it to `group_by` the `id` field, then to `summarise`, setting the new column `size` equal to `n()`, pipe _that_ to `arrange(desc(size))` to list most tests taken to fewest, then pipe the data to `ungroup`.
+
+```{r groupforsize, exercise = TRUE, exercise.lines = 5}
+
+```
+```{r groupforsize-hint-1}
+df %>%
+  group_by(...)
+```
+```{r groupforsize-hint-2}
+df %>%
+  group_by(id) %>%
+  summarise(...)
+```
+```{r groupforsize-hint-3}
+df %>%
+  group_by(id) %>%
+  summarise(size = n()) %>%
+  arrange(...) %>%
+```
+```{r groupforsize-hint-4}
+df %>%
+  group_by(id) %>%
+  summarise(size = n()) %>%
+  arrange(desc(...)) %>%
+  ungroup
+```
+```{r groupforsize-solution}
+df %>%
+  group_by(id) %>%
+  summarise(size = n()) %>%
   arrange(desc(size)) %>%
-  ungroup()
-	# A tibble: 161 x 2
-	   subjectID  size
-	       <int> <int>
-	 1       697     9
-	 2       119     4
-	 3       216     4
-	 4       329     4
-	 5       726     4
-	 6       878     4
-	 7       985     4
-	 8       262     3
-	 9       485     3
-	10       623     3
-	# ... with 151 more rows
-Yep, the dratted 697 is there. How will we select the closest pair for each subject?
+  ungroup
+```
+	
+Yep, the dratted 697 is there at the top of the lists with 9 pairs of dates and tests! How will we select the closest pair for that person and others like them? 
 
-One easy way is to use dplyr. We’ve already merged all the options, so now we just want to filter pairs such that within each ID, the only row we keep is the one with the smallest time interval. That’s fairly simple. We don’t care about order, so we just look for the smallest absolute value in date difference, or, to say it another way, the difference that is the same as the minimum difference for this ID.
+Since we're goig to be measuring distances between dates rather than using them as factors, we need to make sure they are in `date` format. Make sure they are, using the syntax `date_var <- as.Date(date_var)`. (Substitute the actual variable names for `date_var`.)
 
-Note that we have to think about ties – say, there’s a math test 200 days prior to and one 200 days after the language test. In our case, it doesn’t matter which one we pick, so we just take the first one, using dplyr’s slice(). Finally, we’ll ungroup the resultant data frame.
+```{r datevar, exercise = TRUE, exercise.lines = 5}
 
-closestPairs <- pairs %>% 
-  group_by(subjectID) %>%
-  filter(abs(testDate.lang - testDate.math) == min(abs(testDate.lang - testDate.math))) %>%
-  slice(1) %>% 
-  ungroup()
-How big is this data?
+```
+```{r datevar-hint}
+df$date_lang <- as.Date(...)
+df$date_math <- as.Date(...)
+```
+```{r datevar-solution}
+df$date_lang <- as.Date(df$date_lang)
+df$date_math <- as.Date(df$date_math)
+```
 
-dim(closestPairs)
-	[1] 161   5
-closestPairs only has 161 rows, as compared to 250 for pairs. Let’s confirm that there are no duplications:
+One easy way is to use `dplyr`. We’ve already merged, so now we just want to filter pairs such that within each `id`, the only row we keep is the one with the smallest time interval. That’s fairly simple, once you think about it. We don’t care about order, so we just look for the smallest absolute value in date difference, or, to say it another way, the difference that is the same as the minimum difference for this `id`.
 
-table(duplicated(closestPairs$subjectID))
-	FALSE 
-	  161
-All false. We have a data frame that consists of only the subjects that have both tests, and from those administrations, only the pair that has the smallest interval of time.
+Note that we have to think about ties. Suppose the data contains a math test 200 days _before_ and another one 200 days _after_ the language test. In our case it doesn’t matter which one we pick, so let's just take the first one using dplyr’s `slice`, which chooses a row by its ordinal position in a tibble (i.e., it picks the $\displaystyle n$th one it finds). Then we’ll ungroup the resulting tibble and store it in a new tibble called `closest_pairs`.
 
-OPTION 2: Earliest math and nearest language (if any)
+```{r closestpairs, exercise = TRUE, exercise.lines = 5}
+
+```
+```{r closestpairs-hint-1}
+closest_pairs <- df %>%
+  group_by(...) %>%
+  filter(...) %>%
+  slice(...) %>%
+  ...
+```
+```{r closestpairs-hint-2}
+closest_pairs <- df %>%
+  group_by(id) %>%
+  filter(abs(...)) %>%
+  slice(1) %>%
+  ...
+```
+```{r closestpairs-hint-3}
+closest_pairs <- df %>%
+  group_by(id) %>%
+  filter(abs(...) == min(abs(...))) %>%
+  slice(...) %>%
+  ...
+```
+```{r closestpairs-hint-4}
+closest_pairs <- df %>%
+  group_by(id) %>%
+  filter(abs(date_lang - date_math) == min(abs(date_lang - date_math))) %>%
+  slice(...) %>%
+  group
+```
+```{r closestpairs-solution}
+closest_pairs <- df %>%
+  group_by(id) %>%
+  filter(abs(date_lang - date_math) == min(abs(date_lang - date_math))) %>%
+  slice(1) %>%
+  ungroup
+```
+
+What are the new dataset's dimensions?
+
+```{r dimit, exercise = TRUE, exercise.lines = 5}
+
+```
+```{r dimit-hint}
+dim(...)
+```
+```{r dimit-solution}
+dim(closest_pairs)
+```
+
+
+`closest_pairs` now has only 161 rows, much less than the 250 in `df`. Let’s confirm that there are no duplications:
+
+1. Check whether there are any `duplicated` `id`s in `closest_pairs`.    
+
+1. Wrap that check in a call to `table` to make the output nice. You can also add them up by wrapping the output of `duplicated` in `sum`.
+
+```{r wraptableduplicated, exercise = TRUE, exercise.lines = 5}
+
+```
+```{r wraptableduplicated-hint-1}
+table(...)
+```
+```{r wraptableduplicated-hint-2}
+table(duplicated(...))
+```
+```{r wraptableduplicated-solution}
+table(duplicated(closest_pairs$id))
+sum(duplicated(closest_pairs$id))
+```
+
+All false, with 0 duplicates.
+
+We now have a tibble that consists of _only_ the subjects that have both tests, and from those administrations, _only_ the pair that has the smallest time interval.
+
+## Strategy 2: Earliest Math Test and Nearest Language Test (if any)
+
+>“I don’t care if it’s a first test or a subsequent readministration, just give me the smallest time interval between the _first_ math and _any_ language score for each subject that has both.” 
+
+```{r firstquestion, echo=FALSE}
+question("Which elements are part of the preceding question?",
+         answer("Report only paired scores: Don't include instances of only one score or the other. ", correct = TRUE),
+         answer("Find the earliest score (be it language or math).", correct = TRUE),
+         answer("Match a given test score with the other test score for the same `id` (person).", correct = TRUE),
+         answer("Calculate the distance (in time) between the math and language tests.", correct = TRUE),
+         answer("If you have more than one pair of language and math scores, show me the one that has the smallest distance value (distance in time, that is).", correct = TRUE),
+     correct = "Well done. That's a complex sentence converted to a list of things to do. All we have to do is get the order right and, again, use relevant functions with correct syntax.",
+     incorrect = "Sorry, not quite.",
+     random_answer_order = TRUE,
+     allow_retry = TRUE
+)
+```
 
 Here we want all subjects that have a math score. We’ll take their first one, then find the nearest language score (if there is one) to that.
 
-Here, we’ll merge more than just the intersection – we’ll also include cases in which math is present but language is absent. In other words, we want ALL the math rows, regardless of whether there’s a corresponding language row. We can’t say the same about language.
+The easiest way to tackle this problem is to 
+
+1. Merge again using slightly different arguments for a slightly different result
+
+1. Filter again
+
+We’ll merge more than just the intersection of the two data sets: we’ll also include cases in which math is present but language is absent. In other words, we want ALL the math rows, regardless of whether there’s a corresponding language row. We can’t say the same about language. And remember to wrap the merge in `as_tibble` so we have more manageable results.
+
+```{r earliest_math, exercise = TRUE, exercise.lines = 5}
+
+```
+```{r earliest_math-hint-1}
+earliest_math <- merge(...)
+```
+```{r earliest_math-hint-2}
+earliest_math <- merge(x = mathr, 
+                       y = langr,
+                       ...)
+```
+```{r earliest_math-hint-3}
+earliest_math <- merge(x = mathr, 
+                       y = langr,
+                       by = "id",
+                       ...)
+```
+```{r earliest_math-hint-4}
+earliest_math <- as_tibble(merge(x = mathr, 
+                                 y = langr,
+                                 by = "id",
+                                 all.x = TRUE,
+                                 suffixes = c(...)))
+```
+```{r earliest_math-solution}
+earliest_math <- as_tibble(merge(x = mathr, 
+                                 y = langr,
+                                 by = "id",
+                                 all.x = TRUE,
+                                 suffixes = c("_math", "_lang")))
+```
 
 earliestMath <- merge(x=math, y=lang, by="subjectID", 
                       all.x = TRUE, suffixes = c(".math", ".lang"))
+                      
+                      
 Now we’ll do something similar to option 1 above, as far as selecting the smallest absolute value, but we’ll have to include cases where there is no date distance (it’s na), because there isn’t a language date to use to calculate from. We use the vertical pipe (|) to symbolize OR: is.na(testDate.lang - testDate.math)`.
 
 firstMathMaybeLanguage <- earliestMath %>% 
