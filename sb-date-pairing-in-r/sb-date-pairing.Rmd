@@ -38,6 +38,19 @@ mathr <- rename(.data = math, id = subjectID, date = testDate, score = mathScore
 langr <- rename(.data = lang, id = subjectID, date = testDate, score = languageScore)
 
 df <- merge(mathr, langr, by = "id", suffixes = c("_math", "_lang"))
+
+shh(closest_pairs <- df %>%
+      group_by(id) %>%
+      filter(abs(date_lang - date_math) == min(abs(date_lang - date_math))) %>%
+      slice(1) %>%
+      ungroup)
+shh(first_math_maybe_language <- earliest_math %>%
+      group_by(id) %>%
+      filter(abs(date_lang - date_math) == min(abs(date_lang - date_math)) | 
+               is.na(date_lang - date_math)) %>%
+      slice(1) %>%
+      ungroup)
+
 ```
 
 ## The Problem
@@ -83,6 +96,8 @@ library(tidyverse)
 math <- as_tibble(read.csv("https://raw.githubusercontent.com/pm0kjp/datastore/master/fakeMath.csv"))
 lang <- as_tibble(read.csv("https://raw.githubusercontent.com/pm0kjp/datastore/master/fakeLang.csv"))
 ```
+
+If you get an error, don't worry. It probably has something to do with permissions somewhere. You can proceed anyway because we downloaded the data sets for you. If you really, really want to download them for you, try it from your copy of RStudio.
 
 We store the data in two _tibbles_, or nicely formatted data frames. Have a look at them by typing their names, one per line, and executing the code. 
 
@@ -140,7 +155,7 @@ langr <- rename(.data = lang, id = subjectID, date = testDate, score = languageS
 
 If you see anything happen, you might have forgottone to assign the output to the new tibble names, `mathr` and `langr`.
 
-Now use `str(mathr)` and `str(langr)` to find out more about our data set. 
+Now use `str(mathr)` and `str(langr)` to find out more about our data setsz. 
 
 ```{r strdata, exercise = TRUE, exercise.lines = 5}
 
@@ -278,9 +293,9 @@ question("Do all the values in `id` fall within the expected range for both data
 ```
 
 ```{r what-next-if-out-of-range, echo=FALSE}
-question("What would you have done if the range of `id`s had been outside of 1 through 1000?",
+question("What should we do if `id` had included numbers outside of the range 1 through 1000?",
          answer("Look more closely at the data to figure out why.", correct = TRUE),
-         answer("Assume that both variables are not as we thought", message = "Any time you hear or think 'assume' anything, don't stop there. Ask yourself how you can ascertain the truth of the assumption."),
+         answer("Go have a cup of tea and forget about it.", message = "Cup of tea, yes. Forget about it, no."),
          answer("Move along because `id` is not an important variable", message = "Have you any reason to believe that this is an unimportant variable besides the fact that it is called `id`?"),
          answer("Reset all the `id`s in both data sets so they fall within the expected range", message = "Have you ascertained that each `id` is used only once? Until you know more, you should leave their values alone."),
          random_answer_order = TRUE,
@@ -406,7 +421,7 @@ question("Where are the `score` modes (as shown by the histograms)?",
 
 ```{r fix-one-thing, echo=FALSE}
 question("If you could fix one thing about the data set, what would it be?",
-         answer("Change the date from a factor to a date object", correct = TRUE),
+         answer("Change `date` from a factor to a date object", correct = TRUE),
          answer("Eliminate all duplicate `id`s", message = "Duplicate `id`s exist because each person may have taken the test more than once."),
          answer("Make `mathr` wider", message = "`mathr` doesn't contain any implicit variables."),
          answer("Make `langr` wider", message = "`langr` doesn't contain any implicit variables."),
@@ -691,8 +706,6 @@ There are other aspects of this data we need to keep in mind:
 
 A good analyst and coder understands precise research goals as well as the specifications of the measurement when working with data that needs to have multiple administrations resolved.
 
-Let’s take a look at some common tactics with date-based resolution.
-
 We'll use date-based resolution to make this query to the data set.
 
 Begin by making sure that dates are dates. Change the class of `date` to "date", then check it.
@@ -753,7 +766,7 @@ Check out the tibble we created earlier by typing its name (`df`) and running th
 df
 ```
 
-We want to figure out how many tests each person took. Use [piping and summarizing](../sb-piping-and-summarizing/) to figure that out. Start with `df`, pipe it to `group_by` the `id` field, then to `summarise`, setting the new column `size` equal to `n()`, pipe _that_ to `arrange(desc(size))` to list most tests taken to fewest, then pipe the data to `ungroup`.
+We want to figure out how many tests each person took. Use [piping and summarizing](../sb-piping-and-summarizing/) to figure that out. Start with `df`, pipe it to `group_by` the `id` field, then to `summarise`, setting the new column `size` equal to `n()`, pipe _that_ to `arrange(desc(size))` to list most tests taken to fewest, then pipe those results to `ungroup`.
 
 ```{r groupforsize, exercise = TRUE, exercise.lines = 5}
 
@@ -790,7 +803,7 @@ df %>%
 	
 Yep, the dratted 697 is there at the top of the lists with 9 pairs of dates and tests! How will we select the closest pair for that person and others like them? 
 
-Since we're goig to be measuring distances between dates rather than using them as factors, we need to make sure they are in `date` format. Make sure they are, using the syntax `date_var <- as.Date(date_var)`. (Substitute the actual variable names for `date_var`.)
+Since we're going to be measuring distances between dates rather than using them as factors, we need to make sure they are in `date` format. Make sure they are, using the syntax `date_var <- as.Date(date_var)`. (Substitute the actual variable names for `date_var`.)
 
 ```{r datevar, exercise = TRUE, exercise.lines = 5}
 
@@ -804,9 +817,11 @@ df$date_lang <- as.Date(df$date_lang)
 df$date_math <- as.Date(df$date_math)
 ```
 
-One easy way is to use `dplyr`. We’ve already merged, so now we just want to filter pairs such that within each `id`, the only row we keep is the one with the smallest time interval. That’s fairly simple, once you think about it. We don’t care about order, so we just look for the smallest absolute value in date difference, or, to say it another way, the difference that is the same as the minimum difference for this `id`.
+One easy way to get what we're looking for is to use `dplyr`. We’ve already merged, so now we just want to filter pairs such that within each `id`, the only row we keep is the one with the smallest time interval. That’s fairly simple, once you think about it. We don’t care about order, so we just look for the smallest absolute value in date difference, or, to say it another way, the difference that is the same as the minimum difference for this `id`.
 
-Note that we have to think about ties. Suppose the data contains a math test 200 days _before_ and another one 200 days _after_ the language test. In our case it doesn’t matter which one we pick, so let's just take the first one using dplyr’s `slice`, which chooses a row by its ordinal position in a tibble (i.e., it picks the $\displaystyle n$th one it finds). Then we’ll ungroup the resulting tibble and store it in a new tibble called `closest_pairs`.
+Note that we have to think about ties. Suppose the data contains a math test 200 days _before_ and another one 200 days _after_ the language test. In our case it doesn’t matter which one we pick, so let's just take the first one using dplyr’s `slice`, which chooses a row by its ordinal position in a tibble (i.e., it picks the $\displaystyle n$th one it finds). Then we’ll ungroup the resulting tibble and store it in a new tibble called `closest_pairs`. 
+
+One last remark before you try this: You'll see a lot of warnings. You can suppress them if you wrap everything in `suppressWarnings`. 
 
 ```{r closestpairs, exercise = TRUE, exercise.lines = 5}
 
@@ -840,12 +855,21 @@ closest_pairs <- df %>%
   group
 ```
 ```{r closestpairs-solution}
-closest_pairs <- df %>%
-  group_by(id) %>%
-  filter(abs(date_lang - date_math) == min(abs(date_lang - date_math))) %>%
-  slice(1) %>%
-  ungroup
+suppressWarnings(closest_pairs <- df %>%
+                   group_by(id) %>%
+                   filter(abs(date_lang - date_math) == min(abs(date_lang - date_math))) %>%
+                   slice(1) %>%
+                   ungroup)
+
+(earliest_math <- as_tibble(merge(x = mathr, 
+                                 y = langr,
+                                 by = "id",
+                                 all.x = TRUE,
+                                 suffixes = c("_math", "_lang"))))
+
 ```
+
+
 
 What are the new dataset's dimensions?
 
@@ -944,42 +968,33 @@ earliest_math <- as_tibble(merge(x = mathr,
                                  suffixes = c("_math", "_lang"))))
 ```
 
-Now we’ll do something similar to option 1 above, as far as selecting the smallest absolute value, but we’ll have to include cases where there is no date distance (it’s `NA`), because there isn’t a language date to use to calculate from. We use the vertical pipe (`|`) to symbolize "or" for a statement like (exactly like) this: `is.na(testDate.lang - testDate.math)`
+Now we’ll do something similar to option 1 above, as far as selecting the smallest absolute value, but we’ll have to include cases where there is no date distance (it’s `NA`), because there isn’t a language date to use to calculate from. We use the vertical pipe (`|`) to symbolize "or" for a statement like (exactly like) this: `is.na(date_lang - date_math)`
 
-See if you can put it all together in the next code block. Check the hints if you get stuck. 
+See if you can put it all together in the next code block. Check the hints if you get stuck, and wrap everything in `suppressWarnings` after you're happy with it.
 
 ```{r allmath, exercise = TRUE, exercise.lines = 5}
 
 ```
 ```{r allmath-hint-1}
-first_math_maybe_language <- earliest_math %>%
-  group_by(id) %>%
-  filter(abs(date_lang - date_math) == min(abs(date_lang - date_math)) | 
-           is.na(date_lang - date_math)) %>%
-  slice(1) %>%
-  ungroup
+first_math_maybe_language <- ?
 ```
 ```{r allmath-hint-2}
 first_math_maybe_language <- earliest_math %>%
-  group_by(id) %>%
-  filter(abs(date_lang - date_math) == min(abs(date_lang - date_math)) | 
-           is.na(date_lang - date_math)) %>%
-  slice(1) %>%
-  ungroup
+  ...
 ```
 ```{r allmath-hint-3}
 first_math_maybe_language <- earliest_math %>%
-  group_by(id) %>%
-  filter(abs(date_lang - date_math) == min(abs(date_lang - date_math)) | 
-           is.na(date_lang - date_math)) %>%
-  slice(1) %>%
-  ungroup
+  group_by(...) %>%
+  filter(abs(...) == min(abs(...)) | 
+           ...) %>%
+  slice(...) %>%
+  ...
 ```
 ```{r allmath-hint-4}
 first_math_maybe_language <- earliest_math %>%
   group_by(id) %>%
   filter(abs(date_lang - date_math) == min(abs(date_lang - date_math)) | 
-           is.na(date_lang - date_math)) %>%
+           is.na(...)) %>%
   slice(1) %>%
   ungroup
 ```
