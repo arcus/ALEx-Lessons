@@ -388,7 +388,15 @@ question("What is the estimated income for Connecticut?",
 )
 ```
 
+Now that you understand the basics of `pivot_wider`, you can do some more exploring on your own. 
+
 
 ## See Also
 
-Now you know the basics of pivot wider, [see the article by Hadley Wickham et al.](https://tidyr.tidyverse.org/articles/pivot.html) for even more examples of pivoting, including how to use `pivot_wider` to do aggregation. 
+[Hadley Wickham, et al.'s](https://tidyr.tidyverse.org/articles/pivot.html) for even more examples of pivoting, including how to use `pivot_wider` to do aggregation. 
+
+[`pivot_longer`](../sb-pivot-longer/), an interactive lesson by Sheila Braun.
+
+[`dplyr`](../sb-dplyr), an interactive lesson by Sheila Braun based on the `tidyverse`.
+
+[Piping and Summarizing](../sb-piping-and-summarizing/), an interactive lesson by Sheila Braun that uses `dplyr` and `magrittr`, both of which are part of the `tidyverse`.

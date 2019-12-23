@@ -742,7 +742,7 @@ Let's save some typing by assigning `best_df` to `df`. This name is commonly use
 
 I try to use the name `df` whenever my code involves a single data set.
 
-Now let's explore our options. 
+Now let's explore ways to query the data but limit the number of rows returned to just one row per subject. We'll go into detail about each of the strategies 
 
 ### OPTION 1: Closest pairs
 
