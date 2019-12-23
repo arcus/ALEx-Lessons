@@ -3,13 +3,10 @@ title: "Welcome New R User"
 author: "Sheila Braun, CHOP"
 date: "2019/12/23"
 output: 
- learnr::tutorial:
-      progressive: true
-      allow_skip: true
-      css:
-            - https://github.research.chop.edu/pages/CQI/chop-bootstrap/bootstrap-3/bootstrap.min.css
-            - https://github.research.chop.edu/pages/CQI/flexdashboard-theme/css/flexdashboard.min.css
-runtime: shiny_prerendered
+  html_document:
+    css:
+      - https://github.research.chop.edu/pages/CQI/chop-bootstrap/bootstrap-3/bootstrap.min.css
+      - https://github.research.chop.edu/pages/CQI/flexdashboard-theme/css/flexdashboard.min.css
 ---
 
 ## Welcome!
