@@ -71,7 +71,7 @@ Uncomment the lines in the code box below.
 
 [ANOTHER HINT: Press `option` (Mac) or `alt` (PC) and select the first 2 _columns_ of the three lines of code. The cursor should grow or multiply in the direction you move it as long as you hold down the `option/alt` key while selecting. This really cool feature from the RStudio team allows you to select items in sequence---while _not_ holding down the `option/alt` key while you select---_or_ in rectangles---while holding down the `option/alt` key while you select.]
 
-After uncommenting the lines, run the code: Press `cmd` or `ctrl` and `Enter` at the same time or click on the "Run Code" button. These commands download the two data files and stores them in the two tibbles named `math` and `lang`.
+After uncommenting the lines, run the code: Press `cmd` or `ctrl` and `Enter` at the same time or click on the "Run Code" button. These commands download the two data files and store them in the two tibbles named `math` and `lang`.
 
 ```{r load-data, exercise = TRUE, exercise.lines = 5}
 # library(tidyverse)
@@ -168,9 +168,9 @@ The data has the following qualities:
 * Dates are randomly and uniformly distributed between January 1, 2005 and January 1, 2016    
 * Each `id` may have one or more `date`s associated with it because people could take the tests repeatedly
 * Scores follow a triangular distribution with     
-  - a minimum of 25 (indicates full guessing)    
-  - a maximum of 100    
-  - a mode of 80
+    - a minimum of 25 (indicates full guessing)    
+    - a maximum of 100    
+    - a mode of 80
 * scores are rounded
 
 ## Look at the Data
@@ -556,6 +556,8 @@ question("How many people took the math test at least twice?",
 
 One person (`id` = 697) took the math and the language tests each three times. Let's merge our two data sets and see how many records we get for that person. 
 
+## One Way to Merge
+
 1. Start by passing `merge` the two dataset names (`mathr` and `langr`).
 
 1. Tell it to merge `by = id`. 
@@ -565,6 +567,8 @@ One person (`id` = 697) took the math and the language tests each three times. L
 1. Wrap the merge in `as_tibble` so you get nicely formatted data. 
 
 1. Save the tibbled output in `df`. 
+
+1. Look at `df`.
 
 ```{r merge3x3, exercise = TRUE, exercise.lines = 5}
 
@@ -583,6 +587,7 @@ df <- merge(mathr, langr, by = "id", suffixes = ...)
 ```
 ```{r merge3x3-solution}
 df <- as_tibble(merge(mathr, langr, by = "id", suffixes = c("_math", "_lang")))
+df
 ```
 
 ```{r checkthemerge, echo = FALSE}
@@ -670,7 +675,7 @@ It's clear that we have much repetition of `id`s.
 
 Having so much repetition can cause problems with analyses that assume that there is only one observation or one combination of observations per subject. How can we query the data but limit the number of rows returned to just one row per subject?
 
-There are several ways to accomplish this:
+There are different ways to accomplish this. Here are two queries we might make:
 
 1. "Give me the earliest language score, if any, and the math score closest in time to that language score. If no language score exists, omit.” 
 
