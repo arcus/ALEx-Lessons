@@ -1,13 +1,20 @@
 ---
 title: "Welcome New R User"
 author: "Sheila Braun, CHOP"
-date: "2019/10/30"
-output: html_document
+date: "2019/12/23"
+output: 
+ learnr::tutorial:
+      progressive: true
+      allow_skip: true
+      css:
+            - https://github.research.chop.edu/pages/CQI/chop-bootstrap/bootstrap-3/bootstrap.min.css
+            - https://github.research.chop.edu/pages/CQI/flexdashboard-theme/css/flexdashboard.min.css
+runtime: shiny_prerendered
 ---
 
 ## Welcome!
 
-I’ve created a curriculum for you that takes you from basic R syntax all the way to visual representations of your data and beyond. By following the steps outlined below, you can become very good at syntactical rules that are consistent no matter what you do down the line.
+This curriculum takes you from basic R syntax all the way to visual representations of your data and beyond. By following the steps outlined below, you can become very good at syntactical rules that are consistent no matter what you do down the line.
 
 1. Please inspect your packet. It contains Hadley Wickham’s [seminal article](https://vita.had.co.nz/papers/tidy-data.pdf) about “tidy data” (a concept that is at the heart of good coding in R), which you can read at your leisure, and numerous cheat sheets that are loosely arranged from least to most advanced, to which you can refer as you follow the instructions below.
 
@@ -15,5 +22,5 @@ I’ve created a curriculum for you that takes you from basic R syntax all the w
 
 <iframe width="560" height="315" src="https://storage.googleapis.com/braunsb-media/Quick%20R%20Help/Customizing%20RStudio.mp4" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
-Having completed these steps, you are ready to start coding.
+Having completed these steps, you will be ready to start coding!
 
