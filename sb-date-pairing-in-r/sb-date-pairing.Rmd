@@ -665,6 +665,19 @@ sum(duplicated(...))
 sum(duplicated(df$id))
 ```
 
+```{r howmanydupids, echo=FALSE}
+question("How many duplicates did you find?",
+         answer("89", correct = TRUE),
+         answer("86", message = "There were more than that."),
+         answer("82", message = "You should have gotten a higher number."),
+         answer("None", message = "There were duplicates."),
+     correct = "Resplendent!",
+     incorrect = "Try again.",
+     random_answer_order = TRUE,
+     allow_retry = TRUE
+)
+```
+
 **EXTRA CREDIT** Write some code to check whether the sums of all the unique and duplicated `id`s add up to the total length of `df`. Your output should be a logical: `TRUE` or `FALSE`. 
 
 ```{r sumdupcheck, exercise = TRUE, exercise.lines = 5}
