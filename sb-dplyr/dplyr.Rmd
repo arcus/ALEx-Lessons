@@ -2,7 +2,11 @@
 title: "Introduction to the tidyverse: dplyr"
 output: 
  learnr::tutorial:
-      progressive: true
+    progressive: true
+    allow_skip: true
+    css:
+      - https://github.research.chop.edu/pages/CQI/chop-bootstrap/bootstrap-3/bootstrap.min.css
+      - https://github.research.chop.edu/pages/CQI/flexdashboard-theme/css/flexdashboard.min.css
 runtime: shiny_prerendered
 ---
 
@@ -13,7 +17,7 @@ library(learnr)
 library(dplyr)
 knitr::opts_chunk$set(echo = FALSE)
 options(digits = 3, scipen = 9999)
-tutorial_options(exercise.completion = FALSE,
+tutorial_options(exercise.completion = TRUE,
                  exercise.eval = TRUE,
                  exercise.lines = 8,
                  exercise.diagnostics = TRUE)

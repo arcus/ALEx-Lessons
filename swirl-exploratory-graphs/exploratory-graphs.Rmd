@@ -1,12 +1,24 @@
 ---
 title: "Exploratory Graphs"
-output: learnr::tutorial
+output: 
+ learnr::tutorial:
+    progressive: true
+    allow_skip: true
+    css:
+      - https://github.research.chop.edu/pages/CQI/chop-bootstrap/bootstrap-3/bootstrap.min.css
+      - https://github.research.chop.edu/pages/CQI/flexdashboard-theme/css/flexdashboard.min.css
 runtime: shiny_prerendered
 ---
 
 ```{r setup, include=FALSE}
 library(learnr)
 options(digits = 3, scipen = 9999)
+tutorial_options(exercise.startover = TRUE,
+  exercise.eval = TRUE, 
+  exercise.cap = "R Code",
+  exercise.completion = TRUE,
+  exercise.diagnostics = TRUE)
+  
 pollution <- readRDS("pollution.RData")
 ppm <- pollution$pm25
 low <- pollution[pollution$pm25 < 5,]

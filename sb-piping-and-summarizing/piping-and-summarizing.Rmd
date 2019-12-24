@@ -1,6 +1,12 @@
 ---
 title: "A Simple Aggregation Exercise: Piping and Summarizing"
-output: learnr::tutorial
+output: 
+ learnr::tutorial:
+    progressive: true
+    allow_skip: true
+    css:
+      - https://github.research.chop.edu/pages/CQI/chop-bootstrap/bootstrap-3/bootstrap.min.css
+      - https://github.research.chop.edu/pages/CQI/flexdashboard-theme/css/flexdashboard.min.css
 runtime: shiny_prerendered
 ---
 
@@ -9,6 +15,12 @@ options(digits = 3, scipen = 9999)
 if(!require(learnr)){install.packages("learnr")}
 library(learnr)
 library(dplyr)
+tutorial_options(exercise.startover = TRUE,
+   exercise.eval = TRUE, 
+   exercise.cap = "R Code",
+   exercise.completion = TRUE,
+   exercise.diagnostics = TRUE)
+   
 this_Input =("
 Group Value
 2pm    69    

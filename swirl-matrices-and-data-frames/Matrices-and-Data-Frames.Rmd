@@ -1,12 +1,18 @@
 ---
 title: "Matrices and Data Frames"
-output: learnr::tutorial
+output: 
+ learnr::tutorial:
+    progressive: true
+    allow_skip: true
+    css:
+      - https://github.research.chop.edu/pages/CQI/chop-bootstrap/bootstrap-3/bootstrap.min.css
+      - https://github.research.chop.edu/pages/CQI/flexdashboard-theme/css/flexdashboard.min.css
 runtime: shiny_prerendered
 ---
 
 ```{r setup, include=FALSE}
 library(learnr)
-tutorial_options(exercise.completion = FALSE)
+tutorial_options(exercise.completion = TRUE)
 knitr::opts_chunk$set(echo = FALSE)
 ```
 

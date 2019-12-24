@@ -1,6 +1,12 @@
 ---
 title: "Looking at Data"
-output: learnr::tutorial
+output: 
+ learnr::tutorial:
+    progressive: true
+    allow_skip: true
+    css:
+      - https://github.research.chop.edu/pages/CQI/chop-bootstrap/bootstrap-3/bootstrap.min.css
+      - https://github.research.chop.edu/pages/CQI/flexdashboard-theme/css/flexdashboard.min.css
 runtime: shiny_prerendered
 ---
 
@@ -8,6 +14,14 @@ runtime: shiny_prerendered
 library(learnr)
 library(readr)
 library(dplyr)
+
+tutorial_options(exercise.startover = TRUE,
+  exercise.eval = TRUE, 
+  exercise.cap = "R Code",
+  exercise.completion = TRUE,
+  exercise.diagnostics = TRUE)
+  
+
 plants <- read_csv("plants.csv")
 names(plants)
 ncol(plants)

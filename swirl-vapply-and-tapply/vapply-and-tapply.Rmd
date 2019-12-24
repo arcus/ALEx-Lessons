@@ -1,14 +1,24 @@
 ---
 title: "vapply and tapply"
-output: learnr::tutorial
+output: 
+ learnr::tutorial:
+    progressive: true
+    allow_skip: true
+    css:
+      - https://github.research.chop.edu/pages/CQI/chop-bootstrap/bootstrap-3/bootstrap.min.css
+      - https://github.research.chop.edu/pages/CQI/flexdashboard-theme/css/flexdashboard.min.css
 runtime: shiny_prerendered
 ---
-
 ```{r setup, include=FALSE}
 library(learnr)
 library(data.table)
 library(dplyr)
 library(tidyverse)
+tutorial_options(exercise.startover = TRUE, 
+                 exercise.eval = TRUE, 
+                 exercise.cap = "R Code",
+                 exercise.completion = TRUE,
+                 exercise.diagnostics = TRUE)
 flags <- as_tibble(read.csv("flags.csv"))
 
 flag_colors <- flags[, 12:18]
