@@ -70,7 +70,40 @@ question("Check all of these that you have NOT done in `git`:",
 )
 ```
 
-### What you Need for this Lesson
+Warning: This is a very spare lesson, as lessons go. We'll tell you how to do things properly, but we're not going to tell you everything you can do---until later. Here you will learn how to type `git commit -m"my log message here."`. There, you will learn this:
+
+```{r everything, echo = FALSE}
+knitr::include_graphics("www/everything.png", 
+                          auto_pdf = getOption("knitr.graphics.auto_pdf", 
+                                                FALSE), dpi = NULL)
+```
+
+## Some Helpful Videos
+
+I like [these videos](https://git-scm.com/videos). They build on vocabulary you already know if you know nothing at all about `git`. 
+
+In fact, I like them so much, I've put them here. Skip bits that are too slow for you if you need to, get a cup of tea to stay awake if you must, and follow along in your own window if you can. 
+
+There will be a quiz.
+
+### What is Version Control?
+
+<iframe title="vimeo-player" src="https://player.vimeo.com/video/41027679" width="640" height="360" frameborder="0" allowfullscreen></iframe>
+
+### What is `git`?
+
+<iframe title="vimeo-player" src="https://player.vimeo.com/video/41381741" width="640" height="360" frameborder="0" allowfullscreen></iframe>
+
+### Early Steps with a `git` Repo
+
+<iframe title="vimeo-player" src="https://player.vimeo.com/video/41493906" width="640" height="360" frameborder="0" allowfullscreen></iframe>
+
+### The Benefits of `git`
+
+<iframe title="vimeo-player" src="https://player.vimeo.com/video/41516942" width="640" height="360" frameborder="0" allowfullscreen></iframe>
+
+
+## What you Need for this Lesson
 
 1. An open terminal window like this one:  
 
@@ -116,7 +149,7 @@ Now execute two `git` commands:
 1. `git init`    
 2. `git add .`
 
-The dot is a true dot, not a period at the end of a sentence.
+The dot is a true dot, not a period at the end of a sentence. There is a space in front of it.
 
 Then see what's in the directory. Specifically, look for the directory `.git`. 
 
@@ -129,7 +162,7 @@ knitr::include_graphics("www/gitinitgitadd.png",
                                                 FALSE), dpi = NULL)
 ```
 
-An empty directory, right? `cd` into `.git` just to see if you can. 
+You're sitting in empty directory, right? `cd` into `.git` just to see if you can. 
 
 ```{r finditanyway, echo = FALSE}
 knitr::include_graphics("www/finditanyway.png", 
@@ -141,7 +174,7 @@ Of course you can.
 
 Now let's go back into RStudio. Save `scores` as "scores.csv" in your lovely new repo using the command `write.csv(scores, "/your_path_here/scores.csv")`.
 
-Now you have a repo that has something in it. Cool!
+Now you have a repo that has something in it. Well done. 
 
 I have a really cool terminal setup called [iTerm2](https://iterm2.com). The prompt changes to include not only my directory's name, but also the fact that I'm in a `git` repo, which branch of the repo I'm currently using (the `master` branch---and more about branches later), and whether or not I have uncommitted material in the repo (see the ex?).  
 
@@ -153,6 +186,49 @@ knitr::include_graphics("www/iTerm2.png",
 
 ## `git commit`: Advance a Repo
 
+The `git commit` command records changes to the repo. 
+
+### Do it Right
+
+Let's try it. Follow these steps:
+
+1. Tell `git` that there is new stuff in the repo by typing `git add .` as you did before.
+
+```{r goodadd, echo = FALSE}
+knitr::include_graphics("www/goodadd.png", 
+                          auto_pdf = getOption("knitr.graphics.auto_pdf", 
+                                                FALSE), dpi = NULL)
+```
+
+2. Type `git commit -m"Added the data file."`.
+
+```{r commit, echo = FALSE}
+knitr::include_graphics("www/commit.png", 
+                          auto_pdf = getOption("knitr.graphics.auto_pdf", 
+                                                FALSE), dpi = NULL)
+```
+
+### Do it Wrong
+
+This is what happens when you commit without first telling `git` that you have added things:
+
+```{r forgotadd, echo = FALSE}
+knitr::include_graphics("www/forgotadd.png", 
+                          auto_pdf = getOption("knitr.graphics.auto_pdf", 
+                                                FALSE), dpi = NULL)
+```
+
+And this is what happens if you forget to send a message for the log along with your `commit`:
+
+```{r prep-to-commit, echo = FALSE}
+knitr::include_graphics("www/oops.png", 
+                          auto_pdf = getOption("knitr.graphics.auto_pdf", 
+                                                FALSE), dpi = NULL)
+```
+
+That is one of the worst places to end up in all of coding: inside an editor with _no_ instructions on how to edit (only a demand that you do), _no_ instructions on how to leave, and a powerful sense that if you mess this up, you will hurt your repo.
+
+Just don't go there. Use `-m"your message here"`.
 
 ## `git checkout` and `git branch`: Switching Branches
 
