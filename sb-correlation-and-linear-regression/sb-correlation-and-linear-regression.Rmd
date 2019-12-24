@@ -1,11 +1,12 @@
 ---
 title: "Correlation and Linear Regression"
 output: 
-  learnr::tutorial:
+ learnr::tutorial:
     progressive: true
     allow_skip: true
-fig_width: 8
-fig_height: 6
+    css:
+      - https://github.research.chop.edu/pages/CQI/chop-bootstrap/bootstrap-3/bootstrap.min.css
+      - https://github.research.chop.edu/pages/CQI/flexdashboard-theme/css/flexdashboard.min.css
 runtime: shiny_prerendered
 ---
 
