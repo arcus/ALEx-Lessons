@@ -108,11 +108,21 @@ math <- as_tibble(read.csv("https://raw.githubusercontent.com/pm0kjp/datastore/m
 lang <- as_tibble(read.csv("https://raw.githubusercontent.com/pm0kjp/datastore/master/fakeLang.csv"))
 ```
 
-If you got an error, don't worry. It probably has something to do with permissions somewhere. You can proceed anyway because we downloaded the data sets for you. If you really, really want to download them, run these lines from within your copy of RStudio.
+If you got an error, don't worry. It probably has something to do with permissions somewhere. You can proceed anyway because we downloaded the data sets for you. If you really, really want to download them, run the lines from within your copy of RStudio.
 
 ### A Word about the `tidyverse` as we Look at the Data
 
 We store the data in two _tibbles_, or nicely formatted data frames à la the `tidyverse` package (which we loaded in the previous code block). If you have worked only with non-tibble data frames before, you might prefer tibble output. I do. I try to make all my data frames tibbles except when I come across the occasional function that prefers to be passed a base R data frame. For those, I wrap the tibble in `as.data.frame` before passing it.
+
+>The tidyverse prefers tibbles.
+
+Note that `tidyverse` is not just a package, but a package of packages. It is, as is stated on the `tidyverse` website,
+
+>a group of packages that work in harmony because they share common representations and [API design](https://mattgemmell.com/api-design/).
+
+(You can [learn more about APIs](https://mattgemmell.com/api-design/) or simply replace the word "API" in your head with "user interface for developers" whenever you come across it.)
+
+Sometimes you want to put the whole `tidyverse` set of packages in the library; other times you can put [one of its component packages](https://www.tidyverse.org/packages/) in the library and save some space. Check out our [dplyr](../sb-dplyr/), [Piping and Summarizing](../sb-piping-and-summarizing/), [Pivot Longer](../sb-pivot-longer/), [Pivot Wider](../sb-pivot-wider/), and [ggplot2](../sb-ggplot2-part-1) lessons, all of which concern `tidyverse` packages.
 
 Have a look at the data sets by typing their names, one per line, and executing the code. 
 
@@ -128,16 +138,6 @@ math
 math
 lang
 ```
-
->The tidyverse prefers tibbles.
-
-Note that `tidyverse` is not just a package, but a package of packages. It is, as is stated on the `tidyverse` website,
-
->a group of packages that work in harmony because they share common representations and [API design](https://mattgemmell.com/api-design/).
-
-(You can [learn more about APIs](https://mattgemmell.com/api-design/) or simply replace the word "API" in your head with "user interface for developers" whenever you come across it.)
-
-Sometimes you want to put the whole `tidyverse` set of packages in the library; other times you can put [one of its component packages](https://www.tidyverse.org/packages/) in the library and save some space. Check out our [dplyr](../sb-dplyr/), [Piping and Summarizing](../sb-piping-and-summarizing/), [Pivot Longer](../sb-pivot-longer/), [Pivot Wider](../sb-pivot-wider/), and [ggplot2](../sb-ggplot-part-1) lessons, all of which concern `tidyverse` packages.
 
 ### Simplify Variable Names
 
@@ -340,7 +340,7 @@ class(mathr$date); class(langr$date)
 
 ```{r isdatefunction, echo=FALSE}
 question("What class is the date variable?",
-         answer("date", correct = TRUE),
+         answer("factor", correct = TRUE),
          answer("function", message = "You seem to have forgotten to use the `date` variable that is _in the dataset_. If you asked for `class(date)`, you will have been told the class of the _function_ `date`, which is outside the data set."),
          answer("character", message = "You'll probably need to look at the hints to fix your code."),
          answer("analog", message = "I don't know of any data structures in R called 'analog', though I'm sure we could make one."),
