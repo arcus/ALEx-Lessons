@@ -59,6 +59,9 @@ shh(first_math_maybe_language <- earliest_math %>%
       slice(1) %>%
       ungroup)
 
+df$date_math <- as.Date(df$date_math)
+df$date_lang <- as.Date(df$date_lang)
+
 ```
 
 ## The Problem
@@ -335,19 +338,9 @@ class(mathr$date); class(...)
 class(mathr$date); class(langr$date)
 ```
 
-```{r is-date-date, echo=FALSE}
-question("Is the variable `date` a date class in either data set?",
-         answer("No", correct = TRUE),
-         answer("Yes", message = "Type `class(mathr$date); class(langr$date)`"),
-         correct = random_praise(),
-         incorrect = "Don't give up now. Try again.",
-         random_answer_order = TRUE,
-         allow_retry = TRUE
-)
-```
 ```{r isdatefunction, echo=FALSE}
 question("What class is the date variable?",
-         answer("factor", correct = TRUE),
+         answer("date", correct = TRUE),
          answer("function", message = "You seem to have forgotten to use the `date` variable that is _in the dataset_. If you asked for `class(date)`, you will have been told the class of the _function_ `date`, which is outside the data set."),
          answer("character", message = "You'll probably need to look at the hints to fix your code."),
          answer("analog", message = "I don't know of any data structures in R called 'analog', though I'm sure we could make one."),
@@ -357,7 +350,6 @@ question("What class is the date variable?",
      allow_retry = TRUE
 )
 ```
-
 
 ### 5. See the `head` of `date`
 
@@ -702,9 +694,9 @@ It's clear that we have much repetition of `id`s.
 
 Having so much repetition can cause problems with analyses that assume that there is only one observation or one combination of observations per subject. How can we query the data but limit the number of rows returned to just one row per subject?
 
-There are different ways to accomplish this. We will work through two possible queries that result in one case per line. 
+There are different ways to accomplish this. We will work through two possible queries that result in the ideal one case per line. 
 
-A good analyst and coder understands precise research goals as well as the specifications of the measurement when working with data that needs to have multiple administrations resolved. Consider the following:
+A good analyst and coder understands precise research goals as well as the specifications of the measurement when working with data that needs to have multiple administrations resolved (in our example, when people took the test more than once). Consider the following:
 
 * Our instruments _should_ be administered only once, so we could with validity disregard administrations $\displaystyle 2$ through $\displaystyle n$ no matter when they occurred.     
 
@@ -713,30 +705,6 @@ A good analyst and coder understands precise research goals as well as the speci
 * Some instruments need to be administered in order: for example, we might want an instrument that requires deception to be administered _before_ others that could tip participants off. 
 
 We'll use date-based resolution to make this query to the data set.
-
-Begin by making sure that dates are dates. Change the class of each date variable to "date" using the function `as.Date`, then check it.
-
-```{r date_class, exercise = TRUE, exercise.lines = 5}
-
-```
-```{r date_class-hint-1}
-df$date_math <- ?
-df$date_lang <- ?
-```
-```{r date_class-hint-2}
-df$date_math <- as.Date(...)
-df$date_lang <- as.Date(...)
-class(df$date_math)
-class(...)
-```
-```{r date_class-solution}
-df$date_math <- as.Date(df$date_math)
-df$date_lang <- as.Date(df$date_lang)
-class(df$date_math)
-class(df$date_lang)
-```
-
-If your output was `"Date"`, you did it right.
 
 ## QUERY 1: Closest Pairs
 
@@ -751,18 +719,18 @@ question("Which elements are part of the preceding question?",
          answer("Match a given language score with a math score for the same `id` (person).", correct = TRUE),
          answer("Calculate the distance (in time) between the language and math tests.", correct = TRUE),
          answer("If you have more than one pair of language and math scores, show me the one that has the smallest distance value (distance in time, that is).", correct = TRUE),
-     correct = "Well done. That's a run-on sentence pared down to a list of things to do. All we have to do is get the order right and use relevant functions with correct syntax.",
+     correct = "Well done. That's a complex sentence pared down to a list of things to do. All we have to do is get the order right and use relevant functions with correct syntax.",
      incorrect = "Sorry, not quite.",
      random_answer_order = TRUE,
      allow_retry = TRUE
 )
 ```
 
-Let’s get started on that to-do list.
+Let’s get started on the to-do list you just identified in the question above.
 
 We want to figure out how many tests each person took. Use [piping and summarizing](../sb-piping-and-summarizing/) to figure that out. Start with `df`, pipe it to `group_by` the `id` field, then to [`summarise`](../sb-piping-and-summarizing/), setting the new column `size` equal to `n()`, pipe _that_ to `arrange(desc(size))` to list most tests taken to fewest, then pipe those results to `ungroup`.
 
-```{r groupforsize, exercise = TRUE, exercise.lines = 5}
+```{r groupforsize, exercise = TRUE, exercise.lines = 10}
 
 ```
 ```{r groupforsize-hint-1}
@@ -801,17 +769,17 @@ One easy way to get what we're looking for is to use `dplyr`. We’ve already me
 
 Note that we have to think about ties. Suppose the data contains a math test 200 days _before_ and another one 200 days _after_ the language test. In our case it doesn’t matter which one we pick, so let's just take the first one using dplyr’s `slice`, which chooses a row by its ordinal position in a tibble (i.e., it picks the $\displaystyle n$th one it finds). Then we’ll ungroup the resulting tibble and store it in a new tibble called `closest_pairs`. 
 
-We have deliberately left you to figure out how to follow the steps. You know everything you need to know to create the query, but use the "Hints" button if you need to. 
+We have deliberately left you to figure out how to follow the steps, but you can do this. You know everything you need to know to create the query. Use the "Hints" button if you need to. As always with R, you have many choices for setting this up; our solution is only one possibility. 
 
 Save your query results in `closest_pairs`.
 
-A quick tip: You'll see a lot of warnings. You can suppress them if you wrap the entire assignment to `closest_pairs` in `suppressWarnings`. 
+A quick tip: You'll see a lot of warnings. You can suppress them if you wrap the entire assignment to `closest_pairs` in `suppressWarnings`. In fact, I always rename `suppressWarnings` to `shh` in my setup code chunks to save typing and space. I've done that for you here. 
 
-
-```{r closestpairs, exercise = TRUE, exercise.lines = 10}
+```{r closestpairs, exercise = TRUE, exercise.lines = 15}
 
 ```
 ```{r closestpairs-hint-1}
+df$date_diff <- abs(df$date_lang - df$date_math)
 closest_pairs <- df %>%
   group_by(...) %>%
   filter(...) %>%
@@ -819,33 +787,36 @@ closest_pairs <- df %>%
   ...
 ```
 ```{r closestpairs-hint-2}
+df$date_diff <- abs(df$date_lang - df$date_math)
 closest_pairs <- as_tibble(df %>%
                              group_by(id) %>%
-                             filter(abs(...)) %>%
+                             filter(...) %>%
                              slice(1) %>%
                              ...)
 ```
 ```{r closestpairs-hint-3}
+df$date_diff <- abs(df$date_lang - df$date_math)
 closest_pairs <- as_tibble(df %>%
                              group_by(id) %>%
-                             filter(abs(...) == min(abs(...))) %>%
+                             filter(... == ...) %>%
                              slice(...) %>%
                              ...)
 ```
 ```{r closestpairs-hint-4}
-suppressWarnings(closest_pairs <- as_tibble(df %>%
-                                              group_by(id) %>%
-                                              filter(abs(date_lang - date_math) == min(abs(date_lang - date_math))) %>%
-                                              slice(...) %>%
-                                              group))
+df$date_diff <- abs(df$date_lang - df$date_math)
+shh(closest_pairs <- as_tibble(df %>%
+                                 group_by(id) %>%
+                                 filter(date_diff == min(date_diff)) %>%
+                                 slice(...) %>%
+                                 group))
 ```
 ```{r closestpairs-solution}
-suppressWarnings(closest_pairs <- as_tibble(df %>%
-                                              group_by(id) %>%
-                                              filter(abs(date_lang - date_math) == min(abs(date_lang - date_math))) %>%
-                                              slice(1) %>%
-                                              ungroup))
-
+df$date_diff <- abs(df$date_lang - df$date_math)
+shh(closest_pairs <- as_tibble(df %>%
+                                 group_by(id) %>%
+                                 filter(date_diff == min(date_diff)) %>%
+                                 slice(1) %>%
+                                 ungroup))
 ```
 
 
