@@ -44,19 +44,20 @@ earliest_math <- as_tibble(merge(x = mathr,
                                  by = "id",
                                  all.x = TRUE,
                                  suffixes = c("_math", "_lang")))
-df$date_diff <- abs(df$date_lang - df$date_math)
-closest_pairs <- as_tibble(df %>%
-                                 group_by(id) %>%
-                                 filter(date_diff == min(date_diff)) %>%
-                                 slice(1) %>%
-                                 ungroup)
 
-shh(first_math_maybe_language <- earliest_math %>%
-      group_by(id) %>%
-      filter(abs(date_lang - date_math) == min(abs(date_lang - date_math)) | 
-               is.na(date_lang - date_math)) %>%
-      slice(1) %>%
-      ungroup)
+df$date_diff <- abs(as.Date(df$date_lang) - as.Date(df$date_math))
+closest_pairs <- as_tibble(df %>%
+        group_by(id) %>%
+        filter(date_diff == min(date_diff)) %>%
+        slice(1) %>%
+        ungroup)
+
+first_math_maybe_language <- as_tibble(earliest_math %>%
+                                         group_by(id) %>%
+                                         filter(earliest == min(abs(date_lang - date_math)) | 
+                                                  is.na(date_lang - date_math)) %>%
+                                         slice(1) %>%
+                                         ungroup)
 
 df$date_math <- as.Date(df$date_math)
 df$date_lang <- as.Date(df$date_lang)
@@ -726,7 +727,23 @@ question("Which elements are part of the preceding question?",
 )
 ```
 
-Let’s get started on the to-do list you just identified in the question above.
+Let’s get started on the to-do list you just identified in the question above. We'll need the dates in `date` format. Use the `as.Date` function. Assign the dates `as.Dates` back onto themselves.
+
+```{r datesfixing, exercise = TRUE, exercise.lines = 5}
+
+```
+```{r datesfixing-hint-1}
+df$date_math <- ?
+df$date_lang <- ?
+```
+```{r datesfixing-hint-2}
+df$date_math <- as.Date(...)
+df$date_lang <- as.Date(...)
+```
+```{r datesfixing-solution}
+df$date_math <- as.Date(df$date_math)
+df$date_lang <- as.Date(df$date_lang)
+```
 
 We want to figure out how many tests each person took. Use [piping and summarizing](../sb-piping-and-summarizing/) to figure that out. Start with `df`, pipe it to `group_by` the `id` field, then to [`summarise`](../sb-piping-and-summarizing/), setting the new column `size` equal to `n()`, pipe _that_ to `arrange(desc(size))` to list most tests taken to fewest, then pipe those results to `ungroup`.
 
