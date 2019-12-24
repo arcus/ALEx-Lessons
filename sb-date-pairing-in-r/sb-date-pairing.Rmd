@@ -701,7 +701,7 @@ length(unique(df$id)) + sum(duplicated(df$id)) == nrow(df)
 
 Little explorations like these may seem like  waste of time, but actually they help you know your data better and they validate your work. 
 
-By the way: I hope you got `TRUE`.
+By the way, I hope you got `TRUE`.
 
 ## How do we Deal with all the Repetition?
 
@@ -741,7 +741,7 @@ question("Which elements are part of the preceding question?",
 )
 ```
 
-Let’s get started on the to-do list you just identified in the question above. We'll need the dates in `date` format. Use the `as.Date` function. Assign the dates `as.Dates` back onto themselves.
+Let’s get started on the to-do list you just identified in the question above. We'll need the dates in `date` format. Use the `as.Date` function. Assign the dates `as.Dates` back onto themselves, then check their classes.
 
 ```{r datesfixing, exercise = TRUE, exercise.lines = 5}
 
@@ -753,11 +753,17 @@ df$date_lang <- ?
 ```{r datesfixing-hint-2}
 df$date_math <- as.Date(...)
 df$date_lang <- as.Date(...)
+class(...)
+class(...)
 ```
 ```{r datesfixing-solution}
 df$date_math <- as.Date(df$date_math)
 df$date_lang <- as.Date(df$date_lang)
+class(df$date_math)
+class(df$date_lang)
 ```
+
+If you got "Date" for classes, you did well. 
 
 We want to figure out how many tests each person took. Use [piping and summarizing](../sb-piping-and-summarizing/) to figure that out. Start with `df`, pipe it to `group_by` the `id` field, then to [`summarise`](../sb-piping-and-summarizing/), setting the new column `size` equal to `n()`, pipe _that_ to `arrange(desc(size))` to list most tests taken to fewest, then pipe those results to `ungroup`.
 
@@ -889,7 +895,8 @@ We now have a tibble that consists of _only_ the subjects that have both tests, 
 
 ## QUERY 2: Earliest Math Test and Nearest Language Test (if any)
 
->“I don’t care if it’s a first test or a subsequent readministration, just give me the smallest time interval between the _first_ math and _any_ language score for each subject that has both.” 
+>
+“I don’t care if it’s a first test or a subsequent readministration, just give me the smallest time interval between the _first_ math and _any_ language score for each subject that has both.” 
 
 ```{r secondquestion, echo=FALSE}
 question("Which elements are part of the preceding question?",
