@@ -45,11 +45,13 @@ earliest_math <- as_tibble(merge(x = mathr,
                                  all.x = TRUE,
                                  suffixes = c("_math", "_lang")))
 
-shh(closest_pairs <- df %>%
-      group_by(id) %>%
-      filter(abs(date_lang - date_math) == min(abs(date_lang - date_math))) %>%
-      slice(1) %>%
-      ungroup)
+shh(closest_pairs <- as_tibble(df %>%
+                                 group_by(id) %>%
+                                 filter(abs(date_lang - date_math) == 
+                                          min(abs(date_lang - date_math))) %>%
+                                 slice(1) %>%
+                                 ungroup))
+
 shh(first_math_maybe_language <- earliest_math %>%
       group_by(id) %>%
       filter(abs(date_lang - date_math) == min(abs(date_lang - date_math)) | 
@@ -103,9 +105,13 @@ math <- as_tibble(read.csv("https://raw.githubusercontent.com/pm0kjp/datastore/m
 lang <- as_tibble(read.csv("https://raw.githubusercontent.com/pm0kjp/datastore/master/fakeLang.csv"))
 ```
 
-If you get an error, don't worry. It probably has something to do with permissions somewhere. You can proceed anyway because we downloaded the data sets for you. If you really, really want to download them for you, try it from your copy of RStudio.
+If you got an error, don't worry. It probably has something to do with permissions somewhere. You can proceed anyway because we downloaded the data sets for you. If you really, really want to download them, run these lines from within your copy of RStudio.
 
-We store the data in two _tibbles_, or nicely formatted data frames. Have a look at them by typing their names, one per line, and executing the code. 
+### A Word about the `tidyverse` as we Look at the Data
+
+We store the data in two _tibbles_, or nicely formatted data frames à la the `tidyverse` package (which we loaded in the previous code block). If you have worked only with non-tibble data frames before, you might prefer tibble output. I do. I try to make all my data frames tibbles except when I come across the occasional function that prefers to be passed a base R data frame. For those, I wrap the tibble in `as.data.frame` before passing it.
+
+Have a look at the data sets by typing their names, one per line, and executing the code. 
 
 ```{r seemath-lang, exercise = TRUE, exercise.lines = 5}
 
@@ -113,30 +119,30 @@ We store the data in two _tibbles_, or nicely formatted data frames. Have a look
 ```{r seemath-lang-hint}
 math
 ...
+...
 ```
 ```{r seemath-lang-solution}
 math
 lang
 ```
 
-If you have worked with non-tibble data frames before, you might prefer tibble output. I do. I try to put all my data frames in tibble format except when I come across the odd function that prefers to be passed the traditional data frame format. If that happens, I wrap the tibble in `as.data.frame` before passing it to the fussy function.
-
 >The tidyverse prefers tibbles.
 
-You've already put [the `tidyverse` packages](https://tidyverse.tidyverse.org) in the library, so you don't have to do that again. Note that `tidyverse` is not a single package but is, as is stated on its website,
+Note that `tidyverse` is not just a package, but a package of packages. It is, as is stated on the `tidyverse` website,
 
 >a group of packages that work in harmony because they share common representations and [API design](https://mattgemmell.com/api-design/).
 
-
 (You can [learn more about APIs](https://mattgemmell.com/api-design/) or simply replace the word "API" in your head with "user interface for developers" whenever you come across it.)
+
+Sometimes you want to put the whole `tidyverse` set of packages in the library; other times you can put [one of its component packages](https://www.tidyverse.org/packages/) in the library and save some space. Check out our [dplyr](../sb-dplyr/), [Piping and Summarizing](../sb-piping-and-summarizing/), [Pivot Longer](../sb-pivot-longer/), [Pivot Wider](../sb-pivot-wider/), and [ggplot2](../sb-ggplot-part-1) lessons, all of which concern `tidyverse` packages.
 
 ### Simplify Variable Names
 
-We're lazy programmers, so let's simplify our variable names and make sure they are all in lowercase letters. This is good coding practice because, if you lowercase everything, although you will find yourself checking the spelling of variables, you will never find yourself checking to see which letters are upper- and which are lowercase. 
+I'm a lazy coder, so let's simplify our variable names and make sure they are all in lowercase letters. This is good coding practice because, if you lowercase everything, although you will find yourself checking the spelling of variables at times, you will never find yourself checking to see which letters are upper- and which are lowercase. 
 
-We'll use the `tidyverse`'s `rename` function because we want to rename _and_ lowercase the variable names.
+We'll use the `dplyr`'s `rename` function because we want to rename _and_ lowercase the variable names. `dplyr` is already in the library because it's part of the `tidyverse`.
 
-The format for using `rename` is to type its name then pass it the arguments `.data = math` or `lang` and `id = subjectID`. The correct syntax involves putting the "to" variable name first, then setting it equal to the "from" variable.
+The format for using `rename` is to type its name, then pass it the arguments `.data = math` or `lang` and `id = subjectID`. The correct syntax involves putting the "to" variable name first, then setting it equal to the "from" variable.
 
 Do this for both tibbles, renaming `subjectID` to `id`, `testDate` to `date`, and the score variables to `score`. Make sure you store the results in modified tibble names, the same names as before with an "r" on the end. 
 
@@ -160,6 +166,8 @@ langr <- rename(.data = lang, id = subjectID, date = testDate, score = languageS
 ```
 
 If you see anything happen, you might have forgottone to assign the output to the new tibble names, `mathr` and `langr`.
+
+### Look at the `str`ucture of the Files
 
 Now use `str(mathr)` and `str(langr)` to find out more about our data setsz. 
 
@@ -196,7 +204,7 @@ The data has the following qualities:
 
 ## Look at the Data
 
-You can learn more about looking at data by going through our [Looking at Data lesson](http://a-mess.org/swirl-looking-at-data/). We'll be using some of the methods from that lesson here. If you want to take the time to do that now, don't worry---everything you've put in this lesson will be here when you get back. 
+You can learn more about looking at data by going through our [Looking at Data lesson](http://a-mess.org/swirl-looking-at-data/). We'll use some of the methods from that lesson here. If you want to take the time to do that now, don't worry---everything you've put in this lesson will be here when you get back. 
 
 Let's use a variety of functions to confirm what we told you about the data. 
 
@@ -263,7 +271,7 @@ question_rank(
 )
 ```
 
-### 3. Confirm the Range of `id` and `score` with `range`
+### 3. Confirm the `range`s of `id` and `score`
 
 Use the function `range`, passing it `mathr$id`, then `langr$id`. Repeat that line with `mathr$score` and `langr$score`.
 
@@ -299,7 +307,7 @@ question("Do all the values in `id` fall within the expected range for both data
 ```
 
 ```{r what-next-if-out-of-range, echo=FALSE}
-question("What should we do if `id` had included numbers outside of the range 1 through 1000?",
+question("What should we do if `id` includes numbers outside of the range 1 through 1000?",
          answer("Look more closely at the data to figure out why.", correct = TRUE),
          answer("Go have a cup of tea and forget about it.", message = "Cup of tea, yes. Forget about it, no."),
          answer("Move along because `id` is not an important variable", message = "Have you any reason to believe that this is an unimportant variable besides the fact that it is called `id`?"),
@@ -340,7 +348,7 @@ question("Is the variable `date` a date class in either data set?",
 ```{r isdatefunction, echo=FALSE}
 question("What class is the date variable?",
          answer("factor", correct = TRUE),
-         answer("function", message = "You seem to have forgotten to use the `date` variable that is in the dataset. If you just asked for `class(date)`, you will have been told the class of the function `date`, which is outside the data set."),
+         answer("function", message = "You seem to have forgotten to use the `date` variable that is _in the dataset_. If you asked for `class(date)`, you will have been told the class of the _function_ `date`, which is outside the data set."),
          answer("character", message = "You'll probably need to look at the hints to fix your code."),
          answer("analog", message = "I don't know of any data structures in R called 'analog', though I'm sure we could make one."),
      correct = "Correct. Lovely job.",
@@ -475,9 +483,7 @@ question("What does a `dplyr` pipe look like?",
 
 If you struggled to figure out the answers, please see [our `dplyr`](../sb-dplyr/) and [Piping and Summarizing](../sb-piping-and-summarizing/) lessons before continuing. The rest of this lesson assumes you have an understanding of the concepts covered in those lessons.
 
-Our two data sets are tables (matrices). How many duplicates have we in each table? We can use `dplyr` to group by subject `id`, find the how big each group is, and display results in a table, ordered by group size. Follow these steps:
-
-1. Make sure `dplyr` is in the library by typing `library(dplyr)`. 
+Our two data sets are tables (just rows & columns). How many duplicates have we in each table? We can use `dplyr` to group by subject `id`, find the how big each group is, and display results in a table, ordered by group size. Follow these steps:
 
 2. Start with `mathr` and pipe it to `group_by`.    
 
@@ -547,7 +553,7 @@ langr %>%
   table
 ```
 
-Similar here – lots of people took the tests more than once. 
+Similar here---lots of people took the tests more than once. 
 
 ```{r howmanythisthat, echo=FALSE}
 question("How many people took the language test twice?",
@@ -577,11 +583,11 @@ question("How many people took the math test at least twice?",
 
 One person (`id` = 697) took the math and the language tests each three times. Let's merge our two data sets and see how many records we get for that person. 
 
-## One Way to Merge
+## A Simple Merge Example
 
 1. Start by passing `merge` the two dataset names (`mathr` and `langr`).
 
-1. Tell it to merge `by = id`. 
+1. Tell it to merge `by =` "id". 
 
 1. We want to keep the scores and dates straight for the two data sets (which currently have the same names for `date` and `score`), so set `suffixes` equal to `c("_math", "_lang")`. 
 
@@ -696,25 +702,19 @@ It's clear that we have much repetition of `id`s.
 
 Having so much repetition can cause problems with analyses that assume that there is only one observation or one combination of observations per subject. How can we query the data but limit the number of rows returned to just one row per subject?
 
-There are different ways to accomplish this. Here are two queries we might make:
+There are different ways to accomplish this. We will work through two possible queries that result in one case per line. 
 
-1. "Give me the earliest language score, if any, and the math score closest in time to that language score. If no language score exists, omit.” 
+A good analyst and coder understands precise research goals as well as the specifications of the measurement when working with data that needs to have multiple administrations resolved. Consider the following:
 
-1. “I don’t care if it’s a first test or a subsequent readministration, just give me the smallest time interval between a math and a language score for each subject that has both.”   
-
-There are other aspects of this data we need to keep in mind: 
-
-* Our instruments should be administered only once, so we will probably want to disregard administrations $\displaystyle 2$ through $\displaystyle n$ no matter when they occurred.     
+* Our instruments _should_ be administered only once, so we could with validity disregard administrations $\displaystyle 2$ through $\displaystyle n$ no matter when they occurred.     
 
 * Some instruments, like lab results, have roughly defined “expiration dates”---they reflect a moment in time, and must be selected carefully to make sure you’re measuring what you want, when you want it. An expired measurement may be worse than no data at all.    
 
-* Some instruments need to be administered in order: for example, we might want an instrument that requires an instrument requiring deception to be administered before others that could tip participants off to the purpose of the deceptive instrument. 
-
-A good analyst and coder understands precise research goals as well as the specifications of the measurement when working with data that needs to have multiple administrations resolved.
+* Some instruments need to be administered in order: for example, we might want an instrument that requires deception to be administered _before_ others that could tip participants off. 
 
 We'll use date-based resolution to make this query to the data set.
 
-Begin by making sure that dates are dates. Change the class of `date` to "date", then check it.
+Begin by making sure that dates are dates. Change the class of each date variable to "date" using the function `as.Date`, then check it.
 
 ```{r date_class, exercise = TRUE, exercise.lines = 5}
 
@@ -738,9 +738,10 @@ class(df$date_lang)
 
 If your output was `"Date"`, you did it right.
 
-## OPTION 1: Closest pairs
+## QUERY 1: Closest Pairs
 
->"Give me the earliest language score, if any, and the math score closest in time to that language score. If no language score exists, omit.”
+>
+"Give me the earliest language score, if any, and the math score closest in time to that language score. If no language score exists, omit.”
 
 
 ```{r firstquestion, echo=FALSE}
@@ -757,22 +758,9 @@ question("Which elements are part of the preceding question?",
 )
 ```
 
+Let’s get started on that to-do list.
 
-Let’s consider what we would do if we just wanted to get the _closest_ (in time) date-matched set of math and language scores---maybe we are doing research into the correlation of scores between the two tests. If study participants have only one of the two tests, math or language, we want to leave them out of the set.
-
-We have already merged the two data sets.
-
-Check out the tibble we created earlier by typing its name (`df`) and running the code (`cmd-Enter` for a Mac, `ctrl-Enter` for a PC).
-
-
-```{r headdf, exercise = TRUE, exercise.lines = 5}
-
-```
-```{r headdf-solution}
-df
-```
-
-We want to figure out how many tests each person took. Use [piping and summarizing](../sb-piping-and-summarizing/) to figure that out. Start with `df`, pipe it to `group_by` the `id` field, then to `summarise`, setting the new column `size` equal to `n()`, pipe _that_ to `arrange(desc(size))` to list most tests taken to fewest, then pipe those results to `ungroup`.
+We want to figure out how many tests each person took. Use [piping and summarizing](../sb-piping-and-summarizing/) to figure that out. Start with `df`, pipe it to `group_by` the `id` field, then to [`summarise`](../sb-piping-and-summarizing/), setting the new column `size` equal to `n()`, pipe _that_ to `arrange(desc(size))` to list most tests taken to fewest, then pipe those results to `ungroup`.
 
 ```{r groupforsize, exercise = TRUE, exercise.lines = 5}
 
@@ -809,27 +797,18 @@ df %>%
 	
 Yep, the dratted 697 is there at the top of the lists with 9 pairs of dates and tests! How will we select the closest pair for that person and others like them? 
 
-Since we're going to be measuring distances between dates rather than using them as factors, we need to make sure they are in `date` format. Make sure they are, using the syntax `date_var <- as.Date(date_var)`. (Substitute the actual variable names for `date_var`.)
-
-```{r datevar, exercise = TRUE, exercise.lines = 5}
-
-```
-```{r datevar-hint}
-df$date_lang <- as.Date(...)
-df$date_math <- as.Date(...)
-```
-```{r datevar-solution}
-df$date_lang <- as.Date(df$date_lang)
-df$date_math <- as.Date(df$date_math)
-```
-
 One easy way to get what we're looking for is to use `dplyr`. We’ve already merged, so now we just want to filter pairs such that within each `id`, the only row we keep is the one with the smallest time interval. That’s fairly simple, once you think about it. We don’t care about order, so we just look for the smallest absolute value in date difference, or, to say it another way, the difference that is the same as the minimum difference for this `id`.
 
 Note that we have to think about ties. Suppose the data contains a math test 200 days _before_ and another one 200 days _after_ the language test. In our case it doesn’t matter which one we pick, so let's just take the first one using dplyr’s `slice`, which chooses a row by its ordinal position in a tibble (i.e., it picks the $\displaystyle n$th one it finds). Then we’ll ungroup the resulting tibble and store it in a new tibble called `closest_pairs`. 
 
-One last remark before you try this: You'll see a lot of warnings. You can suppress them if you wrap everything in `suppressWarnings`. 
+We have deliberately left you to figure out how to follow the steps. You know everything you need to know to create the query, but use the "Hints" button if you need to. 
 
-```{r closestpairs, exercise = TRUE, exercise.lines = 5}
+Save your query results in `closest_pairs`.
+
+A quick tip: You'll see a lot of warnings. You can suppress them if you wrap the entire assignment to `closest_pairs` in `suppressWarnings`. 
+
+
+```{r closestpairs, exercise = TRUE, exercise.lines = 10}
 
 ```
 ```{r closestpairs-hint-1}
@@ -840,38 +819,32 @@ closest_pairs <- df %>%
   ...
 ```
 ```{r closestpairs-hint-2}
-closest_pairs <- df %>%
-  group_by(id) %>%
-  filter(abs(...)) %>%
-  slice(1) %>%
-  ...
+closest_pairs <- as_tibble(df %>%
+                             group_by(id) %>%
+                             filter(abs(...)) %>%
+                             slice(1) %>%
+                             ...)
 ```
 ```{r closestpairs-hint-3}
-closest_pairs <- df %>%
-  group_by(id) %>%
-  filter(abs(...) == min(abs(...))) %>%
-  slice(...) %>%
-  ...
+closest_pairs <- as_tibble(df %>%
+                             group_by(id) %>%
+                             filter(abs(...) == min(abs(...))) %>%
+                             slice(...) %>%
+                             ...)
 ```
 ```{r closestpairs-hint-4}
-closest_pairs <- df %>%
-  group_by(id) %>%
-  filter(abs(date_lang - date_math) == min(abs(date_lang - date_math))) %>%
-  slice(...) %>%
-  group
+suppressWarnings(closest_pairs <- as_tibble(df %>%
+                                              group_by(id) %>%
+                                              filter(abs(date_lang - date_math) == min(abs(date_lang - date_math))) %>%
+                                              slice(...) %>%
+                                              group))
 ```
 ```{r closestpairs-solution}
-suppressWarnings(closest_pairs <- df %>%
-                   group_by(id) %>%
-                   filter(abs(date_lang - date_math) == min(abs(date_lang - date_math))) %>%
-                   slice(1) %>%
-                   ungroup)
-
-earliest_math <- as_tibble(merge(x = mathr, 
-                                 y = langr,
-                                 by = "id",
-                                 all.x = TRUE,
-                                 suffixes = c("_math", "_lang")))
+suppressWarnings(closest_pairs <- as_tibble(df %>%
+                                              group_by(id) %>%
+                                              filter(abs(date_lang - date_math) == min(abs(date_lang - date_math))) %>%
+                                              slice(1) %>%
+                                              ungroup))
 
 ```
 
@@ -914,7 +887,7 @@ All false, with 0 duplicates.
 
 We now have a tibble that consists of _only_ the subjects that have both tests, and from those administrations, _only_ the pair that has the smallest time interval.
 
-## OPTION 2: Earliest Math Test and Nearest Language Test (if any)
+## QUERY 2: Earliest Math Test and Nearest Language Test (if any)
 
 >“I don’t care if it’s a first test or a subsequent readministration, just give me the smallest time interval between the _first_ math and _any_ language score for each subject that has both.” 
 
