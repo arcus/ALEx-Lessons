@@ -45,11 +45,11 @@ earliest_math <- as_tibble(merge(x = mathr,
                                  all.x = TRUE,
                                  suffixes = c("_math", "_lang")))
 df$date_diff <- abs(df$date_lang - df$date_math)
-shh(closest_pairs <- as_tibble(df %>%
+closest_pairs <- as_tibble(df %>%
                                  group_by(id) %>%
                                  filter(date_diff == min(date_diff)) %>%
                                  slice(1) %>%
-                                 ungroup))
+                                 ungroup)
 
 shh(first_math_maybe_language <- earliest_math %>%
       group_by(id) %>%
