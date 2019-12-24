@@ -916,9 +916,9 @@ Here we want all subjects that have a math score. We’ll take their first one, 
 
 The easiest way to tackle this problem is to 
 
-1. Merge again using slightly different arguments for a slightly different result
+1. Merge again (using slightly different arguments for a slightly different result)
 
-1. Filter again
+1. Filter again (see #1)
 
 We’ll merge more than just the intersection of the two data sets: we’ll also include cases in which math is present but language is absent. In other words, we want ALL the math rows, regardless of whether there’s a corresponding language row. We can’t say the same about language. And remember to wrap the merge in `as_tibble` so we have more manageable results. And here's another trick: Wrap the entire assignment in parentheses so you can see what it looks like without having to add another line of code.
 
