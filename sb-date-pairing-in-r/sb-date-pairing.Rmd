@@ -54,7 +54,8 @@ closest_pairs <- as_tibble(df %>%
 
 first_math_maybe_language <- as_tibble(earliest_math %>%
                                          group_by(id) %>%
-                                         filter(earliest == min(abs(date_lang - date_math)) | 
+                                         filter(abs(date_lang - date_math)
+                                                == min(abs(date_lang - date_math)) | 
                                                   is.na(date_lang - date_math)) %>%
                                          slice(1) %>%
                                          ungroup)
