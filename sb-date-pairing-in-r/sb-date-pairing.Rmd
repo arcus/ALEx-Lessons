@@ -922,7 +922,7 @@ The easiest way to tackle this problem is to
 
 We’ll merge more than just the intersection of the two data sets: we’ll also include cases in which math is present but language is absent. In other words, we want ALL the math rows, regardless of whether there’s a corresponding language row. We can’t say the same about language. And remember to wrap the merge in `as_tibble` so we have more manageable results. And here's another trick: Wrap the entire assignment in parentheses so you can see what it looks like without having to add another line of code.
 
-```{r earliest_math, exercise = TRUE, exercise.lines = 5}
+```{r earliest_math, exercise = TRUE, exercise.lines = 15}
 
 ```
 ```{r earliest_math-hint-1}
@@ -954,9 +954,9 @@ earliest_math <- as_tibble(merge(x = mathr,
                                  suffixes = c("_math", "_lang"))))
 ```
 
-Now we’ll do something similar to option 1 above, as far as selecting the smallest absolute value, but we’ll have to include cases where there is no date distance (it’s `NA`), because there isn’t a language date to use to calculate from. We use the vertical pipe (`|`) to symbolize "or" for a statement like (exactly like) this: `is.na(date_lang - date_math)`
+Now we’ll do something similar in Query 1, as far as selecting the smallest absolute value, but we’ll have to include cases where there is no date distance (it’s `NA`) to cover cases where no language date exists. We use the vertical pipe (`|`) to symbolize "or" for a statement like (exactly like) this: `is.na(date_lang - date_math)`.
 
-See if you can put it all together in the next code block. Check the hints if you get stuck, and wrap everything in `suppressWarnings` after you're happy with it.
+See if you can put it all together in the next code block. Check the hints if you get stuck, and wrap everything in `suppressWarnings` (or `shh`) after you're happy with it.
 
 ```{r allmath, exercise = TRUE, exercise.lines = 5}
 
@@ -1026,4 +1026,4 @@ Great! We have data with no duplicated `id`s.
 
 ## References 
 
-The originator of this lesson as well as the author of the data is [Joy Payton](https://github.com/pm0kjp?tab=repositories). You can find [Joy's original lesson here](https://education.arcus.chop.edu/date-pairing-in-r/).
+You have just gone through some fairly complicated processes. Thanks go to the originator of this lesson and the accompanying data, [Joy Payton](https://github.com/pm0kjp?tab=repositories). You can find [Joy's original lesson here](https://education.arcus.chop.edu/date-pairing-in-r/).
