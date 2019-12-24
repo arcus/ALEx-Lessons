@@ -1,9 +1,12 @@
 ---
 title: "Two-Sample _t_ Test"
 output: 
-  learnr::tutorial:
+ learnr::tutorial:
     progressive: true
     allow_skip: true
+    css:
+      - https://github.research.chop.edu/pages/CQI/chop-bootstrap/bootstrap-3/bootstrap.min.css
+      - https://github.research.chop.edu/pages/CQI/flexdashboard-theme/css/flexdashboard.min.css
 runtime: shiny_prerendered
 ---
 
@@ -16,6 +19,12 @@ library(lattice)
 library(ggplot2)
 library(rcompanion)
 library(pwr)
+tutorial_options(exercise.startover = TRUE,
+  exercise.eval = TRUE, 
+  exercise.cap = "R Code",
+  exercise.completion = TRUE,
+  exercise.diagnostics = TRUE)
+  
 this_Input =("
 Group Value
 2pm    69    

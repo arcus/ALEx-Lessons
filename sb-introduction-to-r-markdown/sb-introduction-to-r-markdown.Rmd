@@ -1,9 +1,12 @@
 ---
 title: "Introduction to R Markdown"
 output: 
-  learnr::tutorial:
+ learnr::tutorial:
     progressive: true
     allow_skip: true
+    css:
+      - https://github.research.chop.edu/pages/CQI/chop-bootstrap/bootstrap-3/bootstrap.min.css
+      - https://github.research.chop.edu/pages/CQI/flexdashboard-theme/css/flexdashboard.min.css
 runtime: shiny_prerendered
 ---
 
@@ -11,10 +14,12 @@ runtime: shiny_prerendered
 library(learnr)
 knitr::opts_chunk$set(echo = FALSE)
 options(digits = 3, scipen = 9999)
-tutorial_options(exercise.completion = FALSE,
-                 exercise.eval = TRUE,
-                 exercise.lines = 8,
-                 exercise.diagnostics = TRUE)
+tutorial_options(exercise.startover = TRUE,
+  exercise.eval = TRUE, 
+  exercise.cap = "R Code",
+  exercise.completion = TRUE,
+  exercise.diagnostics = TRUE)
+  
 
 ```
 

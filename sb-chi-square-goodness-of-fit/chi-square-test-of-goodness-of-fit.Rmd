@@ -1,11 +1,24 @@
 ---
 title: "Chi-Square Test of Goodness-of-Fit"
-output: learnr::tutorial
+output: 
+ learnr::tutorial:
+    progressive: true
+    allow_skip: true
+    css:
+      - https://github.research.chop.edu/pages/CQI/chop-bootstrap/bootstrap-3/bootstrap.min.css
+      - https://github.research.chop.edu/pages/CQI/flexdashboard-theme/css/flexdashboard.min.css
 runtime: shiny_prerendered
 ---
 
 ```{r setup, include=FALSE}
 library(learnr)
+tutorial_options(exercise.startover = TRUE,
+  exercise.eval = TRUE, 
+  exercise.cap = "R Code",
+  exercise.completion = TRUE,
+  exercise.diagnostics = TRUE)
+  
+
 if(!require(rcompanion)){install.packages("rcompanion")}
 Input =("
 Value     Douglas.fir  Ponderosa.pine  Grand.fir   Western.larch

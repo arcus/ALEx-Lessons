@@ -1,11 +1,23 @@
 ---
 title: "One-Sample _t_ Test"
-output: learnr::tutorial
+output: 
+ learnr::tutorial:
+    progressive: true
+    allow_skip: true
+    css:
+      - https://github.research.chop.edu/pages/CQI/chop-bootstrap/bootstrap-3/bootstrap.min.css
+      - https://github.research.chop.edu/pages/CQI/flexdashboard-theme/css/flexdashboard.min.css
 runtime: shiny_prerendered
 ---
 
 ```{r setup, include=FALSE}
 options(scipen = 9999)
+tutorial_options(exercise.startover = TRUE,
+  exercise.eval = TRUE, 
+  exercise.cap = "R Code",
+  exercise.completion = TRUE,
+  exercise.diagnostics = TRUE)
+  
 if(!require(learnr)){install.packages("learnr")}
 library(learnr)
 if(!require(psych)){install.packages("psych")}
