@@ -1,9 +1,12 @@
 ---
 title: "`ggplot2` Part 1"
 output: 
-  learnr::tutorial:
+ learnr::tutorial:
     progressive: true
     allow_skip: true
+    css:
+      - https://github.research.chop.edu/pages/CQI/chop-bootstrap/bootstrap-3/bootstrap.min.css
+      - https://github.research.chop.edu/pages/CQI/flexdashboard-theme/css/flexdashboard.min.css
 runtime: shiny_prerendered
 ---
 
