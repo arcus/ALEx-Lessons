@@ -406,7 +406,7 @@ hist(mathr$score); hist(langr$score)
 question("We were told the distributions were triangular. Are they?",
          answer("Perfectly so.", message = "It's not _that_ precise a shape."),
          answer("Sort of.", correct = TRUE),
-         answer("No.s", message = "Type `hist(mathr$score); hist(langr$score)` and look carefully."),
+         answer("No.", message = "Type `hist(mathr$score); hist(langr$score)` and look carefully."),
          correct = "Correct! You should be proud.",
          incorrect = "No need to fret; try again.",
          random_answer_order = TRUE,
