@@ -44,11 +44,10 @@ earliest_math <- as_tibble(merge(x = mathr,
                                  by = "id",
                                  all.x = TRUE,
                                  suffixes = c("_math", "_lang")))
-
+df$date_diff <- abs(df$date_lang - df$date_math)
 shh(closest_pairs <- as_tibble(df %>%
                                  group_by(id) %>%
-                                 filter(abs(date_lang - date_math) == 
-                                          min(abs(date_lang - date_math))) %>%
+                                 filter(date_diff == min(date_diff)) %>%
                                  slice(1) %>%
                                  ungroup))
 
@@ -403,8 +402,9 @@ hist(mathr$score); hist(langr$score)
 
 ```{r triangular-yn, echo=FALSE}
 question("We were told the distributions were triangular. Are they?",
-         answer("Yes", correct = TRUE),
-         answer("No", message = "Type `hist(mathr$score); hist(langr$score)` and look carefully."),
+         answer("Perfectly so.", message = "It's not _that_ precise a shape."),
+         answer("Sort of.", correct = TRUE),
+         answer("No.s", message = "Type `hist(mathr$score); hist(langr$score)` and look carefully."),
          correct = "Correct! You should be proud.",
          incorrect = "No need to fret; try again.",
          random_answer_order = TRUE,
@@ -770,8 +770,6 @@ One easy way to get what we're looking for is to use `dplyr`. We’ve already me
 Note that we have to think about ties. Suppose the data contains a math test 200 days _before_ and another one 200 days _after_ the language test. In our case it doesn’t matter which one we pick, so let's just take the first one using dplyr’s `slice`, which chooses a row by its ordinal position in a tibble (i.e., it picks the $\displaystyle n$th one it finds). Then we’ll ungroup the resulting tibble and store it in a new tibble called `closest_pairs`. 
 
 We have deliberately left you to figure out how to follow the steps, but you can do this. You know everything you need to know to create the query. Use the "Hints" button if you need to. As always with R, you have many choices for setting this up; our solution is only one possibility. 
-
-Save your query results in `closest_pairs`.
 
 A quick tip: You'll see a lot of warnings. You can suppress them if you wrap the entire assignment to `closest_pairs` in `suppressWarnings`. In fact, I always rename `suppressWarnings` to `shh` in my setup code chunks to save typing and space. I've done that for you here. 
 
