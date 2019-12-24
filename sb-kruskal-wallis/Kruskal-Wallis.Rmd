@@ -1,6 +1,12 @@
 ---
 title: "Kruskal-Wallis Test"
-output: learnr::tutorial
+output: 
+ learnr::tutorial:
+    progressive: true
+    allow_skip: true
+    css:
+      - https://github.research.chop.edu/pages/CQI/chop-bootstrap/bootstrap-3/bootstrap.min.css
+      - https://github.research.chop.edu/pages/CQI/flexdashboard-theme/css/flexdashboard.min.css
 runtime: shiny_prerendered
 ---
 
@@ -13,6 +19,12 @@ if(!require(lattice)){install.packages("lattice")}
 if(!require(dplyr)){install.packages("dplyr")}
 if(!require(rcompanion)){install.packages("rcompanion")}
 options(scipen = 9999, digits = 3)
+tutorial_options(exercise.startover = TRUE,
+  exercise.eval = TRUE, 
+  exercise.cap = "R Code",
+  exercise.completion = TRUE,
+  exercise.diagnostics = TRUE)
+  
 
 knitr::opts_chunk$set(echo = FALSE)
 Input =("
