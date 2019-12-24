@@ -87,7 +87,7 @@ question("What problem do we want to solve by pairing dates?",
 
 ## Example Data
 
-Let’s consider some fake data [Joy Payton](http://education.arcus.chop.edu) created for illustration purposes: 500 records of fake math scores and fake language scores. Joy stored them on her github repo. 
+Let’s consider some fake data [Joy Payton](https://github.com/pm0kjp?tab=repositories) created for illustration purposes: 500 records of fake math scores and fake language scores. Joy stored them on her github repo. 
 
 Uncomment the lines in the code box below. 
 
@@ -990,4 +990,4 @@ Great! We have data with no duplicated `id`s.
 
 ## References 
 
-The originator of this lesson as well as the author of the data is Joy Payton. You can find [Joy's original lesson here](https://education.arcus.chop.edu/date-pairing-in-r/).
+The originator of this lesson as well as the author of the data is [Joy Payton](https://github.com/pm0kjp?tab=repositories). You can find [Joy's original lesson here](https://education.arcus.chop.edu/date-pairing-in-r/).
