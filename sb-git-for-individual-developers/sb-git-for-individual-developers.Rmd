@@ -82,7 +82,7 @@ knitr::include_graphics("www/everything.png",
 
 I like [these videos](https://git-scm.com/videos). They build on vocabulary you already know if you know nothing at all about `git`. 
 
-In fact, I like them so much, I've put them here. Skip bits that are too slow for you if you need to, get a cup of tea to stay awake if you must, and follow along in your own window if you can. 
+In fact, I like them so much, I've put them here. Skip bits that are too slow for you if you need to, get a cup of tea to stay awake if you must, and follow along in your own terminal window if you can. 
 
 There will be a quiz.
 
@@ -101,6 +101,8 @@ There will be a quiz.
 ### The Benefits of `git`
 
 <iframe title="vimeo-player" src="https://player.vimeo.com/video/41516942" width="640" height="360" frameborder="0" allowfullscreen></iframe>
+
+
 
 
 ## What you Need for this Lesson
