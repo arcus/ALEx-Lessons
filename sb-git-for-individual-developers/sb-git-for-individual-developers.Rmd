@@ -70,7 +70,11 @@ question("Check all of these that you have NOT done in `git`:",
 )
 ```
 
-Warning: This is a very spare lesson, as lessons go. We'll tell you how to do things properly, but we're not going to tell you everything you can do---until later. Here you will learn how to type `git commit -m"my log message here."`. There, you will learn this:
+Warning: This is a very spare lesson, as lessons go. We'll tell you how to do things properly, but we're not going to tell you everything you _can_ do---until later. 
+
+In this lesson, you will learn how to type `git commit -m "my log message here."` (among other git commands) and know what it means. 
+
+Later, you will learn all this:
 
 ```{r everything, echo = FALSE}
 knitr::include_graphics("www/everything.png", 
@@ -80,9 +84,9 @@ knitr::include_graphics("www/everything.png",
 
 ## Some Helpful Videos
 
-I like [these videos](https://git-scm.com/videos). They build on vocabulary you already know if you know nothing at all about `git`. 
+I like [these videos](https://git-scm.com/videos). They build on vocabulary you already know even if you know nothing at all about `git`. 
 
-In fact, I like them so much, I've put them here. Skip bits that are too slow for you if you need to, get a cup of tea to stay awake if you must, and follow along in your own terminal window if you can. 
+In fact, I like them so much, I've embedded them here. Skip bits that are too slow for you if you need to, get a cup of tea to stay awake if you must, and follow along in your own terminal window if you can. 
 
 There will be a quiz.
 
@@ -103,13 +107,11 @@ There will be a quiz.
 <iframe title="vimeo-player" src="https://player.vimeo.com/video/41516942" width="640" height="360" frameborder="0" allowfullscreen></iframe>
 
 
-
-
 ## What you Need for this Lesson
 
 1. An open terminal window like this one:  
 
-```{r github, echo = FALSE, fig.width = 3}
+```{r github, echo = FALSE, fig.width = 2}
 knitr::include_graphics("www/terminal.png", 
                           auto_pdf = getOption("knitr.graphics.auto_pdf", 
                                                 FALSE), dpi = NULL)
@@ -151,9 +153,9 @@ Now execute two `git` commands:
 1. `git init`    
 2. `git add .`
 
-The dot is a true dot, not a period at the end of a sentence. There is a space in front of it.
+The dot is a true dot, not a period at the end of a sentence. There is a space in front of it. When you see such a dot, say in your head "everything." So the add command would sound in your head like "`git`, add everything."
 
-Then see what's in the directory. Specifically, look for the directory `.git`. 
+Next, see what's in the directory. Specifically, look for the directory `.git`. 
 
 3. `ls` 
 4. `ls *.git`
@@ -164,7 +166,7 @@ knitr::include_graphics("www/gitinitgitadd.png",
                                                 FALSE), dpi = NULL)
 ```
 
-You're sitting in empty directory, right? `cd` into `.git` just to see if you can. 
+You're sitting in empty directory, right? `cd` into `.git`, which seems not to be there, just to see if you can. 
 
 ```{r finditanyway, echo = FALSE}
 knitr::include_graphics("www/finditanyway.png", 
@@ -202,7 +204,7 @@ knitr::include_graphics("www/goodadd.png",
                                                 FALSE), dpi = NULL)
 ```
 
-2. Type `git commit -m"Added the data file."`.
+2. Type `git commit -m"Added the data file."` (you can put a space between `-m` and the message if you like).
 
 ```{r commit, echo = FALSE}
 knitr::include_graphics("www/commit.png", 
@@ -210,7 +212,7 @@ knitr::include_graphics("www/commit.png",
                                                 FALSE), dpi = NULL)
 ```
 
-### Do it Wrong
+### Doing it Wrong
 
 This is what happens when you commit without first telling `git` that you have added things:
 
@@ -230,7 +232,7 @@ knitr::include_graphics("www/oops.png",
 
 That is one of the worst places to end up in all of coding: inside an editor with _no_ instructions on how to edit (only a demand that you do), _no_ instructions on how to leave, and a powerful sense that if you mess this up, you will hurt your repo.
 
-Just don't go there. Use `-m"your message here"`.
+Just don't go there. Use `git commit -m "your message here"` .
 
 ## `git checkout` and `git branch`: Switching Branches
 
