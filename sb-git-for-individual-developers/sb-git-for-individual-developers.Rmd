@@ -212,6 +212,8 @@ knitr::include_graphics("www/commit.png",
                                                 FALSE), dpi = NULL)
 ```
 
+You should fall gracefully to the next line without any error messages.
+
 ### Doing it Wrong
 
 This is what happens when you commit without first telling `git` that you have added things:
@@ -230,9 +232,9 @@ knitr::include_graphics("www/oops.png",
                                                 FALSE), dpi = NULL)
 ```
 
-That is one of the worst places to end up in all of coding: inside an editor with _no_ instructions on how to edit (only a demand that you do), _no_ instructions on how to leave, and a powerful sense that if you mess this up, you will hurt your repo.
+Inside an editor with _no_ instructions on how to edit anything (only a demand that you do), _no_ instructions on how to leave, and a powerful sense that if you mess this up, you will hurt your repo---this is one of the worst places to end up in all of coding.
 
-Just don't go there. Use `git commit -m "your message here"` .
+Just don't go there. Use `git commit -m "your message here"` to add a message without being shunted to the editor.
 
 ## `git checkout` and `git branch`: Switching Branches
 
