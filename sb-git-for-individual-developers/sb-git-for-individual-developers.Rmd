@@ -51,7 +51,7 @@ scores$subject <- factor(scores$subject)
 ## Is this lesson right for you?
 
 ```{r git-indiv-right-for-you, echo=FALSE}
-question("Check all of these that you have NOT done in `git`:",
+question("Check all of these that you have NOT done in Git:",
          answer("Made a new repository (repo)", message = "* `git init`: Make a New Repo"),
          answer("Used branching", message = "* `git checkout` and `git branch`: Switching Branches"),
          answer("Committed a repo and known what happened when you did it", message = "* `git commit`: Advance a Repo"),
@@ -64,8 +64,8 @@ question("Check all of these that you have NOT done in `git`:",
          answer("Marked a point in a repo", message = "* `git tag`: Marking a Point"),
          answer("None of the above. I've done them all.", correct = TRUE, message = "You can skip this tutorial, but remember that you can also use it as a reference."),
          type = "multiple",
-         correct = "You've already learned all you need to know to operate as an individual developer using `git`.",
-         incorrect = "On the left you can see the topics covered by this tutorial. Here are the ones you should visit to fill the gaps in your knowledge of using `git` as an individual developer:",
+         correct = "You've already learned all you need to know to operate as an individual developer using Git.",
+         incorrect = "On the left you can see the topics covered by this tutorial. Here are the ones you should visit to fill the gaps in your knowledge of using Git as an individual developer:",
          allow_retry = TRUE
 )
 ```
@@ -82,47 +82,40 @@ knitr::include_graphics("www/everything.png",
                                                 FALSE), dpi = NULL)
 ```
 
-## Some Helpful Videos
+## Install Git
 
-I like [these videos](https://git-scm.com/videos) about `git`. They build on vocabulary you already know even if you know nothing at all about `git`. 
+You need Git so you can use it at the command line and so RStudio can call it.
 
-In fact, I like them so much, I've embedded the relevant ones in this lesson where they are most useful. Skip bits that are too slow if you need to, get a cup of tea to stay awake if you must, and follow along in your own [terminal window](https://askubuntu.com/questions/38162/what-is-a-terminal-and-how-do-i-open-and-use-it) if you can. 
+### Is it already, miraculously, installed on your system?
 
-There will be a quiz.
+If there’s any chance it’s installed already, verify that, rejoice, and skip the rest of the "Install Git" section.
 
-### What is Version Control?
-
-<iframe title="vimeo-player" src="https://player.vimeo.com/video/41027679" width="640" height="360" frameborder="0" allowfullscreen></iframe>
-
-### What is `git`?
-
-<iframe title="vimeo-player" src="https://player.vimeo.com/video/41381741" width="640" height="360" frameborder="0" allowfullscreen></iframe>
-
-```{r advantagesofgit, echo=FALSE}
-question("What are three advantages of using `git`?",
-         answer("It is fast", correct = TRUE),
-         answer("It provides a history of content changes", correct = TRUE),
-         answer("It provides a history of content changes even when multiple people are making these changes and even when they are doing so to the same file.", correct = TRUE),
-         answer("It automatically links you to [GitHub](https://github.com).", message = "You have to tell `git` to link you to GitHub. We'll get to that in another lesson."),
-     correct = "You got that right!",
-     incorrect = "Not quite.",
-     random_answer_order = TRUE,
-     allow_retry = TRUE
-)
+```{r checkgitinstalled, echo = FALSE}
+knitr::include_graphics("www/checkgitinstalled.png", 
+                          auto_pdf = getOption("knitr.graphics.auto_pdf", 
+                                                FALSE), dpi = NULL)
 ```
 
-### Early Steps with a `git` Repo
+If, instead, you see something more like `git: command not found`, keep reading.
 
-<iframe title="vimeo-player" src="https://player.vimeo.com/video/41493906" width="640" height="360" frameborder="0" allowfullscreen></iframe>
+macOS users might get an immediate offer to install command line developer tools. Yes, you should accept! Click `Install` and carry on.
 
-### The Benefits of `git`
+### Windows Users
 
-<iframe title="vimeo-player" src="https://player.vimeo.com/video/41516942" width="640" height="360" frameborder="0" allowfullscreen></iframe>
+Option 1 (highly recommended): Install [Git for Windows](https://git-for-windows.github.io/), also known as `msysgit` or “Git Bash”, to get Git in addition to some other useful tools, such as the Bash shell. Yes, all those names are totally confusing, but you might encounter them elsewhere and we want you to be well informed.
 
+We like this because Git for Windows leaves the Git executable in a conventional location, which will help you and other programs, e.g. RStudio, find it and use it. This also supports a transition to more expert use, because the “Git Bash” shell will be useful as you venture outside of R within RStudio.
+
+>NOTE: When asked about “Adjusting your PATH environment”, make sure to select “Git from the command line and also from 3rd-party software”. Otherwise, we believe it is good to accept the defaults.
+Note that RStudio for Windows prefers for Git to be installed below C:/Program Files and this appears to be the default. This implies, for example, that the Git executable on my Windows system is found at C:/Program Files/Git/bin/git.exe. Unless you have specific reasons to otherwise, follow this convention.
+
+This also leaves you with a Git client, though not a very good one. So check out [Git clients we recommend](https://happygitwithr.com/git-client.html#git-client).
+
+FYI, this appears to be equivalent to what you would download from here: https://git-scm.com/download/.
 
 ## What you Need for this Lesson
 
-1. An open [terminal window](https://askubuntu.com/questions/38162/what-is-a-terminal-and-how-do-i-open-and-use-it) like this one:  
+1. An open [shell (a.k.a. "terminal")](https://askubuntu.com/questions/38162/what-is-a-terminal-and-how-do-i-open-and-use-it) like this one:  
 
 ```{r github, echo = FALSE, fig.width = 2}
 knitr::include_graphics("www/terminal.png", 
@@ -140,20 +133,20 @@ scores
 ```
 
 
-We'll use your terminal window and the data to work through some `git` basics.
+We'll use your shell and the data to work through some Git basics.
 
 
-## `git init` and `git add`: Make a New Repoo and Put Something in It
+## `git init`: Make a New Repo and Put Something in It
 
-1. Place yourself in a directory where you can create another directory that you'll make into a `git` "repository" or, as many people say, "repo." I like to put all my repos in the folder `GitHub`, which resides in `Documents` on my computer. 
+1. Place yourself in a directory where you can create another directory that you'll make into a Git "repository" or, as many people say, "repo." I like to put all my repos in the folder `GitHub`, which resides in `Documents` on my computer. 
 
-```{r myterminal, echo = FALSE}
+```{r myshell, echo = FALSE}
 knitr::include_graphics("www/github.png", 
                           auto_pdf = getOption("knitr.graphics.auto_pdf", 
                                                 FALSE), dpi = NULL)
 ```
 
-From your terminal window, create a directory called `scores` and navigate into it. It should be empty.
+From your shell, create a directory called `scores` and navigate into it. It should be empty.
 
 ```{r mkdir, echo = FALSE}
 knitr::include_graphics("www/mkdir.png", 
@@ -161,7 +154,7 @@ knitr::include_graphics("www/mkdir.png",
                                                 FALSE), dpi = NULL)
 ```
 
-Now execute this `git` command:
+Now execute this Git command:
 
 1. `git init`    
 
@@ -192,13 +185,17 @@ Now let's go back into RStudio. Save `scores` as "scores.csv" in your lovely new
 
 Now you have a repo that has something in it. Well done. 
 
-I have a really cool terminal setup called [iTerm2](https://iterm2.com). The prompt changes to include not only my directory's name, but also the fact that I'm in a `git` repo, which branch of the repo I'm currently using (the `master` branch---and more about branches later), and whether or not I have uncommitted material in the repo (see the ex?).  
+I have a really cool shell setup called [iTerm2](https://iterm2.com). The prompt changes to include not only my directory's name, but also the fact that I'm in a Git repo, which branch of the repo I'm currently using (the `master` branch---and more about branches later), and whether or not I have uncommitted material in the repo (see the ex?).  
 
 ```{r iTerm2, echo = FALSE}
 knitr::include_graphics("www/iTerm2.png", 
                           auto_pdf = getOption("knitr.graphics.auto_pdf", 
                                                 FALSE), dpi = NA)
 ```
+
+## `git add`: Managing the Index File
+
+Sorry, this section isn't ready yet. Check back soon because I'm currently working on this lesson. I will add to it every day until it is done.
 
 ## `git commit`: Advance a Repo
 
@@ -208,7 +205,7 @@ The `git commit` command records changes to the repo.
 
 Let's try it. Follow these steps:
 
-1. Tell `git` that there is new stuff in the repo by typing `git add .` The dot following `git add` is a true dot, not a period at the end of a sentence. There is a space in front of it (intentionally left blank). When you see such a dot, say in your head, "everything." So the `add` command would sound in your head like "`git`, add everything." Git knows that you want to include all the files in this directory (all one of them) to your repo. 
+1. Tell Git that there is new stuff in the repo by typing `git add .` The dot following `git add` is a true dot, not a period at the end of a sentence. There is a space in front of it (intentionally left blank). When you see such a dot, say in your head, "everything." So the `add` command would sound in your head like "Git, add everything." Git knows that you want to include all the files in this directory (all one of them) to your repo. 
 
 ```{r goodadd, echo = FALSE}
 knitr::include_graphics("www/goodadd.png", 
@@ -226,9 +223,9 @@ knitr::include_graphics("www/commit.png",
 
 You should fall gracefully to the next command line, with new information provided to you along the way, but without any error messages.
 
-### Doing it Wrong
+### Do it Wrong
 
-This is what happens when you commit without first telling `git` that you have added things:
+This is what happens when you commit without first telling Git that you have added things:
 
 ```{r forgotadd, echo = FALSE}
 knitr::include_graphics("www/forgotadd.png", 
@@ -244,7 +241,7 @@ knitr::include_graphics("www/oops.png",
                                                 FALSE), dpi = NULL)
 ```
 
-Inside an editor with _no_ instructions on how to edit anything (only a demand that you do), _no_ instructions on how to leave, and a powerful sense that if you mess this up, you will hurt your repo---this is one of the worst places to end up in all of coding.
+Inside an editor with _no_ instructions on how to edit anything (only a demand that you do), _no_ instructions on how to leave, and a powerful sense that if you mess this up, you will hurt your repo: this is one of the worst places to end up in all of coding.
 
 Just don't go there. Use `git commit -m "your message here"` to add a message without being shunted to the editor.
 
@@ -256,9 +253,6 @@ Sorry, this section isn't ready yet. Check back soon because I'm currently worki
 
 Sorry, this section isn't ready yet. Check back soon because I'm currently working on this lesson. I will add to it every day until it is done.
 
-## `git add`: Managing the Index File
-
-Sorry, this section isn't ready yet. Check back soon because I'm currently working on this lesson. I will add to it every day until it is done.
 
 ## What's in the log? 
 
@@ -280,6 +274,53 @@ Sorry, this section isn't ready yet. Check back soon because I'm currently worki
 
 Sorry, this section isn't ready yet. Check back soon because I'm currently working on this lesson. I will add to it every day until it is done.
 
+## Some Helpful Videos
+
+I like [these videos](https://git-scm.com/videos) about Git. They build on vocabulary you already know even if you know nothing at all about Git. 
+
+In fact, I like them so much, I've embedded the relevant ones in this lesson where they are most useful. Skip bits that are too slow if you need to, get a cup of tea to stay awake if you must, and follow along in your own [shell](https://happygitwithr.com/shell.html#shell) if you can. 
+
+There will be a quiz.
+
+### What is Version Control?
+
+<iframe title="vimeo-player" src="https://player.vimeo.com/video/41027679" width="640" height="360" frameborder="0" allowfullscreen></iframe>
+
+### What is Git?
+
+<iframe title="vimeo-player" src="https://player.vimeo.com/video/41381741" width="640" height="360" frameborder="0" allowfullscreen></iframe>
+
+```{r advantagesofgit, echo=FALSE}
+question("What are three advantages of using Git?",
+         answer("It is fast", correct = TRUE),
+         answer("It provides a history of content changes", correct = TRUE),
+         answer("It provides a history of content changes even when multiple people are making these changes and even when they are doing so to the same file.", correct = TRUE),
+         answer("It automatically links you to [GitHub](https://github.com).", message = "You have to tell Git to link you to GitHub. We'll get to that in another lesson."),
+     correct = "You got that right!",
+     incorrect = "Not quite.",
+     random_answer_order = TRUE,
+     allow_retry = TRUE
+)
+```
+
+### Early Steps with a Git Repo
+
+<iframe title="vimeo-player" src="https://player.vimeo.com/video/41493906" width="640" height="360" frameborder="0" allowfullscreen></iframe>
+
+### The Benefits of Git
+
+<iframe title="vimeo-player" src="https://player.vimeo.com/video/41516942" width="640" height="360" frameborder="0" allowfullscreen></iframe>
+
 ## References
 
+Main author and content wrangler: Sheila Braun ([CHOP](http://www.chop.edu)). 
 
+Portions of this lesson were based on [Happy Git and GitHub for the useR](https://happygitwithr.com/), which was the work of [Jenny Bryan](http://www.jennybryan.org), Software Engineer at [RStudio](https://www.rstudio.com/) on the [tidyverse](https://www.tidyverse.org/)/[r-lib](https://github.com/r-lib/) team. 
+
+The development and delivery of [Happy Git and GitHub for the useR](https://happygitwithr.com/) also benefited greatly from contributions by
+
+* [Dean Attali](http://www.deanattali.com), Shiny consultant and [STAT 545 TA](http://stat545.com/) alum    
+* Bernhard Konrad, Software Engineer at Google and [STAT 545](http://stat545.com/) TA alum    
+* [Shaun Jackman](http://sjackman.ca/), Bioinformatics Ph.D. student at UBC, lead maintainer of [Linuxbrew](http://linuxbrew.sh/), and [STAT 545](http://stat545.com/) TA alum    
+* [Jim Hester](https://www.jimhester.com/), Software Engineer at [RStudio](https://www.rstudio.com/) on the [tidyverse](https://www.tidyverse.org/)/[r-lib](https://github.com/r-lib/) team    
+* A growing number of [GitHub contributors](https://github.com/jennybc/happy-git-with-r/graphs/contributors)    
