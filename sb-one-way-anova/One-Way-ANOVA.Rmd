@@ -1211,7 +1211,7 @@ str(power_results)
 
 ```{r what-is-the-var-name, echo=FALSE}
 question("What is the variable name for the significance level you set in the previous exercise?",
-         answer("`sig_level`", correct = TRUE),
+         answer("`sig.level`", correct = TRUE),
          answer("`pwr_results$sig.level`"),
          answer("`sig`"),
          answer("`alpha`"),
