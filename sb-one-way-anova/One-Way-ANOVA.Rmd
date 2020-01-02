@@ -1012,12 +1012,12 @@ question("Which differences have _p_ < .05?",
 
 If the data show a lot of heteroscedasticity (different groups have different standard
 deviations), the one-way ANOVA can yield an inaccurate _p_ value; the probability of a false
-positive may be much higher than 5%. In that case, you could use Welch’s ANOVA. If, in addition, the different groups have different _n_s, you _should_ use a Welch's ANOVA instead of a one-way.  
+positive may be much higher than 5%. In that case, you could use Welch’s ANOVA. If, in addition, the different groups have different _n_s, you _should_ use a [Welch's ANOVA](https://reslnarcusedu01.research.chop.edu/sb-one-way-anova/#section-welchs-anova) instead of a one-way.  
 
 ```{r when-to-use-welches, echo=FALSE}
 question("Under what conditions should you use a Welch's ANOVA instead of a classic one-way ANOVA?",
          answer("When different groups have different standard deviations (i.e., the data is heteroscedastic)", correct = TRUE),
-         answer("When different groups have different _n_s", correct = TRUE),
+         answer("When different groups have different _n_'s", correct = TRUE),
          answer("Whenever the probability of a false positive is greater than 5%"),
          answer("When you have a small data set with homoscedastic data"),
          random_answer_order = TRUE,
@@ -1084,6 +1084,19 @@ may be based on a pilot experiment or published literature on similar experiment
 If you’re mainly interested in the comparisons of means, there are other ways of
 expressing the effect size. Your effect could be a difference between the smallest and
 largest means, for example, that you would want to be significant according to a Tukey-Kramer test (see [You found something interesting! Now what?](../sb-one-way-anova/#section-you-found-something-interesting-now-what) earlier in this lesson).
+
+```{r whyispoweranalysistricky, echo=FALSE}
+question("Why is doing a power analysis for a one-way ANOVA a bit tricky?",
+         answer("because you need to decide what effect size matters in your analysis", correct = TRUE),
+         answer("because a tiny effect size in one experiment may be important whereas in another experiment, even a very large effect size might be unimportant", correct = TRUE),
+         answer("becausse statistics is always tricky", message = "Courage! You can do this."),
+         answer("because you can define effect size in different ways", correct = TRUE),
+      correct = "Excellent! You got it.",
+      incorrect = "No.",
+      random_answer_order = TRUE,
+      allow_retry = TRUE
+)
+```
 
 As an example, let’s say you’re studying transcript amount of some gene in these groups:
 
