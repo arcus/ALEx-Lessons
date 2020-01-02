@@ -84,9 +84,9 @@ knitr::include_graphics("www/everything.png",
 
 ## Some Helpful Videos
 
-I like [these videos](https://git-scm.com/videos). They build on vocabulary you already know even if you know nothing at all about `git`. 
+I like [these videos](https://git-scm.com/videos) about `git`. They build on vocabulary you already know even if you know nothing at all about `git`. 
 
-In fact, I like them so much, I've embedded them here. Skip bits that are too slow for you if you need to, get a cup of tea to stay awake if you must, and follow along in your own terminal window if you can. 
+In fact, I like them so much, I've embedded the relevant ones in this lesson where they are most useful. Skip bits that are too slow if you need to, get a cup of tea to stay awake if you must, and follow along in your own [terminal window](https://askubuntu.com/questions/38162/what-is-a-terminal-and-how-do-i-open-and-use-it) if you can. 
 
 There will be a quiz.
 
@@ -97,6 +97,19 @@ There will be a quiz.
 ### What is `git`?
 
 <iframe title="vimeo-player" src="https://player.vimeo.com/video/41381741" width="640" height="360" frameborder="0" allowfullscreen></iframe>
+
+```{r advantagesofgit, echo=FALSE}
+question("What are three advantages of using `git`?",
+         answer("It is fast", correct = TRUE),
+         answer("It provides a history of content changes", correct = TRUE),
+         answer("It provides a history of content changes even when multiple people are making these changes and even when they are doing so to the same file.", correct = TRUE),
+         answer("It automatically links you to [GitHub](https://github.com).", message = "You have to tell `git` to link you to GitHub. We'll get to that in another lesson."),
+     correct = "You got that right!",
+     incorrect = "Not quite.",
+     random_answer_order = TRUE,
+     allow_retry = TRUE
+)
+```
 
 ### Early Steps with a `git` Repo
 
@@ -109,7 +122,7 @@ There will be a quiz.
 
 ## What you Need for this Lesson
 
-1. An open terminal window like this one:  
+1. An open [terminal window](https://askubuntu.com/questions/38162/what-is-a-terminal-and-how-do-i-open-and-use-it) like this one:  
 
 ```{r github, echo = FALSE, fig.width = 2}
 knitr::include_graphics("www/terminal.png", 

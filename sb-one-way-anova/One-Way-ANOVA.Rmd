@@ -709,7 +709,7 @@ question("Why might the Kruskal-Wallis test NOT be a good non-parametric substit
 
 A one-way ANOVA assumes that your data are homoscedastic, meaning the standard
 deviations are equal in the groups. You should examine the standard deviations in the
-different groups and see if there are big differences among them. Try that now with `mussels`. Use `sapply` to check the sd for each column of `mussels`. Remember that `sd` needs to know what to do with `NA`s. Wrap the whole function call in a call to `range`. 
+different groups and see if there are big differences among them. Try that now with `mussels`. Use `sapply` to check the standard deviation (SD) for each column of `mussels`. Remember that the function `sd` needs to know what to do with `NA`s. Wrap the whole function call in a call to `range`. 
 
 ```{r checksd, exercise = TRUE, exercise.lines = 5}
 
@@ -762,15 +762,13 @@ question("When is heteroscedasticity really, really bad for an ANOVA?",
 )
 ```
 
-Heteroscedasticity is a much bigger problem when you have an unbalanced design
-(unequal sample sizes in the groups). If the groups with smaller sample sizes also have
-larger standard deviations, you will get too many false positives. The difference in
-standard deviations does not have to be large; a smaller group could have a standard
+The difference in
+standard deviations between groups does not have to be large to create problems; a smaller group could have a standard
 deviation that’s 50% larger, and your rate of false positives could be above 10% instead of
 at 5% where it belongs. If the groups with larger sample sizes have larger standard
-deviations, the error is in the opposite direction; you get too few false positives, which
-might seem like a good thing except it also means you lose power (get too many false
-negatives, if there is a difference in means).
+deviations, the error is in the opposite direction; you get too _few_ false positives, which
+might seem like a good thing except it also means you lose power (get too many
+negatives even if there _is_ a difference in means).
 
 You should try really hard to have equal sample sizes in all of your groups. With a
 balanced design, you can safely use a one-way ANOVA unless the sample sizes per group
@@ -870,7 +868,7 @@ question("Which of these numbers do you include when you report the results of a
 )
 ```
 
-Take note of the fact that 11 observations were deleted due to missingness. The levels do not all have the same number of values in them. Is this a problem? Perhaps. We'll talk more about that later.
+Take note of the fact that 11 observations were deleted due to missingness. The levels do not all have the same number of values in them. Is this a problem? Perhaps. You can review this question in the section [ANOVA Assumptions and how to Check Them](https://reslnarcusedu01.research.chop.edu/sb-one-way-anova/#section-anova-assumptions-and-how-to-check-them).
 
 Just for fun, run `aov` and allow the results to print without first storing them in `fit` and using `summary` to format them.
 
@@ -890,7 +888,7 @@ library(stats)
 aov(aam ~ location, data = long_mussels)
 ```
 
-This provides less information than when we summarized fit! That's why people usually do summarize the fit. 
+This provides less information than when we summarized `fit`! That's why people usually do summarize whatever fit they get from `lm` or `aov`. 
 
 ```{r two-ways-to-summarize-fit, echo=FALSE}
 question("Which lines of code result in a summary of the fit for an ANOVA?",
