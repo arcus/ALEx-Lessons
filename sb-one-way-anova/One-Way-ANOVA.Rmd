@@ -1116,7 +1116,7 @@ Based on previous research, you decide that you’d like the ANOVA to be signifi
 
 The standard deviation of transcript amount within a tissue type that you’ve seen in previous research is 12 units. 
 
-We have supplied two vectors for the analysis: `group_means`, the means for each group, from which we can derive the between-groups variance, and `experiment_var`, the overall variance for the experiment, or the within-groups variance. See what each vector contains in this next code box.
+We have supplied two vectors for the power analysis: `group_means`, the means for each group, from which we can derive the between-groups variance, and `experiment_var`, the overall variance for the experiment, or the within-groups variance. See what each vector contains in this next code box.
 
 ```{r see_vars, exercise = TRUE, exercise.lines = 5}
 
@@ -1160,7 +1160,7 @@ question("Which _p_ value is recommended by Daniel J. Benjamin and James O. Berg
 )
 ```
 
-Benjamin and Berger said
+Benjamin and Berger wrote
 
 >In statistical practice, perhaps the single biggest problem with p-values is that they are often misinterpreted in ways that lead to overstating the evidence against the null hypothesis.
 
@@ -1170,7 +1170,7 @@ Perform an analysis with the `power.anova.test` function from the `stats` packag
 
 Store the results of `power.anova.test` in `pwr_results` and surround the entire statement with parentheses so you can see the results as they are stored in the variable. On the next line, type `str(pwr_results)` so you can see the structure of the results and the variable names you can use to access them. 
 
-```{r poweranova, exercise = TRUE, exercise.lines = 5}
+```{r poweranova, exercise = TRUE, exercise.lines = 15}
 
 ```
 ```{r poweranova-hint-1}
