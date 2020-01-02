@@ -1232,7 +1232,7 @@ Now you can make the call to `pwr.anova.test`. Pass it `k` set equal to 5, `f` s
 
 Run this code and look at the results. 
 
-```{r pwr_anova_test, exercise = TRUE, exercise.lines = 5}
+```{r pwr_anova_test, exercise = TRUE, exercise.lines = 15}
 
 ```
 ```{r pwr_anova_test-hint-1}
