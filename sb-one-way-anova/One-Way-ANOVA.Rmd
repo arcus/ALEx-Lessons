@@ -971,7 +971,7 @@ TukeyHSD(fit)
 ```
 
 ```{r how-to-interpret-tukey, echo=FALSE}
-question("How do you interpret `Newport-Magadan      -0.004514` (which should be in your `TukeyHSD` output`",
+question("How do you interpret `Newport-Magadan      -0.004514` (which should be in your `TukeyHSD` output)",
          answer("The _p_ value is a negative number."),
          answer("The confidence interval contains 0."),
          answer("If you subtract Magadan's mean from Newport's, you would get -0.004514.", correct = TRUE),
