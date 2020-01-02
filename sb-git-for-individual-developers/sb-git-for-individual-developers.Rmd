@@ -143,7 +143,7 @@ scores
 We'll use your terminal window and the data to work through some `git` basics.
 
 
-## `git init`: Make a New Repoo
+## `git init` and `git add`: Make a New Repoo and Put Something in It
 
 1. Place yourself in a directory where you can create another directory that you'll make into a `git` "repository" or, as many people say, "repo." I like to put all my repos in the folder `GitHub`, which resides in `Documents` on my computer. 
 
@@ -161,17 +161,16 @@ knitr::include_graphics("www/mkdir.png",
                                                 FALSE), dpi = NULL)
 ```
 
-Now execute two `git` commands:
+Now execute this `git` command:
 
 1. `git init`    
-2. `git add .`
 
-The dot is a true dot, not a period at the end of a sentence. There is a space in front of it. When you see such a dot, say in your head "everything." So the add command would sound in your head like "`git`, add everything."
+NOTE: You can also create a directory while initializing it by sitting in the parent directory of your as-yet-unmade one and typing `git init my_new_directory`. 
 
 Next, see what's in the directory. Specifically, look for the directory `.git`. 
 
-3. `ls` 
-4. `ls *.git`
+2. `ls` 
+3. `ls *.git`
 
 ```{r gitinitgitadd, echo = FALSE}
 knitr::include_graphics("www/gitinitgitadd.png", 
@@ -209,7 +208,7 @@ The `git commit` command records changes to the repo.
 
 Let's try it. Follow these steps:
 
-1. Tell `git` that there is new stuff in the repo by typing `git add .` as you did before.
+1. Tell `git` that there is new stuff in the repo by typing `git add .` The dot following `git add` is a true dot, not a period at the end of a sentence. There is a space in front of it (intentionally left blank). When you see such a dot, say in your head, "everything." So the `add` command would sound in your head like "`git`, add everything." Git knows that you want to include all the files in this directory (all one of them) to your repo. 
 
 ```{r goodadd, echo = FALSE}
 knitr::include_graphics("www/goodadd.png", 
@@ -225,7 +224,7 @@ knitr::include_graphics("www/commit.png",
                                                 FALSE), dpi = NULL)
 ```
 
-You should fall gracefully to the next line without any error messages.
+You should fall gracefully to the next command line, with new information provided to you along the way, but without any error messages.
 
 ### Doing it Wrong
 
