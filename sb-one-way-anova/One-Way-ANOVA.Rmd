@@ -907,7 +907,7 @@ question("Which lines of code result in a summary of the fit for an ANOVA?",
  
 If the analysis of variance indicates an interesting effect of the independent variable (here, `location`), you can conduct multiple comparisons _among_ the levels of this factor using Tukey-Kramer or Least Significant Difference (LSD) procedures. (The problem of inflating the Type I Error Rate when making multiple comparisons is discussed in the [Multiple Comparisons chapter](http://www.biostathandbook.com/multiplecomparisons.html) in John H. McDonald's [Handbook of Biological Statistics](http://www.biostathandbook.com/chigof.html))  
 
-R functions that make multiple comparisons usually allow for adjusting _p_ values. In R you can use the Benjamini–Hochberg (BH) or `fdr` procedure. See `?p.adjust` for more information.
+R functions that make multiple comparisons usually allow for adjusting _p_ values. In R, you can use the Benjamini–Hochberg (BH) or `fdr` procedure. See `?p.adjust` for more information.
 
 Let's take a quick look at one method for identifying _which_ pairs of means differ from each other. 
 
