@@ -78,7 +78,7 @@ question("Check all of these that you have NOT done in Git:",
 
 Warning: This is a spare lesson, as Git lessons go. We'll tell you how to do things properly, but we're not going to tell you everything you _can_ do---until later. 
 
-In this lesson, you will learn how to type things like `git commit -m "my log message here."` (among other git commands) and know what it means. 
+In this lesson, you will learn how to type things like `git commit -m "my log message here."` (among other Git commands) and know what it means. 
 
 Later, you will learn things like this:
 
@@ -87,6 +87,8 @@ knitr::include_graphics("www/everything.png",
                           auto_pdf = getOption("knitr.graphics.auto_pdf", 
                                                 FALSE), dpi = NULL)
 ```
+
+Prepare yourself. As Jenny Bryan (whom we quote assiduously within) wrote, "It's not you, it's Git."
 
 ## Install Git
 
@@ -106,16 +108,18 @@ If, instead, you see something more like `git: command not found`, keep reading.
 
 macOS users might get an immediate offer to install command line developer tools. Yes, you should accept! Click `Install` and carry on.
 
-Windows Users Option 1 (highly recommended): Install [Git for Windows](https://git-for-windows.github.io/), also known as `msysgit` or “Git Bash”, to get Git in addition to some other useful tools, such as the Bash shell. Yes, all those names are totally confusing, but you might encounter them elsewhere and we want you to be well informed.
+Windows Users (highly recommended): Install [Git for Windows](https://git-for-windows.github.io/), also known as `msysgit` or “Git Bash”, to get Git in addition to some other useful tools, such as the Bash shell. Yes, all those names are totally confusing, but you might encounter them elsewhere and we want you to be well informed.
 
 We like this because Git for Windows leaves the Git executable in a conventional location, which will help you and other programs, e.g. RStudio, find it and use it. This also supports a transition to more expert use, because the “Git Bash” shell will be useful as you venture outside of R within RStudio.
 
 NOTE: When asked about “Adjusting your PATH environment”, make sure to select “Git from the command line and also from 3rd-party software”. Otherwise, we believe it is good to accept the defaults.
 Note also that RStudio for Windows prefers for Git to be installed below C:/Program Files and this appears to be the default. This implies, for example, that the Git executable on my Windows system is found at C:/Program Files/Git/bin/git.exe. Unless you have specific reasons to otherwise, follow this convention.
 
-This also leaves you with a Git client, though not a very good one. So check out [Git clients we recommend](https://happygitwithr.com/git-client.html#git-client).
+Installing this way also leaves you with a Git client, though not a very good one. So check out [Git clients we recommend](https://happygitwithr.com/git-client.html#git-client).
 
 FYI, this appears to be equivalent to what you would download from here: https://git-scm.com/download/.
+
+If you were not able to download and install Git, I highly recommend following [Jenny Bryan's instructions](https://happygitwithr.com/index.html). They are simple and clear---and in that, they are highly unusual. 
 
 ## What you Need for this Lesson
 
@@ -447,7 +451,7 @@ knitr::include_graphics("www/git-merge.png",
                                                 FALSE), dpi = NULL)
 ```
 
-If I wasn't up to date, git would have opened a file for me to save a comment about the merge. When that happens, you can add a note and save the file, thus completing the merge. The result, from `git log`, is this:
+If I wasn't up to date, Git would have opened a file for me to save a comment about the merge. When that happens, you can add a note and save the file, thus completing the merge. The result, from `git log`, is this:
 
 ```{r git-log-of-merge, echo = FALSE}
 knitr::include_graphics("www/git-log-of-merge.png", 
