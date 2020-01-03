@@ -385,7 +385,7 @@ And there you are, back to the _exact_ state you were in before you had to rush 
 
 ## `git log`: What Have I Done?
 
-So you just inherited this project from someone else and you were told to roll back a feature. How do you figure out when it was introduced and how you might (later) go back to it?
+So you just inherited this project from someone else and you were told to roll back a feature. How do you figure out when it was introduced and how you might (later) go back to before that?
 
 `git log`:
 
@@ -395,9 +395,11 @@ knitr::include_graphics("www/oursimplelog.png",
                                                 FALSE), dpi = NULL)
 ```
 
-This log says that we committed once on Christmas Eve 2019 a little past 4 in the afternoon eastern time and that we said the commit "added the data file." 
+You might have to press `ctrl-z` to get back to the command line.
 
-Some logs are very complicated. For complex projects you probably want to install a Git client such as those listed [here](https://happygitwithr.com/git-client.html). Most of them keep the log available to you at all times as a sort of map, like this (scroll right to see all of it):
+This log says that we committed once on Christmas Eve 2019 at 8 past 4 in the afternoon eastern time and that we said the commit "added the data file." 
+
+Some logs are complicated. For complex projects you probably want to install a Git client such as those listed [here](https://happygitwithr.com/git-client.html). Most of them keep the log available to you at all times as a sort of map, like this (scroll right to see all of it):
 
 ```{r pretty-git-kraken, echo = FALSE}
 knitr::include_graphics("www/pretty-git-kraken.png", 
@@ -407,8 +409,21 @@ knitr::include_graphics("www/pretty-git-kraken.png",
 
 ## `git diff` and `git status`: Seeing what you're Doing
 
+`git diff` shows you what changed, thus:
 
+```{r git-diff, echo = FALSE}
+knitr::include_graphics("www/git-diff.png", 
+                          auto_pdf = getOption("knitr.graphics.auto_pdf", 
+                                                FALSE), dpi = NULL)
+```
 
+Consider version A of a file and a modified version, version B. Assume that version A was part of one Git commit and version B was part of the next commit. **The set of differences between A and B is called a “diff”**. 
+
+Git users contemplate diffs a lot. Diff inspection is how you re-explain to yourself how version A differs from version B. Diff inspection is not limited to adjacent commits. You can inspect the diffs between any two commits.
+
+In fact, Git’s notion of any specific version of a document, code, or data asset is as an accumulation of diffs. If you go back far enough, you find the commit where the file was created in the first place. Every later version is stored by Git as that initial version, plus all the intervening diffs in the history that affect the file.
+
+Here is an example of a diff from this project (the one where I wrote this. Yes, this.)
 
 ## Merging Local Branches
 
