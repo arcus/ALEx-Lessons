@@ -50,6 +50,12 @@ scores$subject <- factor(scores$subject)
 
 ## Is this lesson right for you?
 
+```{r imgs.xkcd, echo = FALSE}
+knitr::include_graphics("https://imgs.xkcd.com/comics/git.png", 
+                          auto_pdf = getOption("knitr.graphics.auto_pdf", 
+                                                FALSE), dpi = NULL)
+```
+
 ```{r git-indiv-right-for-you, echo=FALSE}
 question("Check all of these that you have NOT done in Git:",
          answer("Made a new repository (repo)", message = "* `git init`: Make a New Repo"),
@@ -57,7 +63,7 @@ question("Check all of these that you have NOT done in Git:",
          answer("Committed a repo and known what happened when you did it", message = "* `git commit`: Advance a Repo"),
          answer("Checked out a repo", message = "* `git reset` and `git checkout`: Undoing Changes"),
          answer("Added files preparatory to making a `commit`", message = "* `git add`: Telling Git What to Commit"),
-         answer("Read a repo's log", message = "* What's in the log?"),
+         answer("Read a repo's log", message = "* `git log`: What Have I Done?"),
          answer("Tracked what you were doing", message = "* `git diff` and `git status`: Seeing what you're Doing"),
          answer("Merged two branches`", message = "* Merging Local Branches"),
          answer("Managed a 'topic branch'", "* `git rebase`: Maintaining Topic Branches"),
@@ -377,13 +383,32 @@ knitr::include_graphics("www/git-reset-head.png",
 
 And there you are, back to the _exact_ state you were in before you had to rush off and do something on another branch. 
 
-## What's in the log? 
+## `git log`: What Have I Done?
 
-Sorry, this section isn't ready yet. Check back soon because I'm currently working on this lesson. I will add to it every day until it is done.
+So you just inherited this project from someone else and you were told to roll back a feature. How do you figure out when it was introduced and how you might (later) go back to it?
+
+`git log`:
+
+```{r oursimplelog, echo = FALSE}
+knitr::include_graphics("www/oursimplelog.png", 
+                          auto_pdf = getOption("knitr.graphics.auto_pdf", 
+                                                FALSE), dpi = NULL)
+```
+
+This log says that we committed once on Christmas Eve 2019 a little past 4 in the afternoon eastern time and that we said the commit "added the data file." 
+
+Some logs are very complicated. For complex projects you probably want to install a Git client such as those listed [here](https://happygitwithr.com/git-client.html). Most of them keep the log available to you at all times as a sort of map, like this (scroll right to see all of it):
+
+```{r pretty-git-kraken, echo = FALSE}
+knitr::include_graphics("www/pretty-git-kraken.png", 
+                          auto_pdf = getOption("knitr.graphics.auto_pdf", 
+                                                FALSE), dpi = NULL)
+```
 
 ## `git diff` and `git status`: Seeing what you're Doing
 
-Sorry, this section isn't ready yet. Check back soon because I'm currently working on this lesson. I will add to it every day until it is done.
+
+
 
 ## Merging Local Branches
 
