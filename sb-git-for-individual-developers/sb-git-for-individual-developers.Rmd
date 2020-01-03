@@ -56,7 +56,7 @@ question("Check all of these that you have NOT done in Git:",
          answer("Used branching", message = "* `git checkout` and `git branch`: Switching Branches"),
          answer("Committed a repo and known what happened when you did it", message = "* `git commit`: Advance a Repo"),
          answer("Checked out a repo", message = "* `git reset` and `git checkout`: Undoing Changes"),
-         answer("Managed an index file", message = "* `git add`: Managing the Index File"),
+         answer("Added files preparatory to making a `commit`", message = "* `git add`: Telling Git What to Commit"),
          answer("Read a repo's log", message = "* What's in the log?"),
          answer("Tracked what you were doing", message = "* `git diff` and `git status`: Seeing what you're Doing"),
          answer("Merged two branches`", message = "* Merging Local Branches"),
@@ -253,19 +253,23 @@ Inside an editor with _no_ instructions on how to edit anything (only a demand t
 
 Just don't go there. Use `git commit -m "your message here"` to add a message without being shunted to the editor.
 
-## `git checkout` and `git branch`: Switching Branches
+## `git branch` and `git checkout`: Switching Branches
 
 "What's a branch?" You say.
 
 It's a mysterious concept you're supposed to just git, say I. Ha.
 
-Many people have gotten this far and begun to collapse into confusion because terms like "branch" are used by kindly developers all over the internet with nary a definition in sight. It's why courses like this one are still necessary. 
+### Branching
 
-The problem is that the metaphors are all mixed up. A branch is actually about time, and we're supposed to view it as a sort of tree. We have told Git to keep track of things for us, and Git has obliged. It is creating a history of changes by taking little snapshots of whatever we tell it to add. If you lay those snapshots one above another, well, you get a sort of tree. Right? And you can create alternative histories, like one for your development phase and one for your release phase, and those alternative histories are called branches. 
+Many people have gotten this far and begun to collapse into confusion because terms like "branch" are used by kindly developers all over the internet with nary a definition in sight.
 
-Just go with it. 
+The problem is that the metaphors are all mixed up. A branch is actually about wood and trees and growing things, but here we must view it as being about the flow of time (yes, flowing branches). 
 
-Right now we have only one branch. Find it by typing `git show-branch`. Git will show you all the branches and the commits that have been applied to them. It might not surprise you to find out that our tree is extremely simple. Go ahead, try it. 
+We tell Git to keep track of things for us, and Git obliges by creating a history of our changes. It takes snapshots of whatever we tell it to `add` and `commit`. If you lay those snapshots one above another, consecutively, you get a sort of tree. Right? You aren't actually copying files anywhere; you are keeping track of how they have changed so you could, should you need to, reconstruct a prior version of the file stored further down on the branch. So don't think wood so much as geneology. Where all the parents are single. 
+
+Right now, we have only one branch. Find it by typing `git show-branch`. Git will show you all the branches and the commits that have been applied to them. 
+
+It might not surprise you to find out that our tree is extremely simple. Go ahead, try it. 
 
 ```{r gitshowbranch, echo = FALSE}
 knitr::include_graphics("www/gitshowbranch.png", 
@@ -273,7 +277,71 @@ knitr::include_graphics("www/gitshowbranch.png",
                                                 FALSE), dpi = NULL)
 ```
 
-See? One branch called "master" (to bring in _yet another_ metaphor), which has seen a single commit (remember doing that `git commit` just before you got here? That one). 
+See? One branch called "master" (to bring in _yet another_ metaphor), which has seen a single commit (remember doing that `git commit` just before you got to this section`? That one). 
+
+Here is what Jenny Bryan & Co. say about branches: "Branches afford explicit workflows for integrating different lines of work on your own terms. This is much nicer than trying to do a tricky merge or rebase in a frustrated panic, because you need to push your work to GitHub at the end of the day." In other words, if people make major changes on branches, the master branch can stay as it is until everyone is sure the changes are worth keeping. The branches are still tracking the history of files, but in a different place from where the master branch has it. You can put them all together at will. 
+
+```{r whatsabranch, echo=FALSE}
+question("What's a branch? Pick two.",
+         answer("It grows from trees.", correct = TRUE),
+         answer("It's a line of work, as tracked by Git, that doesn't mix with other lines of work unless you tell it to", correct = TRUE),
+         answer("It's a Git command that sends your changes to the remote file location."),
+         answer("It's a way of telling Git that you want to know what your files looked like yesterday."),
+     correct = "Well done.",
+     incorrect = "There are other commands, like `git pull` and `git diff`, that we haven't discussed yet.",
+     random_answer_order = TRUE,
+     allow_retry = TRUE
+)
+```
+
+According to Bryan et al., Branching means that you take a "detour" from the main "stream" of development (oh, the metaphors!) and do work without changing the main "stream". 
+
+```{r selecttruthaboutbranches, echo=FALSE}
+question("Which of the following are true about branching?",
+         answer("It allows one or many people to work in parallel without overwriting each other’s work.", correct = TRUE),
+         answer("It means lots of people on the same project can have their work under version control without having to merge everything together.", correct = TRUE),
+         answer("It exists to confuse us.", message = "It might seem that way, but no."),
+         answer("It means everyone on the project has agreed to keep what is on each branch.", message = "Actually, branching allows for the opposite of this."),
+     correct = "Cheers! You got it right.",
+     incorrect = "No.",
+     random_answer_order = TRUE,
+     allow_retry = TRUE
+)
+```
+
+Creating a branch and switching between branches is nearly instantaneous. Git's handling of branches encourages workflows in which you create small branches for exploration or for new features and  `merge` them back together quickly and accurately.
+
+"What does it mean to check something out in Git?" you say.
+
+One web resource said, "It is the process that works to checking out previous commits and files in which the current working folder is updated to get equality on a selected branch."
+
+>Huh?
+
+Let's try again. 
+
+"You use git checkout to switch between branches" (Jenny Bryan on [happygitwithr.com](http://happygitwithr.com)).
+
+Oooooh. Okay. Let's try it.
+
+You can create a new branch with `git branch`, then `checkout` the branch with `git checkout`. You can also use the shortcut 
+
+>`git checkout -b issue-5` 
+
+to create and `checkout` the branch all at once.
+
+But wait---what do you do if you are working on a branch and need to switch, but the work on the current branch is not complete? 
+
+One option is `git stash`, but generally, a better option is to safeguard the current state with a temporary `commit`. Here I use “WIP” as the commit message to indicate **w**ork **i**n **p**rogress.
+
+```{r small-commit, echo = FALSE}
+knitr::include_graphics("www/small-commit.png", 
+                          auto_pdf = getOption("knitr.graphics.auto_pdf", 
+                                                FALSE), dpi = NULL)
+```
+
+
+At this point, we're not worried about branches. You might decide to create one, but as an individual developer, you can also just continue working with the branch you have, the "master" branch. 
+
 
 ## `git reset` and `git checkout`: Undoing Changes
 
