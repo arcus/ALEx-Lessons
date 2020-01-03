@@ -100,9 +100,7 @@ If, instead, you see something more like `git: command not found`, keep reading.
 
 macOS users might get an immediate offer to install command line developer tools. Yes, you should accept! Click `Install` and carry on.
 
-### Windows Users
-
-Option 1 (highly recommended): Install [Git for Windows](https://git-for-windows.github.io/), also known as `msysgit` or “Git Bash”, to get Git in addition to some other useful tools, such as the Bash shell. Yes, all those names are totally confusing, but you might encounter them elsewhere and we want you to be well informed.
+Windows Users Option 1 (highly recommended): Install [Git for Windows](https://git-for-windows.github.io/), also known as `msysgit` or “Git Bash”, to get Git in addition to some other useful tools, such as the Bash shell. Yes, all those names are totally confusing, but you might encounter them elsewhere and we want you to be well informed.
 
 We like this because Git for Windows leaves the Git executable in a conventional location, which will help you and other programs, e.g. RStudio, find it and use it. This also supports a transition to more expert use, because the “Git Bash” shell will be useful as you venture outside of R within RStudio.
 
