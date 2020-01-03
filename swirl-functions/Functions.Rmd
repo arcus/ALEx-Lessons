@@ -154,17 +154,17 @@ Time to make a more useful function. We're going to replicate the functionality 
 
 You're free to implement the function `my_mean` however you want, as long as it returns the average of all of the numbers in `my_vector`. 
 
->Hint #1: sum() returns the sum of a vector.   
-	Ex: sum(c(1, 2, 3)) evaluates to 6
+>Hint #1: `sum()` returns the sum of a vector.   
+	Ex: `sum(c(1, 2, 3))` evaluates to 6
 
->Hint #2: length() returns the size of a vector.    
-	Ex: length(c(1, 2, 3)) evaluates to 3
+>Hint #2: `length()` returns the size of a vector.    
+	Ex: `length(c(1, 2, 3))` evaluates to 3
 
 >Hint #3: The mean of all the numbers in a vector is equal to the sum of all of the numbers in the vector divided by the size of the vector. 
 
 Once you've written your function, test out your `my_mean` function by finding the mean of the vector `c(4, 5, 10)`.
 
-```{r m, exercise=TRUE}
+```{r m, exercise=TRUE, , exercise.lines = 15}
 my_vector <- c(4, 5, 10)
 # Write your function here to find the mean of my_vector:
 
@@ -183,7 +183,7 @@ Next, let's try writing a function with default arguments. You can set default v
 
 Let me show you an example of a function I'm going to make up called `increment`. Most of the time I want to use this function to increase the value of a number by one. This function will take two arguments: `number` and `by`, where `number` is the digit I want to increment and `by` is the amount I want to increment `number` by. I've written the function below. 
 
-```{r n}
+```{r n, echo = TRUE}
 increment <- function(number, by = 1) {
       number + by
 }

@@ -31,7 +31,7 @@ tutorial_options(exercise.startover = TRUE,
   exercise.diagnostics = TRUE)
   
 
-########################### Setup for this lesson #######################################
+############################ Setup for this lesson #######################################
 # download Joy's scores data
 math <- read.csv("https://raw.githubusercontent.com/pm0kjp/datastore/master/fakeMath.csv")
 lang <- read.csv("https://raw.githubusercontent.com/pm0kjp/datastore/master/fakeLang.csv")
@@ -86,7 +86,7 @@ knitr::include_graphics("www/everything.png",
 
 You need Git so you can use it at the command line and so RStudio can call it.
 
-### Is it already, miraculously, installed on your system?
+#### Is it already, miraculously, installed on your system?
 
 If there’s any chance it’s installed already, verify that, rejoice, and skip the rest of the "Install Git" section.
 
@@ -209,7 +209,7 @@ Notice that my ex didn't go away. That's because there are changes in the direct
 
 The `git commit` command records changes to the repo. 
 
-### Do it Right
+#### Do it Right
 
 Let's try it. Follow these steps:
 
@@ -229,9 +229,9 @@ knitr::include_graphics("www/commit.png",
                                                 FALSE), dpi = NULL)
 ```
 
-You should fall gracefully to the next command line, with new information provided to you along the way, but without any error messages.
+You should fall gracefully to the next command line, with new information provided to you along the way, but without any error messages. And did you notice that my ex went away? That's because the local repo is up to date with the remote repo.
 
-### Do it Wrong
+#### Do it Wrong
 
 This is what happens when you commit without first telling Git that you have added things:
 
@@ -259,13 +259,13 @@ Just don't go there. Use `git commit -m "your message here"` to add a message wi
 
 It's a mysterious concept you're supposed to just git, say I. Ha.
 
-### Branching
+#### Branching
 
 Many people have gotten this far and begun to collapse into confusion because terms like "branch" are used by kindly developers all over the internet with nary a definition in sight.
 
 The problem is that the metaphors are all mixed up. A branch is actually about wood and trees and growing things, but here we must view it as being about the flow of time (yes, flowing branches). 
 
-We tell Git to keep track of things for us, and Git obliges by creating a history of our changes. It takes snapshots of whatever we tell it to `add` and `commit`. If you lay those snapshots one above another, consecutively, you get a sort of tree. Right? You aren't actually copying files anywhere; you are keeping track of how they have changed so you could, should you need to, reconstruct a prior version of the file stored further down on the branch. So don't think wood so much as geneology. Where all the parents are single. 
+We tell Git to keep track of things for us, and Git obliges by creating a history of our changes. It takes snapshots of whatever we tell it to `add` and `commit`. If you lay those snapshots one above another, consecutively, you get a sort of tree. Right? You aren't actually copying files anywhere; you are keeping track of how they have changed so you could, should you need to, reconstruct a prior version of the file stored further down on the branch. So don't think wood so much as geneology where all the parents are single. 
 
 Right now, we have only one branch. Find it by typing `git show-branch`. Git will show you all the branches and the commits that have been applied to them. 
 
@@ -277,9 +277,9 @@ knitr::include_graphics("www/gitshowbranch.png",
                                                 FALSE), dpi = NULL)
 ```
 
-See? One branch called "master" (to bring in _yet another_ metaphor), which has seen a single commit (remember doing that `git commit` just before you got to this section`? That one). 
+See? One branch called "master" (to bring in _yet another_ metaphor), which has seen a single commit (remember doing that `git commit` just before you got to this section? That commit). 
 
-Here is what Jenny Bryan & Co. say about branches: "Branches afford explicit workflows for integrating different lines of work on your own terms. This is much nicer than trying to do a tricky merge or rebase in a frustrated panic, because you need to push your work to GitHub at the end of the day." In other words, if people make major changes on branches, the master branch can stay as it is until everyone is sure the changes are worth keeping. The branches are still tracking the history of files, but in a different place from where the master branch has it. You can put them all together at will. 
+Here is what Jenny Bryan & Co. say about branches: "Branches afford explicit workflows for integrating different lines of work on your own terms. This is much nicer than trying to do a tricky merge or rebase in a frustrated panic, because you need to `push` your work to GitHub at the end of the day." We haven't encountered `push` yet, but in other words, if people make major changes on branches, the master branch can stay as it is until everyone is sure the changes on other branches are worth keeping. The branches still track the history of files, but in a different place from where the master branch has it. You can merge branches at will. Well, the person(s) who own(s) the parent branch (in our case, the master branch) can. But we'll get to that later.
 
 ```{r whatsabranch, echo=FALSE}
 question("What's a branch? Pick two.",
@@ -288,7 +288,7 @@ question("What's a branch? Pick two.",
          answer("It's a Git command that sends your changes to the remote file location."),
          answer("It's a way of telling Git that you want to know what your files looked like yesterday."),
      correct = "Well done.",
-     incorrect = "There are other commands, like `git pull` and `git diff`, that we haven't discussed yet.",
+     incorrect = "There are other commands, like `git push`, `git pull`, and `git diff`, that we haven't discussed yet.",
      random_answer_order = TRUE,
      allow_retry = TRUE
 )
@@ -311,6 +311,8 @@ question("Which of the following are true about branching?",
 
 Creating a branch and switching between branches is nearly instantaneous. Git's handling of branches encourages workflows in which you create small branches for exploration or for new features and  `merge` them back together quickly and accurately.
 
+#### Checking out Branches
+
 "What does it mean to check something out in Git?" you say.
 
 One web resource said, "It is the process that works to checking out previous commits and files in which the current working folder is updated to get equality on a selected branch."
@@ -319,7 +321,7 @@ One web resource said, "It is the process that works to checking out previous co
 
 Let's try again. 
 
-"You use git checkout to switch between branches" (Jenny Bryan on [happygitwithr.com](http://happygitwithr.com)).
+"You use `git checkout` to switch between branches" (Jenny Bryan on [happygitwithr.com](http://happygitwithr.com)).
 
 Oooooh. Okay. Let's try it.
 
@@ -327,11 +329,11 @@ You can create a new branch with `git branch`, then `checkout` the branch with `
 
 >`git checkout -b issue-5` 
 
-to create and `checkout` the branch all at once.
+to create _and_ `checkout` the branch all at once. We'll talk more about checking out stuff in a minute.
 
-But wait---what do you do if you are working on a branch and need to switch, but the work on the current branch is not complete? 
+Meanwhile---what do you do if you are working on a branch and need to switch, but the work on the current branch is not complete? 
 
-One option is `git stash`, but generally, a better option is to safeguard the current state with a temporary `commit`. Here I use “WIP” as the commit message to indicate **w**ork **i**n **p**rogress.
+One option is `git stash` (later), but generally, a better option is to safeguard the current state with a temporary `commit`. Here I use “WIP” as the commit message to indicate **w**ork **i**n **p**rogress.
 
 ```{r small-commit, echo = FALSE}
 knitr::include_graphics("www/small-commit.png", 
@@ -339,14 +341,41 @@ knitr::include_graphics("www/small-commit.png",
                                                 FALSE), dpi = NULL)
 ```
 
+So you've committed that, and gone off and made some changes on the master branch and committed _them_, thus:
 
-At this point, we're not worried about branches. You might decide to create one, but as an individual developer, you can also just continue working with the branch you have, the "master" branch. 
+```{r fiddleelsewhere, echo = FALSE}
+knitr::include_graphics("www/fiddleelsewhere.png", 
+                          auto_pdf = getOption("knitr.graphics.auto_pdf", 
+                                                FALSE), dpi = NULL)
+```
 
+...and now you want to come back to the _first_ branch and pick up where you left off, pretending you never committed. 
 
-## `git reset` and `git checkout`: Undoing Changes
+You want, in fact, to undo the commit you just did and pretend it never happened. Read on to learn how to use `git reset` to do that.
 
-Sorry, this section isn't ready yet. Check back soon because I'm currently working on this lesson. I will add to it every day until it is done.
+## `git reset`: Undoing Changes
 
+You are sitting in a branch that you saved by `commit`ting it before you actaully wanted to. How do you undo that commit? 
+
+Well, you don't actually "undo" it. You `git reset` it. 
+
+Here, we check out the branch we made in the [previous section of this tutorial](http://a-mess.org/sb-git-for-individual-developers/#section-git-checkout-and-git-branch-switching-branches). 
+
+When you come back to the branch and continue your work, you need to undo the temporary commit by `reset`ting your state. Specifically, we want a mixed reset, but we have so many mixed metaphors that we'll just call it a reset for now. A reset peels off the temporary "WIP" commit we made in the [previous section](http://a-mess.org/sb-git-for-individual-developers/#section-git-checkout-and-git-branch-switching-branches). 
+
+Use the reference `HEAD^` to roll the commit state back to the parent (HEAD) of the current commit. 
+
+Why do we have a parent named "HEAD"? Why do we not call the parent "PARENT"? Because that would be waaay too consistent. This is Git, where the metaphors are always mixed. 
+
+Just . . . just go with it. 
+
+```{r git-reset-head, echo = FALSE}
+knitr::include_graphics("www/git-reset-head.png", 
+                          auto_pdf = getOption("knitr.graphics.auto_pdf", 
+                                                FALSE), dpi = NULL)
+```
+
+And there you are, back to the _exact_ state you were in before you had to rush off and do something on another branch. 
 
 ## What's in the log? 
 
