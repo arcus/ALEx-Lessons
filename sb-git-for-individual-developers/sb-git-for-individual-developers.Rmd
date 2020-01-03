@@ -154,7 +154,7 @@ knitr::include_graphics("www/github.png",
                                                 FALSE), dpi = NULL)
 ```
 
-From your shell, create a directory called `scores` and navigate into it. It should be empty.
+2. From your shell, create a directory called `scores` and navigate into it. It should be empty.
 
 ```{r mkdir, echo = FALSE}
 knitr::include_graphics("www/mkdir.png", 
@@ -164,14 +164,14 @@ knitr::include_graphics("www/mkdir.png",
 
 Now execute this Git command:
 
-1. `git init`    
+3. `git init`    
 
 NOTE: You can also create a directory while initializing it by sitting in the parent directory of your as-yet-unmade one and typing `git init my_new_directory`. 
 
 Next, see what's in the directory. Specifically, look for the directory `.git`. 
 
-2. `ls` 
-3. `ls *.git`
+4. `ls` 
+5. `ls *.git`
 
 ```{r gitinitgitadd, echo = FALSE}
 knitr::include_graphics("www/gitinitgitadd.png", 
@@ -179,7 +179,7 @@ knitr::include_graphics("www/gitinitgitadd.png",
                                                 FALSE), dpi = NULL)
 ```
 
-You're sitting in empty directory, right? `cd` into `.git`, which seems not to be there, just to see if you can. 
+6. You're sitting in empty directory, right? `cd` into `.git`, which seems not to be there, just to see if you can. 
 
 ```{r finditanyway, echo = FALSE}
 knitr::include_graphics("www/finditanyway.png", 
@@ -189,9 +189,9 @@ knitr::include_graphics("www/finditanyway.png",
 
 Of course you can. 
 
-Now let's go back into RStudio. Save `scores` as "scores.csv" in your lovely new repo using the command `write.csv(scores, "/your_path_here/scores.csv")`.
+8. Let's go back into RStudio. Save `scores` as "scores.csv" in your lovely new repo using the command `write.csv(scores, "/your_path_here/scores.csv")`.
 
-Now you have a repo that has something in it. Well done. 
+You have a repo that has something in it. Well done. 
 
 I have a really cool shell setup called [iTerm2](https://iterm2.com). The prompt changes to include not only my directory's name, but also the fact that I'm in a Git repo, which branch of the repo I'm currently using (the `master` branch---and more about branches later), and whether or not I have uncommitted material in the repo (see the ex?).  
 
