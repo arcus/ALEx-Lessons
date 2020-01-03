@@ -70,11 +70,11 @@ question("Check all of these that you have NOT done in Git:",
 )
 ```
 
-Warning: This is a very spare lesson, as lessons go. We'll tell you how to do things properly, but we're not going to tell you everything you _can_ do---until later. 
+Warning: This is a spare lesson, as Git lessons go. We'll tell you how to do things properly, but we're not going to tell you everything you _can_ do---until later. 
 
-In this lesson, you will learn how to type `git commit -m "my log message here."` (among other git commands) and know what it means. 
+In this lesson, you will learn how to type things like `git commit -m "my log message here."` (among other git commands) and know what it means. 
 
-Later, you will learn all this:
+Later, you will learn things like this:
 
 ```{r everything, echo = FALSE}
 knitr::include_graphics("www/everything.png", 
@@ -106,8 +106,8 @@ Option 1 (highly recommended): Install [Git for Windows](https://git-for-windows
 
 We like this because Git for Windows leaves the Git executable in a conventional location, which will help you and other programs, e.g. RStudio, find it and use it. This also supports a transition to more expert use, because the “Git Bash” shell will be useful as you venture outside of R within RStudio.
 
->NOTE: When asked about “Adjusting your PATH environment”, make sure to select “Git from the command line and also from 3rd-party software”. Otherwise, we believe it is good to accept the defaults.
-Note that RStudio for Windows prefers for Git to be installed below C:/Program Files and this appears to be the default. This implies, for example, that the Git executable on my Windows system is found at C:/Program Files/Git/bin/git.exe. Unless you have specific reasons to otherwise, follow this convention.
+NOTE: When asked about “Adjusting your PATH environment”, make sure to select “Git from the command line and also from 3rd-party software”. Otherwise, we believe it is good to accept the defaults.
+Note also that RStudio for Windows prefers for Git to be installed below C:/Program Files and this appears to be the default. This implies, for example, that the Git executable on my Windows system is found at C:/Program Files/Git/bin/git.exe. Unless you have specific reasons to otherwise, follow this convention.
 
 This also leaves you with a Git client, though not a very good one. So check out [Git clients we recommend](https://happygitwithr.com/git-client.html#git-client).
 
@@ -193,9 +193,19 @@ knitr::include_graphics("www/iTerm2.png",
                                                 FALSE), dpi = NA)
 ```
 
-## `git add`: Managing the Index File
+## `git add`: Preparing for a `commit`
 
-Sorry, this section isn't ready yet. Check back soon because I'm currently working on this lesson. I will add to it every day until it is done.
+Use `git add` to tell Git which files you want to include in the next `commit`. I could go into a lot of detail about indices and how Git's guts interpret `add`, but let's just not. Git's guts are frankly rather frightening. You don't need to know about them yet. Use [Git's documentation](https://git-scm.com/docs/git-add) if you want more detail---but first, brace yourself.
+
+The easiest syntax to use from the command line is plain old `git add .`, where the dot means "everything". In your head, you would say, "Git, add everything that has changed since the last time I added things." You can replace the dot with specific file names if you need to. Most of the time, though, you won't. 
+
+```{r gitadddot, echo = FALSE}
+knitr::include_graphics("www/gitadddot.png", 
+                          auto_pdf = getOption("knitr.graphics.auto_pdf", 
+                                                FALSE), dpi = NULL)
+```
+
+Notice that my ex didn't go away. That's because there are changes in the directory that I haven't committed yet.
 
 ## `git commit`: Advance a Repo
 
@@ -205,7 +215,7 @@ The `git commit` command records changes to the repo.
 
 Let's try it. Follow these steps:
 
-1. Tell Git that there is new stuff in the repo by typing `git add .` The dot following `git add` is a true dot, not a period at the end of a sentence. There is a space in front of it (intentionally left blank). When you see such a dot, say in your head, "everything." So the `add` command would sound in your head like "Git, add everything." Git knows that you want to include all the files in this directory (all one of them) to your repo. 
+1. If you are following this tutorial, you already told Git that there is new stuff in the repo by typing `git add .`
 
 ```{r goodadd, echo = FALSE}
 knitr::include_graphics("www/goodadd.png", 
@@ -213,7 +223,7 @@ knitr::include_graphics("www/goodadd.png",
                                                 FALSE), dpi = NULL)
 ```
 
-2. Type `git commit -m"Added the data file."` (you can put a space between `-m` and the message if you like).
+2. Type `git commit -m"Added the data file."` (you can put a space between `-m` and the message if you like; it doesn't matter).
 
 ```{r commit, echo = FALSE}
 knitr::include_graphics("www/commit.png", 
@@ -247,7 +257,25 @@ Just don't go there. Use `git commit -m "your message here"` to add a message wi
 
 ## `git checkout` and `git branch`: Switching Branches
 
-Sorry, this section isn't ready yet. Check back soon because I'm currently working on this lesson. I will add to it every day until it is done.
+"What's a branch?" You say.
+
+It's a mysterious concept you're supposed to just git, say I. Ha.
+
+Many people have gotten this far and begun to collapse into confusion because terms like "branch" are used by kindly developers all over the internet with nary a definition in sight. It's why courses like this one are still necessary. 
+
+The problem is that the metaphors are all mixed up. A branch is actually about time, and we're supposed to view it as a sort of tree. We have told Git to keep track of things for us, and Git has obliged. It is creating a history of changes by taking little snapshots of whatever we tell it to add. If you lay those snapshots one above another, well, you get a sort of tree. Right? And you can create alternative histories, like one for your development phase and one for your release phase, and those alternative histories are called branches. 
+
+Just go with it. 
+
+Right now we have only one branch. Find it by typing `git show-branch`. Git will show you all the branches and the commits that have been applied to them. It might not surprise you to find out that our tree is extremely simple. Go ahead, try it. 
+
+```{r gitshowbranch, echo = FALSE}
+knitr::include_graphics("www/gitshowbranch.png", 
+                          auto_pdf = getOption("knitr.graphics.auto_pdf", 
+                                                FALSE), dpi = NULL)
+```
+
+See? One branch called "master" (to bring in _yet another_ metaphor), which has seen a single commit (remember doing that `git commit` just before you got here? That one). 
 
 ## `git reset` and `git checkout`: Undoing Changes
 
@@ -276,40 +304,9 @@ Sorry, this section isn't ready yet. Check back soon because I'm currently worki
 
 ## Some Helpful Videos
 
-I like [these videos](https://git-scm.com/videos) about Git. They build on vocabulary you already know even if you know nothing at all about Git. 
+I like [this video](https://www.gitkraken.com/learn-git#beginner) about using Git with GitKraken, a rather nice user interface that functions a bit like RStudio does with R: It isn't the actual software, but it is a very nice way of interfacing with the software. 
 
-In fact, I like them so much, I've embedded the relevant ones in this lesson where they are most useful. Skip bits that are too slow if you need to, get a cup of tea to stay awake if you must, and follow along in your own [shell](https://happygitwithr.com/shell.html#shell) if you can. 
-
-There will be a quiz.
-
-### What is Version Control?
-
-<iframe title="vimeo-player" src="https://player.vimeo.com/video/41027679" width="640" height="360" frameborder="0" allowfullscreen></iframe>
-
-### What is Git?
-
-<iframe title="vimeo-player" src="https://player.vimeo.com/video/41381741" width="640" height="360" frameborder="0" allowfullscreen></iframe>
-
-```{r advantagesofgit, echo=FALSE}
-question("What are three advantages of using Git?",
-         answer("It is fast", correct = TRUE),
-         answer("It provides a history of content changes", correct = TRUE),
-         answer("It provides a history of content changes even when multiple people are making these changes and even when they are doing so to the same file.", correct = TRUE),
-         answer("It automatically links you to [GitHub](https://github.com).", message = "You have to tell Git to link you to GitHub. We'll get to that in another lesson."),
-     correct = "You got that right!",
-     incorrect = "Not quite.",
-     random_answer_order = TRUE,
-     allow_retry = TRUE
-)
-```
-
-### Early Steps with a Git Repo
-
-<iframe title="vimeo-player" src="https://player.vimeo.com/video/41493906" width="640" height="360" frameborder="0" allowfullscreen></iframe>
-
-### The Benefits of Git
-
-<iframe title="vimeo-player" src="https://player.vimeo.com/video/41516942" width="640" height="360" frameborder="0" allowfullscreen></iframe>
+GitKraken's videos build on vocabulary you already know even if you know nothing at all about Git. The first part of every tutorial is a good explanation of a Git concept. The end of each video is a demo of how you can use what you just learned and do something in GitKraken. Skip the bits about GitKraken at the end if you like, or consider using GitKraken to manage your files with Git. 
 
 ## References
 
