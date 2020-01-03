@@ -325,11 +325,15 @@ One web resource said, "It is the process that works to checking out previous co
 
 >Huh?
 
-Let's try again. 
+Let's try again. "`git-slam-branch` (for instance) slams a few non-stashed remote branches outside all failed downstream origins, and after a `git-terrorize-ref` (logged by `git-transform-object`) remotes a subtree, unsuccessfully imported tips are prevented for the user, and trees that were `quiltimported` during initializing are left in a cloned state."
 
-"You use `git checkout` to switch between branches" (Jenny Bryan on [happygitwithr.com](http://happygitwithr.com)).
+Okay, okay, I confess: That one came from the [Git Man (Manual) Page Generator](https://git-man-page-generator.lokaltog.net/#c552ac17bee01f2fd7fcb4d523bb45ca), which is actually a bit better than the Git documentation found on your computer and mine.
 
-Oooooh. Okay. Let's try it.
+Back to the question at hand: What _is_ `git checkout`?
+
+"You use `git checkout` to switch between branches" (Jenny Bryan of [happygitwithr.com](http://happygitwithr.com)).
+
+Oooooh. Okay. Now _that_ makes sense.
 
 You can create a new branch with `git branch`, then `checkout` the branch with `git checkout`. You can also use the shortcut 
 
@@ -339,7 +343,9 @@ to create _and_ `checkout` the branch all at once. We'll talk more about checkin
 
 Meanwhile---what do you do if you are working on a branch and need to switch, but the work on the current branch is not complete? 
 
-One option is `git stash` (later), but generally, a better option is to safeguard the current state with a temporary `commit`. Here I use “WIP” as the commit message to indicate **w**ork **i**n **p**rogress.
+One option is `git stash` (which we can look at later), but generally, a better option is to safeguard the current state with a temporary `commit`. 
+
+Here I use “WIP” as the commit message to indicate **w**ork **i**n **p**rogress.
 
 ```{r small-commit, echo = FALSE}
 knitr::include_graphics("www/small-commit.png", 
@@ -431,12 +437,25 @@ knitr::include_graphics("www/git-status-b4-and-4b.png",
                                                 FALSE), dpi = NULL)
 ```
 
-
-
-
 ## Merging Local Branches
 
-Sorry, this section isn't ready yet. Check back soon because I'm currently working on this lesson. I will add to it every day until it is done.
+Here is how you merge:
+
+```{r git-merge, echo = FALSE}
+knitr::include_graphics("www/git-merge.png", 
+                          auto_pdf = getOption("knitr.graphics.auto_pdf", 
+                                                FALSE), dpi = NULL)
+```
+
+If I wasn't up to date, git would have opened a file for me to save a comment about the merge. When that happens, you can add a note and save the file, thus completing the merge. The result, from `git log`, is this:
+
+```{r git-log-of-merge, echo = FALSE}
+knitr::include_graphics("www/git-log-of-merge.png", 
+                          auto_pdf = getOption("knitr.graphics.auto_pdf", 
+                                                FALSE), dpi = NULL)
+```
+
+If you are still having issues with Git dumping you into a line editor that you don't know how to use, see [this set of instructions](https://happygitwithr.com/hello-git.html)---from Jenny Bryan, of course. At the bottom of the page is how to configure a Git editor. Emacs is a bit easier to use than whatever the default editor is for, say, macOS. You can write in an Emacs editor and save what you wrote without having to both do something unintuitive and also deal with the fact that is no user interface or instruction, anywhere. 
 
 ## `git rebase`: Maintaining Topic Branches
 
@@ -456,7 +475,7 @@ GitKraken's videos build on vocabulary you already know even if you know nothing
 
 Main author and content wrangler: Sheila Braun ([CHOP](http://www.chop.edu)). 
 
-Portions of this lesson were based on [Happy Git and GitHub for the useR](https://happygitwithr.com/), which was the work of [Jenny Bryan](http://www.jennybryan.org), Software Engineer at [RStudio](https://www.rstudio.com/) on the [tidyverse](https://www.tidyverse.org/)/[r-lib](https://github.com/r-lib/) team. 
+Portions of this lesson were wrenched wholesale, or copied and somewhat altered to match my own particular je ne se quas, from [Happy Git and GitHub for the useR](https://happygitwithr.com/), which was the work of [Jenny Bryan](http://www.jennybryan.org), Software Engineer at [RStudio](https://www.rstudio.com/) on the [tidyverse](https://www.tidyverse.org/)/[r-lib](https://github.com/r-lib/) team. 
 
 The development and delivery of [Happy Git and GitHub for the useR](https://happygitwithr.com/) also benefited greatly from contributions by
 
