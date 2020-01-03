@@ -70,7 +70,7 @@ question("Check all of these that you have NOT done in Git:",
          answer("Marked a point in a repo", message = "* `git tag`: Marking a Point"),
          answer("None of the above. I've done them all.", correct = TRUE, message = "You can skip this tutorial, but remember that you can also use it as a reference."),
          type = "multiple",
-         correct = "You've already learned all you need to know to operate as an individual developer using Git.",
+         correct = "You've already learned all you need to know to operate as an individual developer using Git. If you find yourself frequently flummoxed, remember, it's not you: it's Git. But reviewing basic concepts by taking about a minute per page here could make something click. Consider doing the tutorial despite your vast experience.",
          incorrect = "On the left you can see the topics covered by this tutorial. Here are the ones you should visit to fill the gaps in your knowledge of using Git as an individual developer:",
          allow_retry = TRUE
 )
@@ -387,7 +387,7 @@ And there you are, back to the _exact_ state you were in before you had to rush 
 
 So you just inherited this project from someone else and you were told to roll back a feature. How do you figure out when it was introduced and how you might (later) go back to before that?
 
-`git log`:
+I typed `git log` and my shell changed to show me this:
 
 ```{r oursimplelog, echo = FALSE}
 knitr::include_graphics("www/oursimplelog.png", 
@@ -395,7 +395,7 @@ knitr::include_graphics("www/oursimplelog.png",
                                                 FALSE), dpi = NULL)
 ```
 
-You might have to press `ctrl-z` to get back to the command line.
+You might have to press `ctrl-z` to get back to the command line. I did.
 
 This log says that we committed once on Christmas Eve 2019 at 8 past 4 in the afternoon eastern time and that we said the commit "added the data file." 
 
@@ -421,9 +421,18 @@ Consider version A of a file and a modified version, version B. Assume that vers
 
 Git users contemplate diffs a lot. Diff inspection is how you re-explain to yourself how version A differs from version B. Diff inspection is not limited to adjacent commits. You can inspect the diffs between any two commits.
 
-In fact, Git’s notion of any specific version of a document, code, or data asset is as an accumulation of diffs. If you go back far enough, you find the commit where the file was created in the first place. Every later version is stored by Git as that initial version, plus all the intervening diffs in the history that affect the file.
+In fact, Git’s notion of any specific version of a document, code, or data asset is as an accumulation of diffs. If you go back far enough, you find the commit where the file was created in the first place. Every later version is stored by Git as that initial version plus all the intervening diffs in the history that affect the file.
 
-Here is an example of a diff from this project (the one where I wrote this. Yes, this.)
+Another way to look at changes is to check the `status` of your repo. I used `git status` in this repo twice, once before and once after I created `another_file`. 
+
+```{r git-status-b4-and-4b, echo = FALSE}
+knitr::include_graphics("www/git-status-b4-and-4b.png", 
+                          auto_pdf = getOption("knitr.graphics.auto_pdf", 
+                                                FALSE), dpi = NULL)
+```
+
+
+
 
 ## Merging Local Branches
 
