@@ -194,13 +194,15 @@ Of course you can.
 
 You have a repo that has something in it. Well done. 
 
-I have a really cool shell setup called [iTerm2](https://iterm2.com). The prompt changes to include not only my directory's name, but also the fact that I'm in a Git repo, which branch of the repo I'm currently using (the `master` branch---and more about branches later), and whether or not I have uncommitted material in the repo (see the ex?).  
+I have a really cool shell setup called [iTerm2](https://iterm2.com). The prompt changes to include not only my directory's name, but also the fact that I'm in a Git repo, which branch of the repo I'm currently using (the `master` branch---and more about branches later), and whether or not I have uncommitted material in the repo (see the ex?). 
 
 ```{r iTerm2, echo = FALSE}
 knitr::include_graphics("www/iTerm2.png", 
                           auto_pdf = getOption("knitr.graphics.auto_pdf", 
                                                 FALSE), dpi = NA)
 ```
+
+Any old shell terminal will work, though. You don't have to get fancy to do this lesson. 
 
 ## `git add`: Preparing for a `commit`
 
@@ -430,6 +432,14 @@ knitr::include_graphics("www/git-diff.png",
 
 Consider version A of a file and a modified version, version B. Assume that version A was part of one Git commit and version B was part of the next commit. **The set of differences between A and B is called a “diff”**. 
 
+Here is an example of one I got while working on this lesson:
+
+```{r git-diff-diff, echo = FALSE}
+knitr::include_graphics("www/git-diff-diff.png", 
+                          auto_pdf = getOption("knitr.graphics.auto_pdf", 
+                                                FALSE), dpi = NULL)
+```
+
 Git users contemplate diffs a lot. Diff inspection is how you re-explain to yourself how version A differs from version B. Diff inspection is not limited to adjacent commits. You can inspect the diffs between any two commits.
 
 In fact, Git’s notion of any specific version of a document, code, or data asset is as an accumulation of diffs. If you go back far enough, you find the commit where the file was created in the first place. Every later version is stored by Git as that initial version plus all the intervening diffs in the history that affect the file.
@@ -460,7 +470,7 @@ knitr::include_graphics("www/git-log-of-merge.png",
                                                 FALSE), dpi = NULL)
 ```
 
-If you are still having issues with Git dumping you into a line editor that you don't know how to use, see [this set of instructions](https://happygitwithr.com/hello-git.html)---from Jenny Bryan, of course. At the bottom of the page is how to configure a Git editor. Emacs is a bit easier to use than whatever the default editor is for, say, macOS. You can write in an Emacs editor and save what you wrote without having to both do something unintuitive and also deal with the fact that is no user interface or instruction, anywhere. 
+If you are still having issues with Git dumping you into a line editor that you don't know how to use, see [this set of instructions](https://happygitwithr.com/hello-git.html)---from Jenny Bryan, of course. At the bottom of the page is how to configure a Git editor. Emacs is a bit easier to use than whatever the default editor is for, say, macOS. You can write in an Emacs editor and save what you wrote without having to both do something unintuitive and also deal with the fact that neither user interface nor instruction, anywhere. 
 
 ## `git rebase`: Maintaining Topic Branches
 
