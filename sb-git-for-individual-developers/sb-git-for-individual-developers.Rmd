@@ -140,6 +140,7 @@ knitr::include_graphics("www/terminal.png",
 scores
 ```
 
+3. R and RStudio installed and usable on your system. If you haven't already gotten this software ready, follow the instructions in [Set Up R](../sb-set-up-r/).
 
 We'll use your shell and the data to work through some Git basics.
 
@@ -335,7 +336,7 @@ Okay, okay, I confess: That one came from the [Git Man (Manual) Page Generator](
 
 Back to the question at hand: What _is_ `git checkout`?
 
-"You use `git checkout` to switch between branches" (Jenny Bryan of [happygitwithr.com](http://happygitwithr.com)).
+>"You use `git checkout` to switch between branches" (Jenny Bryan of [happygitwithr.com](http://happygitwithr.com)).
 
 Oooooh. Okay. Now _that_ makes sense.
 
