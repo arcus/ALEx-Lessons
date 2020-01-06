@@ -35,7 +35,7 @@ o <- ggplot(testdat, aes(x = myx, y = myy))
 ab <- ggplot(mpg, aes(x = displ, y = hwy, color = factor(year)))
 ```
   
-**Hints**: Use the "Hints" and "More hints" buttons to check your work or to get help if you can't figure out what the solution is. The final hint is the solution.      
+**Hint**: Use the "Hints" and "More hints" buttons to check your work or to get help if you can't figure out what the solution is. The final hint is the solution.      
 
 
 ## Where We've Been: `qplot`

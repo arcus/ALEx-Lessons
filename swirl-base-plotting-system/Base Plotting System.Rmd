@@ -26,7 +26,6 @@ notmay <- subset(airquality, Month != 5)
 (Slides for this and other Data Science courses may be found at github [https://github.com/DataScienceSpecialization/courses/](https://github.com/DataScienceSpecialization/courses/). If you care to use them, they must be downloaded as a zip file and viewed locally. This lesson corresponds to 04_ExploratoryAnalysis/PlottingBase.)
 
 **Hint**: Use the Solution buttons to check your work or to get help if you can't figure out what the solution is.     
-**Another Hint**: If you see a red ex next to your code, DO NOT RUN IT or this tutorial might freeze or crash. If it does freeze or crash, simply reload it. Your prior work will have been saved.
 
 ## Base Plotting System
 

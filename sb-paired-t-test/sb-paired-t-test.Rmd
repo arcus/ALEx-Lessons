@@ -48,8 +48,7 @@ birds = read.table(textConnection(birds_Input),header=TRUE)
  
 ```
 
-**Hint**: Use the Solution buttons to check your work or to get help if you can't figure out what the solution is.     
-**Another Hint**: If you see a red ex next to your code, DO NOT RUN IT or this tutorial might freeze or crash. If it does freeze or crash, simply reload it. Your prior work will have been saved.
+**Hint**: Use the Solution buttons to check your work or to get help if you can't figure out what the solution is. 
 
 ## The Purpose of this Lesson
 

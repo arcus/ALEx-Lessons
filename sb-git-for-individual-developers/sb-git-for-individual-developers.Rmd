@@ -65,7 +65,7 @@ question("Check all of these that you have NOT done in Git:",
          answer("Added files preparatory to making a `commit`", message = "* `git add`: Telling Git What to Commit"),
          answer("Read a repo's log", message = "* `git log`: What Have I Done?"),
          answer("Tracked what you were doing", message = "* `git diff` and `git status`: Seeing what you're Doing"),
-         answer("Merged two branches`", message = "* Merging Local Branches"),
+         answer("Merged two branches", message = "* Merging Local Branches"),
          answer("Managed a 'topic branch'", "* `git rebase`: Maintaining Topic Branches"),
          answer("Marked a point in a repo", message = "* `git tag`: Marking a Point"),
          answer("None of the above. I've done them all.", correct = TRUE, message = "You can skip this tutorial, but remember that you can also use it as a reference."),
@@ -117,9 +117,9 @@ Note also that RStudio for Windows prefers for Git to be installed below C:/Prog
 
 Installing this way also leaves you with a Git client, though not a very good one. So check out [Git clients we recommend](https://happygitwithr.com/git-client.html#git-client).
 
-FYI, this appears to be equivalent to what you would download from here: https://git-scm.com/download/.
+If you were not able to download and install Git, I highly recommend following [Jenny Bryan's instructions](https://happygitwithr.com/index.html). They are uniquely simple and clear. 
 
-If you were not able to download and install Git, I highly recommend following [Jenny Bryan's instructions](https://happygitwithr.com/index.html). They are simple and clear---and in that, they are highly unusual. 
+FYI, this appears to be equivalent to what you would download from here: https://git-scm.com/download/.
 
 ## What you Need for this Lesson
 
@@ -166,7 +166,7 @@ Now execute this Git command:
 
 3. `git init`    
 
-NOTE: You can also create a directory while initializing it by sitting in the parent directory of your as-yet-unmade one and typing `git init my_new_directory`. 
+**NOTE**: You can also create a directory while initializing it by sitting in the parent directory of your as-yet-unmade one and typing `git init my_new_directory`. 
 
 Next, see what's in the directory. Specifically, look for the directory `.git`. 
 
