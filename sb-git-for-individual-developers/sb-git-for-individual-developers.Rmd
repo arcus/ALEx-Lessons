@@ -142,7 +142,7 @@ scores
 
 3. R and RStudio installed and usable on your system. If you haven't already gotten this software ready, follow the instructions in [Set Up R](../sb-set-up-r/).
 
-We'll use your shell and the data to work through some Git basics.
+We'll use your shell and the data to work through some Git basics. We will also open the data file in RStudio.
 
 
 ## `git init`: Make a New Repo and Put Something in It
