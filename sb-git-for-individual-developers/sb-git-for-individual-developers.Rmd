@@ -7,13 +7,14 @@ output:
     css:
       - https://github.research.chop.edu/pages/CQI/chop-bootstrap/bootstrap-3/bootstrap.min.css
       - https://github.research.chop.edu/pages/CQI/flexdashboard-theme/css/flexdashboard.min.css
+      - http://reslnarcusedu01.research.chop.edu/braunsb/style.css
 runtime: shiny_prerendered
 ---
 
 ```{r setup, include=FALSE}
 library(learnr)
 library(data.table)
-library(dplyr)
+library(tidyverse)
 library(pwr)
 library(tidyr)
 library(stats)
@@ -140,10 +141,20 @@ knitr::include_graphics("www/terminal.png",
 scores
 ```
 
-3. R and RStudio installed and usable on your system. If you haven't already gotten this software ready, follow the instructions in [Set Up R](../sb-set-up-r/).
+3. Use the next code chunk to save `scores` to your local directory. Replace `? # "<your filename here>"` with a full pathname pointing to where you'd like to store `scores.csv`, then execute the code. Your pathname might look something like  `"/Users/chopuser/Documents/GitHub/scores.csv"`.  
+
+```{r save_scores, exercise = TRUE, exercise.lines = 5}
+library(tidyverse)
+my_filename <- ? # "<your filename here>"
+write_csv(scores, my_filename)
+```
+```{r save_scores-solution}
+library(tidyverse)
+my_filename <- "/users/chopuser/documents/github/scores.csv"
+write_csv(scores, my_filename)
+```
 
 We'll use your shell and the data to work through some Git basics. We will also open the data file in RStudio.
-
 
 ## `git init`: Make a New Repo and Put Something in It
 
@@ -180,7 +191,7 @@ knitr::include_graphics("www/gitinitgitadd.png",
                                                 FALSE), dpi = NULL)
 ```
 
-6. You're sitting in empty directory, right? `cd` into `.git`, which seems not to be there, just to see if you can. 
+6. For some people, this looks like an empty directory, because you haven't made invisible files visible in your operating system's settings. Even if you can't see it, `cd` into `.git`, just to see if you can. 
 
 ```{r finditanyway, echo = FALSE}
 knitr::include_graphics("www/finditanyway.png", 
@@ -442,7 +453,7 @@ knitr::include_graphics("www/git-diff-diff.png",
 
 Git users contemplate diffs a lot. Diff inspection is how you re-explain to yourself how version A differs from version B. Diff inspection is not limited to adjacent commits. You can inspect the diffs between any two commits.
 
-In fact, Git’s notion of any specific version of a document, code, or data asset is as an accumulation of diffs. If you go back far enough, you find the commit where the file was created in the first place. Every later version is stored by Git as that initial version plus all the intervening diffs in the history that affect the file.
+In fact, Git’s notion of any specific version of a document, code, or data asset is as an accumulation of diffs. If you go back far enough, you find the `commit` where the file was created in the first place. Every later version is stored by Git as that initial version plus all the intervening diffs in the history that affect the file.
 
 Another way to look at changes is to check the `status` of your repo. I used `git status` in this repo twice, once before and once after I created `another_file`. 
 
@@ -472,9 +483,19 @@ knitr::include_graphics("www/git-log-of-merge.png",
 
 If you are still having issues with Git dumping you into a line editor that you don't know how to use, see [this set of instructions](https://happygitwithr.com/hello-git.html)---from Jenny Bryan, of course. At the bottom of the page is how to configure a Git editor. Emacs is a bit easier to use than whatever the default editor is for, say, macOS. You can write in an Emacs editor and save what you wrote without having to both do something unintuitive and also deal with the fact that neither user interface nor instruction, anywhere. 
 
-## `git rebase`: Maintaining Topic Branches
+## `git rebase`: Another way to Merge
 
-Sorry, this section isn't ready yet. Check back soon because I'm currently working on this lesson. I will add to it every day until it is done.
+People might tell you about putting things on top of things in Git, then show you a picture of putting things next to things. I'm a literal-minded coder, so this doesn't work for me: which means that the whole term `rebase` doesn't work for me. I can see why they chose it, but I think it brings in yet another metaphor(!) when we could have stuck with the idea of merging.  
+
+As you know from the previous section on `git merge`, you use it to combine your efforts on two branches so you can continue along having benefitted from both.
+
+Well, `git rebase` does the same thing, but it takes all your changes from one branch and puts them after the other branch. Use `git rebase` when you don't particularly care _when_ you made changes: you just want all the changes in one place so you can move forward.
+
+We'll create a branch, make a change on it, then, instead of `merge`ing, we'll `rebase`. 
+
+
+
+
 
 ## `git tag`: Marking a Point
 
