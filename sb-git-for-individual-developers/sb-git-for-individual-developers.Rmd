@@ -67,7 +67,7 @@ question("Check all of these that you have NOT done in Git:",
          answer("Read a repo's log", message = "* `git log`: What Have I Done?"),
          answer("Tracked what you were doing", message = "* `git diff` and `git status`: Seeing what you're Doing"),
          answer("Merged two branches", message = "* Merging Local Branches"),
-         answer("Managed a 'topic branch'", "* `git rebase`: Maintaining Topic Branches"),
+         answer("Configured Git", "* `git configure`: Introduce yourself to Git"),
          answer("Marked a point in a repo", message = "* `git tag`: Marking a Point"),
          answer("None of the above. I've done them all.", correct = TRUE, message = "You can skip this tutorial, but remember that you can also use it as a reference."),
          type = "multiple",
@@ -504,18 +504,30 @@ knitr::include_graphics("www/git-log-of-merge.png",
 
 If you are still having issues with Git dumping you into a line editor that you don't know how to use, see [this set of instructions](https://happygitwithr.com/hello-git.html)---from Jenny Bryan, of course. At the bottom of the page is how to configure a different Git editor. Emacs is a bit easier to use than whatever the default editor is for, say, macOS. You can write in an Emacs editor and save what you wrote without having to both do something unintuitive and also deal with the fact that neither user interface nor instruction, anywhere. 
 
-## `git rebase`: Another way to Merge
+## `git configure`: Introduce yourself to Git
 
-People might tell you about putting things on top of things in Git, then show you a picture of putting things next to things. I'm a literal-minded coder, so this doesn't work for me: which means that the whole term `rebase` doesn't work for me. I can see why they chose it, but I think it brings in yet another metaphor(!) when we could have stuck with the idea of merging.  
+Use `git config` to tell Git who you are. These are the most useful things to tell Git about yourself:
 
-As you know from the previous section on `git merge`, you use it to combine your efforts on two branches so you can continue along having benefitted from both.
+* Your user name with `git config --global user.name 'Your Name'`     
+* Your email with `git config --global user.email 'jane@example.com'`    
 
-Well, `git rebase` does the same thing, but it takes all your changes from one branch and puts them _after_ the other branch. Use `git rebase` when you don't particularly care _when_ you made changes: you just want all the changes in one place so you can move forward.
+Here is an example:
 
-We'll create a branch, make a change on it, then, instead of `merge`ing, we'll `rebase`. 
+```{r git-config, echo = FALSE}
+knitr::include_graphics("www/git-config.png", 
+                          auto_pdf = getOption("knitr.graphics.auto_pdf", 
+                                                FALSE), dpi = NULL)
+```
 
+If you want to know what else you can configure, try typing `git config --list`. The command will disappear and you will see a very long list. Here's what is currently at the top of it:
 
+```{r git-config-list, echo = FALSE}
+knitr::include_graphics("www/git-config-list.png", 
+                          auto_pdf = getOption("knitr.graphics.auto_pdf", 
+                                                FALSE), dpi = NULL)
+```
 
+See Jenny Bryan's [happygitwithr.com](https://happygitwithr.com/hello-git.html) pages to find out more.
 
 
 ## `git tag`: Marking a Point
