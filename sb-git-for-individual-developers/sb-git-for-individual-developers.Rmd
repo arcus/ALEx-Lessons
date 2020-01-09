@@ -540,7 +540,7 @@ I like [this video](https://www.gitkraken.com/learn-git#beginner) about using Gi
 
 GitKraken's videos build on vocabulary you already know even if you know nothing at all about Git. The first part of every tutorial is a good explanation of a Git concept. The end of each video is a demo of how you can use what you just learned and do something in GitKraken. Skip the bits about GitKraken at the end if you like, or consider using GitKraken to manage your files with Git. 
 
-## References
+## References 
 
 Main author and content wrangler: Sheila Braun ([CHOP](http://www.chop.edu)). 
 
