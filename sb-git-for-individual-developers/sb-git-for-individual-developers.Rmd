@@ -20,6 +20,7 @@ library(tidyr)
 library(stats)
 library(ggplot2)
 library(sortable)
+library(gradethis)
 shhh <- suppressPackageStartupMessages
 shh <- suppressWarnings
 sh <- suppressMessages

@@ -66,19 +66,13 @@ library(dplyr)
 
 The `msleep` (mammals sleep) data set contains the sleep times and weights for a set of mammals and is available in the dagdata repository on GitHub. This data set contains 83 rows and 11 variables.  
 
-Download the `msleep` data set in CSV format from [here](https://raw.githubusercontent.com/genomicsclass/dagdata/master/inst/extdata/msleep_ggplot2.csv), and then load into R. I've provided the code for you. Note that there is an interesting function, `basename`, that extracts the file name from a url. We're storing that in `msleep_filename`.  Add `head(msleep)` to the bottom of the code in the code chunk here, then run the code to see the top of the `msleep` data. 
+We've loaded some data for you in a data frame called `msleep`.  Type `head(msleep)` in f the code box here, then run the code to see the top of the data. 
 
 ```{r c, exercise = TRUE, exercise.lines = 10}
-url <- "https://raw.githubusercontent.com/genomicsclass/dagdata/master/inst/extdata/msleep_ggplot2.csv"
-msleep_fname <- basename(url)
-msleep <- read.csv(url)
-#Your code:
+
 
 ```
 ```{r c-solution}
-url <- "https://raw.githubusercontent.com/genomicsclass/dagdata/master/inst/extdata/msleep_ggplot2.csv"
-msleep_fname <- basename(url)
-msleep <- read.csv(url)
 head(msleep)
 ```
 
