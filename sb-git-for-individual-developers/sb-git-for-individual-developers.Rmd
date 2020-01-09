@@ -7,7 +7,7 @@ output:
     css:
       - https://github.research.chop.edu/pages/CQI/chop-bootstrap/bootstrap-3/bootstrap.min.css
       - https://github.research.chop.edu/pages/CQI/flexdashboard-theme/css/flexdashboard.min.css
-      - http://reslnarcusedu01.research.chop.edu/braunsb/style.css
+      - www/style.css
 runtime: shiny_prerendered
 ---
 
@@ -255,7 +255,7 @@ knitr::include_graphics("www/commit.png",
 
 You should fall gracefully to the next command line, with new information provided to you along the way, but without any error messages. And did you notice that my ex went away? That's because the local repo is up to date with the remote repo.
 
-#### Do it Wrong
+#### Forget to Stage (i.e. `add`) your Changes 
 
 This is what happens when you commit without first telling Git that you have added things:
 
@@ -265,7 +265,9 @@ knitr::include_graphics("www/forgotadd.png",
                                                 FALSE), dpi = NULL)
 ```
 
-And this is what happens if you forget to send a message for the log along with your `commit`:
+#### The Dreaded Editor: Commit Wrong and Find Yourself . . . Where? Why?
+
+This is what happens if you forget to send a message for the log along with your `commit`:
 
 ```{r prep-to-commit, echo = FALSE}
 knitr::include_graphics("www/oops.png", 
@@ -275,7 +277,18 @@ knitr::include_graphics("www/oops.png",
 
 Inside an editor with _no_ instructions on how to edit anything (only a demand that you do), _no_ instructions on how to leave, and a powerful sense that if you mess this up, you will hurt your repo: this is one of the worst places to end up in all of coding.
 
-Just don't go there. Use `git commit -m "your message here"` to add a message without being shunted to the editor.
+I will tell you the carefully guarded secrets of this editor just in case you end up there some day:
+
+>1. Press `i` to enter "insert mode." Now you can type.    
+2. Uncomment (i.e., delete hashtags preceding) any line(s) you want to use to describe this commit. 
+3. Press `Esc`. You are no longer in insert mode.
+4. Type `wq` to save and quit the editor and finish the commit.
+
+None of this is intuitive. Remember our mantra:
+
+>It's not you. It's Git.
+
+Then soldier on.
 
 ## `git branch` and `git checkout`: Switching Branches
 
@@ -289,7 +302,7 @@ Many people have gotten this far and begun to collapse into confusion because te
 
 The problem is that the metaphors are all mixed up. A branch is actually about wood and trees and growing things, but here we must view it as being about the flow of time (yes, flowing branches). 
 
-We tell Git to keep track of things for us, and Git obliges by creating a history of our changes. It takes snapshots of whatever we tell it to `add` and `commit`. If you lay those snapshots one above another, consecutively, you get a sort of tree. Right? You aren't actually copying files anywhere; you are keeping track of how they have changed so you could, should you need to, reconstruct a prior version of the file stored further down on the branch. So don't think wood so much as geneology where all the parents are single. 
+We tell Git to keep track of things for us, and Git obliges by creating a history of our changes. It takes snapshots of whatever we tell it to `add` and `commit`. If you lay those snapshots one above another, consecutively, you get a sort of tree. Right? You aren't actually copying files anywhere; you are keeping track of how they have changed so you could, should you need to, reconstruct a prior version of the file stored further down on the branch. So don't think wood so much as a geneology (in which all the parents are single). 
 
 Right now, we have only one branch. Find it by typing `git show-branch`. Git will show you all the branches and the commits that have been applied to them. 
 
@@ -303,7 +316,7 @@ knitr::include_graphics("www/gitshowbranch.png",
 
 See? One branch called "master" (to bring in _yet another_ metaphor), which has seen a single commit (remember doing that `git commit` just before you got to this section? That commit). 
 
-Here is what Jenny Bryan & Co. say about branches: "Branches afford explicit workflows for integrating different lines of work on your own terms. This is much nicer than trying to do a tricky merge or rebase in a frustrated panic, because you need to `push` your work to GitHub at the end of the day." We haven't encountered `push` yet, but in other words, if people make major changes on branches, the master branch can stay as it is until everyone is sure the changes on other branches are worth keeping. The branches still track the history of files, but in a different place from where the master branch has it. You can merge branches at will. Well, the person(s) who own(s) the parent branch (in our case, the master branch) can. But we'll get to that later.
+Here is what Jenny Bryan & Co. say about branches: "Branches afford explicit workflows for integrating different lines of work on your own terms." If people make major changes on branches, the master branch can stay as it is until the changes on other branches are worth keeping. The branches still track the history of files, but in different places from where the master branch has it. You can merge branches back together at will. Well, the person(s) who own(s) the parent branch (in our case, the master branch) can. But we'll get to that later.
 
 ```{r whatsabranch, echo=FALSE}
 question("What's a branch? Pick two.",
@@ -333,7 +346,7 @@ question("Which of the following are true about branching?",
 )
 ```
 
-Creating a branch and switching between branches is nearly instantaneous. Git's handling of branches encourages workflows in which you create small branches for exploration or for new features and  `merge` them back together quickly and accurately.
+Creating a branch and switching between branches is nearly instantaneous. Git's handling of branches encourages workflows in which you create small branches for exploration or for new features and `merge` them back together quickly and accurately.
 
 #### Checking out Branches
 
@@ -345,15 +358,19 @@ One web resource said, "It is the process that works to checking out previous co
 
 Let's try again. "`git-slam-branch` (for instance) slams a few non-stashed remote branches outside all failed downstream origins, and after a `git-terrorize-ref` (logged by `git-transform-object`) remotes a subtree, unsuccessfully imported tips are prevented for the user, and trees that were `quiltimported` during initializing are left in a cloned state."
 
-Okay, okay, I confess: That one came from the [Git Man (Manual) Page Generator](https://git-man-page-generator.lokaltog.net/#c552ac17bee01f2fd7fcb4d523bb45ca), which is actually a bit better than the Git documentation found on your computer and mine.
+>What?
+
+Okay, okay, I confess: That last one came from the [Git Man (Manual) Page Generator](https://git-man-page-generator.lokaltog.net/#c552ac17bee01f2fd7fcb4d523bb45ca), which is really fun and in fact slighly better than the _real_ Git documentation found on your computer and mine.
 
 Back to the question at hand: What _is_ `git checkout`?
 
 >"You use `git checkout` to switch between branches" (Jenny Bryan of [happygitwithr.com](http://happygitwithr.com)).
 
-Oooooh. Okay. Now _that_ makes sense.
+Now _that_ makes sense.
 
-You can create a new branch with `git branch`, then `checkout` the branch with `git checkout`. You can also use the shortcut 
+You can create a new branch with `git branch`, then `checkout` the branch with `git checkout` (meanwhile adding one more to the list of metaphors). 
+
+You can also use the shortcut 
 
 >`git checkout -b issue-5` 
 
@@ -363,7 +380,7 @@ Meanwhile---what do you do if you are working on a branch and need to switch, bu
 
 One option is `git stash` (which we can look at later), but generally, a better option is to safeguard the current state with a temporary `commit`. 
 
-Here I use “WIP” as the commit message to indicate **w**ork **i**n **p**rogress.
+Here I use “WIP” as the commit message to indicate **w**ork **i**n **p**rogress. The command is `git commit --all -m"WIP"`. 
 
 ```{r small-commit, echo = FALSE}
 knitr::include_graphics("www/small-commit.png", 
@@ -391,11 +408,13 @@ Well, you don't actually "undo" it. You `git reset` it.
 
 Here, we check out the branch we made in the [previous section of this tutorial](http://a-mess.org/sb-git-for-individual-developers/#section-git-checkout-and-git-branch-switching-branches). 
 
-When you come back to the branch and continue your work, you need to undo the temporary commit by `reset`ting your state. Specifically, we want a mixed reset, but we have so many mixed metaphors that we'll just call it a reset for now. A reset peels off the temporary "WIP" commit we made in the [previous section](http://a-mess.org/sb-git-for-individual-developers/#section-git-checkout-and-git-branch-switching-branches). 
+When you come back to the branch and continue your work, you need to undo the temporary commit by `reset`ting your state. Specifically, we want a "mixed reset", but we have so many mixed metaphors that we'll just call it a reset for now. A reset eliminates the temporary "WIP" commit we made in the [previous section](http://a-mess.org/sb-git-for-individual-developers/#section-git-checkout-and-git-branch-switching-branches). 
 
-Use the reference `HEAD^` to roll the commit state back to the parent (HEAD) of the current commit. 
+Use the reference `HEAD^` to take the commit state back to the parent (HEAD) of the current commit. 
 
-Why do we have a parent named "HEAD"? Why do we not call the parent "PARENT"? Because that would be waaay too consistent. This is Git, where the metaphors are always mixed. 
+Why do we have a parent named "HEAD"? Why do we not call the parent "PARENT"? Because that would be waaay too consistent. This is Git, where the metaphors are always mixed.
+
+(Actually, `HEAD^` is a reference to tape recording. But I digress.)
 
 Just . . . just go with it. 
 
@@ -419,7 +438,7 @@ knitr::include_graphics("www/oursimplelog.png",
                                                 FALSE), dpi = NULL)
 ```
 
-You might have to press `ctrl-z` to get back to the command line. I did.
+You might have to press `Ctrl-z` to get back to the command line. I did.
 
 This log says that we committed once on Christmas Eve 2019 at 8 past 4 in the afternoon eastern time and that we said the commit "added the data file." 
 
@@ -451,9 +470,11 @@ knitr::include_graphics("www/git-diff-diff.png",
                                                 FALSE), dpi = NULL)
 ```
 
-Git users contemplate diffs a lot. Diff inspection is how you re-explain to yourself how version A differs from version B. Diff inspection is not limited to adjacent commits. You can inspect the diffs between any two commits.
+Git users contemplate diffs a lot. 
 
-In fact, Git’s notion of any specific version of a document, code, or data asset is as an accumulation of diffs. If you go back far enough, you find the `commit` where the file was created in the first place. Every later version is stored by Git as that initial version plus all the intervening diffs in the history that affect the file.
+Diff inspection is how you re-explain to yourself how version A differs from version B. 
+
+In fact, Git’s notion of any specific version of a document, code, or data asset is as an accumulation of diffs. If you go back far enough, you find the `commit` where the file was created in the first place. Every later version is stored by Git as that initial version _plus_ all the intervening diffs in the history that affect the file.
 
 Another way to look at changes is to check the `status` of your repo. I used `git status` in this repo twice, once before and once after I created `another_file`. 
 
@@ -481,7 +502,7 @@ knitr::include_graphics("www/git-log-of-merge.png",
                                                 FALSE), dpi = NULL)
 ```
 
-If you are still having issues with Git dumping you into a line editor that you don't know how to use, see [this set of instructions](https://happygitwithr.com/hello-git.html)---from Jenny Bryan, of course. At the bottom of the page is how to configure a Git editor. Emacs is a bit easier to use than whatever the default editor is for, say, macOS. You can write in an Emacs editor and save what you wrote without having to both do something unintuitive and also deal with the fact that neither user interface nor instruction, anywhere. 
+If you are still having issues with Git dumping you into a line editor that you don't know how to use, see [this set of instructions](https://happygitwithr.com/hello-git.html)---from Jenny Bryan, of course. At the bottom of the page is how to configure a different Git editor. Emacs is a bit easier to use than whatever the default editor is for, say, macOS. You can write in an Emacs editor and save what you wrote without having to both do something unintuitive and also deal with the fact that neither user interface nor instruction, anywhere. 
 
 ## `git rebase`: Another way to Merge
 
@@ -489,7 +510,7 @@ People might tell you about putting things on top of things in Git, then show yo
 
 As you know from the previous section on `git merge`, you use it to combine your efforts on two branches so you can continue along having benefitted from both.
 
-Well, `git rebase` does the same thing, but it takes all your changes from one branch and puts them after the other branch. Use `git rebase` when you don't particularly care _when_ you made changes: you just want all the changes in one place so you can move forward.
+Well, `git rebase` does the same thing, but it takes all your changes from one branch and puts them _after_ the other branch. Use `git rebase` when you don't particularly care _when_ you made changes: you just want all the changes in one place so you can move forward.
 
 We'll create a branch, make a change on it, then, instead of `merge`ing, we'll `rebase`. 
 

@@ -23,7 +23,7 @@ In this lesson, we will explore some basic building blocks of the R programming 
 
 If at any point you’d like more information on a particular topic related to R, you can type `help.start()` at the prompt, which will open a menu of resources (either within RStudio or your default web browser, depending on your setup). Alternatively, a simple web search often yields the answer you’re looking for.
 
-In its simplest form, R can be used as an interactive calculator. Type $\displaystyle 5 + 7$ and press Cmd-Enter. On a PC, you would type Ctrl-Enter. That combination of keys executes all the code in your code chunk.
+In its simplest form, R can be used as an interactive calculator. Type `5 + 7` and press `Cmd-Enter`. On a PC, you would type Ctrl-Enter. That combination of keys executes all the code in your code chunk.
 
 ```{r a, exercise=TRUE, exercise.lines = 5}
 
@@ -32,15 +32,15 @@ In its simplest form, R can be used as an interactive calculator. Type $\display
 5 + 7
 ```
 
-R simply prints the result $\displaystyle 12$ by default. However, R is a programming language and often the reason we use a programming language as opposed to a calculator is to automate some process or avoid unnecessary repetition.
+R simply prints the result `12` by default. However, R is a programming language and often the reason we use a programming language as opposed to a calculator is to automate some process or avoid unnecessary repetition.
 
-In this case, we may want to use our result from above in a second calculation. Instead of retyping $\displaystyle 5 + 7$ every time we need it, we can just create a new variable that stores the result.
+In this case, we may want to use our result from above in a second calculation. Instead of retyping `5 + 7` every time we need it, we can just create a new variable that stores the result.
 
 The way you assign a value to a variable in R is by using the assignment operator, which is just a ‘less than’ symbol followed by a ‘minus’ sign. It looks like this: `<-`.
 
 Think of the assignment operator as an arrow. You are assigning the value on the right side of the arrow to the variable name on the left side of the arrow.
 
-To assign the result of $\displaystyle 5 + 7$ to a new variable called `x`, you type `x <- 5 + 7`. This can be read as ‘`x` gets 5 plus 7’. Give it a try now.
+To assign the result of `5 + 7` to a new variable called `x`, you type `x <- 5 + 7`. This can be read as ‘`x` gets 5 plus 7’. Give it a try now.
 
 ```{r b, exercise=TRUE, exercise.lines = 5}
 
@@ -49,7 +49,7 @@ To assign the result of $\displaystyle 5 + 7$ to a new variable called `x`, you 
 x <- 5 + 7
 ```
 
-You’ll notice that R did not print the result $\displaystyle 12$ this time. When you use the assignment operator, R assumes that you don’t want to see the result immediately, but rather that you intend to use the result for something else later on. 
+You’ll notice that R did not print the result `12`this time. When you use the assignment operator, R assumes that you don’t want to see the result immediately, but rather that you intend to use the result for something else later on. 
 
 If you want to *both* assign a variable *and* see the output, place parentheses around the entire assignment statment: `(x <- 5 + 7)`. 
 
@@ -91,7 +91,7 @@ y
 
 Now, let’s create a small collection of numbers called a vector. Any object that contains data is called a data structure and numeric vectors are the simplest type of data structure in R. In fact, even a single number is considered a vector of length one.
 
-The easiest way to create a vector is with the `c` function, which stands for ‘concatenate’ or ‘combine’. To create a vector containing the numbers $\displaystyle 1.1, 9,$ and $\displaystyle 3.14$, type `c(1.1, 9, 3.14)`. Try it now and store the result in a variable called `z`.
+The easiest way to create a vector is with the `c` function, which stands for ‘concatenate’ or ‘combine’. To create a vector containing the numbers 1.1, 9, and 3.14, type `c(1.1, 9, 3.14)`. Try it now and store the result in a variable called `z`.
 
 ```{r f, exercise=TRUE, exercise.setup = "prepare-e"}
 
@@ -121,7 +121,7 @@ z <- c(1.1, 9, 3.14)
 z
 ```
 
-You can combine vectors to make a new vector. Create a new vector that contains `z`, $\displaystyle 555$, then `z` again in that order. Don’t assign this vector to a new variable, so that we can just see the result immediately.
+You can combine vectors to make a new vector. Create a new vector that contains `z`, `555`, then `z` again in that order. Don’t assign this vector to a new variable, so that we can just see the result immediately.
 
 ```{r i, exercise=TRUE, exercise.setup = "prepare-h"}
 
