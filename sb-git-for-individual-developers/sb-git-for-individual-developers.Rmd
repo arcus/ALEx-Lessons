@@ -57,6 +57,8 @@ knitr::include_graphics("https://imgs.xkcd.com/comics/git.png",
                                                 FALSE), dpi = NULL)
 ```
 
+### Use this Checklist
+
 ```{r git-indiv-right-for-you, echo=FALSE}
 question("Check all of these that you have NOT done in Git:",
          answer("Made a new repository (repo)", message = "* `git init`: Make a New Repo"),
@@ -67,7 +69,7 @@ question("Check all of these that you have NOT done in Git:",
          answer("Read a repo's log", message = "* `git log`: What Have I Done?"),
          answer("Tracked what you were doing", message = "* `git diff` and `git status`: Seeing what you're Doing"),
          answer("Merged two branches", message = "* Merging Local Branches"),
-         answer("Configured Git", "* `git configure`: Introduce yourself to Git"),
+         answer("Configured Git", message = "* `git configure`: Introduce yourself to Git"),
          answer("Marked a point in a repo", message = "* `git tag`: Marking a Point"),
          answer("None of the above. I've done them all.", correct = TRUE, message = "You can skip this tutorial, but remember that you can also use it as a reference."),
          type = "multiple",
@@ -95,7 +97,7 @@ Prepare yourself. As Jenny Bryan (whom we quote assiduously within) wrote, "It's
 
 You need Git so you can use it at the command line and so RStudio can call it.
 
-#### Is it already, miraculously, installed on your system?
+### Is it already, miraculously, installed on your system?
 
 If there’s any chance it’s installed already, verify that, rejoice, and skip the rest of the "Install Git" section.
 
@@ -233,7 +235,7 @@ Notice that my ex didn't go away. That's because there are changes in the direct
 
 The `git commit` command records changes to the repo. 
 
-#### Do it Right
+### Do it Right
 
 Let's try it. Follow these steps:
 
@@ -255,7 +257,7 @@ knitr::include_graphics("www/commit.png",
 
 You should fall gracefully to the next command line, with new information provided to you along the way, but without any error messages. And did you notice that my ex went away? That's because the local repo is up to date with the remote repo.
 
-#### Forget to Stage (i.e. `add`) your Changes 
+### Forget to Stage (i.e. `add`) your Changes 
 
 This is what happens when you commit without first telling Git that you have added things:
 
@@ -265,7 +267,7 @@ knitr::include_graphics("www/forgotadd.png",
                                                 FALSE), dpi = NULL)
 ```
 
-#### The Dreaded Editor: Commit Wrong and Find Yourself . . . Where? Why?
+### The Dreaded Editor: Commit Wrong and Find Yourself . . . Where? Why?
 
 This is what happens if you forget to send a message for the log along with your `commit`:
 
@@ -296,7 +298,7 @@ Then soldier on.
 
 It's a mysterious concept you're supposed to just git, say I. Ha.
 
-#### Branching
+### Branching
 
 Many people have gotten this far and begun to collapse into confusion because terms like "branch" are used by kindly developers all over the internet with nary a definition in sight.
 
@@ -348,7 +350,7 @@ question("Which of the following are true about branching?",
 
 Creating a branch and switching between branches is nearly instantaneous. Git's handling of branches encourages workflows in which you create small branches for exploration or for new features and `merge` them back together quickly and accurately.
 
-#### Checking out Branches
+### Checking out Branches
 
 "What does it mean to check something out in Git?" you say.
 

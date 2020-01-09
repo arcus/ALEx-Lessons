@@ -38,13 +38,13 @@ tutorial_options(exercise.completion = FALSE,
 
 Machine learning algorithms have a unique capacity to improve at their task when exposed to more and better data through a process called training. Let's explore each of these elements in greater detail:
 
-### Task-oriented
+#### Task-oriented
 
 The goal of machine learning is usually to create a model that can perform a task well, such as predicting a quantity or label, or assigning observations to a group or cluster. In medical research, the classic label prediction task is diagnosis: does the patient have X disease or not?
 
 As researchers, we may also be interested in the patterns themselves: that is, what aspects of our data help our algorithm perform a task well? What factors are predictive of a specific disease?
 
-### Learning to perform a task
+#### Learning to perform a task
 
 The key to succeeding at a machine learning task is **generalization**. As we've discussed, machine learning is task-oriented. We want to *do* something with the pattern we've observed. In other words, we want to capture something about this pattern in such a way that we can generalize this pattern recognition to a new context, such as a previously unobserved set of observations, and still do a good job at our machine learning task (such as predicting an outcome).
 
@@ -74,7 +74,7 @@ Machine learning is heavily related to, but distinct from traditional statistica
 
 Let's take a look at one research question:
 
-### 1. Sepsis events in the NICU
+#### 1. Sepsis events in the NICU
 > Sepsis is a potentially devastating event in a neonatal intensive care unit (ICU) setting. If clinicians could predict the onset of sepsis more reliably, they could reduce inpatient mortality for the most vulnerable patients. A team of researchers collects data on thousands of cases of infants, with a mix of septic and non-septic events in the ICU. Is it possible for the team to use data from previous cases to improve prediction of sepsis events? If so, which of 30 possible indicators should clinicians prioritize at the bedside?
 
 Note that this question begins with a task (predict "sepsis" or "no sepsis" for a given individual) and a dataset (a mix of 30-40 clinical indicators for 1000+ children). With a data-first approach, you already have all of the data and conceptual resources you need to frame this as a machine learning task.
@@ -114,7 +114,7 @@ If you have **unlabeled training data**:
 
 We will begin by answering question one.
 
-### Is my training data labeled?
+#### Is my training data labeled?
 
 Let's return to the example of predicting sepsis events in the ICU. Imagine that you have information about two thousand patients (n=2000). This information is a mixture of test results, clinical indicators, and lab orders. It also includes a variable called `is_patient_septic` that is coded as either `TRUE` or `FALSE`.
 
@@ -128,19 +128,19 @@ Our training data includes a single variable with the label we are interested in
 
 When we have labeled training data, we can use supervised learning techniques. **Supervised learning** refers to machine learning algorithms that learn to assign an output by exposure to labeled training data. The algorithm finds patterns between the features and the target variable in this training data, and uses those patterns to generalize how to behave in the future when it is given features only and must assign an output on its own. 
 
-### What about unsupervised learning?
+#### What about unsupervised learning?
 
 Imagine that you have a dataset describing a number of clinical characteristics of patients in the ICU, but you don't know whether the patients had a sepsis event or not. This data still includes a **feature set** of relevant information about each patient. However, it lacks a target output variable. 
 
 In this case, you are able to conduct **unsupervised learning**. Unsupervised learning draws inferences from unlabeled data without knowing a target or outcome variable. As a result, the type of insights you gather are usually more exploratory, such as identifying clusters of patients that show common groupings of indicators. These algorithms function differently than supervised algorithms, as they strive to find patterns or commonalities without optimizing for a specific target or outcome.
 
-### What else is out there?
+#### What else is out there?
 
 Supervised and unsupervised learning are the two primary categories of ML. In medical research contexts, you can expect to see these two approaches in 95%+ of studies.
 
 There are other categories of machine learning tasks that may be relevant to you, however! One important method is reinforcement learning. Also, there are hybrid approaches such as semi-supervised learning.
 
-### What about my task?
+#### What about my task?
 
 Once you know what your training data looks like, you can proceed to the challenge of picking a machine learning algorithm that is appropriate for your specific task. Let's explore what that looks like for supervised learning first, and identify algorithms that can help with the task.
 
@@ -152,13 +152,13 @@ For supervised learning, we begin with labeled training data. Our goal is to use
 
 When it comes to our task, we can think of two flavors of prediction: predicting a discrete class/categorical label, or predicting a continuous quantity.
 
-### Predicting a discrete class/categorical label
+#### Predicting a discrete class/categorical label
 
 We call predicting a discrete class or categorical label a **classification problem**.
 
 In the case of researching sepsis in the ICU, the target variable `is_patient_septic` accepts two distinct classes: `True` or `False`. These two classes are mutually exclusive. The job of a classification algorithm is to learn a pattern in the feature set that is predictive of the `is_patient_septic` target, and do so in a way that is generalizable to individuals outside of the training set.
 
-### Predicting a continuous quantity
+#### Predicting a continuous quantity
 
 We call predicting a continuous quantity a **regression problem**.
 
@@ -174,7 +174,7 @@ question("Can we use the is_patient_septic variable to predict ICU length stay, 
 )
 ```
 
-### Algorithms for classification (supervised learning)
+#### Algorithms for classification (supervised learning)
 
 Now that we've framed our machine learning problem space as a classification task, we can use models that excel at learning relationships between a feature set and a discrete output. Some possibilities include:
 
@@ -192,7 +192,7 @@ Note that every model here performs the same **task** - features in, discrete ta
 As algorithms increase in **complexity**, they tend to decrease in **interpretability**. For instance, logistic regression is considered one of the most interpretable algorithms for classification, as you can articulate the impact of a change in a given variable as increasing or decreasing the odds of observing the target outcome. Logistic regression performs moderately well in many use cases, but lacks the ability to learn very complex decision boundaries. In contrast, neural networks are capable of learning very complex patterns, but their inner workings are notoriously difficult to interpret (thus the phrase **black box** to describe neural networks).
 
 
-### Algorithms for regression (supervised learning)
+#### Algorithms for regression (supervised learning)
 
 Several algorithms used in classification are also useful in regression - either without modification or with some modification, including tree-based algorithms and neural networks.
 
@@ -202,7 +202,7 @@ Several algorithms used in classification are also useful in regression - either
 * Neural network
 * Linear regression (like logistic regression, sometimes debated as a ML method)
 
-### Let's review
+#### Let's review
 
 ## Unsupervised learning: Clustering and dimensionality reduction
 
@@ -220,7 +220,7 @@ For instance, researchers may be interested in tasks such as:
 
 These two examples above correspond to the two most common use cases for unsupervised learning: clustering and dimensionality reduction.
 
-### Clustering observations into groups
+#### Clustering observations into groups
 
 Clustering is a common unsupervised learning task in which an algorithm assigns all observational units in a dataset to one of *k* clusters. K may vary anywhere from two to hundreds or more, but in most use cases is somewhere in the 2-20 range. One way to phrase the goal of clustering is the following:
 
@@ -232,7 +232,7 @@ Let's return to the example of a clustering task from the sepsis study:
 
 It is possible that clustering test results may reveal, within one cluster, patients with diagnostic signs of sepsis. It's also possible that clustering may reveal a confounding factor, such as clusters of patients who show alarming signs of state deterioration that may or may not be precursors to a sepsis event. As a result, researchers may incorporate unsupervised learning within an exploratory data analysis framework, as one of multiple stages to explore, categorize, and infer structure in data.
 
-### Dimensionality reduction of features in a dataset
+#### Dimensionality reduction of features in a dataset
 
 Dimensionality reduction is a family of unsupervised learning tasks that confront the challenge of working with data with many candidate features, or variables, for consideration. We may use dimensionlity reduction to select only features that provide high amounts of information, and to exclude possible features that are heavily correlated with our data or otherwise uninformative. 
 
@@ -242,18 +242,18 @@ PCA uses complex math to project many-dimension data-points into two or three di
 
 (I like to think of dimensionality reduction as roughly similar to clustering, yet applied to the features in a dataset themselves. We are hoping to uncover latent structures and simplify - but in this case, it's in the service of reducing redundant variables from a dataset.)
 
-### Algorithms for clustering (unsupervised learning)
+#### Algorithms for clustering (unsupervised learning)
 
 * Hierarchical clustering
 * k-means clustering
 * Gaussian mixture model
 
-### Algorithms for dimensionality reduction (unsupervised learning)
+#### Algorithms for dimensionality reduction (unsupervised learning)
 
 * Principle component analysis (PCA)
 * Latent Dirichlet analysis (LDA)
 
-### Let's review
+#### Let's review
 
 **QUESTIONS HERE**
 
