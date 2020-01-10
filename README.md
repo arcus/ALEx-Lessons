@@ -46,7 +46,6 @@ NOTES
 
 Thank you for adding to the list of lessons we can offer!
 
-
 ### Note about this Repo's History
 
 Related to the repo inside CHOP's enterprise GitHub. 
