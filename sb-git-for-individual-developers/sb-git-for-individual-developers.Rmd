@@ -5,8 +5,8 @@ output:
     progressive: true
     allow_skip: true
     css:
-      - https://github.research.chop.edu/pages/CQI/chop-bootstrap/bootstrap-3/bootstrap.min.css
-      - https://github.research.chop.edu/pages/CQI/flexdashboard-theme/css/flexdashboard.min.css
+      - www/bootstrap.min.css
+      - www/flexdashboard.min.css
       - www/style.css
 runtime: shiny_prerendered
 ---
@@ -71,7 +71,7 @@ question("Check all of these that you have NOT done in Git:",
          answer("Tracked what you were doing", message = "* `git diff` and `git status`: Seeing what you're Doing"),
          answer("Merged two branches", message = "* Merging Local Branches"),
          answer("Configured Git", message = "* `git configure`: Introduce yourself to Git"),
-         answer("Marked a point in a repo", message = "* `git tag`: Marking a Point"),
+         answer("Marked a point in a repo", message = "* `git tag`: Naming a Commit"),
          answer("None of the above. I've done them all.", correct = TRUE, message = "You can skip this tutorial, but remember that you can also use it as a reference."),
          type = "multiple",
          correct = "You've already learned all you need to know to operate as an individual developer using Git. If you find yourself frequently flummoxed, remember, it's not you: it's Git. But reviewing basic concepts by taking about a minute per page here could make something click. Consider doing the tutorial despite your vast experience.",
@@ -142,19 +142,6 @@ knitr::include_graphics("www/terminal.png",
 ```
 ```{r scores-see-ha-ha-solution}
 scores
-```
-
-3. Use the next code chunk to save `scores` to your local directory. Replace `? # "<your filename here>"` with a full pathname pointing to where you'd like to store `scores.csv`, then execute the code. Your pathname might look something like  `"/Users/chopuser/Documents/GitHub/scores.csv"`.  
-
-```{r save_scores, exercise = TRUE, exercise.lines = 5}
-library(tidyverse)
-my_filename <- ? # "<your filename here>"
-write_csv(scores, my_filename)
-```
-```{r save_scores-solution}
-library(tidyverse)
-my_filename <- "/users/chopuser/documents/github/scores.csv"
-write_csv(scores, my_filename)
 ```
 
 We'll use your shell and the data to work through some Git basics. We will also open the data file in RStudio.
@@ -533,9 +520,33 @@ knitr::include_graphics("www/git-config-list.png",
 See Jenny Bryan's [happygitwithr.com](https://happygitwithr.com/hello-git.html) pages to find out more.
 
 
-## `git tag`: Marking a Point
+## `git tag`: Naming a Commit
 
-Sorry, this section isn't ready yet. Check back soon because I'm currently working on this lesson. I will add to it every day until it is done.
+A tag is a name for a commit. Git already names each commit with a _sha_, a set of unique random numbers and letters for each commit. But suppose you want a better name, like "v 1.0" to indicate that a given commit was the beginning of version 1.0? Let's try that in the shell.
+
+```{r git-tag, echo = FALSE}
+knitr::include_graphics("www/git-tag.png", 
+                          auto_pdf = getOption("knitr.graphics.auto_pdf", 
+                                                FALSE), dpi = NULL)
+```
+
+When you flag `git tag` with `-a`, you can add some notes to the tag if you want to. This is what that looks like in Emacs (the editor I have configured as Git's default).
+
+```{r git-tag-editor, echo = FALSE}
+knitr::include_graphics("www/git-tag-editor.png", 
+                          auto_pdf = getOption("knitr.graphics.auto_pdf", 
+                                                FALSE), dpi = NULL)
+```
+
+You can make sure a commit got tagged by using `git log`.
+
+```{r git-log-after-tagging, echo = FALSE}
+knitr::include_graphics("www/git-log-after-tagging.png", 
+                          auto_pdf = getOption("knitr.graphics.auto_pdf", 
+                                                FALSE), dpi = NULL)
+```
+
+You can see the sha, Git's internal name for the commit. It's a long, complicated set of characters. That's why `tag`ging is helpful. 
 
 ## Some Helpful Videos
 

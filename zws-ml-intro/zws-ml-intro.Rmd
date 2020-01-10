@@ -5,8 +5,8 @@ output:
     progressive: true
     allow_skip: true
     css:
-      - https://github.research.chop.edu/pages/CQI/chop-bootstrap/bootstrap-3/bootstrap.min.css
-      - https://github.research.chop.edu/pages/CQI/flexdashboard-theme/css/flexdashboard.min.css
+      - www/bootstrap.min.css
+      - www/flexdashboard.min.css
       - www/style.css
 runtime: shiny_prerendered
 ---

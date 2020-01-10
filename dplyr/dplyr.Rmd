@@ -43,6 +43,10 @@ To learn more about `dplyr`, see the package vignette [Introduction to dplyr](ht
 
 In addition, `dplyr` contains a useful function to perform another common task,  "split-apply-combine": more about that later. 
 
+### How do you say it?
+
+Dee'-plier
+
 ### How does `dplyr` Compare to Using Base Functions in R?
 
 If you are familiar with R, you are probably familiar with base R functions such as `split`, `subset`, `apply`, `sapply`, `lapply`, `tapply` and `aggregate`. Some people find the syntax in the `dplyr` package to be easier to work with. I personally like to use Base R for some things and `dplyr` for others. You'll develop your own preferences as you progress in your understanding of R and its many packages. 
