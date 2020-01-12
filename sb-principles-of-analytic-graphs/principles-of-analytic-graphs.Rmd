@@ -1,6 +1,13 @@
 ---
 title: "Principles of Analytic Graphs"
-output: learnr::tutorial
+output: 
+ learnr::tutorial:
+    progressive: true
+    allow_skip: true
+    css:
+      - www/bootstrap.min.css
+      - www/flexdashboard.min.css
+      - www/style.css
 runtime: shiny_prerendered
 ---
 
@@ -113,7 +120,6 @@ Suppose we divided this mortality/pollution data into the four seasons. Would we
 ```{r g}
 
 ```
-
 
 Yes, we do! Plotting the same data for the 4 seasons individually we see a different result.
 
