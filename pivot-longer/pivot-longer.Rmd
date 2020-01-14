@@ -137,7 +137,7 @@ head(long_mussels)
 tail(long_mussels)
 ```
 
-As you can see, you now have a nice long data set. Why did you do that? So you can perform a [one-way ANOVA](../sb-one-way-anova/), of course. Have fun!
+As you can see, you now have a nice long data set. Why did you do that? So you can perform a [one-way ANOVA](../one-way-anova/), of course. Have fun!
 
 ## References
 

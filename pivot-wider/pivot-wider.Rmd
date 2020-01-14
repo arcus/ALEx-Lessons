@@ -280,7 +280,7 @@ Basically, you figure out which new variables you want from the _levels_ of vari
 
 You'll end up with more columns and fewer rows in the data set.
 
-Let's try it with the `fish_encounters` data set. Pipe the data set to `pivot_wider` and tell it to take the `names_from` the `station` variable and the `values_from` `seen`. Use the hints if you have trouble.
+Let's try it with the `fish_encounters` data set. [Pipe][../piping-and-summarizing/] the data set to `pivot_wider` and tell it to take the `names_from` the `station` variable and the `values_from` `seen`. Use the hints if you have trouble.
 
 First, though, change all the names to lowercase using the statement `names(fish_encounters) <- tolower(names(fish_encounters))`. 
 
