@@ -1,0 +1,1030 @@
+---
+title: "Date Pairing in R"
+output: 
+ learnr::tutorial:
+    progressive: true
+    allow_skip: true
+    css:
+      - www/bootstrap.min.css
+      - www/flexdashboard.min.css
+      - www/style.css
+runtime: shiny_prerendered
+---
+
+```{r setup, include=FALSE}
+library(learnr)
+library(data.table)
+library(dplyr)
+library(pwr)
+library(tidyr)
+library(stats)
+library(ggplot2)
+library(sortable)
+shhh <- suppressPackageStartupMessages
+shh <- suppressWarnings
+sh <- suppressMessages
+knitr::opts_chunk$set(echo = FALSE)
+options(digits = 3, scipen = 9999)
+tutorial_options(exercise.completion = FALSE,
+                 exercise.eval = TRUE,
+                 exercise.lines = 8,
+                 exercise.diagnostics = TRUE)
+
+############################### Data for this lesson ###########################################
+
+math <- read.csv("www/math.csv")
+lang <- read.csv("lang.csv")
+
+mathr <- rename(.data = math, id = subjectID, date = testDate, score = mathScore)
+langr <- rename(.data = lang, id = subjectID, date = testDate, score = languageScore)
+
+df <- merge(mathr, langr, by = "id", suffixes = c("_math", "_lang"))
+
+earliest_math <- as_tibble(merge(x = mathr, 
+                                 y = langr,
+                                 by = "id",
+                                 all.x = TRUE,
+                                 suffixes = c("_math", "_lang")))
+
+df$date_diff <- abs(as.Date(df$date_lang) - as.Date(df$date_math))
+closest_pairs <- as_tibble(df %>%
+        group_by(id) %>%
+        filter(date_diff == min(date_diff)) %>%
+        slice(1) %>%
+        ungroup)
+
+first_math_maybe_language <- as_tibble(earliest_math %>%
+                                         group_by(id) %>%
+                                         filter(abs(date_lang - date_math)
+                                                == min(abs(date_lang - date_math)) | 
+                                                  is.na(date_lang - date_math)) %>%
+                                         slice(1) %>%
+                                         ungroup)
+
+df$date_math <- as.Date(df$date_math)
+df$date_lang <- as.Date(df$date_lang)
+
+```
+
+## The Problem
+
+Let’s say **you want to look at two measurements** for a patient or a research participant to find some relationship between them, like a score on an anxiety measure for one variable and triglyceride levels for a few other variables---but some patients have **multiple records for one or both instruments or measures**. 
+
+**How can you find the right records to use in your research?** If you don’t limit which repeated measures you use, you’ll end up with more than one row per patient, which you don’t want.
+
+Maybe you want the two measurements to be as close as possible in time. Or maybe you want the earliest anxiety measure and whatever triglyceride is nearest it (say, 40 days earlier), even if that *interval* isn’t the smallest (say the patient later had an anxiety workup and lipids lab on the same day). There are lots of possibilities here, and they all depend on your research purpose.
+
+```{r what-problems-to-solve, echo=FALSE}
+question("What problem do we want to solve by pairing dates?",
+         answer("We want to compare two variables but we have multiple records for some patients, either in the responses to one instrument or in two or more instruments", correct = TRUE),
+         answer("There is no research question", message = "We may not have a research question, but more study and thought rather than pairing dates will help us solve that problem."),
+         answer("2008/1.33", message = "That's a math problem. Date pairing will not help you. Try typing it into the console if you really want to solve it."),
+         answer("We want to identify unique cases and keep only those", message = "You can solve this by widening both data sets, binding their rows, and passing the new data set name to `unique`. Date pairing will not help you."),
+         correct = "You are amazing!",
+         incorrect = "Incorrect.",
+         random_answer_order = TRUE,
+         allow_retry = TRUE
+)
+```
+
+## Example Data
+
+Let’s consider some fake data [Joy Payton](https://github.com/pm0kjp?tab=repositories) created for illustration purposes: 500 records of fake math scores and fake language scores. Joy stored them on her github repo. 
+
+Uncomment the lines in the code box below. 
+
+[HINT: In RStudio, you can select all the lines you want to uncomment or comment, then press `cmd` (if you have a Mac) or `ctrl` (if you have a PC) along with `shift-c`. This key combination is a toggle: a great way to uncomment or comment large blocks of code. You can't do that here, though. Here, delete the `#` and any accompanying spaces at the beginning of each line to uncomment code.]
+
+[ANOTHER HINT: Press `option` (Mac) or `alt` (PC) and select the first 2 _columns_ of the three lines of code. The cursor should grow or multiply in the direction you move it as long as you hold down the `option/alt` key while selecting. This really cool feature from the RStudio team allows you to select items in sequence---while _not_ holding down the `option/alt` key while you select---_or_ in rectangles---while holding down the `option/alt` key while you select.]
+
+After uncommenting the lines, run the code: Press `cmd` or `ctrl` and `Enter` at the same time or click on the "Run Code" button. These commands download the two data files and store them in the two tibbles named `math` and `lang`.
+
+```{r load-data, exercise = TRUE, exercise.lines = 5}
+# library(tidyverse)
+# math <- as_tibble(read.csv("https://raw.githubusercontent.com/pm0kjp/datastore/master/fakeMath.csv"))
+# lang <- as_tibble(read.csv("https://raw.githubusercontent.com/pm0kjp/datastore/master/fakeLang.csv"))
+```
+```{r load-data-solution}
+library(tidyverse)
+math <- as_tibble(read.csv("https://raw.githubusercontent.com/pm0kjp/datastore/master/fakeMath.csv"))
+lang <- as_tibble(read.csv("https://raw.githubusercontent.com/pm0kjp/datastore/master/fakeLang.csv"))
+```
+
+If you got an error, don't worry. It probably has something to do with permissions somewhere. You can proceed anyway because we downloaded the data sets for you. If you really, really want to download them, run the lines from within your copy of RStudio.
+
+### A Word about the `tidyverse` as we Look at the Data
+
+We store the data in two _tibbles_, or nicely formatted data frames à la the `tidyverse` package (which we loaded in the previous code block). If you have worked only with non-tibble data frames before, you might prefer tibble output. I do. I try to make all my data frames tibbles except when I come across the occasional function that prefers to be passed a base R data frame. For those, I wrap the tibble in `as.data.frame` before passing it.
+
+>The tidyverse prefers tibbles.
+
+Note that `tidyverse` is not just a package, but a package of packages. It is, as is stated on the `tidyverse` website,
+
+>a group of packages that work in harmony because they share common representations and [API design](https://mattgemmell.com/api-design/).
+
+(You can [learn more about APIs](https://mattgemmell.com/api-design/) or simply replace the word "API" in your head with "user interface for developers" whenever you come across it.)
+
+Sometimes you want to put the whole `tidyverse` set of packages in the library; other times you can put [one of its component packages](https://www.tidyverse.org/packages/) in the library and save some space. Check out our [dplyr](../sb-dplyr/), [Piping and Summarizing](../sb-piping-and-summarizing/), [Pivot Longer](../sb-pivot-longer/), [Pivot Wider](../sb-pivot-wider/), and [ggplot2](../sb-ggplot2-part-1) lessons, all of which concern `tidyverse` packages.
+
+Have a look at the data sets by typing their names, one per line, and executing the code. 
+
+```{r seemath-lang, exercise = TRUE, exercise.lines = 5}
+
+```
+```{r seemath-lang-hint}
+math
+...
+...
+```
+```{r seemath-lang-solution}
+math
+lang
+```
+
+### Simplify Variable Names
+
+I'm a lazy coder, so let's simplify our variable names and make sure they are all in lowercase letters. This is good coding practice because, if you lowercase everything, although you will find yourself checking the spelling of variables at times, you will never find yourself checking to see which letters are upper- and which are lowercase. 
+
+We'll use the `dplyr`'s `rename` function because we want to rename _and_ lowercase the variable names. `dplyr` is already in the library because it's part of the `tidyverse`.
+
+The format for using `rename` is to type its name, then pass it the arguments `.data = math` or `lang` and `id = subjectID`. The correct syntax involves putting the "to" variable name first, then setting it equal to the "from" variable.
+
+Do this for both tibbles, renaming `subjectID` to `id`, `testDate` to `date`, and the score variables to `score`. Make sure you store the results in modified tibble names, the same names as before with an "r" on the end. 
+
+```{r rename-vars, exercise = TRUE, exercise.lines = 5}
+
+```
+```{r rename-vars-hint-1}
+mathr <- rename(...)
+```
+```{r rename-vars-hint-2}
+mathr <- rename(.data = math, ...)
+rename(.data = lang, ...)
+```
+```{r rename-vars-hint-3}
+mathr <- rename(.data = math, id = subjectID, ...)
+langr <- rename(.data = lang, ...)
+```
+```{r rename-vars-solution}
+mathr <- rename(.data = math, id = subjectID, date = testDate, score = mathScore)
+langr <- rename(.data = lang, id = subjectID, date = testDate, score = languageScore)
+```
+
+If you see anything happen, you might have forgottone to assign the output to the new tibble names, `mathr` and `langr`.
+
+### Look at the `str`ucture of the Files
+
+Now use `str(mathr)` and `str(langr)` to find out more about our data setsz. 
+
+```{r strdata, exercise = TRUE, exercise.lines = 5}
+
+```
+```{r strdata-hint-1}
+str(...)
+```
+```{r strdata-hint-2}
+str(...)
+str(...)
+```
+```{r strdata-hint-3}
+str(mathr)
+str(...)
+```
+```{r strdata-solution}
+str(mathr)
+str(langr)
+```
+
+The data has the following qualities:
+
+* Each of the two data sets `math` and `lang` has 500 samples and 3 variables    
+* IDs are integers between 1 and 1000    
+* Dates are randomly and uniformly distributed between January 1, 2005 and January 1, 2016    
+* Each `id` may have one or more `date`s associated with it because people could take the tests repeatedly
+* Scores follow a triangular distribution with     
+    - a minimum of 25 (indicates full guessing)    
+    - a maximum of 100    
+    - a mode of 80
+* scores are rounded
+
+## Look at the Data
+
+You can learn more about looking at data by going through our [Looking at Data lesson](http://a-mess.org/swirl-looking-at-data/). We'll use some of the methods from that lesson here. If you want to take the time to do that now, don't worry---everything you've put in this lesson will be here when you get back. 
+
+Let's use a variety of functions to confirm what we told you about the data. 
+
+### 1. Prepare: Get the `names` to Pass to Other Functions
+
+Find the variable names in `mathr` and `langr` by passing each one to the `names` function. Separate the two calls to `names` using a `;`. That's how you put two R commands on a single line. I don't do it often, but ocassionally, as here, it's more readable to put simple, repetitive statements together on the same line.
+
+You should see three names for each data set as a result. Each data set has the _same_ set of three names. 
+
+```{r names, exercise = TRUE, exercise.lines = 5}
+
+```
+```{r names-hint-1}
+names(...)
+```
+```{r names-hint-2}
+names(...); names(...)
+```
+```{r names-hint-3}
+names(mathr); names(...)
+```
+```{r names-solution}
+names(mathr); names(langr)
+```
+
+Now let's see if the dataset has the correct dimensions.
+
+### 2. Confirm the Number of Samples with `dim`
+
+Do something similar to what you did with `names`, but this time, replace the calls to `names` with calls to `dim`. 
+
+You can copy your code from the previous code chunk and replace just two words.
+
+```{r dims, exercise = TRUE, exercise.lines = 5}
+
+```
+```{r dims-hint-1}
+dim(...)
+```
+```{r dims-hint-2}
+dim(...); dim(...)
+```
+```{r dims-hint-3}
+dim(mathr); dim(...)
+```
+```{r dims-solution}
+dim(mathr); dim(langr)
+```
+
+Most packages in R (including base R and the [`tidyverse`](https://tidyverse.tidyverse.org/)) provide results in R, C format: first the rows, then the columns. This output shows us that each data set has 500 rows and 3 columns.
+
+```{r rowcolumnorder, echo = FALSE}
+# Define the answer options
+rc_list <- c(
+  "Rows",
+  "Columns"
+  )
+# Initialize the question
+question_rank(
+  "Please place these in the order in which you can usually expect R to present them to you in output. If they are already in the right order, just leave them alone.",
+  answer(rc_list, correct = TRUE),
+  answer(rev(rc_list), correct = FALSE, message = "Other direction."),
+  allow_retry = TRUE
+)
+```
+
+### 3. Confirm the `range`s of `id` and `score`
+
+Use the function `range`, passing it `mathr$id`, then `langr$id`. Repeat that line with `mathr$score` and `langr$score`.
+
+```{r range, exercise = TRUE, exercise.lines = 5}
+
+```
+```{r range-hint-1}
+range(...)
+range(...)
+```
+```{r range-hint-2}
+range(...); range(...)
+range(...); range(...)
+```
+```{r range-hint-3}
+range(mathr$id); range(langr$id)
+range(...)
+```
+```{r range-solution}
+range(mathr$id); range(langr$id)
+range(mathr$score); range(langr$score)
+```
+
+```{r range_id, echo=FALSE}
+question("Do all the values in `id` fall within the expected range for both data sets?",
+         answer("Yes", correct = TRUE),
+         answer("No", message = "Check the hints in the code block to see where you may have gone wrong."),
+         correct = random_praise(),
+         incorrect = "They do.",
+         random_answer_order = TRUE,
+         allow_retry = TRUE
+)
+```
+
+```{r what-next-if-out-of-range, echo=FALSE}
+question("What should we do if `id` includes numbers outside of the range 1 through 1000?",
+         answer("Look more closely at the data to figure out why.", correct = TRUE),
+         answer("Go have a cup of tea and forget about it.", message = "Cup of tea, yes. Forget about it, no."),
+         answer("Move along because `id` is not an important variable", message = "Have you any reason to believe that this is an unimportant variable besides the fact that it is called `id`?"),
+         answer("Reset all the `id`s in both data sets so they fall within the expected range", message = "Have you ascertained that each `id` is used only once? Until you know more, you should leave their values alone."),
+         random_answer_order = TRUE,
+         allow_retry = TRUE
+)
+```
+
+
+### Is `date` a Date?
+
+Find out what class the `date` variable is for each data set using the `class` function. You can separate the two calls (one each for `mathr` and `langr`) by a semicolon as you did with `dim` and `names` above. 
+
+```{r check-date-class, exercise = TRUE, exercise.lines = 5}
+
+```
+```{r check-date-class-hint-1}
+class(...)
+```
+```{r check-date-class-hint-2}
+class(mathr$date); class(...)
+```
+```{r check-date-class-solution}
+class(mathr$date); class(langr$date)
+```
+
+```{r isdatefunction, echo=FALSE}
+question("What class is the date variable?",
+         answer("factor", correct = TRUE),
+         answer("function", message = "You seem to have forgotten to use the `date` variable that is _in the dataset_. If you asked for `class(date)`, you will have been told the class of the _function_ `date`, which is outside the data set."),
+         answer("character", message = "You'll probably need to look at the hints to fix your code."),
+         answer("analog", message = "I don't know of any data structures in R called 'analog', though I'm sure we could make one."),
+     correct = "Correct. Lovely job.",
+     incorrect = "Try again. Next time's the charm!",
+     random_answer_order = TRUE,
+     allow_retry = TRUE
+)
+```
+
+### 5. See the `head` of `date`
+
+Look at the top of the `date` variables by passing them to `head`.
+
+```{r head-date, exercise = TRUE, exercise.lines = 5}
+
+```
+```{r head-date-hint-1}
+head(...)
+```
+```{r head-date-hint-2}
+head(mathr$date); head(...)
+```
+```{r head-date-solution}
+head(mathr$date); head(langr$date)
+```
+
+```{r howmanylevelsdates, echo=FALSE}
+question("How many levels are in the two date variables for `mathr` and `langr`?",
+         answer("468 and 470", correct = TRUE),
+         answer("3 and 9", message = "There are many, many more than that"),
+         answer("470 and 468", message = "That's backwards."),
+         answer("2005-08-15 and 2006-07-22", message = "Those are dates, not numbers of levels."),
+     correct = "That's the answer I was looking for.",
+     incorrect = "Try again. Perseverence is one of the keys to success.",
+     random_answer_order = TRUE,
+     allow_retry = TRUE
+)
+```
+
+### 6. Check `score` Distributions (and Find the Modes)
+
+Use `hist` to find the distributions of values for `mathr$score` and `langr$score`. 
+
+```{r check-score-distros, exercise = TRUE, exercise.lines = 5}
+
+```
+```{r check-score-distros-hint-1}
+hist(...)
+```
+```{r check-score-distros-hint-2}
+hist(...); hist(...)
+```
+```{r check-score-distros-hint-3}
+hist(mathr$score); hist(...)
+```
+```{r check-score-distros-solution}
+hist(mathr$score); hist(langr$score)
+```
+
+```{r triangular-yn, echo=FALSE}
+question("We were told the distributions were triangular. Are they?",
+         answer("Perfectly so.", message = "It's not _that_ precise a shape."),
+         answer("Sort of.", correct = TRUE),
+         answer("No.", message = "Type `hist(mathr$score); hist(langr$score)` and look carefully."),
+         correct = "Correct! You should be proud.",
+         incorrect = "No need to fret; try again.",
+         random_answer_order = TRUE,
+         allow_retry = TRUE
+)
+```
+```{r wheremode, echo=FALSE}
+question("Where are the `score` modes (as shown by the histograms)?",
+         answer("Around 80", correct = TRUE),
+         answer("Around 60"),
+         answer("Around 0"),
+         correct = "Well done.",
+         incorrect = "Actually no. Look for the tallest bars in each of the histograms",
+         random_answer_order = TRUE,
+         allow_retry = TRUE
+)
+```
+
+### Fix One Thing
+
+```{r fix-one-thing, echo=FALSE}
+question("If you could fix one thing about the data set, what would it be?",
+         answer("Change `date` from a factor to a date object", correct = TRUE),
+         answer("Eliminate all duplicate `id`s", message = "Duplicate `id`s exist because each person may have taken the test more than once."),
+         answer("Make `mathr` wider", message = "`mathr` doesn't contain any implicit variables."),
+         answer("Make `langr` wider", message = "`langr` doesn't contain any implicit variables."),
+         correct = "Correct! What first-rate work!",
+         incorrect = "That's okay: You learn just as much from mistakes as from successes. Try again.",
+         random_answer_order = TRUE,
+         allow_retry = TRUE
+)
+```
+
+We'll do this later in the lesson. If you want to find out how, check out the [swirl lesson about dates in R](../swirl-dates-and-times/).
+
+## Identify Duplicates using `dplyr`
+
+Do you need to review `dplyr`? Let's find out. Try your hand at these two questions.
+
+```{r select-verbs, echo=FALSE}
+question("Which of these are `dplyr` verbs? Select six.",
+         answer("`select`", correct = TRUE),
+         answer("`unselect`"),
+         answer("`disregard`"),
+         answer("`rename`", correct = TRUE),
+         answer("`mutate`", correct = TRUE),
+         answer("`filter`", correct = TRUE),
+         answer("`summarise`", correct = TRUE),
+         answer("`arrange`", correct = TRUE),
+         correct = "You are amazing!",
+         incorrect = "It might help if you review [our `dplyr` lesson](../sb-dplyr/).",
+         random_answer_order = TRUE,
+         allow_retry = TRUE
+)
+```
+```{r whatsapipe, echo=FALSE}
+question("What does a `dplyr` pipe look like?",
+         answer("`%>%`", correct = TRUE),
+         answer("`%->%`"),
+         answer("`%=%`"),
+         answer("`%<%`"),
+         correct = "Correct! Absolutely fabulous!",
+         incorrect = "No, that's not a pipe in `dplyr` terms. Check out [our `dplyr` lesson](../sb-dplyr/).",
+         random_answer_order = TRUE,
+         allow_retry = TRUE
+)
+```
+
+If you struggled to figure out the answers, please see [our `dplyr`](../sb-dplyr/) and [Piping and Summarizing](../sb-piping-and-summarizing/) lessons before continuing. The rest of this lesson assumes you have an understanding of the concepts covered in those lessons.
+
+Our two data sets are tables (just rows & columns). How many duplicates have we in each table? We can use `dplyr` to group by subject `id`, find the how big each group is, and display results in a table, ordered by group size. Follow these steps:
+
+2. Start with `mathr` and pipe it to `group_by`.    
+
+3. Pass `id` to `group_by`, then add another pipe.    
+
+4. Call the function `group_size`, then add another pipe.    
+
+5. Call the function `table`.
+
+```{r first-piping, exercise = TRUE, exercise.lines = 7}
+
+```
+```{r first-piping-hint-1}
+library(...)
+```
+```{r first-piping-hint-2}
+library(dplyr)
+mathr %>% 
+  ...
+```
+```{r first-piping-hint-3}
+library(dplyr)
+mathr %>% 
+  group_by(...) %>%
+  ...
+```
+```{r first-piping-hint-4}
+library(dplyr)
+mathr %>% 
+  group_by(id) %>%
+  group_size %>%
+  ...
+```
+```{r first-piping-solution}
+library(dplyr)
+mathr %>% 
+  group_by(id) %>%
+  group_size %>%
+  table
+```
+
+Lots of duplication here. One participant took the math test four times! Still, most (329) made only one attempt.
+
+Go ahead and use this code chunk to run the same series of steps with `langr` as input data.
+
+```{r langr-piping, exercise = TRUE, exercise.lines = 5}
+
+```
+```{r langr-piping-hint-1}
+langr %>%
+  ...
+```
+```{r langr-piping-hint-2}
+langr %>%
+  group_by(...) %>%
+```
+```{r langr-piping-hint-3}
+langr %>%
+  group_by(id) %>%
+  group_size %>%
+  ...
+```
+```{r langr-piping-solution}
+langr %>%
+  group_by(id) %>%
+  group_size %>%
+  table
+```
+
+Similar here---lots of people took the tests more than once. 
+
+```{r howmanythisthat, echo=FALSE}
+question("How many people took the language test twice?",
+         answer("86", correct = TRUE),
+         answer("295", message = "That's how many took it once."),
+         answer("11", message = "That's how many took it 3 times."),
+         answer("0", message = "I'm afraid something went seriously wrong with your code if you have a 0 somewhere."),
+     correct = "Correct! :)",
+     incorrect = "Please try again.",
+     random_answer_order = TRUE,
+     allow_retry = TRUE
+)
+```
+```{r howmanymath, echo=FALSE}
+question("How many people took the math test at least twice?",
+         answer("82", correct = TRUE),
+         answer("76", message = "That's how many people took it twice---but the question is how many people too the test _at least_ twice."),
+         answer("5", message = "That's how many people took the test 3 times. Add a few more to the total and you'll get the right answer."),
+         answer("1", message = "Four times is _at least_ twice, but you should add in those who took it twice and three times as well."),
+     correct = "You got it! Great work.",
+     incorrect = "Try again.",
+     random_answer_order = TRUE,
+     allow_retry = TRUE
+)
+```
+
+
+One person (`id` = 697) took the math and the language tests each three times. Let's merge our two data sets and see how many records we get for that person. 
+
+## A Simple Merge Example
+
+1. Start by passing `merge` the two dataset names (`mathr` and `langr`).
+
+1. Tell it to merge `by =` "id". 
+
+1. We want to keep the scores and dates straight for the two data sets (which currently have the same names for `date` and `score`), so set `suffixes` equal to `c("_math", "_lang")`. 
+
+1. Wrap the merge in `as_tibble` so you get nicely formatted data. 
+
+1. Save the tibbled output in `df`. 
+
+1. Look at `df`.
+
+```{r merge3x3, exercise = TRUE, exercise.lines = 5}
+
+```
+```{r merge3x3-hint-1}
+df <- ?
+```
+```{r merge3x3-hint-2}
+df <- merge(mathr, ...)
+```
+```{r merge3x3-hint-3}
+df <- merge(mathr, langr, by = ...)
+```
+```{r merge3x3-hint-4}
+df <- merge(mathr, langr, by = "id", suffixes = ...)
+```
+```{r merge3x3-solution}
+df <- as_tibble(merge(mathr, langr, by = "id", suffixes = c("_math", "_lang")))
+df
+```
+
+```{r checkthemerge, echo = FALSE}
+# Define the answer options
+mergevarorder <- c(
+  "id",
+  "date_math",
+  "score_math",
+  "date_lang",
+  "score_lang"
+  )
+# Initialize the question
+question_rank(
+  "Please arrange these column names to match your output.",
+  answer(mergevarorder, correct = TRUE),
+  answer(rev(mergevarorder), correct = FALSE, message = "Other direction."),
+  allow_retry = TRUE
+)
+```
+
+Check out `df`'s dimensions, then look at the top of the newly merged data set.
+
+```{r mergeddfidtab, exercise = TRUE, exercise.lines = 5}
+
+```
+```{r mergeddfidtab-hint-1}
+dim(...)
+```
+```{r mergeddfidtab-hint-2}
+dim(...)
+table(...)
+```
+```{r mergeddfidtab-hint-3}
+dim(...)
+head(...)
+```
+```{r mergeddfidtab-solution}
+dim(df)
+head(df)
+```
+
+Now let's see how much repetition there is in `id`. We can add up how many elements of a vector are `duplicated` by `sum`ming them.
+
+```{r sumdup-id, exercise = TRUE, exercise.lines = 5}
+
+```
+```{r sumdup-id-hint-1}
+sum(...)
+```
+```{r sumdup-id-hint-2}
+sum(duplicated(...))
+```
+```{r sumdup-id-solution}
+sum(duplicated(df$id))
+```
+
+```{r howmanydupids, echo=FALSE}
+question("How many duplicates did you find?",
+         answer("89", correct = TRUE),
+         answer("86", message = "There were more than that."),
+         answer("82", message = "You should have gotten a higher number."),
+         answer("None", message = "There were duplicates."),
+     correct = "Resplendent!",
+     incorrect = "Try again.",
+     random_answer_order = TRUE,
+     allow_retry = TRUE
+)
+```
+
+**EXTRA CREDIT** Write some code to check whether the sums of all the unique and duplicated `id`s add up to the total length of `df`. Your output should be a logical: `TRUE` or `FALSE`. 
+
+```{r sumdupcheck, exercise = TRUE, exercise.lines = 5}
+
+```
+```{r sumdupcheck-hint-1}
+length(...) + sum(...) == ?
+```
+```{r sumdupcheck-hint-2}
+length(unique(...)) + sum(duplicated(...)) == ?
+```
+```{r sumdupcheck-hint-3}
+length(unique(df$id)) + sum(duplicated(df$id)) == nrow(...)
+```
+```{r sumdupcheck-hint-4}
+length(unique(df$id)) + sum(duplicated(df$id)) == nrow(df)
+```
+```{r sumdupcheck-solution}
+length(unique(df$id)) + sum(duplicated(df$id)) == nrow(df)
+```
+
+Little explorations like these may seem like  waste of time, but actually they help you know your data better and they validate your work. 
+
+By the way, I hope you got `TRUE`.
+
+## How do we Deal with all the Repetition?
+
+It's clear that we have much repetition of `id`s.
+
+Having so much repetition can cause problems with analyses that assume that there is only one observation or one combination of observations per subject. How can we query the data but limit the number of rows returned to just one row per subject?
+
+There are different ways to accomplish this. We will work through two possible queries that result in the ideal one case per line. 
+
+A good analyst and coder understands precise research goals as well as the specifications of the measurement when working with data that needs to have multiple administrations resolved (in our example, when people took the test more than once). Consider the following:
+
+* Our instruments _should_ be administered only once, so we could with validity disregard administrations $\displaystyle 2$ through $\displaystyle n$ no matter when they occurred.     
+
+* Some instruments, like lab results, have roughly defined “expiration dates”---they reflect a moment in time, and must be selected carefully to make sure you’re measuring what you want, when you want it. An expired measurement may be worse than no data at all.    
+
+* Some instruments need to be administered in order: for example, we might want an instrument that requires deception to be administered _before_ others that could tip participants off. 
+
+We'll use date-based resolution to make this query to the data set.
+
+## QUERY 1: Closest Pairs
+
+>
+"Give me the earliest language score, if any, and the math score closest in time to that language score. If no language score exists, omit.”
+
+
+```{r firstquestion, echo=FALSE}
+question("Which elements are part of the preceding question?",
+         answer("Report only paired scores: Don't include instances of only one score or the other. ", correct = TRUE),
+         answer("Find the earliest language score first.", correct = TRUE),
+         answer("Match a given language score with a math score for the same `id` (person).", correct = TRUE),
+         answer("Calculate the distance (in time) between the language and math tests.", correct = TRUE),
+         answer("If you have more than one pair of language and math scores, show me the one that has the smallest distance value (distance in time, that is).", correct = TRUE),
+     correct = "Well done. That's a complex sentence pared down to a list of things to do. All we have to do is get the order right and use relevant functions with correct syntax.",
+     incorrect = "Sorry, not quite.",
+     random_answer_order = TRUE,
+     allow_retry = TRUE
+)
+```
+
+Let’s get started on the to-do list you just identified in the question above. We'll need the dates in `date` format. Use the `as.Date` function. Assign the dates `as.Dates` back onto themselves, then check their classes.
+
+```{r datesfixing, exercise = TRUE, exercise.lines = 5}
+
+```
+```{r datesfixing-hint-1}
+df$date_math <- ?
+df$date_lang <- ?
+```
+```{r datesfixing-hint-2}
+df$date_math <- as.Date(...)
+df$date_lang <- as.Date(...)
+class(...)
+class(...)
+```
+```{r datesfixing-solution}
+df$date_math <- as.Date(df$date_math)
+df$date_lang <- as.Date(df$date_lang)
+class(df$date_math)
+class(df$date_lang)
+```
+
+If you got "Date" for classes, you did well. 
+
+We want to figure out how many tests each person took. Use [piping and summarizing](../sb-piping-and-summarizing/) to figure that out. Start with `df`, pipe it to `group_by` the `id` field, then to [`summarise`](../sb-piping-and-summarizing/), setting the new column `size` equal to `n()`, pipe _that_ to `arrange(desc(size))` to list most tests taken to fewest, then pipe those results to `ungroup`.
+
+```{r groupforsize, exercise = TRUE, exercise.lines = 10}
+
+```
+```{r groupforsize-hint-1}
+df %>%
+  group_by(...)
+```
+```{r groupforsize-hint-2}
+df %>%
+  group_by(id) %>%
+  summarise(...)
+```
+```{r groupforsize-hint-3}
+df %>%
+  group_by(id) %>%
+  summarise(size = n()) %>%
+  arrange(...) %>%
+```
+```{r groupforsize-hint-4}
+df %>%
+  group_by(id) %>%
+  summarise(size = n()) %>%
+  arrange(desc(...)) %>%
+  ungroup
+```
+```{r groupforsize-solution}
+df %>%
+  group_by(id) %>%
+  summarise(size = n()) %>%
+  arrange(desc(size)) %>%
+  ungroup
+```
+	
+Yep, the dratted 697 is there at the top of the lists with 9 pairs of dates and tests! How will we select the closest pair for that person and others like them? 
+
+One easy way to get what we're looking for is to use `dplyr`. We’ve already merged, so now we just want to filter pairs such that within each `id`, the only row we keep is the one with the smallest time interval. That’s fairly simple, once you think about it. We don’t care about order, so we just look for the smallest absolute value in date difference, or, to say it another way, the difference that is the same as the minimum difference for this `id`.
+
+Note that we have to think about ties. Suppose the data contains a math test 200 days _before_ and another one 200 days _after_ the language test. In our case it doesn’t matter which one we pick, so let's just take the first one using dplyr’s `slice`, which chooses a row by its ordinal position in a tibble (i.e., it picks the $\displaystyle n$th one it finds). Then we’ll ungroup the resulting tibble and store it in a new tibble called `closest_pairs`. 
+
+We have deliberately left you to figure out how to follow the steps, but you can do this. You know everything you need to know to create the query. Use the "Hints" button if you need to. As always with R, you have many choices for setting this up; our solution is only one possibility. 
+
+A quick tip: You'll see a lot of warnings. You can suppress them if you wrap the entire assignment to `closest_pairs` in `suppressWarnings`. In fact, I always rename `suppressWarnings` to `shh` in my setup code chunks to save typing and space. I've done that for you here. 
+
+```{r closestpairs, exercise = TRUE, exercise.lines = 15}
+
+```
+```{r closestpairs-hint-1}
+df$date_diff <- abs(df$date_lang - df$date_math)
+closest_pairs <- df %>%
+  group_by(...) %>%
+  filter(...) %>%
+  slice(...) %>%
+  ...
+```
+```{r closestpairs-hint-2}
+df$date_diff <- abs(df$date_lang - df$date_math)
+closest_pairs <- as_tibble(df %>%
+                             group_by(id) %>%
+                             filter(...) %>%
+                             slice(1) %>%
+                             ...)
+```
+```{r closestpairs-hint-3}
+df$date_diff <- abs(df$date_lang - df$date_math)
+closest_pairs <- as_tibble(df %>%
+                             group_by(id) %>%
+                             filter(... == ...) %>%
+                             slice(...) %>%
+                             ...)
+```
+```{r closestpairs-hint-4}
+df$date_diff <- abs(df$date_lang - df$date_math)
+shh(closest_pairs <- as_tibble(df %>%
+                                 group_by(id) %>%
+                                 filter(date_diff == min(date_diff)) %>%
+                                 slice(...) %>%
+                                 group))
+```
+```{r closestpairs-solution}
+df$date_diff <- abs(df$date_lang - df$date_math)
+shh(closest_pairs <- as_tibble(df %>%
+                                 group_by(id) %>%
+                                 filter(date_diff == min(date_diff)) %>%
+                                 slice(1) %>%
+                                 ungroup))
+```
+
+
+
+What are the new dataset's dimensions?
+
+```{r dimit, exercise = TRUE, exercise.lines = 5}
+
+```
+```{r dimit-hint}
+dim(...)
+```
+```{r dimit-solution}
+dim(closest_pairs)
+```
+
+
+`closest_pairs` now has only 161 rows, much less than the 250 in `df`. Let’s confirm that there are no duplications:
+
+1. Check whether there are any `duplicated` `id`s in `closest_pairs`.    
+
+1. Wrap that check in a call to `table` to make the output nice. You can also add them up by wrapping the output of `duplicated` in `sum`.
+
+```{r wraptableduplicated, exercise = TRUE, exercise.lines = 5}
+
+```
+```{r wraptableduplicated-hint-1}
+table(...)
+```
+```{r wraptableduplicated-hint-2}
+table(duplicated(...))
+```
+```{r wraptableduplicated-solution}
+table(duplicated(closest_pairs$id))
+sum(duplicated(closest_pairs$id))
+```
+
+All false, with 0 duplicates.
+
+We now have a tibble that consists of _only_ the subjects that have both tests, and from those administrations, _only_ the pair that has the smallest time interval.
+
+## QUERY 2: Earliest Math Test and Nearest Language Test (if any)
+
+>
+“I don’t care if it’s a first test or a subsequent readministration, just give me the smallest time interval between the _first_ math and _any_ language score for each subject that has both.” 
+
+```{r secondquestion, echo=FALSE}
+question("Which elements are part of the preceding question?",
+         answer("Report only paired scores: Don't include instances of only one score or the other. ", correct = TRUE),
+         answer("Find the earliest score (be it language or math).", correct = TRUE),
+         answer("Match a given test score with the other test score for the same `id` (person).", correct = TRUE),
+         answer("Calculate the distance (in time) between the math and language tests.", correct = TRUE),
+         answer("If you have more than one pair of language and math scores, show me the one that has the smallest distance value (distance in time, that is).", correct = TRUE),
+     correct = "Well done. That's a complex sentence converted to a list of things to do. All we have to do is get the order right and, again, use relevant functions with correct syntax.",
+     incorrect = "Sorry, not quite.",
+     random_answer_order = TRUE,
+     allow_retry = TRUE
+)
+```
+
+Here we want all subjects that have a math score. We’ll take their first one, then find the nearest language score (if there is one) to that.
+
+The easiest way to tackle this problem is to 
+
+1. Merge again (using slightly different arguments for a slightly different result)
+
+1. Filter again (see #1)
+
+We’ll merge more than just the intersection of the two data sets: we’ll also include cases in which math is present but language is absent. In other words, we want ALL the math rows, regardless of whether there’s a corresponding language row. We can’t say the same about language. And remember to wrap the merge in `as_tibble` so we have more manageable results. And here's another trick: Wrap the entire assignment in parentheses so you can see what it looks like without having to add another line of code.
+
+```{r earliest_math, exercise = TRUE, exercise.lines = 15}
+
+```
+```{r earliest_math-hint-1}
+earliest_math <- merge(...)
+```
+```{r earliest_math-hint-2}
+earliest_math <- merge(x = mathr, 
+                       y = langr,
+                       ...)
+```
+```{r earliest_math-hint-3}
+earliest_math <- merge(x = mathr, 
+                       y = langr,
+                       by = "id",
+                       ...)
+```
+```{r earliest_math-hint-4}
+earliest_math <- as_tibble(merge(x = mathr, 
+                                 y = langr,
+                                 by = "id",
+                                 all.x = TRUE,
+                                 suffixes = c(...)))
+```
+```{r earliest_math-solution}
+(earliest_math <- as_tibble(merge(x = mathr, 
+                                 y = langr,
+                                 by = "id",
+                                 all.x = TRUE,
+                                 suffixes = c("_math", "_lang"))))
+```
+
+Now we’ll do something similar in Query 1, as far as selecting the smallest absolute value, but we’ll have to include cases where there is no date distance (it’s `NA`) to cover cases where no language date exists. We use the vertical pipe (`|`) to symbolize "or" for a statement like (exactly like) this: `is.na(date_lang - date_math)`.
+
+See if you can put it all together in the next code block. Check the hints if you get stuck, and wrap everything in `suppressWarnings` (or `shh`) after you're happy with it.
+
+```{r allmath, exercise = TRUE, exercise.lines = 5}
+
+```
+```{r allmath-hint-1}
+first_math_maybe_language <- ?
+```
+```{r allmath-hint-2}
+first_math_maybe_language <- earliest_math %>%
+  ...
+```
+```{r allmath-hint-3}
+first_math_maybe_language <- earliest_math %>%
+  group_by(...) %>%
+  filter(abs(...) == min(abs(...)) | 
+           ...) %>%
+  slice(...) %>%
+  ...
+```
+```{r allmath-hint-4}
+first_math_maybe_language <- earliest_math %>%
+  group_by(id) %>%
+  filter(abs(date_lang - date_math) == min(abs(date_lang - date_math)) | 
+           is.na(...)) %>%
+  slice(1) %>%
+  ungroup
+```
+```{r allmath-solution}
+first_math_maybe_language <- earliest_math %>%
+  group_by(id) %>%
+  filter(abs(date_lang - date_math) == min(abs(date_lang - date_math)) | 
+           is.na(date_lang - date_math)) %>%
+  slice(1) %>%
+  ungroup
+```
+
+Again, let’s look at how large our dataset is.
+
+```{r dimnewone, exercise = TRUE, exercise.lines = 5}
+
+```
+```{r dimnewone-hint}
+dim(...)
+```
+```{r dimnewone-solution}
+dim(first_math_maybe_language)
+```
+
+`first_math_maybe_language` has 411 rows. Let’s confirm that there are no duplicates. Use the code you wrote to check for duplcates before. That same code will work here, too, with the new tibble name. You can also just sum up the duplicates. 
+
+```{r table_duped_again, exercise = TRUE, exercise.lines = 5}
+
+```
+```{r table_duped_again-hint-1}
+table(...)
+```
+```{r table_duped_again-hint-2}
+table(duplicated(...))
+```
+```{r table_duped_again-solution}
+table(duplicated(first_math_maybe_language$id))
+sum(duplicated(first_math_maybe_language$id))
+```
+
+Great! We have data with no duplicated `id`s.
+
+
+## References 
+
+You have just gone through some fairly complicated processes. Thanks go to the originator of this lesson and the accompanying data, [Joy Payton](https://github.com/pm0kjp?tab=repositories). You can find [Joy's original lesson here](https://education.arcus.chop.edu/date-pairing-in-r/).

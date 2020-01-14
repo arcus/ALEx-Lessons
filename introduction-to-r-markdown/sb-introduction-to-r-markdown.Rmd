@@ -1,0 +1,42 @@
+---
+title: "Introduction to R Markdown"
+output: 
+ learnr::tutorial:
+    progressive: true
+    allow_skip: true
+    css:
+      - www/bootstrap.min.css
+      - www/flexdashboard.min.css
+      - www/style.css
+runtime: shiny_prerendered
+---
+
+```{r setup, include=FALSE}
+library(learnr)
+knitr::opts_chunk$set(echo = FALSE)
+options(digits = 3, scipen = 9999)
+tutorial_options(exercise.startover = TRUE,
+  exercise.eval = TRUE, 
+  exercise.cap = "R Code",
+  exercise.completion = TRUE,
+  exercise.diagnostics = TRUE)
+  
+
+```
+
+## Why should I learn this?
+
+From Garret Grolemund,
+
+>R Markdown documents implement Donald’s Knuth’s idea of literate programming and take the manual labor out of writing and maintaining reports. Moreover, they are quick to learn. (2015)
+
+To learn more about why rave about RMarkdown, [check out the RMardown website](https://rmarkdown.rstudio.com) or [see samples of some of the things you can do with RMarkdown in this gallery](https://rmarkdown.rstudio.com/gallery.html).
+
+## Another Shameless Link to Someone Else's Work
+
+Roger Peng's introduction to R Markdown remains the best video about R Markdown that I have found in cyberspace. Follow along in RStudio to create and run your own R Markdown file. 
+
+![Roger Peng's Video about RMarkdown](https://www.youtube.com/watch?v=DNS7i2m4sB0)
+
+
+
