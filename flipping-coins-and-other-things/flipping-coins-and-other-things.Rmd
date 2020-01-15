@@ -182,6 +182,23 @@ Let's continue. I am going to flip the coin again. What are the odds of getting 
 0.0625
 ```
 
+Example code written below:
+
+```{r trying, exercise = TRUE}
+sqrt(exp(3))
+```
+```{r trying-hint-1}
+"You can take the log with `log()`"
+```
+```{r trying-hint-2}
+"You can take the square root with `sqrt()`"
+```
+```{r trying-solution}
+sqrt(log(2))
+```
+```{r trying-check}
+grade_code("Good job. Don't worry, things will soon get harder.")
+```
 
 Continue to find out what happened.
 
