@@ -1,0 +1,317 @@
+---
+title: "Flipping Coins and Other Things"
+author: "Sheila Braun, CHOP"
+date: "1/14/2020"
+output: 
+ learnr::tutorial:
+    progressive: true
+    allow_skip: true
+    css:
+      - www/bootstrap.min.css
+      - www/flexdashboard.min.css
+      - www/style.css
+runtime: shiny_prerendered
+---
+
+```{r setup, include=FALSE}
+options(digits = 3, scipen = 9999)
+if(!require(learnr)){install.packages("learnr")}
+library(learnr)
+library(dplyr)
+library(tidyr)
+tutorial_options(exercise.completion = FALSE,
+                 exercise.eval = TRUE,
+                 exercise.lines = 8,
+                 exercise.diagnostics = TRUE)
+
+```
+
+## We should Probably start with Probability
+
+The best lesson on flipping coins that I have ever seen is at Khan Academy's website. Have a look, then come back here for some interaction about flipping coins. 
+
+
+![Probability explained by Sal Khan](https://youtu.be/uzkc-qNVoOk)
+
+
+<iframe width="560" height="315" src="" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+Here are some key points to remember:
+    
+* P(H) means "The probability of H".
+* P(H) = the number of possibilities that meet your condition DIVIDED BY the number of equally likely possibilities.
+
+## Flip a Coin
+
+```{r whataretheodds, echo=FALSE}
+question("What are the odds of getting heads when you flip a fair coin one time?",
+         answer("1", message = "That would mean you would get heads every single time, which would indicate we don't have a fair coin."),
+         answer(".50", correct = TRUE),
+         answer("1/2", correct = TRUE),
+         answer("5%", message = "Five percent means you get heads way less than half the time, which means, that we don't have a fair coin."),
+         correct = "You are amazing!",
+         incorrect = "There are two correct answers.",
+         random_answer_order = TRUE,
+         allow_retry = TRUE
+)
+```
+
+>I got heads.
+
+## Flip A Different Coin
+
+I am going to flip a different (fair) coin.
+
+```{r i-have-another-one, echo=FALSE}
+question(" What are my odds of getting heads?",
+         answer(".50", correct = TRUE),
+         answer("1/2", correct = TRUE),
+         answer("1", message = "That would mean you would get heads every single time, which would indicate we don't have a fair coin."),
+         answer(".25", message = "Twenty-five percent means you get heads way less than half the time, which means, that we don't have a fair coin."),
+     correct = "Yes!",
+     incorrect = "The odds are 1:1, which is half. Make sure you've checked off all the answers that mean half.",
+     random_answer_order = TRUE,
+     allow_retry = TRUE
+)
+```
+
+Continue to find out what happened.
+
+## Second Flip
+
+>I got heads.
+
+```{r and-again, echo=FALSE}
+question("I'm going to flip the same coin again. What are the odds of getting heads again?",
+         answer("1"),
+         answer(".50"),
+         answer("1/2"),
+         answer(".25", correct = TRUE),
+     correct = "Correct. Superb work!",
+     incorrect = "As we proceed, the odds of getting a string of, say, n heads, gets smaller. Halve the previous odds to get the correct answer.",
+     random_answer_order = TRUE,
+     allow_retry = TRUE
+)
+```
+
+Continue to find out what happened.
+
+## Third Flip 
+  
+>I got heads.
+
+```{r headsagainornot, echo=FALSE}
+question("I'm going to flip the same coin again. What are the odds of getting heads again?",
+         answer("1"),
+         answer(".25"),
+         answer(".50"),
+         answer("None of these (except this one)", correct = TRUE),
+     correct = "Well done!",
+     incorrect = "The odds are no half what they were last time, or .25/2. Try that.",
+     random_answer_order = TRUE,
+     allow_retry = TRUE
+)
+```
+
+We have again cut our odds in half, so the answer to the previous question is .125. 
+
+Continue to find out what happened.
+
+
+## Fourth Flip
+
+>I got heads.
+
+```{r whyinhalf, echo=FALSE}
+question("Why have we cut our odds in half at each step so far?",
+         answer("because we have enough data to estimate new odds", correct = TRUE),
+         answer("because I definitely have an unfair coin"),
+     correct = "Yay!",
+     incorrect = "'Definitely' is a strong word. Go with the less definitive answer.",
+     random_answer_order = TRUE,
+     allow_retry = TRUE
+)
+```
+
+```{r whatwertheodds, echo=FALSE}
+question("What were the odds that I would get heads for the third flip?",
+         answer(".125", correct = TRUE),
+         answer(".0613", message = "You're getting ahead of the rest of us"),
+         answer(".0306", message = "That is close to the odds for a future flip, but not the third flip."),
+         answer("1", message = "That would mean it is 100% likely to get heads next flip. If you think that, then you have decided this is an unfair coin."),
+         correct = "Correct. Smashing!",
+         incorrect = "No. You could go back to the previous page to find out.",
+         random_answer_order = TRUE,
+         allow_retry = TRUE
+)
+```
+
+>I'm flipping the coin again. Continue to find out what happened.
+
+
+## Fifth Flip
+
+>I got heads.
+  
+Despite our consistent results so far, it's not impossible for me to get tails on the next flip unless the coin is unfair. Is it? 
+
+Although you might guess that I am flipping an unfair coin, the odds of my not flipping heads are still substantial at 6.25%. 
+
+```{r isthisapvalue, echo=FALSE}
+question("These odds that we have been calculating, are they possibly the equivalent of a _p_ value?",
+         answer("Yes.", correct = TRUE),
+         answer("No", message = "message_wrong_1"),
+         correct = "Exactly so.",
+         incorrect = "Yes. Yes they are. Cool, huh?",
+         random_answer_order = TRUE,
+         allow_retry = TRUE
+)
+```
+
+Let's continue. I am going to flip the coin again. What are the odds of getting an addition to our string of heads? Our chances have halved again. Type in the formula that would give you the correct answer and run the code.
+
+```{r whataretheoddsthistime, exercise = TRUE, exercise.lines = 5}
+
+```
+```{r whataretheoddsthistime-hint}
+#Divide the last answer by 2
+```
+```{r whataretheoddsthistime-solution}
+#Divide the last answer by 2
+.125/2
+0.0625
+```
+
+
+Continue to find out what happened.
+
+
+## Sixth Flip
+
+>I got heads.
+
+Do I have a fair coin? What do you think now?
+  
+One more flip. Maybe you're convinced that I have an unfair coin because the odds of heads last time were close to .05. 
+
+```{r onelasttime, echo=FALSE}
+question("How likely is it that I get yet another in the string of heads?",
+         answer(".03125", correct = TRUE),
+         answer(".05", message = "message_wrong_1"),
+         answer("0", message = "message_wrong_2"),
+         answer(".0625/2", correct = "TRUE"),
+         correct = "Yes, that's right",
+         incorrect = "Take the previous answer and divide it in two. There are two correct answers.",
+         random_answer_order = TRUE,
+         allow_retry = TRUE
+)
+```
+
+
+Continue to find out what happened.
+
+
+## Sixth Flip Result
+
+I got tails. 
+  
+## Other Stuff
+
+Let's switch to probability with dice. 
+
+With a fair die, what is the formula for calculating the probability of rolling a 3 or a 4? 
+
+```{r threeorfour, exercise = TRUE, exercise.lines = 5}
+
+```
+```{r threeorfour-hint}
+2/6
+
+```
+```{r threeorfour-solution}
+2/6
+0.333
+```
+
+  CorrectAnswer: 2/6
+  AnswerTests: omnitest(correctExpr = "2/6")
+  Hint: The number of possibilities that meet your condition is 2. The number of equally likely possibilities is still 6.
+
+
+What is the formula for figuring out the probability of rolling a 2 AND a 3 in a single roll of a fair die?
+  CorrectAnswer: 0/6
+  AnswerTests: omnitest(correctExpr = "0/6")
+  Hint: The number of possibilities that meet your condition is 0. The number of equally likely outcomes is still 6. 
+
+- Class: video
+The second Khan Academy video on probability is also excellent--and there will be a quiz. The next few questions are based on it. You might want to take a snapshot of the screen near the end and keep that image in front of you while you answer the questions about the video.
+  VideoLink: https://www.youtube.com/watch?v=QE2uR6Z-NcU
+
+
+What is the probability of a lellow object being the first to fall out of the bag? Please leave your answer in fraction format.
+  AnswerChoices: 12/29;There is no such thing as lellow;5/29
+  CorrectAnswer: 12/29
+  AnswerTests: omnitest(correctVal="12/29")
+  Hint: The probability of a lellow object being the first to come out of the bag is the number of lellows DIVIDED BY the total number of objects in the bag. 
+  
+
+Why am I saying "lellow"?
+  AnswerChoices: because it's ridiculous;because it's fun;because the Khan lecturer said his son says lellow for yellow;all these answers are correct
+  CorrectAnswer: all these answers are correct
+  AnswerTests: omnitest(correctVal="all these answers are correct")
+  Hint: Did you watch the video with the sound turned up?
+  
+
+Let's explore probability from another perspective by way of review.
+  
+
+Who wrote this? "'Luck is my middle name,’ said Rincewind, indistinctly. ‘Mind you, my first name is Bad.'"
+  AnswerChoices: Neil Gaiman;Douglas Adams;Terry Pratchett;Eoin Colfer
+  CorrectAnswer: Terry Pratchett
+  AnswerTests: omnitest(correctVal = "Terry Pratchett")
+  Hint: The book was Equal Rites.
+
+
+Who wrote this? "'Million-to-one chances,’ she said, ‘crop up nine times out of ten'"
+  AnswerChoices: Neil Gaiman;Douglas Adams;Terry Pratchett;Eoin Colfer
+  CorrectAnswer: Terry Pratchett
+  AnswerTests: omnitest(correctVal = "Terry Pratchett")
+  Hint: The book was Interesting Times.
+
+
+Who wrote this? "All dogs don’t talk. Ones that do are merely a statistical error, and can therefore be ignored."
+  AnswerChoices: Neil Gaiman;Douglas Adams;Terry Pratchett;Eoin Colfer
+  CorrectAnswer: Terry Pratchett
+  AnswerTests: omnitest(correctVal = "Terry Pratchett")
+  Hint: The book was Men at Arms.
+
+
+|+
+    Who wrote this? "'Why us?’ he said.‘Why is it happening to us?’
+    ‘Everything has to happen to someone,’ said Ginger."
+  AnswerChoices: Neil Gaiman;Douglas Adams;Terry Pratchett;Eoin Colfer
+  CorrectAnswer: Terry Pratchett
+  AnswerTests: omnitest(correctVal = "Terry Pratchett")
+  Hint: The book was Moving Pictures.
+  
+
+
+
+Who wrote this? "'You just get one chance,' she said.  'You live for maybe seventy years, and if you’re lucky you get one chance. Think of all the natural skiers who are born in deserts. Think of all the genius blacksmiths who were born hundreds of years before anyone invented the horse.  All the skills that are never used.  All the wasted chances.'"
+  AnswerChoices: Neil Gaiman;Douglas Adams;Terry Pratchett;Eoin Colfer
+  CorrectAnswer: Terry Pratchett
+  AnswerTests: omnitest(correctVal = "Terry Pratchett")
+  Hint: The book was Moving Pictures.
+
+
+Last question. Who wrote this? "It is known that there are an infinite number of worlds, simply because there is an infinite amount of space for them to be in. However, not every one of them is inhabited. Therefore, there must be a finite number of inhabited worlds. Any finite number divided by infinity is as near to nothing as makes no odds, so the average population of all the planets in the Universe can be said to be zero. From this it follows that the population of the whole Universe is also zero, and that any people you may meet from time to time are merely the products of a deranged imagination."
+  AnswerChoices: Neil Gaiman;Douglas Adams;Terry Pratchett;Eoin Colfer
+  CorrectAnswer: Douglas Adams
+  AnswerTests: omnitest(correctVal = "Douglas Adams")
+  Hint: The book was The Restaurant at the End of the Universe.
+
+
+And if you got the last question right, it shows that you have learned from previous data. You're turning into a Bayesian. "Stop it."
+  
+
+(That last quotation was a final nod to the great Douglas Adams. You are of course welcome to turn into a Bayesian. To do so, start with the lesson on Conditional Probability in this Swirly Stats course.)

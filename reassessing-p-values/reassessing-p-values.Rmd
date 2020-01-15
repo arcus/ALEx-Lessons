@@ -2,8 +2,12 @@
 title: "Reassessing _p_ Values"
 output: 
  learnr::tutorial:
-      progressive: true
-      allow_skip: true
+    progressive: true
+    allow_skip: true
+    css:
+      - www/bootstrap.min.css
+      - www/flexdashboard.min.css
+      - www/style.css
 runtime: shiny_prerendered
 ---
 
