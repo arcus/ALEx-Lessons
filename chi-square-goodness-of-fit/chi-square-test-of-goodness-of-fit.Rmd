@@ -152,8 +152,8 @@ Try the chi-square goodness-of-fit code using the function `chisq.test`. Let's u
 Please edit the following code to get a result:
 
 ```{r chisq-test, exercise = TRUE}
-observed <- 1        # REPLACE WITH CORRECT VALUES
-expected <- 1        # REPLACE WITH CORRECT VALUES
+observed <- c(0.5,0.5)        # REPLACE WITH CORRECT VALUES
+expected <- c(0.5,0.5)        # REPLACE WITH CORRECT VALUES
 chisq.test(x = observed,
            p = expected)
 ```
