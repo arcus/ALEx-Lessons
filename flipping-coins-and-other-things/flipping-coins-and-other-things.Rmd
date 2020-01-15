@@ -30,9 +30,7 @@ tutorial_options(exercise.completion = FALSE,
 
 The best lesson on flipping coins that I have ever seen is at Khan Academy's website. Have a look, then come back here for some interaction about flipping coins. 
 
-
 ![Probability explained by Sal Khan](https://youtu.be/uzkc-qNVoOk)
-
 
 <iframe width="560" height="315" src="" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
@@ -182,23 +180,6 @@ Let's continue. I am going to flip the coin again. What are the odds of getting 
 0.0625
 ```
 
-Example code written below:
-
-```{r trying, exercise = TRUE}
-sqrt(exp(3))
-```
-```{r trying-hint-1}
-"You can take the log with `log()`"
-```
-```{r trying-hint-2}
-"You can take the square root with `sqrt()`"
-```
-```{r trying-solution}
-sqrt(log(2))
-```
-```{r trying-check}
-grade_code("Good job. Don't worry, things will soon get harder.")
-```
 
 Continue to find out what happened.
 
@@ -216,7 +197,7 @@ question("How likely is it that I get yet another in the string of heads?",
          answer(".03125", correct = TRUE),
          answer(".05", message = "message_wrong_1"),
          answer("0", message = "message_wrong_2"),
-         answer(".0625/2", correct = "TRUE"),
+         answer(".0625/2", correct = TRUE),
          correct = "Yes, that's right",
          incorrect = "Take the previous answer and divide it in two. There are two correct answers.",
          random_answer_order = TRUE,
@@ -230,7 +211,7 @@ Continue to find out what happened.
 
 ## Sixth Flip Result
 
-I got tails. 
+>I got tails. 
   
 ## Other Stuff
 
@@ -241,18 +222,40 @@ With a fair die, what is the formula for calculating the probability of rolling 
 ```{r threeorfour, exercise = TRUE, exercise.lines = 5}
 
 ```
-```{r threeorfour-hint}
-2/6
-
+```{r threeorfour-hint-1}
+# The number of possibilities that meet your condition is 2. 
+# The number of equally likely possibilities is still 6
+```
+```{r threeorfour-hint-2}
+# The formula you need is [the number of possibilities that meet your condition] divided by the number of equally likely possibilities.
 ```
 ```{r threeorfour-solution}
-2/6
 0.333
 ```
+```{r check}
+
+
+```
+
+```{r testingthis, echo = FALSE}
+question_text(
+  "With a fair die, what is the formula for calculating the probability of rolling a 3 or a 4?",
+  answer(".333", message = "That's the answer, not the formula for arriving at the answer."),
+  answer(".33", message = "That's the answer, not the formula for arriving at the answer."),
+  answer("3/6", message = "There are only 2 possibilities, not 3."),
+  answer("6/2", message = "That's upside down."),
+  answer("2/6", correct = TRUE),
+  answer("1", message = "The forumla you need is the number of possibilities that meet your condition--here 2--divided by the number of equally likely possibilities--here 6."),
+  correct = "Well done!",
+  incorrect = "No.",
+  allow_retry = TRUE
+)
+```
+
 
   CorrectAnswer: 2/6
   AnswerTests: omnitest(correctExpr = "2/6")
-  Hint: The number of possibilities that meet your condition is 2. The number of equally likely possibilities is still 6.
+  .
 
 
 What is the formula for figuring out the probability of rolling a 2 AND a 3 in a single roll of a fair die?
