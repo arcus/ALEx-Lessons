@@ -32,7 +32,7 @@ tutorial_options(exercise.completion = FALSE,
 
 ############################### Data for this lesson ###########################################
 
-math <- read.csv("www/math.csv")
+math <- read.csv("math.csv")
 lang <- read.csv("lang.csv")
 
 mathr <- rename(.data = math, id = subjectID, date = testDate, score = mathScore)
