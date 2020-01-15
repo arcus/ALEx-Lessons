@@ -54,7 +54,7 @@ question("What are the odds of getting heads when you flip a fair coin one time?
 )
 ```
 
->I got heads.
+>We got heads.
 
 ## Flip A Different Coin
 
@@ -73,7 +73,7 @@ question(" What are my odds of getting heads?",
 )
 ```
 
-Continue to find out what happened.
+Go to the next section to find out the results of the coin toss.
 
 ## Second Flip
 
@@ -92,7 +92,7 @@ question("I'm going to flip the same coin again. What are the odds of getting he
 )
 ```
 
-Continue to find out what happened.
+Go to the next section to find out the results of the coin toss.
 
 ## Third Flip 
   
@@ -113,7 +113,7 @@ question("I'm going to flip the same coin again. What are the odds of getting he
 
 We have again cut our odds in half, so the answer to the previous question is .125. 
 
-Continue to find out what happened.
+Go to the next section to find out the results of the coin toss.
 
 
 ## Fourth Flip
@@ -144,7 +144,7 @@ question("What were the odds that I would get heads for the third flip?",
 )
 ```
 
->I'm flipping the coin again. Continue to find out what happened.
+>I'm flipping the coin again. Go to the next section to find out the results of the coin toss.
 
 
 ## Fifth Flip
@@ -168,20 +168,20 @@ question("These odds that we have been calculating, are they possibly the equiva
 
 Let's continue. I am going to flip the coin again. What are the odds of getting an addition to our string of heads? Our chances have halved again. Type in the formula that would give you the correct answer and run the code.
 
-```{r whataretheoddsthistime, exercise = TRUE, exercise.lines = 5}
-
+```{r testingthis, echo = FALSE}
+question_text(
+  "What is the formula for cacluating my odds of getting a fifth heads?",
+  answer(".125 / 2", correct = TRUE),
+  answer(".125/2", correct = TRUE),
+  answer(".0625", message = "That's the answer, not the formula for arriving at the answer."),
+  answer("1", message = "This would be correct if you believe I was either cheating or using an unfair coin."),
+  correct = "Cool job!",
+  incorrect = "No.",
+  allow_retry = TRUE
+)
 ```
-```{r whataretheoddsthistime-hint}
-#Divide the last answer by 2
-```
-```{r whataretheoddsthistime-solution}
-#Divide the last answer by 2
-.125/2
-0.0625
-```
 
-
-Continue to find out what happened.
+Go to the next section to find out the results of the coin toss.
 
 
 ## Sixth Flip
@@ -195,8 +195,8 @@ One more flip. Maybe you're convinced that I have an unfair coin because the odd
 ```{r onelasttime, echo=FALSE}
 question("How likely is it that I get yet another in the string of heads?",
          answer(".03125", correct = TRUE),
-         answer(".05", message = "message_wrong_1"),
-         answer("0", message = "message_wrong_2"),
+         answer(".05", message = "Not even close"),
+         answer("0", message = "Hmm. Interesting response."),
          answer(".0625/2", correct = TRUE),
          correct = "Yes, that's right",
          incorrect = "Take the previous answer and divide it in two. There are two correct answers.",
@@ -206,7 +206,7 @@ question("How likely is it that I get yet another in the string of heads?",
 ```
 
 
-Continue to find out what happened.
+Go to the next section to find out the results of the coin toss.
 
 
 ## Sixth Flip Result
@@ -217,27 +217,15 @@ Continue to find out what happened.
 
 Let's switch to probability with dice. 
 
+To figure out the odds of rolling a 1 (for instance), you take the number of possibilities you're considering (one of them) and divide it by the total number of possibilities on the die. Since we're discussing a 6-sided die, that number is 6. 
+
+$\displaystyle \frac{1}{6} = 0.167$.
+
+That's just under 17% odds that you'll get a 1 in a 
+
 With a fair die, what is the formula for calculating the probability of rolling a 3 or a 4? 
 
-```{r threeorfour, exercise = TRUE, exercise.lines = 5}
-
-```
-```{r threeorfour-hint-1}
-# The number of possibilities that meet your condition is 2. 
-# The number of equally likely possibilities is still 6
-```
-```{r threeorfour-hint-2}
-# The formula you need is [the number of possibilities that meet your condition] divided by the number of equally likely possibilities.
-```
-```{r threeorfour-solution}
-0.333
-```
-```{r check}
-
-
-```
-
-```{r testingthis, echo = FALSE}
+```{r testingthat, echo = FALSE}
 question_text(
   "With a fair die, what is the formula for calculating the probability of rolling a 3 or a 4?",
   answer(".333", message = "That's the answer, not the formula for arriving at the answer."),
@@ -245,17 +233,13 @@ question_text(
   answer("3/6", message = "There are only 2 possibilities, not 3."),
   answer("6/2", message = "That's upside down."),
   answer("2/6", correct = TRUE),
-  answer("1", message = "The forumla you need is the number of possibilities that meet your condition--here 2--divided by the number of equally likely possibilities--here 6."),
+  answer("1", message = "Remember, the forumla you need is the number of possibilities that meet your condition—here 2—divided by the number of equally likely possibilities—here 6."),
   correct = "Well done!",
   incorrect = "No.",
   allow_retry = TRUE
 )
 ```
 
-
-  CorrectAnswer: 2/6
-  AnswerTests: omnitest(correctExpr = "2/6")
-  .
 
 
 What is the formula for figuring out the probability of rolling a 2 AND a 3 in a single roll of a fair die?
