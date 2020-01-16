@@ -30,9 +30,7 @@ tutorial_options(exercise.completion = FALSE,
 
 The best lesson on flipping coins that I have ever seen is at Khan Academy's website. Have a look, then come back here for some interaction about flipping coins. 
 
-![Probability explained by Sal Khan](https://youtu.be/uzkc-qNVoOk)
-
-<iframe width="560" height="315" src="" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+![Flipping coins explained by Sal Khan](https://youtu.be/uzkc-qNVoOk)
 
 Here are some key points to remember:
     
@@ -198,7 +196,7 @@ question("How likely is it that I get yet another in the string of heads?",
          answer(".05", message = "Not even close"),
          answer("0", message = "Hmm. Interesting response."),
          answer(".0625/2", correct = TRUE),
-         correct = "Yes, that's right",
+         correct = "Yes, that's right.",
          incorrect = "Take the previous answer and divide it in two. There are two correct answers.",
          random_answer_order = TRUE,
          allow_retry = TRUE
@@ -221,9 +219,9 @@ To figure out the odds of rolling a 1 (for instance), you take the number of pos
 
 $\displaystyle \frac{1}{6} = 0.167$.
 
-That's just under 17% odds that you'll get a 1 in a 
+That's just under 17% odds that you'll get a 1 from rolling a fair die.
 
-With a fair die, what is the formula for calculating the probability of rolling a 3 or a 4? 
+Again with a fair die, what is the formula for calculating the probability of rolling a 3 or a 4? 
 
 ```{r testingthat, echo = FALSE}
 question_text(
@@ -240,82 +238,133 @@ question_text(
 )
 ```
 
+```{r formulathreeandfour, echo = FALSE}
+question_text(
+  "What is the formula for figuring out the probability of rolling a 2 AND a 3 in a single roll of a fair die?",
+  answer("0/6", correct = TRUE),
+  answer("0 / 6", correct = TRUE),
+  answer("2/6"),
+  answer("2 / 6"),
+  answer("1/6"),
+  answer("1 / 6"),
+  answer("2/3"),
+  answer("3/2"),
+  correct = "Perfect!",
+  incorrect = "The number of possibilities that meet your condition is 0. The number of equally likely outcomes is still 6.",
+  allow_retry = TRUE
+)
+```
 
 
-What is the formula for figuring out the probability of rolling a 2 AND a 3 in a single roll of a fair die?
-  CorrectAnswer: 0/6
-  AnswerTests: omnitest(correctExpr = "0/6")
-  Hint: The number of possibilities that meet your condition is 0. The number of equally likely outcomes is still 6. 
-
-- Class: video
 The second Khan Academy video on probability is also excellent--and there will be a quiz. The next few questions are based on it. You might want to take a snapshot of the screen near the end and keep that image in front of you while you answer the questions about the video.
-  VideoLink: https://www.youtube.com/watch?v=QE2uR6Z-NcU
+
+![Khan Academy video on probability](https://www.youtube.com/watch?v=QE2uR6Z-NcU)
 
 
-What is the probability of a lellow object being the first to fall out of the bag? Please leave your answer in fraction format.
-  AnswerChoices: 12/29;There is no such thing as lellow;5/29
-  CorrectAnswer: 12/29
-  AnswerTests: omnitest(correctVal="12/29")
-  Hint: The probability of a lellow object being the first to come out of the bag is the number of lellows DIVIDED BY the total number of objects in the bag. 
-  
+```{r lellow, echo=FALSE}
+question("What is the probability of a lellow object falling out of the bag first?",
+         answer("12/29", correct = TRUE),
+         answer("There is no such thing as 'lellow'"),
+         answer("5/29"),
+         answer("1"),
+     correct = "Awesome!",
+     incorrect = "The probability of a lellow object being the first to come out of the bag is the number of lellows DIVIDED BY the total number of objects in the bag.",
+     random_answer_order = TRUE,
+     allow_retry = TRUE
+)
+```
 
-Why am I saying "lellow"?
-  AnswerChoices: because it's ridiculous;because it's fun;because the Khan lecturer said his son says lellow for yellow;all these answers are correct
-  CorrectAnswer: all these answers are correct
-  AnswerTests: omnitest(correctVal="all these answers are correct")
-  Hint: Did you watch the video with the sound turned up?
-  
+```{r whysaylellow, echo=FALSE}
+question("Why am I saying 'lellow'?",
+         answer("because it's ridiculous", correct = TRUE),
+         answer("because it's fun", correct = TRUE),
+         answer("because Sal Khan said his son says 'lellow' for yellow", correct = TRUE),
+     correct = "That's right!",
+     incorrect = "Incorrect: We try not to take ourselves too seriously. Did you watch the video with the sound turned up?",
+     random_answer_order = TRUE,
+     allow_retry = TRUE
+)
+```
+
+## Review
 
 Let's explore probability from another perspective by way of review.
   
+Here are some quotations. Who wrote them?
 
-Who wrote this? "'Luck is my middle name,’ said Rincewind, indistinctly. ‘Mind you, my first name is Bad.'"
-  AnswerChoices: Neil Gaiman;Douglas Adams;Terry Pratchett;Eoin Colfer
-  CorrectAnswer: Terry Pratchett
-  AnswerTests: omnitest(correctVal = "Terry Pratchett")
-  Hint: The book was Equal Rites.
+```{r rincewind, echo=FALSE}
+question("'Luck is my middle name,' said Rincewind, indistinctly. 'Mind you, my first name is Bad.'",
+         answer("Neil Gaiman"),
+         answer("Douglas Adams"),
+         answer("Terry Pratchett", correct = TRUE),
+         answer("Eoin Colfer"),
+     correct = "You got it! Want to join my reading group?",
+     incorrect = "Nope. Here is a hint: The book was *Equal Rites*.",
+     random_answer_order = TRUE,
+     allow_retry = TRUE
+)
+```
+```{r interesting, echo=FALSE}
+question("'Million-to-one chances,’ she said, ‘crop up nine times out of ten.'",
+         answer("Neil Gaiman"),
+         answer("Douglas Adams"),
+         answer("Terry Pratchett", correct = TRUE),
+         answer("Eoin Colfer"),
+     correct = "Yes! Clearly you are a cultured individual.",
+     incorrect = "Nope. The book was *Interesting Times*.",
+     random_answer_order = TRUE,
+     allow_retry = TRUE
+)
+```
+```{r menatarms, echo=FALSE}
+question("All dogs don’t talk. Ones that do are merely a statistical error, and can therefore be ignored.",
+         answer("Neil Gaiman"),
+         answer("Douglas Adams"),
+         answer("Terry Pratchett", correct = TRUE),
+         answer("Eoin Colfer"),
+     correct = "Very good. Perhaps you are starting to see a pattern.",
+     incorrect = "Not that author. The book was *Men at Arms*.",
+     random_answer_order = TRUE,
+     allow_retry = TRUE
+)
+```
+```{r whyus, echo=FALSE}
+question("'Why us?’ he said. ‘Why is it happening to us?’ ‘Everything has to happen to someone,’ said Ginger.",
+         answer("Neil Gaiman"),
+         answer("Douglas Adams"),
+         answer("Terry Pratchett", correct = TRUE),
+         answer("Eoin Colfer"),
+     correct = "Yes, Terry Pratchett wrote that one, too.",
+     incorrect = "Not that author. The book was *Moving Picures*, which I highly recommend.",
+     random_answer_order = TRUE,
+     allow_retry = TRUE
+)
+```
+```{r onechance, echo=FALSE}
+question("'You just get one chance,' she said.  'You live for maybe seventy years, and if you’re lucky you get one chance. Think of all the natural skiers who are born in deserts. Think of all the genius blacksmiths who were born hundreds of years before anyone invented the horse. All the skills that are never used. All the wasted chances.'",
+         answer("Neil Gaiman"),
+         answer("Douglas Adams"),
+         answer("Terry Pratchett", correct = TRUE),
+         answer("Eoin Colfer"),
+     correct = "You are amazing!",
+     incorrect = "No, 'fraid not.",
+     random_answer_order = TRUE,
+     allow_retry = TRUE
+)
+```
+```{r infiniteworlds, echo=FALSE}
+question("It is known that there are an infinite number of worlds, simply because there is an infinite amount of space for them to be in. However, not every one of them is inhabited. Therefore, there must be a finite number of inhabited worlds. Any finite number divided by infinity is as near to nothing as makes no odds, so the average population of all the planets in the Universe can be said to be zero. From this it follows that the population of the whole Universe is also zero, and that any people you may meet from time to time are merely the products of a deranged imagination.",
+         answer("Neil Gaiman"),
+         answer("Douglas Adams", correct = TRUE),
+         answer("Terry Pratchett"),
+         answer("Eoin Colfer"),
+     correct = "Ha! There's no fooling you!",
+     incorrect = "No. The book was *The Restaurant at the End of the Universe*.",
+     random_answer_order = TRUE,
+     allow_retry = TRUE
+)
+```
 
-
-Who wrote this? "'Million-to-one chances,’ she said, ‘crop up nine times out of ten'"
-  AnswerChoices: Neil Gaiman;Douglas Adams;Terry Pratchett;Eoin Colfer
-  CorrectAnswer: Terry Pratchett
-  AnswerTests: omnitest(correctVal = "Terry Pratchett")
-  Hint: The book was Interesting Times.
-
-
-Who wrote this? "All dogs don’t talk. Ones that do are merely a statistical error, and can therefore be ignored."
-  AnswerChoices: Neil Gaiman;Douglas Adams;Terry Pratchett;Eoin Colfer
-  CorrectAnswer: Terry Pratchett
-  AnswerTests: omnitest(correctVal = "Terry Pratchett")
-  Hint: The book was Men at Arms.
-
-
-|+
-    Who wrote this? "'Why us?’ he said.‘Why is it happening to us?’
-    ‘Everything has to happen to someone,’ said Ginger."
-  AnswerChoices: Neil Gaiman;Douglas Adams;Terry Pratchett;Eoin Colfer
-  CorrectAnswer: Terry Pratchett
-  AnswerTests: omnitest(correctVal = "Terry Pratchett")
-  Hint: The book was Moving Pictures.
+And if you got the last question right, it shows that you have learned from previous data. You're turning into a Bayesian. "Stop it." 
   
-
-
-
-Who wrote this? "'You just get one chance,' she said.  'You live for maybe seventy years, and if you’re lucky you get one chance. Think of all the natural skiers who are born in deserts. Think of all the genius blacksmiths who were born hundreds of years before anyone invented the horse.  All the skills that are never used.  All the wasted chances.'"
-  AnswerChoices: Neil Gaiman;Douglas Adams;Terry Pratchett;Eoin Colfer
-  CorrectAnswer: Terry Pratchett
-  AnswerTests: omnitest(correctVal = "Terry Pratchett")
-  Hint: The book was Moving Pictures.
-
-
-Last question. Who wrote this? "It is known that there are an infinite number of worlds, simply because there is an infinite amount of space for them to be in. However, not every one of them is inhabited. Therefore, there must be a finite number of inhabited worlds. Any finite number divided by infinity is as near to nothing as makes no odds, so the average population of all the planets in the Universe can be said to be zero. From this it follows that the population of the whole Universe is also zero, and that any people you may meet from time to time are merely the products of a deranged imagination."
-  AnswerChoices: Neil Gaiman;Douglas Adams;Terry Pratchett;Eoin Colfer
-  CorrectAnswer: Douglas Adams
-  AnswerTests: omnitest(correctVal = "Douglas Adams")
-  Hint: The book was The Restaurant at the End of the Universe.
-
-
-And if you got the last question right, it shows that you have learned from previous data. You're turning into a Bayesian. "Stop it."
-  
-
-(That last quotation was a final nod to the great Douglas Adams. You are of course welcome to turn into a Bayesian. To do so, start with the lesson on Conditional Probability in this Swirly Stats course.)
+(That last quotation was a final nod to the great Douglas Adams. You are of course welcome to turn into a Bayesian. To do so, start with [the introductory lesson on it](../probability-theory-introduction-to-bayes-theorem/), which was written, as was this lesson, by Sheila Braun of the CHOP Department of Biomedical and Health Informatics, with a little help from the greats.)
