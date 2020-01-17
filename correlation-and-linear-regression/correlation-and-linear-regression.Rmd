@@ -199,7 +199,7 @@ slef <- summary(ln_egg_fit)
 
 This lesson is both a reference and a tutorial. It contains all the code samples you need to perform correlations and regressions on your own data as well as background information such as how to interpret output and which graphs you might want to use to demonstrate results (and in some cases which graphs _not_ to use). 
 
-You can also learn to understand and perform a correlation and linear regression by working through the lesson from start to finish. I avoid hard math everywhere except in the section "I _like_ Math. Where's the Math?" (where angels fear to tread).
+You can also learn to understand and perform a correlation and linear regression by working through the lesson from start to finish. I avoid hard math everywhere except in the section "I like Math. Where's the Math?" (where angels fear to tread).
 
 ## What kinds of Variables work with Correlation and Regression
 
@@ -515,9 +515,12 @@ question("Why is this analysis correctly run as a regression rather than as a co
 
 But it's not a very meaningful estimate of anything about lizards. This is because the $\displaystyle r^2$ depends on the values of the independent variable that you chose. For the exact same relationship between temperature and running speed, a narrower range of temperatures would give a smaller $\displaystyle r^2$. Here are three graphs showing some simulated data, with the same scatter (standard deviation) of $\displaystyle Y$ values at each value of $\displaystyle X$. 
 
-```{r, out.width = "600px", echo = FALSE}
-knitr::include_graphics("https://storage.googleapis.com/public-braunsb-media/Arcus-Education-Assets/Lessons/images/three-graphs-of-simulated-data.png")
+```{r three-graphs, echo = FALSE, fig.width = 4, fig.height = 1.5}
+knitr::include_graphics("www/three-graphs.png", 
+                          auto_pdf = getOption("knitr.graphics.auto_pdf", 
+                                                FALSE), dpi = NULL)
 ```
+
 
 As you can see, with a narrower range of $\displaystyle X$ values, the $\displaystyle r^2$ gets smaller. If you did another experiment on humidity and running speed in your lizards and got a lower $\displaystyle r^2$, you couldn't say that running speed is more strongly associated with temperature than with humidity; if you had chosen a narrower range of temperatures and a broader range of humidities, humidity might have had a larger $\displaystyle r^2$ than temperature.
 
@@ -814,7 +817,7 @@ nrow(egg)
 
 Close enough. We have sufficient power in `egg` for a correlation. 
 
-### Power analysis for a Linear Regression
+### For Linear Regression
 
 In general, what's good enough for a correlation is good enough for a single predictor-outcome variable linear regression. When you have multiple predictors, however, you would use `pwr.f2.test(u =, v = , f2 = , sig.level = , power = )`, where $\displaystyle u$ and $\displaystyle v$ are numerator and denominator degrees of freedom. That whole discussion is a bit more complicated, so we'll save it for the lesson about general linear models. 
 
@@ -851,7 +854,7 @@ Use `?mtcars` to find out more about the individual variables. Here is some meta
 * [,10]	gear	Number of forward gears       
 * [,11]	carb	Number of carburetors
 
-Remember how indexing works from from the most basic `swirl` lesson? If not, [take time for a quick review](http://www.a-mess.org/swirl-basic-building-blocks/). Going through these lessons is like practicing a musical instrument. It's best to practice repeatedly.
+Remember how indexing works from from the most basic `swirl` lesson? If not, [take time for a quick review](../swirl-basic-building-blocks/). Going through these lessons is like practicing a musical instrument. It's best to practice repeatedly.
 
 We have to pass `mtcars` to `rcorr` as a matrix, not as a data frame. Nest a call to `as.matrix` with input `mtcars` within a call to `rcorr`. You don't have to pass `rcorr` anything else. 
 
@@ -1042,7 +1045,7 @@ Now, to get a little more information, pass the best-fit model (`egg_fit`) to `a
 anova(egg_fit)
 ```
 
-As you can see from the output, we now have a different test statistic, $\displaystyle F$. We can see how many degrees of freedom there were and we have a different $\displaystyle p$ value. If you want to know more about this output, download [Arcus's one-way ANOVA lesson](https://storage.googleapis.com/public-braunsb-media/Arcus-Education-Assets/Lessons/One-Way-ANOVA.Rmd). Then just open it in RStudio and click "Run Document" in the top bar of the tab. Get tea, because as a relatively non-interactive stats lesson, it can put you to sleep. We will fix that as soon as we have the rest of the more interactive stats lessons available for your use. 
+As you can see from the output, we now have a different test statistic, $\displaystyle F$. We can see how many degrees of freedom there were and we have a different $\displaystyle p$ value. If you want to know more about this output, download [Arcus's one-way ANOVA lesson](../one-way-anova/). Then just open it in RStudio and click "Run Document" in the top bar of the tab. Get tea, because as a relatively non-interactive stats lesson, it can put you to sleep. We will fix that as soon as we have the rest of the more interactive stats lessons available for your use. 
 
 ## Interpret the `lm` Output
 
@@ -1120,12 +1123,14 @@ plot(diversity)
 
 Plain old `plot` is a great way to start looking at a data set. You can look at each plot and decide whether any of the images make you think there might be correlations between the two variables involved. For instance, on the bottom row, second from the right, is an interesting image that may or may not show a correlation. This initial plot helps you decide how to proceed. 
 
-Of course you can do many and varied things with plots. Rather than trying to do something better than has already been done excellently, I recommend you start with [this wonderful `ggplot2` tutorial](http://r-statistics.co/ggplot2-Tutorial-With-R.html).
+Of course you can do many and varied things with plots. Rather than trying to do something better than has already been done excellently, I recommend you start with our three `ggplot` tutorials ([ggplot2 Part 1](../swirl-ggplot2-part-1/), [ggplot2 Part 2](../swirl-ggplot2-part-2/), [ggplot2 Extras](../ggplot2-extras/)) followed by [this wonderful `ggplot2` tutorial](http://r-statistics.co/ggplot2-Tutorial-With-R.html) that has content about plotting in layers.
 
-## I_like_ Math. Where's the Math? How Correlations and Linear Regressions Work
+## Ilike Math. Where's the Math? How Correlations and Linear Regressions Work
 
-```{r, out.width = "400px", echo = FALSE}
-knitr::include_graphics("https://storage.googleapis.com/public-braunsb-media/Arcus-Education-Assets/Lessons/images/best-fit-line.png")
+```{r best-fit-line, echo = FALSE}
+knitr::include_graphics("www/best-fit-line.png", 
+                          auto_pdf = getOption("knitr.graphics.auto_pdf", 
+                                                FALSE), dpi = NULL)
 ```
 
 ### The Best Fit Line
