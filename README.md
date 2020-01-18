@@ -12,7 +12,7 @@ In our workshops,
 
 Learning event attendees have highly variable goals, from R basics to machine learning algorithms for genetic data to report writing for monthly metrics. We experimented with RStudio's R packages `shiny` and `learnr` to answer the question, “How can an instructor who has _N_ attendees at a workshop create _N_ different curricula based on _N_ different sets of learning goals, while still treating the class not so much as a single entity, but as _N_ individuals?” 
 
-To answer this question in a practical way, we created a tool that streamlines the process of matching an individual learner's goals to a curriculum, a learning checklist for achieving those goals.
+To answer this question in a practical way, we created a tool that streamlines the process of matching an individual learner's goals to a curriculum--a learning checklist for achieving those goals.
 
 The software for this tool is in the [Personalized Learning Plan](https://github.research.chop.edu/braunsb/Arcus-Education-Lessons-and-Learning-Plan-Generator/tree/master/Personalized-Learning-Plan) folder. Individual lessons are in [Lessons](https://arcus/ALEx-Lessons). 
 
