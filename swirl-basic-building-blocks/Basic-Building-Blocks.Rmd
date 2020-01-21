@@ -75,7 +75,7 @@ Now, store the result of `x - 3` in a new variable called `y`.
 y <- x - 3
 ```
 
-What is the value of `y`? Type `y` to find out.
+What is the value of `y`? Type `y` and run the code to find out.
 
 ```{r prepare-e}
 x <- 5 + 7
