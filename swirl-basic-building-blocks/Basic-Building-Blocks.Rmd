@@ -22,8 +22,6 @@ options(digits = 3, scipen = 9999)
 
 In this lesson, we will explore some basic building blocks of the R programming language.
 
-If at any point you’d like more information on a particular topic related to R, you can type `help.start()` at the prompt, which will open a menu of resources (either within RStudio or your default web browser, depending on your setup). Alternatively, a simple web search often yields the answer you’re looking for.
-
 In its simplest form, R can be used as an interactive calculator. Type `5 + 7` and press `Cmd-Enter`. On a PC, you would type Ctrl-Enter. That combination of keys executes all the code in your code chunk.
 
 ```{r a, exercise=TRUE, exercise.lines = 5}
