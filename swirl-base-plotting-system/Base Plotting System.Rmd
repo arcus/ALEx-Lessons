@@ -96,6 +96,8 @@ question("What is the most frequent count?",
          answer("More than 100"),
          answer("Less than 25", correct = TRUE),
          answer("Between 60 and 75"),
+         correct = "You are amazing!",
+         incorrect = "Actually, no. Look for the highest bar and then look for the number on the x axis that more or less corresponds with it.",
          random_answer_order = TRUE,
          allow_retry = TRUE
 )
@@ -220,7 +222,9 @@ question("What do you think these two numbers represent?",
          answer("A confidence interval"),
          answer("Random numbers"),
          random_answer_order = TRUE,
-         allow_retry = TRUE
+         allow_retry = TRUE,
+         correct = "Yes!",
+         incorrect = "No."
 )
 ```
 

@@ -151,11 +151,16 @@ Take the square root of `z - 1` and assign it to a new variable called `my_sqrt`
 my_sqrt <- sqrt(z - 1)
 ```
 
+
 ```{r l, echo=FALSE}
 question("Before we view the contents of the my_sqrt variable, what do you think it contains?",
-  answer("a vector of length 3", correct = TRUE),
-  answer("a single number (i.e a vector of length 1)"),
-  answer("a vector of length 0 (i.e. an empty vector)")
+         answer("a vector of length 3", correct = TRUE),
+         answer("a single number (i.e a vector of length 1)"),
+         answer("a vector of length 0 (i.e. an empty vector)"),
+         correct = "You are amazing!",
+         incorrect = "This is a  hard one.",
+         random_answer_order = TRUE,
+         allow_retry = TRUE
 )
 ```
 
@@ -185,9 +190,13 @@ my_div <- z / my_sqrt
 
 ```{r o, echo=FALSE}
 question("Which statement do you think is true?",
-  answer("The first element of `my_div` is equal to the first element of `z` divided by the first element of `my_sqrt`, and so on…", correct = TRUE),
-  answer("`my_div` is a single number (i.e a vector of length 1)"),
-  answer("`my_div` is undefined")
+         answer("The first element of `my_div` is equal to the first element of `z` divided by the first element of `my_sqrt`, and so on…", correct = TRUE),
+         answer("`my_div` is a single number (i.e a vector of length 1)"),
+         answer("`my_div` is undefined"),
+         correct = "Awesome!",
+         incorrect = "Read some of what came before this question to find the answer. It's there.",
+         random_answer_order = TRUE,
+         allow_retry = TRUE
 )
 ```
 

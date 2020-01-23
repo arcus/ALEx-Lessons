@@ -237,7 +237,7 @@ fish_encounters <- read.table(textConnection(Input), header = TRUE); rm(Input)
 fish_encounters <- as_tibble(fish_encounters)
 ```
 
-This lesson is a partner to our [`pivot_longer` lesson](../sb-pivot-longer/). We suggest you start with that one, as this lesson assumes you are familiar with basic `pivot` syntax.
+This lesson is a partner to our [`pivot_longer` lesson](../pivot-longer/). We suggest you start with that one, as this lesson assumes you are familiar with basic `pivot` syntax.
 
 ## Background
 
@@ -247,7 +247,7 @@ In the vignette, Hadley Wickham wrote this:
 
 >For some time, it’s been obvious that there is something fundamentally wrong with the design of `spread()` and `gather()`. Many people don’t find the names intuitive and find it hard to remember which direction corresponds to spreading and which to gathering. It also seems surprisingly hard to remember the arguments to these functions, meaning that many people (including me!) have to consult the documentation every time.
 
-The two pivot functions, [`pivot_longer`](../sb-pivot-longer/) and `pivot_wider`, are the solution.
+The two pivot functions, [`pivot_longer`](../pivot-longer/) and `pivot_wider`, are the solution.
 
 ## The Problem that is not so Much of a Problem
 
@@ -274,7 +274,7 @@ Many tools used to analyse this data need it in a form in which each station is 
 
 >`pivot_wider(names_from = var1, values_from = var2)`
 
-This process is a bit like creating dummy variables with 1s & 0s when you want all your regression input to be scalar in one form or another (see our [Correlation and Regression lesson](../sb-correlation-and-regression/) to learn more). 
+This process is a bit like creating dummy variables with 1s & 0s when you want all your regression input to be scalar in one form or another (see our [Correlation and Regression lesson](../correlation-and-regression/) to learn more). 
 
 Basically, you figure out which new variables you want from the _levels_ of varibles that are already present in the data set. That's where you get your new variables _names from_. Then you figure out where the values for those new variables are stored before the pivot, and you tell `pivot_wider` that's where you want the _values from_. `pivot_wider` creates new variables and populates them with data from the variable you told it to take the values from.
 
@@ -399,8 +399,8 @@ Now that you understand the basics of `pivot_wider`, you can do some more explor
 
 [Hadley Wickham, et al.'s](https://tidyr.tidyverse.org/articles/pivot.html) for even more examples of pivoting, including how to use `pivot_wider` to do aggregation. 
 
-[`pivot_longer`](../sb-pivot-longer/), an interactive lesson by Sheila Braun.
+[`pivot_longer`](../pivot-longer/), an interactive lesson by Sheila Braun.
 
-[`dplyr`](../sb-dplyr), an interactive lesson by Sheila Braun based on the `tidyverse`.
+[`dplyr`](../dplyr), an interactive lesson by Sheila Braun based on the `tidyverse`.
 
-[Piping and Summarizing](../sb-piping-and-summarizing/), an interactive lesson by Sheila Braun that uses `dplyr` and `magrittr`, both of which are part of the `tidyverse`.
+[Piping and Summarizing](../piping-and-summarizing/), an interactive lesson by Sheila Braun that uses `dplyr` and `magrittr`, both of which are part of the `tidyverse`.

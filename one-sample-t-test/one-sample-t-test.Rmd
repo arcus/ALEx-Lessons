@@ -90,7 +90,11 @@ xwpm <- wpm$words_per_minute
 
 ## Background
 
-There are several statistical tests that use the _t_ distribution and can be called _t_ tests. One is Student's _t_ test for one sample, named after "Student," the pseudonym William Gosset used to hide his employment by the Guinness brewery in the early 1900s (they had a rule that their employees weren't allowed to publish, and Guinness didn't want other employees to know that they were making an exception for Gosset). Student's _t_ test for one sample compares a sample to a theoretical mean. It has so few uses in biology that McDonald didn't cover it in previous editions of his Handbook, but then he found a use for it (McDonald and Dunn 2013), so here it is.
+There are several statistical tests that use the _t_ distribution and can be called _t_ tests. See the Arcus Learning Exchange lessons for the [two-sample _t_ test](../two-sample-t-test/) and the [paired _t_ test](../paired-t-test/).
+
+Here we will focus on the Student's _t_ test for one sample, named after "Student," the pseudonym William Gosset used to hide his employment by the Guinness brewery in the early 1900s. They had a rule that their employees weren't allowed to publish, and Guinness didn't want other employees to know that they were making an exception for Gosset. 
+
+Student's _t_ test for one sample compares a sample to a theoretical mean. It has so few uses in biology that McDonald didn't cover it in previous editions of his Handbook, but then he found a use for it (McDonald and Dunn 2013), so here it is.
 
 ```{r aa, echo=FALSE}
 question("What might have been one of Student's favorite pasttimes?",

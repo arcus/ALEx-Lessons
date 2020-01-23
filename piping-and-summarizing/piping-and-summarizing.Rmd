@@ -91,7 +91,7 @@ class(ht$inches)
 
 To find out more about why variable types are important to understand at the outset of any examination of your data, see our [Variables lesson](../variables/). 
 
-Find out what the means are for the two groups. We'll group the data and summarize it. Make sure you have `dplyr` in the library. `dplyr` puts `magrittr` in the library so we can use `%>%` for piping ([What's piping?](https://www.datacamp.com/community/tutorials/pipe-r-tutorial) Unless you're in interested in the history of R, control- or command-f the phrase "Why use it?" and start reading from there).
+Find out what the means are for the two groups. We'll group the data and summarize it. Make sure you have `dplyr` in the library. `dplyr` puts `magrittr` in the library so we can use `%>%` for piping ([What's piping?](../piping-and-summarizing/)) Unless you're in interested in the history of R, control- or command-f the phrase "Why use it?" and start reading from there).
 
 Group the data by `section` using `group_by(section, .data = ht)` and examine the output.
 

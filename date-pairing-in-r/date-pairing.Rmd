@@ -124,7 +124,7 @@ Note that `tidyverse` is not just a package, but a package of packages. It is, a
 
 (You can [learn more about APIs](https://mattgemmell.com/api-design/) or simply replace the word "API" in your head with "user interface for developers" whenever you come across it.)
 
-Sometimes you want to put the whole `tidyverse` set of packages in the library; other times you can put [one of its component packages](https://www.tidyverse.org/packages/) in the library and save some space. Check out our [dplyr](../sb-dplyr/), [Piping and Summarizing](../sb-piping-and-summarizing/), [Pivot Longer](../sb-pivot-longer/), [Pivot Wider](../sb-pivot-wider/), and [ggplot2](../sb-ggplot2-part-1) lessons, all of which concern `tidyverse` packages.
+Sometimes you want to put the whole `tidyverse` set of packages in the library; other times you can put [one of its component packages](https://www.tidyverse.org/packages/) in the library and save some space. Check out our [dplyr](../dplyr/), [Piping and Summarizing](../piping-and-summarizing/), [Pivot Longer](../pivot-longer/), [Pivot Wider](../pivot-wider/), and [ggplot2](../ggplot2-part-1) lessons, all of which concern `tidyverse` packages.
 
 Have a look at the data sets by typing their names, one per line, and executing the code. 
 
@@ -458,7 +458,7 @@ question("Which of these are `dplyr` verbs? Select six.",
          answer("`summarise`", correct = TRUE),
          answer("`arrange`", correct = TRUE),
          correct = "You are amazing!",
-         incorrect = "It might help if you review [our `dplyr` lesson](../sb-dplyr/).",
+         incorrect = "It might help if you review [our `dplyr` lesson](../dplyr/).",
          random_answer_order = TRUE,
          allow_retry = TRUE
 )
@@ -470,7 +470,7 @@ question("What does a `dplyr` pipe look like?",
          answer("`%=%`"),
          answer("`%<%`"),
          correct = "Correct! Absolutely fabulous!",
-         incorrect = "No, that's not a pipe in `dplyr` terms. Check out [our `dplyr` lesson](../sb-dplyr/).",
+         incorrect = "No, that's not a pipe in `dplyr` terms. Check out [our `dplyr` lesson](../dplyr/).",
          random_answer_order = TRUE,
          allow_retry = TRUE
 )

@@ -40,8 +40,10 @@ question("Which of the following would NOT be a good reason to use graphics in d
          answer("To suggest modeling strategies"),
          answer("To find a color that best matches the shirt you're wearing", correct = TRUE),
          answer("To find patterns in data"),
-         random_answer_order = TRUE,
-         allow_retry = TRUE
+     correct = "Magnificent!",
+     incorrect = "At least one of these possibilities is just plain silly.",
+     random_answer_order = TRUE,
+     allow_retry = TRUE
 )
 ```
 

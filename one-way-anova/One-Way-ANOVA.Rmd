@@ -215,15 +215,15 @@ question("Which function replaces the `gather` function in the `tidyverse`?",
 )
 ```
 
-So your first step may be to check out our lesson about [pivot_longer](../sb-pivot-longer/), if you haven't used it before, to transform a wide data set to a narrower, longer one. Your work will still be here when you get back. 
+So your first step may be to check out our lesson about [pivot_longer](../pivot-longer/), if you haven't used it before, to transform a wide data set to a narrower, longer one. Your work will still be here when you get back. 
 
 #### Convert Wide Data to Long Data by using `pivot_longer`
 
-Using the method from [Pivot Longer](../sb-pivot-longer/), enter the code for making the the wide version of `mussels` longer here. Store the output from your call to `pivot_longer` in `long_mussels`. 
+Using the method from [Pivot Longer](../pivot-longer/), enter the code for making the the wide version of `mussels` longer here. Store the output from your call to `pivot_longer` in `long_mussels`. 
 
 Remember to set the new `location` variable in `long_mussels` to be a factor once you've created `long_mussels`.
 
-If you haven't time to do the [pivot_longer](../sb-pivot-longer/) lesson, use the Hints buttons to teach yourself the proper syntax for the `pivot_longer` function.
+If you haven't time to do the [pivot_longer](../pivot-longer/) lesson, use the Hints buttons to teach yourself the proper syntax for the `pivot_longer` function.
 
 Make sure you enclose your assignment commands in parentheses so you can see what they are doing without having to add another line to display results. 
 
@@ -681,7 +681,7 @@ Don't. Delete. Outliers. (Unless they are wrong. Dead wrong. As in input wrong.)
 ### If no Transformations Produce Normally Distributed Residuals
 
 If none of the transformations you tried made the data look _normal_ _enough_, you have a couple of choices: run the ANOVA anyway or use
-the [Kruskal-Wallis test](../sb-kruskal-wallis/). Be aware of these factors if you decide to performa a Kruskal-Wallis test:
+the [Kruskal-Wallis test](../kruskal-wallis/). Be aware of these factors if you decide to performa a Kruskal-Wallis test:
 
 * the Krusal-Wallis test makes the assumption that the different groups
 have the same shaped distributions (which we know already isn't true because we did a density plot earlier in this lesson that showed that the shapes of the distributions for each level of `location` are different)    
@@ -691,7 +691,7 @@ the one-way ANOVA
 Personally, we don’t like the Kruskal-Wallis test; We recommend that if you
 have non-normal data that can’t be fixed by transformation, you go ahead and use one-way
 ANOVA; but be cautious about rejecting the null hypothesis if the _p_ value is not very far
-below 0.05 and if your data is extremely non-normal. You may even want to set alpha to something besides .05, say, .005 (see [Reassessing p Values](../sb-reassessing-p-values/) for why this particular number might be a good choice).
+below 0.05 and if your data is extremely non-normal. You may even want to set alpha to something besides .05, say, .005 (see [Reassessing p Values](../reassessing-p-values/) for why this particular number might be a good choice).
 
 ```{r whynot-kw, echo=FALSE}
 question("Why might the Kruskal-Wallis test NOT be a good non-parametric substitute for a one-way ANOVA?",
@@ -785,7 +785,7 @@ be much more accurate for heteroscedastic data from an unbalanced design.
 
 ## Perform the ANOVA 
 
-The `lm` function in the native `stats` package fits a linear model by [least squares](https://rcompanion.org/handbook/G_05.html), and can be used for a variety of analyses: [regression](../sb-correlation-and-linear-regression/), analysis of variance (what we're doing now), and [analysis of covariance](https://rcompanion.org/rcompanion/e_04.html), for instance.  The analysis of variance is then conducted either with the `anova` function in the `car` package for [Type II or Type III sum of squares](https://rcompanion.org/rcompanion/d_04.html), or with the `aov` function in the native `stats` package for [Type I sum of squares](https://rcompanion.org/rcompanion/d_04.html). 
+The `lm` function in the native `stats` package fits a linear model by [least squares](https://rcompanion.org/handbook/G_05.html), and can be used for a variety of analyses: [regression](../correlation-and-linear-regression/), analysis of variance (what we're doing now), and [analysis of covariance](https://rcompanion.org/rcompanion/e_04.html), for instance.  The analysis of variance is then conducted either with the `anova` function in the `car` package for [Type II or Type III sum of squares](https://rcompanion.org/rcompanion/d_04.html), or with the `aov` function in the native `stats` package for [Type I sum of squares](https://rcompanion.org/rcompanion/d_04.html). 
 
 ```{r where-can-we-use-lm, echo=FALSE}
 question("Which analyses can you do using the `lm` function?",
@@ -1084,7 +1084,7 @@ group means. Your estimate of the standard deviation of means that you’re look
 may be based on a pilot experiment or published literature on similar experiments.
 If you’re mainly interested in the comparisons of means, there are other ways of
 expressing the effect size. Your effect could be a difference between the smallest and
-largest means, for example, that you would want to be significant according to a Tukey-Kramer test (see [You found something interesting! Now what?](../sb-one-way-anova/#section-you-found-something-interesting-now-what) earlier in this lesson).
+largest means, for example, that you would want to be significant according to a Tukey-Kramer test (see [You found something interesting! Now what?](../one-way-anova/#section-you-found-something-interesting-now-what) earlier in this lesson).
 
 ```{r whyispoweranalysistricky, echo=FALSE}
 question("Why is doing a power analysis for a one-way ANOVA a bit tricky?",
@@ -1131,7 +1131,7 @@ group_means
 experiment_var
 ```
 
-For an _a priori_ power analysis, the `power.anova.test` function requires the number of groups, the two types of variance (within-groups and between-groups), the alpha level for the experiment, and the required power for the experiment. Many people use an alpha of .05 because it has been popular, but we encourage you to check out our lesson [Reassessing _p_ Values](../sb-reassessing-p-values/) and use one of the alphas proposed by spokespeople for the ASA, .005. 
+For an _a priori_ power analysis, the `power.anova.test` function requires the number of groups, the two types of variance (within-groups and between-groups), the alpha level for the experiment, and the required power for the experiment. Many people use an alpha of .05 because it has been popular, but we encourage you to check out our lesson [Reassessing _p_ Values](../reassessing-p-values/) and use one of the alphas proposed by spokespeople for the ASA, .005. 
 
 ```{r p-values}
 # Define the answer options
@@ -1333,4 +1333,4 @@ This lesson is heavily based with thanks on the works of John H. McDonald ([Hand
 
 ## See Also 
 
-[Kruskall Wallis test](../sb-kruskal-wallis/).
+[Kruskall Wallis test](../kruskal-wallis/).

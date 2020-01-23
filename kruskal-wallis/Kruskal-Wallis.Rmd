@@ -141,11 +141,11 @@ question("You might use a Kruskal-Wallis test to examine which of the following 
 
 ### Why use it? 
 
-The Kruskal-Wallis test is erroneously but commonly considered an alternative to an [ANOVA](http://www.biostathandbook.com/onewayANOVA.html). Many people use it if their data isn't [normally distributed](http://www.biostathandbook.com/normality.html). It tests whether the mean _ranks_ (rather than the means, which the ANOVA uses) are the same in all the groups represented by your nominal variable. 
+The Kruskal-Wallis test is erroneously but commonly considered an alternative to an [ANOVA](../one-way-anova/). Many people use it if their data isn't [normally distributed](http://www.biostathandbook.com/normality.html). It tests whether the mean _ranks_ (rather than the means, which the ANOVA uses) are the same in all the groups represented by your nominal variable. 
 
-Some people have the attitude that unless you have a large sample size and can clearly demonstrate that your data is normal, you should routinely use Kruskal–Wallis; they think it is dangerous to use the one-way ANOVA, which assumes normality, when you don't know for sure that your data is normal. 
+Some people have the attitude that unless you have a large sample size and can clearly demonstrate that your data is normal, you should routinely use Kruskal–Wallis; they think it is dangerous to use the [one-way ANOVA](../one-way-anova/), which assumes normality, when you don't know for sure that your data is normal. 
 
-However, one-way ANOVA is not very sensitive to deviations from normality. John H. McDonald (with permission, the author upon which many of our lessons are based) has done simulations with a variety of non-normal distributions, including flat, highly peaked, highly skewed, and bimodal, and the proportion of false positives is always around 5% or a little lower, just as it should be. For this reason, McDonald does not recommend the Kruskal-Wallis test as an alternative to one-way ANOVA. Because many people use it, you should be familiar with it even if you become convinced that it's overused.
+However, [one-way ANOVA](../one-way-anova/) is not terribly sensitive to deviations from normality. John H. McDonald (with permission, the author upon which many of our statistics lessons are based) has done simulations with a variety of non-normal distributions, including flat, highly peaked, highly skewed, and bimodal, and the proportion of false positives is always around 5% or a little lower, just as it should be. For this reason, McDonald does not recommend the Kruskal-Wallis test as an alternative to one-way ANOVA. Because many people use it, you should be familiar with it even if you become convinced that it's overused.
 
 ```{r why, echo=FALSE}
 question("When would you need to understand a Kruskal-Wallis test?",
@@ -159,7 +159,7 @@ question("When would you need to understand a Kruskal-Wallis test?",
 
 The Kruskal-Wallis test is a __non-parametric test__, or a test that does not assume the data is from a distribution that can be completely described by the two parameters _mean_ and _standard deviation_ (the way a normal distribution can). 
 
-Like most non-parametric tests, you perform it on "ranked" data. Convert measurement observations to their ranks in the overall data set (with, in some cases, great loss of information) by giving the smallest value a rank of 1, the next smallest a rank of 2, and so on. Since you lose information when you substitute ranks for the original values, converting measurements to ranks can make this a somewhat less powerful test than a one-way ANOVA. This is another reason to prefer one-way ANOVA.
+Like most non-parametric tests, you perform it on "ranked" data. Convert measurement observations to their ranks in the overall data set (with, in some cases, great loss of information) by giving the smallest value a rank of 1, the next smallest a rank of 2, and so on. Since you lose information when you substitute ranks for the original values, converting measurements to ranks can make this a somewhat less powerful test than a [one-way ANOVA](../one-way-anova/). This is another reason to prefer one-way ANOVA.
 
 ```{r rank, echo=FALSE}
 question("How do you make ranked data?",
@@ -170,7 +170,7 @@ question("How do you make ranked data?",
 )
 ```
 
-The other assumption of one-way ANOVA is that the variation within the groups is equal (homoscedasticity). While Kruskal-Wallis does not assume that the data are normal, it does assume that the different groups have the same distribution, and groups with different standard deviations have different distributions. __If your data are heteroscedastic, Kruskal–Wallis is no better than one-way ANOVA, and may be worse__. Instead, you should __use Welch's ANOVA for heteroscedastic data__.
+The other assumption of [one-way ANOVA](../one-way-anova/) is that the variation within the groups is equal (homoscedasticity). While Kruskal-Wallis does not assume that the data are normal, it does assume that the different groups have the same distribution, and groups with different standard deviations have different distributions. __If your data are heteroscedastic, Kruskal–Wallis is no better than one-way ANOVA, and may be worse__. Instead, you should __use Welch's ANOVA for heteroscedastic data__.
 
 ```{r hetero, echo=FALSE}
 question("Upon which assumptions does the Kruskal-Wallis test rest?",
@@ -181,7 +181,7 @@ question("Upon which assumptions does the Kruskal-Wallis test rest?",
 )
 ```
 
-__The only time I recommend using Kruskal-Wallis is when your original data set actually consists of one nominal variable and one ranked variable__; in this case, you cannot do a one-way ANOVA and _must_ use the Kruskal–Wallis test. Dominance hierarchies (in behavioral biology) and developmental stages are the only ranked variables I can think of that are common in biology.
+__The only time I recommend using Kruskal-Wallis is when your original data set actually consists of one nominal variable and one ranked variable__; in this case, you cannot do a [one-way ANOVA](../one-way-anova/) and _must_ use the Kruskal–Wallis test. Dominance hierarchies (in behavioral biology) and developmental stages are the only ranked variables I can think of that are common in biology.
 
 ```{r assumptions, echo=FALSE}
 question("Upon what assumptions does the Kruskal-Wallis test NOT rely?",
@@ -204,7 +204,7 @@ question("What is the BEST situation in which to use a Kruskal-Wallis test?",
 
 The Mann–Whitney *U* test (also known as the Mann–Whitney–Wilcoxon test, the Wilcoxon rank-sum test, or the Wilcoxon two-sample test) is limited to nominal variables with only two values; it is the non-parametric analogue to two-sample *t* test. It uses a different test statistic (*U* instead of the *H* of the Kruskal–Wallis test), but the *p* value is mathematically identical to that of a Kruskal–Wallis test. For simplicity, I will refer to Kruskal–Wallis on the rest of this web page, but everything also applies to the Mann–Whitney *U* test.
 
-The Kruskal–Wallis test is sometimes called Kruskal–Wallis one-way ANOVA or non-parametric one-way ANOVA. I think calling the Kruskal–Wallis test an ANOVA is confusing, and I recommend that you just call it the Kruskal–Wallis test.
+The Kruskal–Wallis test is sometimes called Kruskal–Wallis [one-way ANOVA](../one-way-anova/) or non-parametric one-way ANOVA. I think calling the Kruskal–Wallis test an ANOVA is confusing, and I recommend that you just call it the Kruskal–Wallis test.
 
 ## Practice
 
