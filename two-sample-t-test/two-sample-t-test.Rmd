@@ -805,7 +805,6 @@ p
 
 You are amazing!
 
-
 ## I _like_ Math. Where's the Math?
 
 In general, these tutorial-reference lessons are meant for the person who wants to know how properly to use a statistical test without having to get a PhD in statistics. However, some learners enjoy the math behind the tests. This section is dedicated to those learners. Enjoy it!
@@ -817,6 +816,11 @@ In general, these tutorial-reference lessons are meant for the person who wants 
 And just for fun, a riddle:
 
 ![](https://www.youtube.com/watch?v=mmkCS5eA4f8)
+
+## See Also
+
+[One-sample _t_ Test](../one-sample-t-test/)
+[Paired _t_ Test](../paired-t-test/)
 
 ## References
 

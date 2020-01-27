@@ -12,22 +12,25 @@ runtime: shiny_prerendered
 ---
 
 ```{r setup, include=FALSE}
-library(learnr)
 library(data.table)
 library(dplyr)
 library(pwr)
 library(tidyr)
 library(stats)
-library(ggplot2)
 shhh <- suppressPackageStartupMessages
 shh <- suppressWarnings
 sh <- suppressMessages
 knitr::opts_chunk$set(echo = FALSE)
 options(digits = 3, scipen = 9999)
-tutorial_options(exercise.completion = FALSE,
-                 exercise.eval = TRUE,
-                 exercise.lines = 8,
-                 exercise.diagnostics = TRUE)
+library(learnr)
+library(ggplot2)
+knitr::opts_chunk$set(echo = TRUE)
+options(scipen = 9999, digits = 3)
+tutorial_options(exercise.startover = TRUE,
+  exercise.eval = TRUE, 
+  exercise.cap = "R Code",
+  exercise.completion = TRUE,
+  exercise.diagnostics = TRUE)
 
 Input = ("
 Tillamook Newport Petersburg  Magadan Tvarminne
@@ -53,7 +56,7 @@ long_mussels$location <- as.factor(long_mussels$location)
 
 ## Background
 
-One common way to look at the data in more detail after performing an [ANOVA](../one-way-anova/) is to compare different pairs of means and see which are significantly different from each other. For the mussel shell example in [our ANOVA lesson](http://www.a-mess.org/sb-one-way-anova/), the overall _p_ value (.0036) piques our interest. We therefore want to follow up by asking whether the mean in Tillamook is different from the mean in Newport, whether Newport is different from Petersburg, and so on.
+One common way to look at the data in more detail after performing an [ANOVA](../one-way-anova/) is to compare different pairs of means and see which are significantly different from each other. For the mussel shell example in [our ANOVA lesson](../one-way-anova/), the overall _p_ value (.0036) piques our interest. We therefore want to follow up by asking whether the mean in Tillamook is different from the mean in Newport, whether Newport is different from Petersburg, and so on.
 
 ## What kinds of Variables work with a Tukey-Kramer _Post Hoc_ Test
 
@@ -77,7 +80,7 @@ Analysis of variance (ANOVA) is the most commonly used technique for __comparing
 
 ## The Code
 
-Let's keep using the data set we used in [the ANOVA lesson](http://www.a-mess.org/sb-one-way-anova/). We'll recreate our ANOVA fit, then run the Tukey-Kramer test to see which pairs differ from each other.
+Let's keep using the data set we used in [the ANOVA lesson](../one-way-anova/). We'll recreate our ANOVA fit, then run the Tukey-Kramer test to see which pairs differ from each other.
 
 Please follow these steps:
 

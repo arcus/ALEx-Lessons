@@ -265,6 +265,8 @@ question("What does the blue line represent in the plot you just made?",
 )
 ```
 
-## Note to the Learner
+## See Also
 
-This lesson is not yet complete. We hope you enjoyed the first part of it. Stay tuned for more to come! 
+[One-sample _t_ Test](../one-sample-t-test/)
+[Two-sample _t_ Test](../two-sample-t-test/)
+

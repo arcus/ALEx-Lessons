@@ -489,6 +489,11 @@ ggplot(data=wpm,
   labs(y = "Words per Minute")
 ```
 
+## See Also
+
+[Two-sample _t_ Test](../two-sample-t-test/)
+[Paired _t_ Test](../paired-t-test/)
+
 ## References
 
 This lesson is heavily based with thanks on the works of John H. McDonald ([Handbook of Biological Statistics](http://www.biostathandbook.com/chigof.html)) and Salvatore S. Mangiafico ([R Companion to the Biostats Handbook](https://rcompanion.org/rcompanion/b_03.html)).

@@ -13,8 +13,15 @@ runtime: shiny_prerendered
 
 ```{r setup, include=FALSE}
 library(learnr)
-tutorial_options(exercise.completion = FALSE)
-knitr::opts_chunk$set(echo = FALSE)
+library(ggplot2)
+library(tidyverse)
+knitr::opts_chunk$set(echo = TRUE)
+options(scipen = 9999, digits = 3)
+tutorial_options(exercise.startover = TRUE,
+  exercise.eval = TRUE, 
+  exercise.cap = "R Code",
+  exercise.completion = TRUE,
+  exercise.diagnostics = TRUE)
 ```
 
 If you need to understand how to affect your files and workspace from within RStudio and R, we recommend that you run this lesson directly within your own copy of RStudio by typing the following commands into the console:
