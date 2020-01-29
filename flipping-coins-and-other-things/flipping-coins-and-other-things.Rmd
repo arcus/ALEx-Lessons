@@ -44,7 +44,7 @@ question("What are the odds of getting heads when you flip a fair coin one time?
          answer("1", message = "That would mean you would get heads every single time, which would indicate we don't have a fair coin."),
          answer("0.50", correct = TRUE),
          answer("1/2", correct = TRUE),
-         answer("5%", message = "Five percent means you get heads way less than half the time, which means, that we don't have a fair coin."),
+         answer("5%", message = "Five percent means you get heads way less than half the time, which means that we don't have a fair coin."),
          correct = "You are amazing!",
          incorrect = "There are two correct answers.",
          random_answer_order = TRUE,
