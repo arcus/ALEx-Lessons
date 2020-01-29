@@ -34,7 +34,7 @@ The best lesson on flipping coins that I have ever seen is at Khan Academy's web
 
 Here are some key points to remember:
     
-* P(H) means "The probability of H".
+* P(H) means "The probability of H"0.
 * P(H) = the number of possibilities that meet your condition DIVIDED BY the number of equally likely possibilities.
 
 ## Flip a Coin
@@ -42,7 +42,7 @@ Here are some key points to remember:
 ```{r whataretheodds, echo=FALSE}
 question("What are the odds of getting heads when you flip a fair coin one time?",
          answer("1", message = "That would mean you would get heads every single time, which would indicate we don't have a fair coin."),
-         answer(".50", correct = TRUE),
+         answer("0.50", correct = TRUE),
          answer("1/2", correct = TRUE),
          answer("5%", message = "Five percent means you get heads way less than half the time, which means, that we don't have a fair coin."),
          correct = "You are amazing!",
@@ -60,10 +60,10 @@ I am going to flip a different (fair) coin.
 
 ```{r i-have-another-one, echo=FALSE}
 question(" What are my odds of getting heads?",
-         answer(".50", correct = TRUE),
+         answer("0.50", correct = TRUE),
          answer("1/2", correct = TRUE),
          answer("1", message = "That would mean you would get heads every single time, which would indicate we don't have a fair coin."),
-         answer(".25", message = "Twenty-five percent means you get heads way less than half the time, which means, that we don't have a fair coin."),
+         answer("0.25", message = "Twenty-five percent means you get heads way less than half the time, which means, that we don't have a fair coin."),
      correct = "Yes!",
      incorrect = "The odds are 1:1, which is half. Make sure you've checked off all the answers that mean half.",
      random_answer_order = TRUE,
@@ -78,11 +78,11 @@ Go to the next section to find out the results of the coin toss.
 >I got heads.
 
 ```{r and-again, echo=FALSE}
-question("I'm going to flip the same coin again. What are the odds of getting heads again?",
+question("I'm going to flip the same coin again. What are the odds of getting heads again, in other words, of flipping a _series_ of two heads?",
          answer("1"),
-         answer(".50"),
+         answer("0.50"),
          answer("1/2"),
-         answer(".25", correct = TRUE),
+         answer("0.25", correct = TRUE),
      correct = "Correct. Superb work!",
      incorrect = "As we proceed, the odds of getting a string of, say, n heads, gets smaller. Halve the previous odds to get the correct answer.",
      random_answer_order = TRUE,
@@ -99,17 +99,17 @@ Go to the next section to find out the results of the coin toss.
 ```{r headsagainornot, echo=FALSE}
 question("I'm going to flip the same coin again. What are the odds of getting heads again?",
          answer("1"),
-         answer(".25"),
-         answer(".50"),
+         answer("0.25"),
+         answer("0.50"),
          answer("None of these (except this one)", correct = TRUE),
      correct = "Well done!",
-     incorrect = "The odds are no half what they were last time, or .25/2. Try that.",
+     incorrect = "The odds are no half what they were last time, or 0.25/2. Try that.",
      random_answer_order = TRUE,
      allow_retry = TRUE
 )
 ```
 
-We have again cut our odds in half, so the answer to the previous question is .125. 
+We have again cut our odds in half, so the answer is 0.125. 
 
 Go to the next section to find out the results of the coin toss.
 
@@ -130,10 +130,10 @@ question("Why have we cut our odds in half at each step so far?",
 ```
 
 ```{r whatwertheodds, echo=FALSE}
-question("What were the odds that I would get heads for the third flip?",
-         answer(".125", correct = TRUE),
-         answer(".0613", message = "You're getting ahead of the rest of us"),
-         answer(".0306", message = "That is close to the odds for a future flip, but not the third flip."),
+question("What are the odds that I would get heads for a fourth flip?",
+         answer("0.0625", correct = TRUE),
+         answer("0.03125", message = "You're getting ahead of the rest of us"),
+         answer("0.0306", message = "That is close to the odds for a future flip, but not for this flip."),
          answer("1", message = "That would mean it is 100% likely to get heads next flip. If you think that, then you have decided this is an unfair coin."),
          correct = "Correct. Smashing!",
          incorrect = "No. You could go back to the previous page to find out.",
@@ -156,7 +156,7 @@ Although you might guess that I am flipping an unfair coin, the odds of my not f
 ```{r isthisapvalue, echo=FALSE}
 question("These odds that we have been calculating, are they possibly the equivalent of a _p_ value?",
          answer("Yes.", correct = TRUE),
-         answer("No", message = "message_wrong_1"),
+         answer("Sorry, no.", message = "message_wrong_1"),
          correct = "Exactly so.",
          incorrect = "Yes. Yes they are. Cool, huh?",
          random_answer_order = TRUE,
@@ -169,12 +169,17 @@ Let's continue. I am going to flip the coin again. What are the odds of getting 
 ```{r testingthis, echo = FALSE}
 question_text(
   "What is the formula for cacluating my odds of getting a fifth heads?",
-  answer(".125 / 2", correct = TRUE),
-  answer(".125/2", correct = TRUE),
-  answer(".0625", message = "That's the answer, not the formula for arriving at the answer."),
+  answer("0.0625 / 2", correct = TRUE),
+  answer("0.0625/2", correct = TRUE),
+  answer(".0625 / 2", correct = TRUE),
+  answer(".0625/2", correct = TRUE),
+  answer(".625/2", message = "I think you forgot a 0."),
+  answer("0.625/2", message = "I think you forgot a 0."),
+  answer("0.03125", message = "That's the answer, not the formula for arriving at the answer."),
+  answer(".03125", message = "That's the answer, not the formula for arriving at the answer."),
   answer("1", message = "This would be correct if you believe I was either cheating or using an unfair coin."),
-  correct = "Cool job!",
-  incorrect = "No.",
+  correct = "Good job!",
+  incorrect = "Sorry, no.",
   allow_retry = TRUE
 )
 ```
@@ -188,14 +193,14 @@ Go to the next section to find out the results of the coin toss.
 
 Do I have a fair coin? What do you think now?
   
-One more flip. Maybe you're convinced that I have an unfair coin because the odds of heads last time were close to .05. 
+One more flip. Maybe you're convinced that I have an unfair coin because the odds of heads last time were close to 0.05. 
 
 ```{r onelasttime, echo=FALSE}
 question("How likely is it that I get yet another in the string of heads?",
-         answer(".03125", correct = TRUE),
-         answer(".05", message = "Not even close"),
+         answer("0.0156", correct = TRUE),
+         answer("0.05", message = "Not even close"),
          answer("0", message = "Hmm. Interesting response."),
-         answer(".0625/2", correct = TRUE),
+         answer("0.0325/2", correct = TRUE),
          correct = "Yes, that's right.",
          incorrect = "Take the previous answer and divide it in two. There are two correct answers.",
          random_answer_order = TRUE,
@@ -211,7 +216,7 @@ Go to the next section to find out the results of the coin toss.
 
 >I got tails. 
   
-## Other Stuff
+## Other Things
 
 Let's switch to probability with dice. 
 
@@ -221,19 +226,19 @@ $\displaystyle \frac{1}{6} = 0.167$.
 
 That's just under 17% odds that you'll get a 1 from rolling a fair die.
 
-Again with a fair die, what is the formula for calculating the probability of rolling a 3 or a 4? 
 
 ```{r testingthat, echo = FALSE}
 question_text(
   "With a fair die, what is the formula for calculating the probability of rolling a 3 or a 4?",
-  answer(".333", message = "That's the answer, not the formula for arriving at the answer."),
-  answer(".33", message = "That's the answer, not the formula for arriving at the answer."),
+  answer("0.333", message = "That's the answer, not the formula for arriving at the answer."),
+  answer("0.33", message = "That's the answer, not the formula for arriving at the answer."),
   answer("3/6", message = "There are only 2 possibilities, not 3."),
   answer("6/2", message = "That's upside down."),
   answer("2/6", correct = TRUE),
+  answer("2 / 6", correct = TRUE),
   answer("1", message = "Remember, the forumla you need is the number of possibilities that meet your condition—here 2—divided by the number of equally likely possibilities—here 6."),
   correct = "Well done!",
-  incorrect = "No.",
+  incorrect = "Sorry, no.",
   allow_retry = TRUE
 )
 ```
