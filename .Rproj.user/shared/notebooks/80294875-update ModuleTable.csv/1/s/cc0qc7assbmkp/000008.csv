@@ -1,0 +1,10 @@
+"0","df <- read_csv(paste0(params$location, ""/ModuleTable.csv""))
+"
+"2","Parsed with column specification:
+cols(
+  lesson_key = [32mcol_double()[39m,
+  group = [31mcol_character()[39m,
+  title = [31mcol_character()[39m,
+  url = [31mcol_character()[39m
+)
+"

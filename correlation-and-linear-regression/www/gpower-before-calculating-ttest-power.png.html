@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Sign In with Auth0</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="shortcut icon" href="https://cdn.auth0.com/styleguide/components/2.0.2/media/logos/img/favicon.png">
+</head>
+<body>
+
+  <!--[if IE 8]>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/ie8/0.2.5/ie8.js"></script>
+  <![endif]-->
+
+  <!--[if lte IE 9]>
+  <script src="https://cdn.auth0.com/js/base64.js"></script>
+  <script src="https://cdn.auth0.com/js/es5-shim.min.js"></script>
+  <![endif]-->
+
+  <script src="https://cdn.auth0.com/js/lock/11.20/lock.min.js"></script>
+  <script>
+    var authParams = JSON.parse(decodeURIComponent(escape(window.atob('eyJwcm90b2NvbCI6InNhbWxwIiwiU0FNTFJlcXVlc3QiOiJmVkxKVHNNd0VMMGo4UStSNzltcXNzaHFVaFZRUmFVQ0VRMGN1RG5PSkxYcTJNRmp0L0QzdUdrUmNLQUhYNTZmM3pLZXlmU2prOEVXREFxdE1wSkdDUWxBY1YwTDFXYmtwWnlIMTJTYW41OU5rSFd5cHpObjErb1ozaDJnRGZ4TGhYUzR5SWd6aW1xR0FxbGlIU0Mxbks1bUQwczZpaExhRzIwMTE1SUVpN3VNTk8yNjJYUlY2M21kM1BqVFZseHlWYW1ONXJKWElKcUdpN29GRXJ4K3h4cnRZeTBRSFN3VVdxYXNoNUpSRWlacG1GNlc2UlVkWDlQeHhSc0ppcVBUalZDSEJxZGlWUWNTMHZ1eUxNTGlhVlVPQWx0UmczbjA3SXkwV3JjU0lxNjd2WDNCRU1YV3d3MlQ2T1BORU1GWUgvQldLM1FkbUJXWXJlRHc4cnpNeU5yYUhta2M3M2E3NkVjbVpqRXozR0hFMTdxUG9IWXg0MGp5WWJwMEtHaCtqZlYwZlBadFQvSWZnMG44U3lvLy90cSt6T0t1MEZMd3oyQW1wZDdkR21EV043SEcrU0p6YlRwbS8zZExvM1JBUkIwMkE1VTZoVDF3MFFpb1NSRG5COWUvNitHWDVncz0iLCJSZWxheVN0YXRlIjoiaHR0cHM6Ly9hY2NvdW50cy5nb29nbGUuY29tL0NoZWNrQ29va2llP2NvbnRpbnVlPWh0dHBzJTNBJTJGJTJGY29uc29sZS5jbG91ZC5nb29nbGUuY29tJTJGc3RvcmFnZSUyRmJyb3dzZXIlMkZfZGV0YWlscyUyRnB1YmxpYy1icmF1bnNiLW1lZGlhJTJGQXJjdXMtRWR1Y2F0aW9uLUFzc2V0cyUyRmEtTUVTUyUyNTIwTGVzc29ucyUyRmltYWdlcyUyRmdwb3dlciUyNTIwYmVmb3JlJTI1MjBjYWxjdWxhdGluZyUyNTIwdHRlc3QlMjUyMHBvd2VyLnBuZyUzRnByb2plY3QlM0RhcmN1cy1lZHUtcHVibGljLWM2MmE3MzdjJnNlcnZpY2U9Y2xvdWRjb25zb2xlJm9zaWQ9MSIsIl9jc3JmIjoiUjZnaWkzVlotLWdrNXJYY05HVGttMmpZQnR3YUc0eHpseFljIiwiX2ludHN0YXRlIjoiZGVwcmVjYXRlZCIsInN0YXRlIjoiZzZGbzJTQktWVXh0YkdKRVdtY3RWV1J6Um1WMVJ6TkRhRlJYTkRWMWRWVlpORzQzTjZOMGFXVFpJRzlmT1RNNVkySlJUVTB6ZEdodmVGbHVaMWxHTVMxQ01HdzVOakJ3Vm1oV28yTnBaTmtnWXpOb01ERjJRekJ0VTNWTFltRjVhMjVMTUZweWVuQTFVekJ6VW5sNGFtOCJ9'))));
+    var lock = new Auth0Lock(
+      'c3h01vC0mSuKbayknK0Zrzp5S0sRyxjo',
+      'chop.auth0.com', {
+        
+        configurationBaseUrl: 'https://cdn.auth0.com/',
+        
+        closable: false,
+        
+        allowedConnections: ['CHOPAD'],
+        
+        
+        
+        
+        languageDictionary: { title: 'Arcus GCP at CHOP' },
+        
+        theme: {
+          logo: 'https://s3.amazonaws.com/education-dev.arcus.chop.edu/images/CHOP.png'
+          
+          , primaryColor: '#5DBCD2'
+          
+        },
+        
+        auth: {
+          redirectUrl: 'https://www.google.com/a/arcus.chop.edu/acs',
+          responseType: 'code',
+          params: authParams
+        },
+        defaultADUsernameFromEmailPrefix: false,
+        overrides: {
+          __tenant: 'chop',
+          __token_issuer: 'https://chop.auth0.com/'
+        }
+      });
+
+    lock.show();
+  </script>
+
+  
+  <style>
+    .auth0-lock.auth0-lock .auth0-lock-overlay {
+      background: #000000
+    }
+  </style>
+  
+</body>
+</html>

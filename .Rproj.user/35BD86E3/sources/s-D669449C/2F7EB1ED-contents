@@ -1,0 +1,375 @@
+---
+title: "Flipping Coins and Other Things"
+author: "Sheila Braun, CHOP"
+date: "1/14/2020"
+output: 
+ learnr::tutorial:
+    progressive: true
+    allow_skip: true
+    css:
+      - www/bootstrap.min.css
+      - www/flexdashboard.min.css
+      - www/style.css
+runtime: shiny_prerendered
+---
+
+```{r setup, include=FALSE}
+options(digits = 3, scipen = 9999)
+if(!require(learnr)){install.packages("learnr")}
+library(learnr)
+library(dplyr)
+library(tidyr)
+tutorial_options(exercise.completion = FALSE,
+                 exercise.eval = TRUE,
+                 exercise.lines = 8,
+                 exercise.diagnostics = TRUE)
+
+```
+
+## We should Probably start with Probability
+
+The best lesson on flipping coins that I have ever seen is at Khan Academy's website. Have a look, then come back here for some interaction about flipping coins. 
+
+![Flipping coins explained by Sal Khan](https://youtu.be/uzkc-qNVoOk)
+
+Here are some key points to remember:
+    
+* P(H) means "The probability of H"0.
+* P(H) = the number of possibilities that meet your condition DIVIDED BY the number of equally likely possibilities.
+
+## Flip a Coin
+
+```{r whataretheodds, echo=FALSE}
+question("What are the odds of getting heads when you flip a fair coin one time?",
+         answer("1", message = "That would mean you would get heads every single time, which would indicate we don't have a fair coin."),
+         answer("0.50", correct = TRUE),
+         answer("1/2", correct = TRUE),
+         answer("5%", message = "Five percent means you get heads way less than half the time, which means that we don't have a fair coin."),
+         correct = "You are amazing!",
+         incorrect = "There are two correct answers.",
+         random_answer_order = TRUE,
+         allow_retry = TRUE
+)
+```
+
+>We got heads.
+
+## Flip A Different Coin
+
+I am going to flip a different (fair) coin.
+
+```{r i-have-another-one, echo=FALSE}
+question(" What are my odds of getting heads?",
+         answer("0.50", correct = TRUE),
+         answer("1/2", correct = TRUE),
+         answer("1", message = "That would mean you would get heads every single time, which would indicate we don't have a fair coin."),
+         answer("0.25", message = "Twenty-five percent means you get heads way less than half the time, which means, that we don't have a fair coin."),
+     correct = "Yes!",
+     incorrect = "The odds are 1:1, which is half. Make sure you've checked off all the answers that mean half.",
+     random_answer_order = TRUE,
+     allow_retry = TRUE
+)
+```
+
+Go to the next section to find out the results of the coin toss.
+
+## Second Flip
+
+>I got heads.
+
+```{r and-again, echo=FALSE}
+question("I'm going to flip the same coin again. What are the odds of getting heads again, in other words, of flipping a _series_ of two heads?",
+         answer("1"),
+         answer("0.50"),
+         answer("1/2"),
+         answer("0.25", correct = TRUE),
+     correct = "Correct. Superb work!",
+     incorrect = "As we proceed, the odds of getting a string of, say, n heads, gets smaller. Halve the previous odds to get the correct answer.",
+     random_answer_order = TRUE,
+     allow_retry = TRUE
+)
+```
+
+Go to the next section to find out the results of the coin toss.
+
+## Third Flip 
+  
+>I got heads.
+
+```{r headsagainornot, echo=FALSE}
+question("I'm going to flip the same coin again. What are the odds of getting heads again?",
+         answer("1"),
+         answer("0.25"),
+         answer("0.50"),
+         answer("None of these (except this one)", correct = TRUE),
+     correct = "Well done!",
+     incorrect = "The odds are no half what they were last time, or 0.25/2. Try that.",
+     random_answer_order = TRUE,
+     allow_retry = TRUE
+)
+```
+
+We have again cut our odds in half, so the answer is 0.125. 
+
+Go to the next section to find out the results of the coin toss.
+
+
+## Fourth Flip
+
+>I got heads.
+
+```{r whyinhalf, echo=FALSE}
+question("Why have we cut our odds in half at each step so far?",
+         answer("because we have enough data to estimate new odds", correct = TRUE),
+         answer("because I definitely have an unfair coin"),
+     correct = "Yay!",
+     incorrect = "'Definitely' is a strong word. Go with the less definitive answer.",
+     random_answer_order = TRUE,
+     allow_retry = TRUE
+)
+```
+
+```{r whatwertheodds, echo=FALSE}
+question("What are the odds that I would get heads for a fourth flip?",
+         answer("0.0625", correct = TRUE),
+         answer("0.03125", message = "You're getting ahead of the rest of us"),
+         answer("0.0306", message = "That is close to the odds for a future flip, but not for this flip."),
+         answer("1", message = "That would mean it is 100% likely to get heads next flip. If you think that, then you have decided this is an unfair coin."),
+         correct = "Correct. Smashing!",
+         incorrect = "No. You could go back to the previous page to find out.",
+         random_answer_order = TRUE,
+         allow_retry = TRUE
+)
+```
+
+>I'm flipping the coin again. Go to the next section to find out the results of the coin toss.
+
+
+## Fifth Flip
+
+>I got heads.
+  
+Despite our consistent results so far, it's not impossible for me to get tails on the next flip unless the coin is unfair. Is it? 
+
+Although you might guess that I am flipping an unfair coin, the odds of my not flipping heads are still substantial at 6.25%. 
+
+```{r isthisapvalue, echo=FALSE}
+question("These odds that we have been calculating, are they possibly the equivalent of a _p_ value?",
+         answer("Yes.", correct = TRUE),
+         answer("Sorry, no.", message = "message_wrong_1"),
+         correct = "Exactly so.",
+         incorrect = "Yes. Yes they are. Cool, huh?",
+         random_answer_order = TRUE,
+         allow_retry = TRUE
+)
+```
+
+Let's continue. I am going to flip the coin again. What are the odds of getting an addition to our string of heads? Our chances have halved again. Type in the formula that would give you the correct answer and run the code.
+
+```{r testingthis, echo = FALSE}
+question_text(
+  "What is the formula for cacluating my odds of getting a fifth heads?",
+  answer("0.0625 / 2", correct = TRUE),
+  answer("0.0625/2", correct = TRUE),
+  answer(".0625 / 2", correct = TRUE),
+  answer(".0625/2", correct = TRUE),
+  answer(".625/2", message = "I think you forgot a 0."),
+  answer("0.625/2", message = "I think you forgot a 0."),
+  answer("0.03125", message = "That's the answer, not the formula for arriving at the answer."),
+  answer(".03125", message = "That's the answer, not the formula for arriving at the answer."),
+  answer("1", message = "This would be correct if you believe I was either cheating or using an unfair coin."),
+  correct = "Good job!",
+  incorrect = "Sorry, no.",
+  allow_retry = TRUE
+)
+```
+
+Go to the next section to find out the results of the coin toss.
+
+
+## Sixth Flip
+
+>I got heads.
+
+Do I have a fair coin? What do you think now?
+  
+One more flip. Maybe you're convinced that I have an unfair coin because the odds of heads last time were close to 0.05. 
+
+```{r onelasttime, echo=FALSE}
+question("How likely is it that I get yet another in the string of heads?",
+         answer("0.0156", correct = TRUE),
+         answer("0.05", message = "Not even close"),
+         answer("0", message = "Hmm. Interesting response."),
+         answer("0.0325/2", correct = TRUE),
+         correct = "Yes, that's right.",
+         incorrect = "Take the previous answer and divide it in two. There are two correct answers.",
+         random_answer_order = TRUE,
+         allow_retry = TRUE
+)
+```
+
+
+Go to the next section to find out the results of the coin toss.
+
+
+## Sixth Flip Result
+
+>I got tails. 
+  
+## Other Things
+
+Let's switch to probability with dice. 
+
+To figure out the odds of rolling a 1 (for instance), you take the number of possibilities you're considering (one of them) and divide it by the total number of possibilities on the die. Since we're discussing a 6-sided die, that number is 6. 
+
+$\displaystyle \frac{1}{6} = 0.167$.
+
+That's just under 17% odds that you'll get a 1 from rolling a fair die.
+
+
+```{r testingthat, echo = FALSE}
+question_text(
+  "With a fair die, what is the formula for calculating the probability of rolling a 3 or a 4?",
+  answer("0.333", message = "That's the answer, not the formula for arriving at the answer."),
+  answer("0.33", message = "That's the answer, not the formula for arriving at the answer."),
+  answer("3/6", message = "There are only 2 possibilities, not 3."),
+  answer("6/2", message = "That's upside down."),
+  answer("2/6", correct = TRUE),
+  answer("2 / 6", correct = TRUE),
+  answer("1", message = "Remember, the forumla you need is the number of possibilities that meet your condition—here 2—divided by the number of equally likely possibilities—here 6."),
+  correct = "Well done!",
+  incorrect = "Sorry, no.",
+  allow_retry = TRUE
+)
+```
+
+```{r formulathreeandfour, echo = FALSE}
+question_text(
+  "What is the formula for figuring out the probability of rolling a 2 AND a 3 in a single roll of a fair die?",
+  answer("0/6", correct = TRUE),
+  answer("0 / 6", correct = TRUE),
+  answer("2/6"),
+  answer("2 / 6"),
+  answer("1/6"),
+  answer("1 / 6"),
+  answer("2/3"),
+  answer("3/2"),
+  correct = "Perfect!",
+  incorrect = "The number of possibilities that meet your condition is 0. The number of equally likely outcomes is still 6.",
+  allow_retry = TRUE
+)
+```
+
+
+The second Khan Academy video on probability is also excellent--and there will be a quiz. The next few questions are based on it. You might want to take a snapshot of the screen near the end and keep that image in front of you while you answer the questions about the video.
+
+![Khan Academy video on probability](https://www.youtube.com/watch?v=QE2uR6Z-NcU)
+
+
+```{r lellow, echo=FALSE}
+question("What is the probability of a lellow object falling out of the bag first?",
+         answer("12/29", correct = TRUE),
+         answer("There is no such thing as 'lellow'"),
+         answer("5/29"),
+         answer("1"),
+     correct = "Awesome!",
+     incorrect = "The probability of a lellow object being the first to come out of the bag is the number of lellows DIVIDED BY the total number of objects in the bag.",
+     random_answer_order = TRUE,
+     allow_retry = TRUE
+)
+```
+
+```{r whysaylellow, echo=FALSE}
+question("Why am I saying 'lellow'?",
+         answer("because it's ridiculous", correct = TRUE),
+         answer("because it's fun", correct = TRUE),
+         answer("because Sal Khan said his son says 'lellow' for yellow", correct = TRUE),
+     correct = "That's right!",
+     incorrect = "Incorrect: We try not to take ourselves too seriously. Did you watch the video with the sound turned up?",
+     random_answer_order = TRUE,
+     allow_retry = TRUE
+)
+```
+
+## Review
+
+Let's explore probability from another perspective by way of review.
+  
+Here are some quotations. Who wrote them?
+
+```{r rincewind, echo=FALSE}
+question("'Luck is my middle name,' said Rincewind, indistinctly. 'Mind you, my first name is Bad.'",
+         answer("Neil Gaiman"),
+         answer("Douglas Adams"),
+         answer("Terry Pratchett", correct = TRUE),
+         answer("Eoin Colfer"),
+     correct = "You got it! Want to join my reading group?",
+     incorrect = "Nope. Here is a hint: The book was *Equal Rites*.",
+     random_answer_order = TRUE,
+     allow_retry = TRUE
+)
+```
+```{r interesting, echo=FALSE}
+question("'Million-to-one chances,’ she said, ‘crop up nine times out of ten.'",
+         answer("Neil Gaiman"),
+         answer("Douglas Adams"),
+         answer("Terry Pratchett", correct = TRUE),
+         answer("Eoin Colfer"),
+     correct = "Yes! Clearly you are a cultured individual.",
+     incorrect = "Nope. The book was *Interesting Times*.",
+     random_answer_order = TRUE,
+     allow_retry = TRUE
+)
+```
+```{r menatarms, echo=FALSE}
+question("All dogs don’t talk. Ones that do are merely a statistical error, and can therefore be ignored.",
+         answer("Neil Gaiman"),
+         answer("Douglas Adams"),
+         answer("Terry Pratchett", correct = TRUE),
+         answer("Eoin Colfer"),
+     correct = "Very good. Perhaps you are starting to see a pattern.",
+     incorrect = "Not that author. The book was *Men at Arms*.",
+     random_answer_order = TRUE,
+     allow_retry = TRUE
+)
+```
+```{r whyus, echo=FALSE}
+question("'Why us?’ he said. ‘Why is it happening to us?’ ‘Everything has to happen to someone,’ said Ginger.",
+         answer("Neil Gaiman"),
+         answer("Douglas Adams"),
+         answer("Terry Pratchett", correct = TRUE),
+         answer("Eoin Colfer"),
+     correct = "Yes, Terry Pratchett wrote that one, too.",
+     incorrect = "Not that author. The book was *Moving Picures*, which I highly recommend.",
+     random_answer_order = TRUE,
+     allow_retry = TRUE
+)
+```
+```{r onechance, echo=FALSE}
+question("'You just get one chance,' she said.  'You live for maybe seventy years, and if you’re lucky you get one chance. Think of all the natural skiers who are born in deserts. Think of all the genius blacksmiths who were born hundreds of years before anyone invented the horse. All the skills that are never used. All the wasted chances.'",
+         answer("Neil Gaiman"),
+         answer("Douglas Adams"),
+         answer("Terry Pratchett", correct = TRUE),
+         answer("Eoin Colfer"),
+     correct = "You are amazing!",
+     incorrect = "No, 'fraid not.",
+     random_answer_order = TRUE,
+     allow_retry = TRUE
+)
+```
+```{r infiniteworlds, echo=FALSE}
+question("It is known that there are an infinite number of worlds, simply because there is an infinite amount of space for them to be in. However, not every one of them is inhabited. Therefore, there must be a finite number of inhabited worlds. Any finite number divided by infinity is as near to nothing as makes no odds, so the average population of all the planets in the Universe can be said to be zero. From this it follows that the population of the whole Universe is also zero, and that any people you may meet from time to time are merely the products of a deranged imagination.",
+         answer("Neil Gaiman"),
+         answer("Douglas Adams", correct = TRUE),
+         answer("Terry Pratchett"),
+         answer("Eoin Colfer"),
+     correct = "Ha! There's no fooling you!",
+     incorrect = "No. The book was *The Restaurant at the End of the Universe*.",
+     random_answer_order = TRUE,
+     allow_retry = TRUE
+)
+```
+
+And if you got the last question right, it shows that you have learned from previous data. You're turning into a Bayesian. "Stop it." 
+  
+(That last quotation was a final nod to the great Douglas Adams. You are of course welcome to turn into a Bayesian. To do so, start with [the introductory lesson on it](../probability-theory-introduction-to-bayes-theorem/), which was written, as was this lesson, by Sheila Braun of the CHOP Department of Biomedical and Health Informatics, with a little help from the greats.)

@@ -1,0 +1,11 @@
+"0","```r
+
+# Check if we need to create a new group
+
+if (params$group == \"Other\") {
+      prompt = \"What new group would you like to use?\"
+      group <- readline(prompt = prompt)
+} else {
+      group <- params$group
+}
+```"
