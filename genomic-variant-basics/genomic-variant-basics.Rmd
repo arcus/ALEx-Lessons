@@ -2,7 +2,7 @@
 title: "Genomic Variant Basics"
 output: 
  learnr::tutorial:
-    progressive: true
+    progressive: false
     allow_skip: true
     css:
       - www/bootstrap.min.css
@@ -17,7 +17,7 @@ library(shiny)
 library(knitr)
 ```
 
-# Introduction
+## Introduction
 
 In genetics, __variants__ are differences in the gentic code that vary from the reference sequencing. The reference is arbitrarily defined by the [Genome Reference Consortium](https://www.ncbi.nlm.nih.gov/grc) and ideally represents the most common genetic sequence across humanity. Although many sequences in the reference deviate from this ideal^[1](https://www.ncbi.nlm.nih.gov/pmc/articles/pmid/26670213/)^, such issues are outside of the scope of this tutorial. 
 

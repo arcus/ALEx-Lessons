@@ -133,9 +133,9 @@ question("You might use a chi-square goodness-of-fit test to examine which of th
 ```{r defineextrinsic, echo=FALSE}
 question("What is an extrinsic hypothesis",
          answer("One based on previously known expected proportions", correct = TRUE),
-         answer("One based on proportions estimated by collecting the data", message = "message_wrong_1"),
-         answer("third_answer", message = "message_wrong_2"),
-         answer("fourth_answer", message = "message_wrong_3"),
+         answer("One based on proportions estimated by collecting the data", message = "Oops, no."),
+         answer("One you can state explicitly", message = "No---that would be silly."),
+         answer("One you keep to yourself", message = "message_wrong_3"),
      correct = "correct_feedback",
      incorrect = "incorrect_feedback",
      random_answer_order = TRUE,
