@@ -80,21 +80,46 @@ This lesson is both a reference and a tutorial. It contains all the code samples
 
 ## Variables
 
->One [nominal variable](http://www.biostathandbook.com/variabletypes.html#nominal)    
+>One [nominal variable](http://www.biostathandbook.com/variabletypes.html#nominal)
+
+```{r whatisanominalvariable, echo=FALSE}
+question("What is a nominal variable?",
+         answer("A variable that classifies observations into discrete categories; also known as a _categorical_ variable", correct = TRUE),
+         answer("The relationship between two measurement variables", message = "That's a _ratio_ variable."),
+         answer("A variable for which individual observations can be put in order from smallest to largest, even though the exact values are unknown", message = "That's a _ranked_ or _ordinal_ variable."),
+         answer("A variable that represents measurements of things", message = "That's a _measurement_ or _scalar_ variable."),
+     correct = "Well done you!",
+     incorrect = "No.",
+     random_answer_order = TRUE,
+     allow_retry = TRUE
+)
+```
 
 ## Null and Alternative Hypotheses
 
 > **H<sub>0</sub>**: The nominal variable of interest's cateogory (a.k.a. "level") proportions _are not different_ from theoretical proportions.       
-**H<sub>A</sub>** (which is 2-sided): The nominal variable of interest's category proportions _are different_ from theoretical proportions.         
+**H<sub>A</sub>** (which is 2-sided): The nominal variable of interest's category proportions _are different_ from theoretical proportions.   
+
+```{r differences, echo=FALSE}
+question("Differences between category proportions _are present_ for which?",
+         answer("The alternative hypothesis", correct = TRUE),
+         answer("The null hypothesis", message = "The other one"),
+         answer("A shopping list", message = "A shopping list is not particularly relevant here."),
+         correct = "You are amazing!",
+         incorrect = "That's not the answer I was looking for.",
+         random_answer_order = TRUE,
+         allow_retry = TRUE
+)
+```
 
 ## Examples of the Null and Alternative Hypotheses
 
 >**Example H<sub>0</sub>**: "The number of times a flipped coin lands on its head *is not different* from 50% of the total number of tosses."    
 **Example H<sub>A</sub>** (2-sided): "The number of times a flipped coin lands on its head *is different* from 50% of the total number of tosses."     
 
-The null hypothesis is usually an extrinsic hypothesis, which means you knew the expected proportions before doing the experiment. Examples include a 1:1 heads to tails ratio or a 1:2:1 ratio in a genetic cross. Another example would be looking at an area of shore that had 59% of the area covered in sand, 28% mud, and 13% rocks; if you were investigating where seagulls like to stand, your null hypothesis would be that 59% of the seagulls were standing on sand, 28% on mud, and 13% on rocks.
+The null hypothesis is usually an _extrinsic_ hypothesis, i.e., you knew the expected proportions before doing the experiment. Examples include a 1:1 heads to tails ratio or a 1:2:1 ratio in a genetic cross. Another example would be looking at an area of shore that had 59% of the area covered in sand, 28% mud, and 13% rocks; if you were investigating where seagulls like to stand, your null hypothesis would be that 59% of the seagulls were standing on sand, 28% on mud, and 13% on rocks.
 
-Significant results can be reported as “The nominal variable's category proportions were statistically different from theoretical proportions.”
+Suggestive results can be reported as “The nominal variable's category proportions were statistically different from theoretical proportions.”
 
 ```{r vars, echo=FALSE}
 question("You might use a chi-square goodness-of-fit test to examine which of the following relationships?",
@@ -102,6 +127,19 @@ question("You might use a chi-square goodness-of-fit test to examine which of th
       answer("Number of people from two countries"),
       answer("The relationships among age groups"),
       answer("Height, weight, and season")
+)
+```
+
+```{r defineextrinsic, echo=FALSE}
+question("What is an extrinsic hypothesis",
+         answer("One based on previously known expected proportions", correct = TRUE),
+         answer("One based on proportions estimated by collecting the data", message = "message_wrong_1"),
+         answer("third_answer", message = "message_wrong_2"),
+         answer("fourth_answer", message = "message_wrong_3"),
+     correct = "correct_feedback",
+     incorrect = "incorrect_feedback",
+     random_answer_order = TRUE,
+     allow_retry = TRUE
 )
 ```
 
@@ -126,26 +164,27 @@ question("When would you NOT use a chi-square goodness-of-fit test?",
       answer("When you can't prove that your data is normally distributed"),
       answer("When your data is very large"),
       answer("When the count per category is less than 5", correct = TRUE),
-      answer("Now, because there is always a quiz")
+      answer("Now, because there is always a quiz"),
+      correct = "Yes! Have a look at the other answers. You _can_ use a chi square test even when you can't prove your data is normally distributed."
 )
 ```
 
 ## Practice
 
-The following code chunk checks to see if you have the required packages and, if you don't, installs them to your R environment. You can copy and paste this code into your local copy of RStudio or run it from here to see what happens. 
+The following code chunk checks to see if you have the required packages and, if you don't, installs them to your R environment. You can copy and paste this code into your local copy of RStudio and run it if you want to be able to duplicate what we do here. 
 
-```{r packages, exercise=TRUE}
-if(!require(EMT)){install.packages("EMT")}
-if(!require(DescTools)){install.packages("DescTools")}
-if(!require(ggplot2)){install.packages("ggplot2")}
-if(!require(rcompanion)){install.packages("rcompanion")}
+```{r packages, exercise=FALSE}
+if(!require(EMT)){install.packages("EMT")}    
+if(!require(DescTools)){install.packages("DescTools")}    
+if(!require(ggplot2)){install.packages("ggplot2")}    
+if(!require(rcompanion)){install.packages("rcompanion")}    
 ```
 
 ### Drosophila Example
 
 Try the chi-square goodness-of-fit code using the function `chisq.test`. Let's use McDonald's Drosophila example. Since we need only counts and not data points, we can run the command without having first to load a data set. Here is the information you need:
 
-* We expect a proportion of 3:1 of smooth-winged to wrinkle-winged Drosophila
+* We expect a proportion of 3:1 of smooth-winged to wrinkle-winged Drosophila (bonus: say "wrinkle-winged" ten times fast)
 * The sample has 770 smooth-winged flies 
 * The sample has 230 wrinkle-winged flies
 
@@ -175,8 +214,8 @@ Calculate the expected frequency of right-billed birds by multiplying the total 
 ```
 ```{r red-cross-bills-solution}
 #'
-#' You can do this many ways. Here is one wordier example that arrives at the 
-#' correct output. Sometimes you might want to make your code more wordy
+#' You can do this many ways. Here is one somewhat wordy example that arrives at  
+#' the correct output. Sometimes you might want to make your code more wordy
 #' if you have few concerns about memory or about computation time and if 
 #' it is very important that the code be readable. Err on the side of 
 #' readability when you can. 
@@ -192,7 +231,9 @@ chisq.test(x = c(obs_right, obs_left),
            p = c(.5, .5))
 ```
 
-You can reject the null hypothesis that there is no difference between observed and expected: there is one. There are significantly more left-billed crossbills than right-billed.
+Provided $\displaystyle \alpha = .05$, you may reject the null hypothesis that there is no difference between observed and expected proportions because $\displaystyle p = .018$. There are intriguingly more left-billed crossbills than right-billed.
+
+>NOTE: See [Reassessing P Values](../reassessing-p-values/) to find out why I didn't use the word "significant" in the paragraph above.
 
 ### Extrinsic Hypothesis for Rice Herbicides
 
@@ -302,9 +343,9 @@ P <- pchisq(chi2,
 P
 ```
 
-The result is not significant. You cannot reject the null hypothesis that the data fit the expected Hardy-Weinberg proportions. 
+The result is not terribly interesting. You cannot reject the null hypothesis that the data fit the expected Hardy-Weinberg proportions. 
 
->Memorize this forever: *You haven't proven the null*. You can never prove a null by deciding you can't with confidence reject it. The bar is very low for proving you can't reject a null hypothesis. It must be much higher before you can with confidence utterly and forever reject the alternative hypothesis and claim the null hypothesis is true.
+>Memorize this forever: *You haven't proven the null*. You can never prove a null hypothesis by deciding you can't with confidence reject it. The bar is very low for proving you can't reject a null hypothesis. It must be much higher before you can with confidence utterly and forever reject the alternative hypothesis and claim the null hypothesis is true.
 
 ## Graphing the Results
 
