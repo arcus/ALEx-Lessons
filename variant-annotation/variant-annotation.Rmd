@@ -89,7 +89,7 @@ perl annotate_variation.pl -buildver hg19 -downdb -webfrom annovar refGene human
 Change the `-buildver` option to `hg18` or `hg38` as necessary. Also change name of the database to match that which you want to download. In the above example it is `refGene`. Once the database has been downloaded, you will receive confirmation that the file has been extracted and installed. 
 
 ### Annotating a VCF File
-**ANNOVAR** can accept a `.vcf` file as input. The input parameters can be somewhat complex, but are managable once you know what each does. Here is an example of annotating `filename.vcf` which was aligned against `hg19` with information from RefGene, gnomAD, ClinVar, prediction programs and splicing prediction. 
+**ANNOVAR** can accept a `.vcf` file as input. The input parameters can be somewhat complex, but can be managable once you know what each does. Here is an example of annotating `filename.vcf` which was aligned against `hg19` with information from RefGene, gnomAD, ClinVar, prediction programs and splicing prediction. 
 
 ```{r, engine = 'bash', eval = FALSE}
 perl table_annovar.pl filename.vcf humandb/ \
