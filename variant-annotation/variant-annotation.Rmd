@@ -1,0 +1,126 @@
+---
+title: "Variant Annotation with `ANNOVAR`"
+output: 
+ learnr::tutorial:
+    progressive: true
+    allow_skip: true
+    css:
+      - www/bootstrap.min.css
+      - www/flexdashboard.min.css
+      - www/style.css
+runtime: shiny_prerendered
+---
+
+```{r, echo=FALSE}
+library(rmarkdown)
+library(shiny)
+library(knitr)
+```
+
+### Introduction
+
+In genetics, __variants__ are differences in the gentic code that vary from the reference sequencing. Understanding the importance of these variants to biology and health requires knowledge of how variants affect transcript and protein function and how common they are in the population. 
+
+Given than an individual may have thousands or millions of variants identified by genome scale assays, high throughput annotation of variants with this information is vital. 
+
+Often times, researchers are presented with a [VCF](https://alex.arcus.chop.edu/genomic-variant-basics/) file containing variants of interest and wish to analyze how these variants may be relavent to disease or other phenotypes. 
+
+[**ANNOVAR**](http://annovar.openbioinformatics.org/) is a popular software package that can _quickly_ annotate variants with up-to-date information available from publically available data sources and prediction algorithms.
+
+### ANNOVAR
+**ANNOVAR** is implemented in Perl and thus can be executed on any opperating system where Perl is installed. It is available for download [here](http://download.openbioinformatics.org/annovar_download_form.php) after registration and is free for academic use. 
+
+After downloading the `.tar` file, you will need to decompress it with `tar -xvf annovar.tar` or with your decompression program of choice. 
+
+### Running ANNOVAR
+As stated before, **ANNOVAR** is implemented in Perl, and thus you must first [install Perl](https://learn.perl.org/installing/). If you are working on a linux server, your system may already have Perl installed. Try `perl --version` to see. You might also try loading the Perl module with `module load perl`. 
+
+Once you have confirmed Perl is installed, navigate to the folder that you previously extracted the contents of the `.tar` file to. Issue the `perl` command with the `table_annovar.pl` script to ensure that things are working. 
+
+```{r, engine = 'bash', eval = FALSE}
+module load perl/
+perl table_annovar.pl
+```
+
+You should see output that includes the version number. 
+
+### Download Annotation Databases
+**ANNOVAR** relies on pre-calculated and indexed databases to quickly annotate variants. [A list of available databases](https://doc-openbio.readthedocs.io/projects/annovar/en/latest/user-guide/download/#additional-databases) is availble on the project website. 
+
+A seperate version of each database is required for each genome build. You will need to know what build of the genome your sequencing data was aligned against. Here are a list of the most common human genome builds:
+
+#### Human Genome Builds
+```{r echo = FALSE, results='asis'}
+ToRender <- rbind(c("Dec 2013","Genome Reference Consortium Human Build 38","GRCh38","hg38"),
+                  c("Feb 2009","Genome Reference Consortium Human Build 37","GRCh37","hg19"),
+                  c("Mar 2006","International Human Genome Sequencing Consortium Build 36","NCBI36","hg18")
+                   )
+ToRender <- as.data.frame(ToRender)
+colnames(ToRender) <- c("Date Released","Name","Official Abbreviation","Common Abbreviation")
+kable(ToRender)
+```
+
+Once you have identified which build of the genome you need, you can select which information databases you want to download. Some of these files are very large. Here is a list of some of the most useful databases:
+
+#### Useful ANNOVAR Databases
+```{r echo = FALSE, results='asis'}
+ToRender <- rbind(c("refGene","All annotated transcripts in RefSeq"),
+                  c("dbnsfp35a","Compiled prediction scores including SIFT, PolyPhen2, MutationTaster, PhyloP and SiPhy"),
+                  c("gnomad211_exome","gnomAD exome collection (v2.1.1) including subpopulations"),
+                  c("gnomad30_genome","gnomAD with whole genome level coverage (v3.0) - this database is VERY large"),
+                  c("clinvar_20190305","Pathogenicity assertions from diagnostic laboratories from ClinVar"),
+                  c("dbscsnv11","Splice site prediction")
+                  )
+ToRender <- as.data.frame(ToRender)
+colnames(ToRender) <- c("Database","Description")
+kable(ToRender)
+```
+
+NOTE: Newer versions of these databases may be available. [See the ANNOVAR website for an updated list](https://doc-openbio.readthedocs.io/projects/annovar/en/latest/user-guide/download/#additional-databases). 
+
+Once you have selected the databases you are interested, you will need to download and install them. 
+<br><br>
+
+#### Command to Download and Install ANNOVAR Databases
+```{r, engine = 'bash', eval = FALSE}
+perl annotate_variation.pl -buildver hg19 -downdb -webfrom annovar refGene humandb/
+```
+
+Change the `-buildver` option to `hg18` or `hg38` as necessary. Also change name of the database to match that which you want to download. In the above example it is `refGene`. Once the database has been downloaded, you will receive confirmation that the file has been extracted and installed. 
+
+### Annotating a VCF File
+**ANNOVAR** can accept a `.vcf` file as input. The input parameters can be somewhat complex, but are managable once you know what each does. Here is an example of annotating `filename.vcf` which was aligned against `hg19` with information from RefGene, gnomAD, ClinVar, prediction programs and splicing prediction. 
+
+```{r, engine = 'bash', eval = FALSE}
+perl table_annovar.pl filename.vcf humandb/ \
+-buildver hg19 \
+-out filename \
+-remove \
+-protocol refGene,gnomad211_exome,clinvar_20190305,dbnsfp35a,dbscsnv11 \
+-operation g,f,f,f,f \
+-nastring . \
+-vcfinput
+```
+
+Here is a list of helpful options:
+
+```{r echo = FALSE, results='asis'}
+ToRender <- rbind(c("humandb/","Database Directory","Denotes the database directory for the appropriate species."),
+                  c("-buildver","Build Version","Genome build version"),
+                  c("-out","Output Filename","The filename prefix that you want your output files to have."),
+                  c("-remove","Remove Temporary","Remove intermediate temporary files."),
+                  c("-protocol","Database protocol","Annotate the variants with information from these databases."),
+                  c("-operation","Operation type","g for gene based, r for region based, and f for filter based."),
+                  c("-nastring","NA Output String","Place this string in a field if no information is available"),
+                  c("-vcfinput","VCF Input","Input file is in VCF format. Also output data in VCF format in addition to delimited format."),
+                  c("-polish","Full AA Change Output","Show improved amino acid change output such as c.35delG:p.G12Vfs*2."),
+                  c("-csvout","CVS Output","Output a CVS file instead of a tab delimited text file.")
+                
+                  )
+
+ToRender <- as.data.frame(ToRender)
+colnames(ToRender) <- c("Option","Name","Description")
+kable(ToRender)
+```
+
+
