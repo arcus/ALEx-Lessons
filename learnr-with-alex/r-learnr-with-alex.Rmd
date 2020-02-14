@@ -1,0 +1,245 @@
+---
+title: "Using learnr to Write an Interactive ALEx Lesson"
+output: 
+ learnr::tutorial:
+    progressive: true
+    allow_skip: true
+    css:
+      - www/bootstrap.min.css
+      - www/flexdashboard.min.css
+      - www/style.css
+runtime: shiny_prerendered
+---
+
+```{r setup, include=FALSE}
+library(learnr)
+options(digits = 3, scipen = 9999)
+tutorial_options(exercise.startover = TRUE,
+  exercise.eval = TRUE, 
+  exercise.cap = "R Code",
+  exercise.completion = TRUE,
+  exercise.diagnostics = TRUE)
+### Your data goes here. It's best to put the entire data set as text in this setup code chunk.
+# That way, it's available to all the code chunks that follow.
+# What happens in a code chunk stays in a code chunk, not to be see by other code chunks--unless
+# you did it in the setup code chunk as well. 
+
+```
+
+## Installing the `learnr` Package for Interactive Lessons
+
+RStudio has a wonderful package for interactive lessons with quiz questions and interactive R code called `learnr`. 
+
+We use a forked version of the `learnr` package here at [CHOP's Arcus Learning Exchange](https://alex.arcus.chop.edu) that allows us to write interactive lessons with code chunks in     
+
+  * R    
+  * Python    
+  * SQL    
+
+You can download the version we use for your own system by following these commands:
+
+```{r download-zoe-learnr, echo = TRUE, eval=FALSE}
+library(devtools)
+install_github("zoews/learnr")
+```
+
+Once you've done that, you have the package that allows you to create interactive lessons in R, Python, SQL, and, later, any number of other languages. 
+
+We recommend the use of this package only for ALEx lessons. Our servers are protected from [Bobby Tables](https://xkcd.com/327/) hacks. If you plan to deploy interactive lessons on your own server, you might want to use the original `learnr` package and limit your interactive code chunks to the R language. RStudio may release their own multi-language `learnr` at some point. Meanwhile, caveat emptor!
+
+```{r bobby-tables, echo = FALSE}
+knitr::include_graphics("www/bobby-tables.png", 
+                          auto_pdf = getOption("knitr.graphics.auto_pdf", 
+                                                FALSE), dpi = NULL)
+```
+
+
+## What's an Interactive Lesson?
+
+An interactive lesson requires the user not simply to read text or watch videos, but also to respond to questions or try out the steps themselves in code chunks that work. Leaners therefore don't need to have R or RStudio (or Python, or SQL) installed to run their code and see how well it works. For an example, try our [R Basic Building Blocks](../swirl-basic-building-blocks/) lesson. 
+
+`learnr` requires specific yaml and setup code. For the Arcus Learning Exchange, please use the code as shown here:
+
+```{r yaml-and-setup, echo = FALSE}
+knitr::include_graphics("www/yaml-and-setup.png", 
+                          auto_pdf = getOption("knitr.graphics.auto_pdf", 
+                                                FALSE), dpi = NULL)
+```
+
+## Rules of Headers and Interactive Code Chunks
+
+The following sections provide information about which headers to use and how to create interactive code chunks.
+
+## The First Double Hashtag Header is the only One that Does _not_ Start a New Page 
+
+Create an informative header and write some informative text two lines below it. Always eparate paragraphs with an extra line.
+
+### Quiz Question Code
+
+You might write a quiz question with a special code chunk that looks like this:
+
+```{r quizquestion, echo = FALSE}
+knitr::include_graphics("www/quizquestion.png", 
+                          auto_pdf = getOption("knitr.graphics.auto_pdf", 
+                                                FALSE), dpi = NULL)
+```
+
+To see how your lesson will look at runtime, click on "Run Document" at the top of the RStudio window.
+
+```{r rundocument, echo = FALSE}
+knitr::include_graphics("www/rundocument.png", 
+                          auto_pdf = getOption("knitr.graphics.auto_pdf", 
+                                                FALSE), dpi = NULL)
+```
+
+
+That code chunk looks like this after you run your document:
+
+```{r label, echo=FALSE}
+question("question",
+         answer("first_answer", correct = TRUE),
+         answer("second_answer", message = "message_wrong_1"),
+         answer("third_answer", message = "message_wrong_2"),
+         answer("fourth_answer", message = "message_wrong_3"),
+         correct = "correct_feedback",
+         incorrect = "incorrect_feedback",
+         random_answer_order = TRUE,
+         allow_retry = TRUE
+)
+```
+
+
+### A Triple-Hashtag-Headed Section Contains Everything between itself and the "Continue" Button
+
+This level of header will appear at the top of the window, but everything back to the previous double-hashtag header is still on the page. You can scroll up to see it. 
+
+```{r firstcodechunk, echo = FALSE}
+knitr::include_graphics("www/firstcodechunk.png", 
+                          auto_pdf = getOption("knitr.graphics.auto_pdf", 
+                                                FALSE), dpi = NULL)
+```
+
+
+And you might want to ask a simple coding question, thus. We usually give the user a hint and then the solution for them to check against their work.
+
+```{r name, exercise = TRUE, exercise.lines = 5}
+
+```
+```{r name-hint}
+x <- ?
+```
+```{r name-solution}
+x <- 1
+```
+
+Here is a Python code chunk to check if x is less than or equal to 4:
+
+```{r pythoncodechunk, echo = FALSE}
+knitr::include_graphics("www/pythoncodechunk.png", 
+                          auto_pdf = getOption("knitr.graphics.auto_pdf", 
+                                                FALSE), dpi = NULL)
+```
+
+Here is what that resolves to when you run the document. 
+
+```{python pythonchunk, exercise = TRUE, exercise.lines = 5}
+
+```
+```{python pythonchunk-solution}
+x = 5
+x < -4
+```
+
+### This is the Next Subsection
+
+...with its contents. Perhaps a more complex coding question?
+
+```{r name2, exercise = TRUE, exercise.lines = 5}
+
+```
+```{r name2-hint-1}
+x <- 1
+y <- ?
+```
+```{r name2-hint-2}
+x <- 1
+y <- 2
+z <- ?
+```
+```{r name2-solution}
+x <- 1
+y <- 2
+z <- 3
+```
+
+## This is the Next Section
+
+And these are its contents. Perhaps a coding question that requires three hints:
+
+```{r name3, exercise = TRUE, exercise.lines = 8}
+
+```
+```{r name3-hint-1}
+x <- ?
+```
+```{r name3-hint-2}
+x <- 1
+y <- ?
+```
+```{r name3-hint-3}
+x <- 1
+y <- 2
+z <- 3
+xyz <- ?
+```
+```{r name3-solution}
+x <- 1
+y <- 2
+z <- 3
+xyz <- x + y + z
+```
+
+## A Whole New Section
+
+With a complex, 4-hint coding question:
+
+```{r name4, exercise = TRUE, exercise.lines = 15}
+
+```
+```{r name4-hint-1}
+x <- 1
+y <- 2
+z <- 3
+xyz <- x + y + z
+xyz2 <- (x + y + z) ^ 2
+```
+```{r name4-hint-2}
+x <- 1
+y <- 2
+z <- 3
+xyz <- x + y + z
+xyz2 <- (x + y + z) ^ 2
+```
+```{r name4-hint-3}
+x <- 1
+y <- 2
+z <- 3
+xyz <- x + y + z
+xyz2 <- (x + y + z) ^ 2
+```
+```{r name4-hint-4}
+x <- 1
+y <- 2
+z <- 3
+xyz <- x + y + z
+xyz2 <- (x + y + z) ^ 2
+```
+```{r name4-solution}
+x <- 1
+y <- 2
+z <- 3
+xyz <- x + y + z
+xyz2 <- (x + y + z) ^ 2
+```
+
+Thus endeth the template. 

@@ -461,9 +461,9 @@ forage$upper.ci[forage$ Value == "Expected"] = 0
 forage
 ```
 
-Now we plot it. For more information on `ggplot2` see [the documentation at the tidyverse website](https://ggplot2.tidyverse.org). 
+Now we plot it. For more information on `ggplot2` see our lessons [ggplot2 Part 1](../swirl-ggplot2-part-1/), [ggplot2 Part 2](../swirl-ggplot2-part-2/), and [ggplot2 Extras](../swirl-ggplot2-extras/). 
 
-If you are familiar with `ggplot2` you can build the plot. The data is, of course, `forage`. For aesthetics (`aes`), `x` is the variable `Tree` and `y` is `Proportion` (which we just now created). Use `Value` for the fill.
+If you are familiar with `ggplot2`, you can build the plot. The data is, of course, `forage`. For aesthetics (`aes`), `x` is the variable `Tree` and `y` is `Proportion` (which we just now created). Use `Value` for the fill.
 
 The geom we want is `geom_bar`. In fact we want 2 of them. They both have arguments `stat = "identity"` and `position = "dodge"`; the first one has a width of 0.7. The second `geom_bar` has `colour` "black", `width` 0.7, and `show.legend` `FALSE`. 
 
