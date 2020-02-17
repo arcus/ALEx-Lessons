@@ -70,13 +70,29 @@ knitr::include_graphics("www/yaml-and-setup.png",
 
 The following sections provide information about which headers to use and how to create interactive code chunks.
 
-## The First Double Hashtag Header is the only One that Does _not_ Start a New Page 
+## Double-Hashtag Headers
 
-Create an informative header and write some informative text two lines below it. Always eparate paragraphs with an extra line.
+Double-hashtag headers are written 
 
-### Quiz Question Code
+>\## I am a Double-Hashtag Header
 
-You might write a quiz question with a special code chunk that looks like this:
+but they look like
+
+>## This
+
+Create an informative header and write some informative text two lines below it. Always separate paragraphs with an extra line.
+
+### Triple-Hashtag Headers
+
+This level of header may appear at the top of the window (if you have two or more of them), but everything back to the previous double-hashtag header is still on the page. You can scroll up to see it. The "Continue" button either opens up more text on this page if the next section is triple-hashtag headed, or opens a new page if the next section is double-hashtag headed.
+
+## Quiz Questions and Exercises
+
+You can interact with learners using quiz questions and coding exercises. In the following sections, we provide you with examples of how to write quizzes and exercises and show you what that code presents to the user. 
+
+### Quiz Question
+
+You can write a quiz question using a special code chunk that looks like this:
 
 ```{r quizquestion, echo = FALSE}
 knitr::include_graphics("www/quizquestion.png", 
@@ -93,7 +109,7 @@ knitr::include_graphics("www/rundocument.png",
 ```
 
 
-That code chunk looks like this after you run your document:
+The quiz question code chunk looks like this after you run your document:
 
 ```{r label, echo=FALSE}
 question("question",
@@ -108,10 +124,11 @@ question("question",
 )
 ```
 
+### Exercise with One Hint
 
-### A Triple-Hashtag-Headed Section Contains Everything between itself and the "Continue" Button
+You might want to present a simple coding exercise in any of our supported languages. 
 
-This level of header will appear at the top of the window, but everything back to the previous double-hashtag header is still on the page. You can scroll up to see it. 
+Here is how to write an exericse to give the learner a simple exercise in R and provide them with a single hint:
 
 ```{r firstcodechunk, echo = FALSE}
 knitr::include_graphics("www/firstcodechunk.png", 
@@ -119,8 +136,7 @@ knitr::include_graphics("www/firstcodechunk.png",
                                                 FALSE), dpi = NULL)
 ```
 
-
-And you might want to ask a simple coding question, thus. We usually give the user a hint and then the solution for them to check against their work.
+The above code produces this interactive code box:
 
 ```{r name, exercise = TRUE, exercise.lines = 5}
 
@@ -132,7 +148,13 @@ x <- ?
 x <- 1
 ```
 
-Here is a Python code chunk to check if x is less than or equal to 4:
+It has two so-called hints because the final hint is the solution. 
+
+### Exericse in Python with One Hint
+
+To create an exercise in a different language, simply change the object that follow the `{` from `r` to `python` or `sql`. 
+
+For example, this Python code chunk asks the learner to create Python code to check if x is less than or equal to 4. No hints are provided---just the solution.
 
 ```{r pythoncodechunk, echo = FALSE}
 knitr::include_graphics("www/pythoncodechunk.png", 
@@ -140,7 +162,7 @@ knitr::include_graphics("www/pythoncodechunk.png",
                                                 FALSE), dpi = NULL)
 ```
 
-Here is what that resolves to when you run the document. 
+Here is what that resolves to when you run the document:
 
 ```{python pythonchunk, exercise = TRUE, exercise.lines = 5}
 
@@ -150,9 +172,19 @@ x = 5
 x < -4
 ```
 
-### This is the Next Subsection
+### Coding Exercise in SQL with One Hint
 
-...with its contents. Perhaps a more complex coding question?
+### Coding Exercise in R with Two Hints
+
+It's easy to add additional hints. Here is an example in R code:
+
+```{r rcodetwohints, echo = FALSE}
+knitr::include_graphics("www/rcodetwohints.png", 
+                          auto_pdf = getOption("knitr.graphics.auto_pdf", 
+                                                FALSE), dpi = NULL)
+```
+
+And this is what the learner sees as a result of the above code:
 
 ```{r name2, exercise = TRUE, exercise.lines = 5}
 
@@ -172,9 +204,11 @@ y <- 2
 z <- 3
 ```
 
-## This is the Next Section
+As you can see, we add hints by adding new code chunks in the sequence. 
 
-And these are its contents. Perhaps a coding question that requires three hints:
+### Coding Exercise in R with Three Hints
+
+Here is a coding question in R that requires three hints:
 
 ```{r name3, exercise = TRUE, exercise.lines = 8}
 
@@ -199,7 +233,7 @@ z <- 3
 xyz <- x + y + z
 ```
 
-## A Whole New Section
+### Coding Exercise in R with Four Hints
 
 With a complex, 4-hint coding question:
 
@@ -242,4 +276,91 @@ xyz <- x + y + z
 xyz2 <- (x + y + z) ^ 2
 ```
 
-Thus endeth the template. 
+## Exercise Examples with All Available Languages
+
+In these sections you will find examples SQL, R, and Python coding exercises. 
+
+### A Simple SQL Exercise
+
+Here is the code for an exercise in SQL:
+
+```{r sqlexercise, echo = FALSE}
+knitr::include_graphics("www/sqlexercise.png", 
+                          auto_pdf = getOption("knitr.graphics.auto_pdf", 
+                                                FALSE), dpi = NULL)
+```
+
+Go ahead and run the code if you like. You can also try other SQL commands in this code box. 
+
+```{r setup2, include=FALSE}
+# altered from https://datacarpentry.org/R-ecology-lesson/05-r-and-databases.html
+mammals <- DBI::dbConnect(RSQLite::SQLite(),
+                          "www/portal_mammals.sqlite")
+```
+```{sql sql-not-r, exercise = TRUE, connection="mammals", output.var='surveys', exercise.lines = 15}
+SELECT *
+FROM `surveys`
+LIMIT 10
+```
+
+### The Same Code in R and Python---with Different Results
+
+The following code exercises run code that looks the same in either R or Python but results in different outcomes.  The R code chunk evaluates to 10 and the Python code chunk evaluates to `False` and 5.
+
+```{r agnostic, echo = FALSE}
+knitr::include_graphics("www/agnostic.png", 
+                          auto_pdf = getOption("knitr.graphics.auto_pdf", 
+                                                FALSE), dpi = NULL)
+```
+
+You can try running these code chunks here:
+
+```{r r-not-python-check}
+r_answer <- 10
+```
+```{r r-not-python-code-check}
+x = 5
+x <-10
+print(x)
+```
+```{r r-not-python, exercise=TRUE, exercise.lines = 5}
+# if running in R, this should return 10
+# if running in Python, this should return FALSE and 5
+x = 5
+x <-10
+print(x)
+```
+
+```{python python-not-r-check}
+r_answer <- list(FALSE, 5)
+```
+```{python python-not-r-code-check}
+x = 5
+x <-10
+print(x)
+```
+```{python python-not-r, exercise=TRUE, exercise.lines = 5}
+# if running in R, this should return 10
+# if running in Python, this should return FALSE and 5
+x = 5
+x <-10
+print(x)
+```
+
+## Final Comments
+
+Once you have created your lesson, please submit it to the Arcus Learning Exchange by
+
+1. initiating a pull request at https://github.com/arcus/ALEx-Lessons        
+1. filling out our [instructors' form](https://redcap.chop.edu/surveys/?s=LXAFDYHTRA)
+
+Thus endeth the lesson about writing lessons for ALEx using our version of RStudio's `learnr` package. We hope you will join our vibrant community of learner-instructors and share your expertise with those who can benefit from it. 
+
+Instructors' QR code:
+
+```{r instructorqrcode, echo = FALSE}
+knitr::include_graphics("www/instructorqrcode.png", 
+                          auto_pdf = getOption("knitr.graphics.auto_pdf", 
+                                                FALSE), dpi = NULL)
+```
+
