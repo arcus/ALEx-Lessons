@@ -164,10 +164,10 @@ knitr::include_graphics("www/pythoncodechunk.png",
 
 Here is what that resolves to when you run the document:
 
-```{python pythonchunk, exercise = TRUE, exercise.lines = 5}
+```{python pythonchunk, python.reticulate = FALSE, exercise = TRUE, exercise.lines = 5}
 
 ```
-```{python pythonchunk-solution}
+```{python pythonchunk-solution, python.reticulate = FALSE}
 x = 5
 x < -4
 ```
@@ -331,15 +331,15 @@ x <-10
 print(x)
 ```
 
-```{python python-not-r-check}
+```{python python-not-r-check, python.reticulate = FALSE}
 r_answer <- list(FALSE, 5)
 ```
-```{python python-not-r-code-check}
+```{python python-not-r-code-check, python.reticulate = FALSE}
 x = 5
 x <-10
 print(x)
 ```
-```{python python-not-r, exercise=TRUE, exercise.lines = 5}
+```{python python-not-r, exercise=TRUE, exercise.lines = 5, python.reticulate = FALSE}
 # if running in R, this should return 10
 # if running in Python, this should return FALSE and 5
 x = 5
