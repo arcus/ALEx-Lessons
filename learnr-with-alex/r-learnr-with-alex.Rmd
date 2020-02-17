@@ -1,5 +1,5 @@
 ---
-title: "Using learnr to Write an Interactive ALEx Lesson"
+title: "Writing Interactive ALEx Lessons with learnr"
 output: 
  learnr::tutorial:
     progressive: true
@@ -28,7 +28,7 @@ tutorial_options(exercise.startover = TRUE,
 
 ## Installing the `learnr` Package for Interactive Lessons
 
-RStudio has a wonderful package for interactive lessons with quiz questions and interactive R code called `learnr`. 
+RStudio has a wonderful package, called `learnr`, which allows you to create beautiful interactive lessons containing quiz questions and interactive R code. 
 
 We use a forked version of the `learnr` package here at [CHOP's Arcus Learning Exchange](https://alex.arcus.chop.edu) that allows us to write interactive lessons with code chunks in     
 
@@ -152,7 +152,7 @@ It has two so-called hints because the final hint is the solution.
 
 ### Exericse in Python with One Hint
 
-To create an exercise in a different language, simply change the object that follow the `{` from `r` to `python` or `sql`. 
+To create an exercise in a different language, simply change the object that follows the `{` from `r` to `python` or `sql`. 
 
 For example, this Python code chunk asks the learner to create Python code to check if x is less than or equal to 4. No hints are provided---just the solution.
 
@@ -171,8 +171,6 @@ Here is what that resolves to when you run the document:
 x = 5
 x < -4
 ```
-
-### Coding Exercise in SQL with One Hint
 
 ### Coding Exercise in R with Two Hints
 
@@ -210,6 +208,14 @@ As you can see, we add hints by adding new code chunks in the sequence.
 
 Here is a coding question in R that requires three hints:
 
+```{r rthreehints, echo = FALSE}
+knitr::include_graphics("www/rthreehints.png", 
+                          auto_pdf = getOption("knitr.graphics.auto_pdf", 
+                                                FALSE), dpi = NULL)
+```
+
+And the result:
+
 ```{r name3, exercise = TRUE, exercise.lines = 8}
 
 ```
@@ -235,7 +241,15 @@ xyz <- x + y + z
 
 ### Coding Exercise in R with Four Hints
 
-With a complex, 4-hint coding question:
+Here is a complex, 4-hint coding question:
+
+```{r rfourhints, echo = FALSE}
+knitr::include_graphics("www/rfourhints.png", 
+                          auto_pdf = getOption("knitr.graphics.auto_pdf", 
+                                                FALSE), dpi = NULL)
+```
+
+And the result:
 
 ```{r name4, exercise = TRUE, exercise.lines = 15}
 
@@ -278,7 +292,7 @@ xyz2 <- (x + y + z) ^ 2
 
 ## Exercise Examples with All Available Languages
 
-In these sections you will find examples SQL, R, and Python coding exercises. 
+In these sections you will find examples of SQL, R, and Python coding exercises. 
 
 ### A Simple SQL Exercise
 
@@ -349,12 +363,12 @@ print(x)
 
 ## Final Comments
 
-Once you have created your lesson, please submit it to the Arcus Learning Exchange by
+Thus endeth the lesson about writing lessons for ALEx using our version of RStudio's `learnr` package. 
+
+We hope you will join our vibrant community of learner-instructors and share your expertise with those who can benefit from it. Once you have created your lesson, please submit it to the Arcus Learning Exchange by
 
 1. initiating a pull request at https://github.com/arcus/ALEx-Lessons        
 1. filling out our [instructors' form](https://redcap.chop.edu/surveys/?s=LXAFDYHTRA)
-
-Thus endeth the lesson about writing lessons for ALEx using our version of RStudio's `learnr` package. We hope you will join our vibrant community of learner-instructors and share your expertise with those who can benefit from it. 
 
 Instructors' QR code:
 
