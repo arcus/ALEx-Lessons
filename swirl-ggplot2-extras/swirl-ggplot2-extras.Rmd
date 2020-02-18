@@ -53,7 +53,7 @@ str(diamonds)
 ```
 
 ```{r diamond-characs, echo=FALSE}
-question("From the output, how many _characteristics_ of diamonds do you thing this data contains?",
+question("From the output, how many _characteristics_ of diamonds do you think this data contains?",
          answer("11", correct = TRUE),
          answer("53940"),
          answer("5394"),
