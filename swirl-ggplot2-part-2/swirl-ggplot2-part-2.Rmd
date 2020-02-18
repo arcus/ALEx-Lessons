@@ -368,7 +368,7 @@ g + geom_point(aes(color = drv), size = 4, alpha = 1/2)
 Notice the helpful legend on the right decoding the relationship between `color` and `drv`.
 
 ```{r why-aes-this-time, echo=FALSE}
-question("Why are some aesthetics not passed to the `aes` function but others are not?",
+question("Why are some aesthetics passed to the `aes` function but others are not?",
          answer("Because programmers are a fickle breed", message = "Perhaps this is true, but it's not the reason for this particular design decision."),
          answer("Only constants must be passed to a `geom` by way of the `aes` function.", message = "That's backwards."),
          answer("Any aesthetic that is a constant can be passed directly to the `geom`; but an aesthetic that is an interpretation of the data you're plotting _must_ be passed to `geom` by way of the `aes` function.", correct = TRUE),
