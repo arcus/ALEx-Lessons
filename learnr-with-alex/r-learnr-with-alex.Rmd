@@ -306,10 +306,10 @@ knitr::include_graphics("www/sqlexercise.png",
 
 Go ahead and run the code if you like. You can also try other SQL commands in this code box. 
 
-```{r setup2, include=FALSE}
+```{r setup2, exercise = TRUE}
 # altered from https://datacarpentry.org/R-ecology-lesson/05-r-and-databases.html
 mammals <- DBI::dbConnect(RSQLite::SQLite(),
-                          "www/portal_mammals.sqlite")
+                          "../www/portal_mammals.sqlite")
 ```
 ```{sql sql-not-r, exercise = TRUE, connection="mammals", output.var='surveys', exercise.lines = 15}
 SELECT *
