@@ -68,8 +68,6 @@ question("When might you NOT want to use the exact test of goodness-of-fit despi
 
 ### Assumptions
 
-
-
 ```{r rank, echo=FALSE}
 question("How do you make ranked data?",
       answer("You rate the data on a scale from poor to excellent"),
@@ -115,9 +113,9 @@ question("What is the BEST situation in which to use a Kruskal-Wallis test?",
 
 #### Load Packages
 
-The following code checks to see if you have the required packages and, if you don't, installs them to your R environment. You can copy and paste this code into your local copy of RStudio or run it from here to see what happens. 
+The following code checks to see if you have the required packages and, if you don't, installs them to your R environment. You can copy and paste this code into your local copy of RStudio. 
 
-```{r packages, exercise=TRUE, eval = FALSE}
+```{r packages, exercise=FALSE, eval = FALSE}
 if(!require(dplyr)){install.packages("dplyr")}
 if(!require(FSA)){install.packages("FSA")}
 if(!require(DescTools)){install.packages("DescTools")}
@@ -132,6 +130,7 @@ library(rcompanion)
 library(multcompView)
 library(pwr)
 library(lattice)
+library(stats)
 ```
 
 In this example, we will perform the `kruskal.test` function on a data frame from the native `stats` package. The example data is from Hollander & Wolfe (1973); it is measurements of the mucociliary efficiency in the rate of dust removal among normal subjects, subjects with obstructive airway disease, and subjects with asbestosis. 
@@ -142,9 +141,20 @@ We will work through a complete example with plots, post-hoc tests, and alternat
 
 The data is already in memory named `Data`. `dplyr` is already in the library, so let's mutate `Data$Health` so it is a factor variable that has no repeating levels.
 
-```{r mutate, exercise=TRUE, eval = FALSE}
+```{r mutatedata, exercise = TRUE, exercise.lines = 5}
+
+```
+```{r mutatedata-hint-1}
+Data <- mutate(...,
+               Health = factor(..., levels = unique(...)))
+```
+```{r mutatedata-hint-2}
 Data <- mutate(Data,
-               Health = factor(Health, levels=unique(Health)))
+               Health = factor(Health, levels = unique(...)))
+```
+```{r mutatedata-solution}
+Data <- mutate(Data,
+               Health = factor(Health, levels = unique(Health)))
 ```
 
 #### Have a Look before Testing: Medians and Descriptive Statistics
