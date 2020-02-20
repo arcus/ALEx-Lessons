@@ -22,7 +22,12 @@ tutorial_options(exercise.startover = TRUE,
 ### Your data goes here. It's best to put the entire data set as text in this setup code chunk.
 # That way, it's available to all the code chunks that follow.
 # What happens in a code chunk stays in a code chunk, not to be see by other code chunks--unless
-# you did it in the setup code chunk as well. 
+# you did it in the setup code chunk as well.
+
+# moved RSQL setup code here to avoid caching issues
+# altered from https://datacarpentry.org/R-ecology-lesson/05-r-and-databases.html
+mammals <- DBI::dbConnect(RSQLite::SQLite(),
+                          "www/portal_mammals.sqlite")
 
 ```
 
@@ -306,11 +311,6 @@ knitr::include_graphics("www/sqlexercise.png",
 
 Go ahead and run the code if you like. You can also try other SQL commands in this code box. 
 
-```{r setup2, include=FALSE}
-# altered from https://datacarpentry.org/R-ecology-lesson/05-r-and-databases.html
-mammals <- DBI::dbConnect(RSQLite::SQLite(),
-                          "www/portal_mammals.sqlite")
-```
 ```{sql sql-not-r, exercise = TRUE, connection="mammals", output.var='surveys', exercise.lines = 15}
 SELECT *
 FROM `surveys`
