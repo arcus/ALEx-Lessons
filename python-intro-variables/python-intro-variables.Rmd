@@ -1,0 +1,75 @@
+---
+title: "Introduction to Python: Variables"
+output: 
+ learnr::tutorial:
+    progressive: true
+    allow_skip: true
+    css:
+      - www/bootstrap.min.css
+      - www/flexdashboard.min.css
+      - www/style.css
+runtime: shiny_prerendered
+---
+
+```{r setup, include=FALSE}
+library(learnr)
+options(digits = 3, scipen = 9999)
+tutorial_options(exercise.startover = TRUE,
+  exercise.eval = TRUE, 
+  exercise.cap = "R Code",
+  exercise.completion = TRUE,
+  exercise.diagnostics = TRUE)
+```
+
+## Getting started
+
+Want to dive into Python? This lesson starts at the very beginning. We do not assume prior experience with programming in any language - if you do have that experience, you may see some parallels and some different ways of doing things in Python.
+
+### What is Python?
+
+Good question! 
+
+1. A snake. 
+2. Python is a **general-purpose** programming language, which means that it's useful for solving many different types of problems. 
+
+Python is widely used in applications that include web applications, software development, and scientific computing. 
+
+Many people associate Python with data science, and for good reason! The data science ecosystem of tools in Python has grown rapidly over the past decade. Learners interested in topics like machine learning, artifical intelligence, and natural language processing will benefit from Python's strengths in these areas.
+
+Here's a little bit of Python code. Click **Run Code** in the top-right to run the code. The output of your code will pop up below the text box.
+
+```{python python-snakes, exercise=TRUE, exercise.eval=FALSE}
+print("Snakes are 80% scary, 20% cute.")
+```
+
+You're already running Python code! Yay! Now let's get started on learning what's going on here.
+
+### A quick note on running Python
+
+There are several ways to write, run, and interact with Python code. In this lesson, we will be using an interactive learning environment called **learnr** -- that's the platform you're reading these words on right now, and that you just used to run a chunk of Python code. (Interestingly, learnr can run Python code but is actually written in the **R** programming language! But that's a story for another day :) ).
+
+A browser-based learning environment is a great way to practice writing Python code. But keep in mind that, in the future, you may wish to write and run code in one of a few ways. Three popular approaches include:
+
+1. Writing code with a text editor and running it on your computer's command line.
+2. Writing and running code in a integrated developer environement (IDE) like PyCharm, which provides extra tools for coding.
+3. Writing and running code in an interactive browser-based notebook using the Jupyter Notebook package or a similar package. You can run notebooks locally on your computer or on cloud-based services like Google Colaboratory.
+
+Take a look at our other lessons when you feel ready to help you set up your programming environment with one of these three approaches. For now, let's dive into writing and running Python code directly in your browser!
+
+## Python as a calculator
+
+As a programming language, Python takes a set of instructions and data and creates some kind of output. At the most basic level, you can think of Python as a calculator. Let's literally use it like that.
+
+Run the code chunk below to see the calculator in action:
+
+```{python python-calculator, exercise=TRUE, exercise.eval=FALSE}
+44 / 2
+```
+
+Python takes arithmetic notation as an input and produces an answer as an output. As you would expect, Python also pays attention to the order of operation:
+
+```{python python-calculator2, exercise=TRUE, exercise.eval=FALSE}
+44 / (2 + 5.5 * 3 - 2)
+```
+
+What do you think would happen if you took out the parentheses, or moved the parentheses elsewhere? Try it out and re-run the code above.
