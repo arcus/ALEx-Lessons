@@ -27,12 +27,12 @@ Want to dive into Python? This lesson starts at the very beginning. We do not as
 
 ### What is Python?
 
-Good question! 
+Good question!
 
-1. A snake. 
-2. Python is a **general-purpose** programming language, which means that it's useful for solving many different types of problems. 
+1. A snake.
+2. Python is a **general-purpose** programming language, which means that it's useful for solving many different types of problems.
 
-Python is widely used in applications that include web applications, software development, and scientific computing. 
+Python is widely used in applications that include web applications, software development, and scientific computing.
 
 Many people associate Python with data science, and for good reason! The data science ecosystem of tools in Python has grown rapidly over the past decade. Learners interested in topics like machine learning, artifical intelligence, and natural language processing will benefit from Python's strengths in these areas.
 
@@ -89,7 +89,7 @@ python_cute_porportion
 
 Notice that our code chunk includes a line that begins with an ampersand `#`. In Python, using `#` allows us to write a **comment** that will not be evaluated as code. Comments are usually reminders or instructions for the programmer.
 
-We created our variable `python_cute_porportion` and assigned it a starting value, `0.2` by using a single statement with an equals sign `=`. In the final line, we simply repeated the name of the varaible so that we could see the output directly in the browser.
+We created our variable `python_cute_porportion` and assigned it a starting value, `0.2` by using a single statement with an equals sign `=`. In the final line, we simply repeated the name of the variable so that we could see the output directly in the browser.
 
 ## Modifying a variable
 
@@ -114,16 +114,16 @@ question("When I see a Python statement that uses a single equals sign, like `do
          answer("... evaluate the left side of the statement first, and assign the outcome to the right side"),
          answer("... evaluate both sides simultaneously", message = "message_wrong_2"),
          answer("... crash the mainframe", message = "message_wrong_3"),
-         correct = "correct_feedback",
-         incorrect = "incorrect_feedback",
+         correct = "Correct!",
+         incorrect = "Please try again.",
          random_answer_order = TRUE,
          allow_retry = TRUE
 )
 ```
 
-## Learning a variable's type
+## Learning a Variable's Type
 
-In Python, every variable has a specific "type" that corresponds to what types of data the variable will accept. If we are thinking of our variables as containers, perhaps the variable type is the material and shape that make up the container. A butterfly net is appropriate a medium-sized insect (or a small snake) but not good at holding water from a well. And so on.
+In Python, every variable has a specific "type" that corresponds to what types of data the variable will accept. If we are thinking of our variables as containers, perhaps the variable type is the material and shape that make up the container. A butterfly net is appropriate for a medium-sized insect (or a small snake) but not good at holding water from a well. And so on.
 
 As we saw a moment ago, Python doesn't require a special step where we create a variable before assigning it a value. Instead, Python uses that first variable assignment step to infer what kind of variable it should create. This is very convenient, but it's still important to think about our varaible types as they affect how our program runs, sometimes in unexpected ways!
 
@@ -143,24 +143,36 @@ Take a look at the output. We see three distinct variable types: **'int'**, **'f
 
 ### Integer
 
-`int` or **Integer** refers to a whole number. This type of of value cannot accept a decimial place. Do you think an integer can accept a negative sign? Try in the code chunk below:
+`int` or **Integer** refers to a whole number. This type of of value cannot accept a decimial place. Do you think an integer can accept a negative sign?
+
+Let's see what happens! Below, the first line is incomplete. Replace the `# replace this part` with a value that will test your hypothesis re: negative integers. 
+
 
 ```{python python-var-int, exercise=TRUE, exercise.eval=FALSE}
-var_one = # replace this part
+var_one = # replace this with a negative integer
 
 type(var_one)
 ```
 
+If you run the code chunk that is incomplete or has a comment that disrupts the program, no worries! You'll see an error message. That means something needs to change about your code before it will run correctly.
+
+If your code chunk runs without throwing any errors, you should see the output of `type(var_one)` appear beneath the chunk.
+
+
 
 ### Float
 
-`float` or **floating-point number** refers to a number with a decimal point and a variable number of digits afterwards. As a trick, you can convert an integer into a floating point number in Python by multiplying the integer value by `1.0`. Try converting `var_one` from integer to float using this method.
+`float` or **floating-point number** refers to a number with a decimal point and a variable number of digits afterwards. 
+
+As a trick, you can convert an integer into a floating point number in Python by multiplying an integer by `1.0`. For Python, the result of multiplying a float and an integer together is always a float, even if that value is technically "equal" in value. (This process is called **type conversion** or **type coersion**.)
+
+Try converting `var_one` from integer to float using this method.
 
 ```{python python-var-float, exercise=TRUE, exercise.eval=FALSE}
 var_one = 9
 type(var_one)
 
-var_one = # replace this part with var_one *...
+var_one = # multiply var_one by 1.0
 type(var_one)
 ```
 
@@ -178,5 +190,6 @@ var_three = # replace with a string using single quotation marks, like 'string'
 type(var_three)
 ```
 
-We will explore variable types more deeply in the next session, but this should get you started!
+Well done! At this point, you've run Python code chunks in your browser, assigned values to new variables, and even converted variables from one type to another. 
 
+Keep going to continue learning about solving problems and manipulating data with Python.
