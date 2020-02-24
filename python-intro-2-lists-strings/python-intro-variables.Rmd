@@ -1,0 +1,195 @@
+---
+title: "Introduction to Python: Variables"
+output: 
+ learnr::tutorial:
+    progressive: true
+    allow_skip: true
+    css:
+      - www/bootstrap.min.css
+      - www/flexdashboard.min.css
+      - www/style.css
+runtime: shiny_prerendered
+---
+
+```{r setup, include=FALSE}
+library(learnr)
+options(digits = 3, scipen = 9999)
+tutorial_options(exercise.startover = TRUE,
+  exercise.eval = TRUE, 
+  exercise.cap = "R Code",
+  exercise.completion = TRUE,
+  exercise.diagnostics = TRUE)
+```
+
+## Getting started
+
+Want to dive into Python? This lesson starts at the very beginning. We do not assume prior experience with programming in any language - if you do have that experience, you may see some parallels and some different ways of doing things in Python.
+
+### What is Python?
+
+Good question!
+
+1. A snake.
+2. Python is a **general-purpose** programming language, which means that it's useful for solving many different types of problems.
+
+Python is widely used in applications that include web applications, software development, and scientific computing.
+
+Many people associate Python with data science, and for good reason! The data science ecosystem of tools in Python has grown rapidly over the past decade. Learners interested in topics like machine learning, artifical intelligence, and natural language processing will benefit from Python's strengths in these areas.
+
+Here's a little bit of Python code. Click **Run Code** in the top-right to run the code. The output of your code will pop up below the text box.
+
+```{python python-snakes, exercise=TRUE, exercise.eval=FALSE}
+print("Snakes are 80% scary, 20% cute.")
+```
+
+You're already running Python code! Yay! Now let's get started on learning what's going on here.
+
+### A quick note on running Python
+
+There are several ways to write, run, and interact with Python code. In this lesson, we will be using an interactive learning environment called **learnr** -- that's the platform you're reading these words on right now, and that you just used to run a chunk of Python code. (Interestingly, learnr can run Python code but is actually written in the **R** programming language! But that's a story for another day :) ).
+
+A browser-based learning environment is a great way to practice writing Python code. But keep in mind that, in the future, you may wish to write and run code in one of a few ways. Three popular approaches include:
+
+1. Writing code with a text editor and running it on your computer's command line.
+2. Writing and running code in a integrated developer environement (IDE) like PyCharm, which provides extra tools for coding.
+3. Writing and running code in an interactive browser-based notebook using the Jupyter Notebook package or a similar package. You can run notebooks locally on your computer or on cloud-based services like Google Colaboratory.
+
+Take a look at our other lessons when you feel ready to help you set up your programming environment with one of these three approaches. For now, let's dive into writing and running Python code directly in your browser!
+
+## Python as a calculator
+
+As a programming language, Python takes a set of instructions and data and creates some kind of output. At the most basic level, you can think of Python as a calculator. Let's literally use it like that.
+
+Run the code chunk below to see the calculator in action:
+
+```{python python-calculator, exercise=TRUE, exercise.eval=FALSE}
+44 / 2
+```
+
+Python takes arithmetic notation as an input and produces an answer as an output. As you would expect, Python also pays attention to the order of operation:
+
+```{python python-calculator2, exercise=TRUE, exercise.eval=FALSE}
+44 / (2 + 5.5 * 3 - 2)
+```
+
+What do you think would happen if you took out the parentheses, or moved the parentheses elsewhere? Try it out and re-run the code above.
+
+## Creating a variable
+
+**Variables** are reserves spaces in memory that store values -- you can think of them as named containers. Using variables in your Python programs gives you access to a wide range of special features and problem-solving patterns.
+
+In most programming languages, we must **create** a variable and **asign a value** to that variable. In Python, these steps can happen at the exact same time. For instance, let's create a variable called `python_cute_porportion` and assign it the value `0.2`:
+
+```{python python-assign, exercise=TRUE, exercise.eval=FALSE}
+# we can do this in one step!
+python_cute_porportion = 0.2
+
+python_cute_porportion
+```
+
+Notice that our code chunk includes a line that begins with an ampersand `#`. In Python, using `#` allows us to write a **comment** that will not be evaluated as code. Comments are usually reminders or instructions for the programmer.
+
+We created our variable `python_cute_porportion` and assigned it a starting value, `0.2` by using a single statement with an equals sign `=`. In the final line, we simply repeated the name of the variable so that we could see the output directly in the browser.
+
+## Modifying a variable
+
+Often, we will assign a variable an initial value with the expectation that it may change in the future. For instance, let's say we want to re-evaluate how cute we think a python is after our bravery_factor increases:
+
+```{python python-modify, exercise=TRUE, exercise.eval=FALSE}
+python_cute_porportion = 0.2
+bravery_factor = 2.5
+python_cute_porportion = python_cute_porportion * bravery_factor
+
+python_cute_porportion
+
+```
+
+Notice how in the line `python_cute_porportion = python_cute_porportion * bravery_factor`, we were able to use the variable name on both the left and right side of the `=` sign. 
+
+Python evaluates the right side of a statement first. In this case, on the right side we multiply the two values of our variables together. We take the result of of this expression and overwrite `python_cute_porportion` with the result.
+
+```{r order, echo=FALSE}
+question("When I see a Python statement that uses a single equals sign, like `dog_age = dog_age + 1`,  I expect the program to... ",
+         answer("... evaluate the right side of the statement first, and assign the outcome to the left side", correct = TRUE),
+         answer("... evaluate the left side of the statement first, and assign the outcome to the right side"),
+         answer("... evaluate both sides simultaneously", message = "message_wrong_2"),
+         answer("... crash the mainframe", message = "message_wrong_3"),
+         correct = "Correct!",
+         incorrect = "Please try again.",
+         random_answer_order = TRUE,
+         allow_retry = TRUE
+)
+```
+
+## Learning a Variable's Type
+
+In Python, every variable has a specific "type" that corresponds to what types of data the variable will accept. If we are thinking of our variables as containers, perhaps the variable type is the material and shape that make up the container. A butterfly net is appropriate for a medium-sized insect (or a small snake) but not good at holding water from a well. And so on.
+
+As we saw a moment ago, Python doesn't require a special step where we create a variable before assigning it a value. Instead, Python uses that first variable assignment step to infer what kind of variable it should create. This is very convenient, but it's still important to think about our varaible types as they affect how our program runs, sometimes in unexpected ways!
+
+Let's assign three slightly different values to three variables, and check the type of each variable. In Python, we can use the `type()` function to check the type of a variable (more information about functions in another lesson!):
+
+```{python python-var-types, exercise=TRUE, exercise.eval=FALSE}
+var_one = 9
+var_two = 9.0
+var_three = "nine"
+
+type(var_one)
+type(var_two)
+type(var_three)
+```
+
+Take a look at the output. We see three distinct variable types: **'int'**, **'float'**, and **'str**.
+
+### Integer
+
+`int` or **Integer** refers to a whole number. This type of of value cannot accept a decimial place. Do you think an integer can accept a negative sign?
+
+Let's see what happens! Below, the first line is incomplete. Replace the `# replace this part` with a value that will test your hypothesis re: negative integers. 
+
+
+```{python python-var-int, exercise=TRUE, exercise.eval=FALSE}
+var_one = # replace this with a negative integer
+
+type(var_one)
+```
+
+If you run the code chunk that is incomplete or has a comment that disrupts the program, no worries! You'll see an error message. That means something needs to change about your code before it will run correctly.
+
+If your code chunk runs without throwing any errors, you should see the output of `type(var_one)` appear beneath the chunk.
+
+
+
+### Float
+
+`float` or **floating-point number** refers to a number with a decimal point and a variable number of digits afterwards. 
+
+As a trick, you can convert an integer into a floating point number in Python by multiplying an integer by `1.0`. For Python, the result of multiplying a float and an integer together is always a float, even if that value is technically "equal" in value. (This process is called **type conversion** or **type coersion**.)
+
+Try converting `var_one` from integer to float using this method.
+
+```{python python-var-float, exercise=TRUE, exercise.eval=FALSE}
+var_one = 9
+type(var_one)
+
+var_one = # multiply var_one by 1.0
+type(var_one)
+```
+
+
+### String
+
+`str` or a **string** refers to an ordered collection of alphanumeric characters, commonly associated with words and other texts. Strings must be surrounded by quotation marks. 
+
+In Python, you can use single-quotation or double-quotation marks (or even triple-single quotation marks, like `'''`) as long as you are consistent in using the same type of quotation marks on either side of the string. (Try reassigning var_three with a string value using single quotation marks.)
+
+```{python python-var-str, exercise=TRUE, exercise.eval=FALSE}
+var_three = "nine"
+var_three = # replace with a string using single quotation marks, like 'string'
+
+type(var_three)
+```
+
+Well done! At this point, you've run Python code chunks in your browser, assigned values to new variables, and even converted variables from one type to another. 
+
+Keep going to continue learning about solving problems and manipulating data with Python.
