@@ -24,13 +24,13 @@ library(learnr)
 
 Many software solutions have been developed for citation management. You may have heard of one of the most popular commercial solutions, EndNote.
 
-__Zotero__ is a free and open source alternative which can be installed without administrator privilages.
+__Zotero__ is a free and open source alternative which can be installed without administrator privileges.
 
 ### __Why Do I Need a Reference Manager?__
 
 __Zotero__ offers a number of advantages:
  
-1. Zotero acts as a convient way to store and organize PDFs of your papers
+1. Zotero acts as a convenient way to store and organize PDFs of your papers
 2. Zotero makes it easy to automatically cite papers in a manuscript in Microsoft Word or Open Office using the appropriate format for you selected journal
 3. Zotero makes it easy to automatically create a bibliography at the end of your manuscript
 4. Zotero can download papers and automatically store the information about the citation from PubMed or journal websites
@@ -38,10 +38,10 @@ __Zotero__ offers a number of advantages:
 
 ```{r whyzotero, echo=FALSE}
 question("Which of the following is NOT a potential benefit of Zotero discussed above?",
-         answer("Zotero is free to downlaod and use."),
+         answer("Zotero is free to download and use."),
          answer("Zotero is open source, meaning it can be improved and extended by people around the world.", message = "That's a _ratio_ variable."),
          answer("Zotero allows you to automatically generate citations and bibliographies."),
-         answer("You are entiled to real-time technical support.", correct = TRUE),
+         answer("You are entitled to real-time technical support.", correct = TRUE),
          answer("Zotero organizes your papers and allows you to share them with others."),
      correct = "Correct.",
      incorrect = "Sorry, try again.",
@@ -77,7 +77,7 @@ knitr::include_graphics("www/Fig3.png")
 ```
 
 ## __Importing a Zotero Library__
-Now that __Zotero__ has been installed, your orginization may have a common library of publications to get you started. 
+Now that __Zotero__ has been installed, your organization may have a common library of publications to get you started. 
 
 ```{r echo=FALSE}
 knitr::include_graphics("www/Fig5.png")
@@ -101,7 +101,7 @@ If your organization's library contains `.pdf` files, you will be asked if you w
 knitr::include_graphics("www/Fig9.png")
 ```
 
-Once the importation process is compelete, you will see the papers in your Zotero library.
+Once the importation process is complete, you will see the papers in your Zotero library.
 
 ## __Inserting Citations in Microsoft Word__
 
@@ -147,7 +147,7 @@ knitr::include_graphics("www/Fig14.png")
 
 Return to Microsoft Word and press the `Document Preferences` button again if necessary. Select your journal in the list and select `OK`. 
 
-__Note that the style can be changed at any time using the same proceedure.__
+__Note that the style can be changed at any time using the same procedure.__
 
 ### __Inserting a Citation in Microsoft Word__
 
@@ -157,7 +157,7 @@ knitr::include_graphics("www/Fig15.png")
 
 When you're ready to insert a citation, place the cursor in the document where you want the citation to appear. Then press the `Add/Edit Citation` button.
 
-A search box will appear where you can begin searching for the papper you wish to cite. You can search for and metadata element including author, title, journal, and year. 
+A search box will appear where you can begin searching for the paper you wish to cite. You can search for and metadata element including author, title, journal, and year. 
 
 ```{r echo=FALSE, out.width="90%"}
 knitr::include_graphics("www/Fig16.png")
