@@ -54,11 +54,11 @@ question("Which of the following is NOT a potential benefit of Zotero discussed 
 __Zotero__ comes in two main parts:
 
 1. The main reference manager program, `Zotero`
-2. The browser plugin, `Zotero connect`, used to easily import new papers
+2. The browser plugin, `Zotero Connector`, used to easily import new papers
 
 Install the main reference manager program by visiting [the download page](https://www.zotero.org/download/).
 
-On that same page, you will likely find a link to __Zotero Connect__ that matches your browser. 
+On that same page, you will likely find a link to __Zotero Connector__ that matches your browser. 
 
 ```{r echo=FALSE, out.width = '90%'}
 knitr::include_graphics("www/Fig1.png")
@@ -70,7 +70,7 @@ You may receive a warning that instillation cannot continue due to lack of permi
 knitr::include_graphics("www/Fig2.png")
 ```
 
-Once __Zotero__ is installed, you can also install __Zotero Connect__. 
+Once __Zotero__ is installed, you can also install __Zotero Connector__. 
 
 ```{r echo=FALSE}
 knitr::include_graphics("www/Fig3.png")
