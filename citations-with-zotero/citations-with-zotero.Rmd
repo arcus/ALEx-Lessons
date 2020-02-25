@@ -31,7 +31,7 @@ __Zotero__ is a free and open source alternative which can be installed without 
 __Zotero__ offers a number of advantages:
  
 1. Zotero acts as a convenient way to store and organize PDFs of your papers
-2. Zotero makes it easy to automatically cite papers in a manuscript in Microsoft Word or Open Office using the appropriate format for you selected journal
+2. Zotero makes it easy to automatically cite papers in a manuscript in Microsoft Word or Open Office using the appropriate format for your selected journal
 3. Zotero makes it easy to automatically create a bibliography at the end of your manuscript
 4. Zotero can download papers and automatically store the information about the citation from PubMed or journal websites
 4. Zotero makes it easy to share papers with others
