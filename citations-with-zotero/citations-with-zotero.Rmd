@@ -1,6 +1,6 @@
 ---
 title: "Citation Management with Zotero"
-author: "Ian Campbell"
+author: "Ian Campbell, MD, PhD"
 output: 
  learnr::tutorial:
     progressive: false
@@ -77,7 +77,7 @@ knitr::include_graphics("www/Fig3.png")
 ```
 
 ## __Importing a Zotero Library__
-Now that __Zotero__ has been installed, your orginization may have a common library of publications to get get you started. 
+Now that __Zotero__ has been installed, your orginization may have a common library of publications to get you started. 
 
 ```{r echo=FALSE}
 knitr::include_graphics("www/Fig5.png")
