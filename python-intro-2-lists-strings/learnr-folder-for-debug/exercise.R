@@ -1,0 +1,7 @@
+# long jump distances, in meters
+long_jump_distances = [3.4, 3.14, 2.99, 1.7, 3.9, 4.1, 4.001, 3.55]
+print(long_jump_distances)
+
+# the .sort() method rearranges our values in ascending order
+long_jump_distances.sort()
+print(long_jump_distances)

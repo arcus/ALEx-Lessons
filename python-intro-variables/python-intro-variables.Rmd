@@ -112,7 +112,7 @@ Python evaluates the right side of a statement first. In this case, on the right
 question("When I see a Python statement that uses a single equals sign, like `dog_age = dog_age + 1`,  I expect the program to... ",
          answer("... evaluate the right side of the statement first, and assign the outcome to the left side", correct = TRUE),
          answer("... evaluate the left side of the statement first, and assign the outcome to the right side"),
-         answer("... evaluate both sides simultaneously", message = "message_wrong_2"),
+         answer("... evaluate both sides simultaneously"),
          answer("... crash the mainframe", message = "message_wrong_3"),
          correct = "Correct!",
          incorrect = "Please try again.",

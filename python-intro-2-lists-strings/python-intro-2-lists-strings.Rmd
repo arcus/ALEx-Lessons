@@ -1,0 +1,220 @@
+---
+title: "Introduction to Python 2: Lists and Strings"
+output: 
+ learnr::tutorial:
+    progressive: true
+    allow_skip: true
+    css:
+      - www/bootstrap.min.css
+      - www/flexdashboard.min.css
+      - www/style.css
+runtime: shiny_prerendered
+---
+
+```{r setup, include=FALSE}
+library(learnr)
+options(digits = 3, scipen = 9999)
+tutorial_options(exercise.startover = TRUE,
+  exercise.eval = TRUE, 
+  exercise.cap = "R Code",
+  exercise.completion = TRUE,
+  exercise.diagnostics = TRUE)
+```
+
+## Getting started
+
+In this lesson, we will go deep into two types of Python variables in particular: **lists** and **strings**. 
+
+Both lists and strings belong to a family of data types called **sequence types**. Sequence types - as you may have guessed! - store data as a sequence, or an ordered collection of objects. This enables some very important functionality when transforming data. We'll explore common uses and functionality for sequence data in this lessson.
+
+Run the code block below (click the Run button in the top-right) to get a quick preview of what we'll cover:
+
+```{python python-fib, exercise=TRUE, exercise.eval=FALSE}
+fibonacci_list = [0, 1, 1, 2, 3, 5, 8, 13, 21]
+fibonacci_string = "Long before Fibonacci was born, the Fibonacci numbers had a long, rich history in Sanskrit prosody"
+
+print(fibonacci_list)
+print(fibonacci_string)
+```
+
+Now let's get started!
+
+## Lists
+
+In Python, a **list** is a data type that collects a number of objects together in order. Python understands lists in a similar way that we think of a to-do list or a grocery list: items in order from first to last.
+
+Let's take the example of a grocery list with five items:
+* Cereal
+* Vegan pizza
+* Waffle fries
+* Olive oil
+* Coffee
+
+In Python, we use square brackets to indicate we're creating a list, then include each item in the list followed by a comma. In this example, we will represent each item as a **string variable** -- more on this latter. For now, think of a **string** as text surrounded by quotation marks.
+
+Let's create our list in Python, and `print()` the result to screen:
+
+```{python grocery-list, exercise=TRUE, exercise.eval=FALSE}
+grocery_list = ["cereal", "vegan pizza", "waffle fries", "olive oil", "coffee"]
+
+print(grocery_list)
+```
+
+### List type
+
+In the variable lesson, we described Python as a **dynamically typed** langauge. Do you recall what that means?
+
+```{r dynamic-type, echo=FALSE}
+question("What does 'dynamically typed' mean?",
+         answer("Python can figure out what data type to use for a new variable based on the value you assign it", correct = TRUE),
+         answer("Python runs very quickly on quantum computers"),
+         answer("Python is a type of programming language"),
+         correct = "Correct!",
+         incorrect = "Please try again.",
+         random_answer_order = TRUE,
+         allow_retry = TRUE
+)
+```
+
+In this case, because we've assigned Python a list of items - as indicated by the square brackets - `grocery_list` is now a list-type variable. We can check to confirm:
+
+```{python grocery-list-confirm, exercise=TRUE, exercise.eval=FALSE}
+grocery_list = ["cereal", "vegan pizza", "waffle fries", "olive oil", "coffee"]
+
+type(grocery_list)
+```
+
+### Accessing objects in a list by index 
+
+Every item in a list receives an **index** based on its location in the list. 
+
+In many situations, we will want to access a specific object from a list by referencing its location by index in the list. We can do so by using square brackets, but this time passing in a specific index (as an integer), to access that item, such as `my_list_of_items[3]` to access the object at index 3 in `my_list_of_items`.
+
+
+What object do you expect to be at index 1 in the list? Let's look:
+
+```{python grocery-list-index, exercise=TRUE, exercise.eval=FALSE}
+grocery_list = ["cereal", "vegan pizza", "waffle fries", "olive oil", "coffee"]
+
+print(grocery_list[1])
+```
+
+Was this what you expected?
+
+If you have a background in other programming languages, you may be familiar with this pattern: counting starts at the integer 0 instead of the integer 1. In a list, the "first" item, `"cereal"` is stored at index 0. To clear up the ambiguity, people sometimes say "the zero-th element" instead of "the first element" or "the item at index 0 in the list". Python upholds this expectation of counting starting at 0 in most if not all situations.
+
+How about accessing `"coffee"` from our list? You actually have two options:
+1) Use the index number as in our example above, or
+2) Count backwards from the end of the list. You can use `-1` to access the last item, `-2` to access the second-to-last item, and so on.
+
+Try out both ways below:
+
+```{python grocery-list-last-item, exercise=TRUE, exercise.eval=FALSE}
+grocery_list = ["cereal", "vegan pizza", "waffle fries", "olive oil", "coffee"]
+
+# print out "coffee" from the list
+```
+
+### Accessing a list slice
+
+Sometimes you will want to access a subset of your list, or a **slice**. You request a slice using that same `[]` square bracket notation, but this time, you can pass in a range of numbers like so:
+
+```{python grocery-list-slice, exercise=TRUE, exercise.eval=FALSE}
+grocery_list = ["cereal", "vegan pizza", "waffle fries", "olive oil", "coffee"]
+
+print(grocery_list[0:2])
+```
+
+Note that Python treats the first number of a slice as **inclusive** (meaning that the object at index 0 is included) and the second number of a slice as **exclusive** (meaning the object at index 2 is excluded, and the object immediately before it is the last one included). Thus the slice range `0:2` means, in practice, `object at index 0, object at index 1`.
+
+Python also allows you to imply a range to the very beginning or very end by omitting the number entirely, as opposed to specifying. For instance, istead of specifying 0 as the start of our range, we can simply omit it for the same result:
+
+```{python grocery-list-slice-omit, exercise=TRUE, exercise.eval=FALSE}
+grocery_list = ["cereal", "vegan pizza", "waffle fries", "olive oil", "coffee"]
+
+print(grocery_list[:2])
+```
+
+### Challenge
+
+Who are your five favorite musicians of all time? Create a list `favorite_musicians` below. Then, print only the top 3.
+
+```{python grocery-list-challenge, exercise=TRUE, exercise.eval=FALSE}
+# favorite_musicians ... YOUR CODE HERE
+
+# print ... YOUR CODE HERE
+```
+
+## List methods
+
+One unique aspect of Python is that it likes to treat everything like an **object**. Instead of simply storing data in a varaible and calling it a day, Python bundles in a bunch of helpful features to support that data, based on the variable type. 
+
+When we store data as a list, we actually create a **list object**. This list object includes a container for our data. It also includes a number of helpful **functions**. In Python, any function that belongs to an object is called a **method**. We can access a method by using dot notation (.), such as `object_of_some_kind.method()`
+
+If we think of our list object as a car, our data are like the passengers in the interior of the car. Our methods are like the engine, tires, windshield, and brakes: they serve a number of purposes in support of moving the passengers through the world.
+
+(We'll talk more about both functions and methods in a future lesson!)
+
+### The .sort() method
+
+For now, let's see this in action. Let's create a new list, called long_jump_distances, and provide it several values. Then, let's call the **.sort() method** on our values to sort them, lowest to highest. We can also use **print() statements** to check the status of our `long_jump_distances` variable before and after the `sort()` method:
+
+```{python long_jump_distances, exercise=TRUE, exercise.eval=FALSE}
+# long jump distances, in meters
+long_jump_distances = [3.4, 3.14, 2.99, 1.7, 3.9, 4.1, 4.001, 3.55]
+print(long_jump_distances)
+
+# the .sort() method rearranges our values in ascending order
+long_jump_distances.sort()
+print(long_jump_distances)
+```
+
+### The .append() method
+
+In Python, lists are changeable or **mutable**. This is very important! Some other data types can never change, and instead must be overwritten to be modified. With a list, however, we just need to know the relevant methods to manipulate the data in some way. 
+
+We've already seen one example of list mutation through the `.sort()` method.
+
+Another thing we may wish to do is add new items to our list. Consider our grocery list from earlier. Why don't we append a new item to the end of our list? Let's say we wish to append "bananas":
+
+```{python grocery-list-to-append, exercise=TRUE, exercise.eval=FALSE}
+grocery_list = ["cereal", "vegan pizza", "waffle fries", "olive oil", "coffee"]
+
+item_to_add = "bananas"
+
+grocery_list.append(item_to_add)
+
+print(grocery_list)
+```
+
+Note that, as we desired, we added `bananas"` to the end of `grocery_list`. We did **not** add the phrase `"item_to_add"` to the end of this list. Why is that, do you think?
+
+```{r list-var-name, echo=FALSE}
+question("Why did we not append the phrase item_to_add in this case?",
+         answer("item_to_add is the name of a variable. Python looks for whatever object we assigned to the variable, and that's what gets passed along.", correct = TRUE),
+         answer("We put a quotation mark in the wrong place."),
+         answer("Python is a weird programming language.),
+         correct = "Correct!",
+         incorrect = "Please try again.",
+         random_answer_order = TRUE,
+         allow_retry = TRUE
+)
+```
+
+When we simply include a name in our Python code without any special punctuation like quotation marks or square brackets, Python assumes we are referring to a variable name. Then, when we call that `.append()` method, Python will pass along the value associated with that variable. 
+
+(Pro tip: there are some cases where we may wish to pass along the value of our variable, but instead pass along the location of the variable itself. Then, in the future, if we make changes to that variable, it can actually change other variables by accident. That isn't going to happen with this particular example, but keep an eye out for it in the future -- it's caused countless numbers of programmer headaches!!!)
+
+### Challenge
+
+Here is space for a code block to ask for sorting AND appending! TO ADD.
+
+## Strings
+
+Some things about strings!
+
+## String methods
+
+Some string methods!
+
+## Review
