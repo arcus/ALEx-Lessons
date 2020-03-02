@@ -115,6 +115,19 @@ grocery_list = ["cereal", "vegan pizza", "waffle fries", "olive oil", "coffee"]
 # print out "coffee" from the list
 ```
 
+### List length with the len() function
+
+How many items are in our list?
+
+This is an important question to answer in many situations. For instance, when we're working with our grocery list, we may want to know just the count. For instance, let's get the length of our grocery list items:
+
+```{python grocery-list-len, exercise=TRUE, exercise.eval=FALSE}
+grocery_list = ["cereal", "vegan pizza", "waffle fries", "olive oil", "coffee"]
+
+len(grocery_list)
+```
+
+
 ### Accessing a list slice
 
 Sometimes you will want to access a subset of your list, or a **slice**. You request a slice using that same `[]` square bracket notation, but this time, you can pass in a range of numbers like so:
@@ -139,33 +152,39 @@ print(grocery_list[:2])
 
 Who are your five favorite musicians of all time? Create a list `favorite_musicians` below. Then, print only the top 3.
 
+
 ```{python grocery-list-challenge, exercise=TRUE, exercise.eval=FALSE}
 # favorite_musicians ... YOUR CODE HERE
 
 # print ... YOUR CODE HERE
 ```
 
+
 ## List methods
 
-One unique aspect of Python is that it likes to treat everything like an **object**. Instead of simply storing data in a varaible and calling it a day, Python bundles in a bunch of helpful features to support that data, based on the variable type. 
+One unique aspect of Python is that it likes to treat everything like an **object**. Objects are bundles of data and functions that can work together. Python uses a specific object type for each variable type, like integer, float, list, and string.
 
-When we store data as a list, we actually create a **list object**. This list object includes a container for our data. It also includes a number of helpful **functions**. In Python, any function that belongs to an object is called a **method**. We can access a method by using dot notation (.), such as `object_of_some_kind.method()`
+When we create a variable and assign it a list, we automatically create a **list object**. This list object includes a container for our data - this is its most important feature. The list object also includes a number of helpful functions that support the data in some way. In Python, any function that belongs to an object is called a **method**. We can access a method by using dot notation, which looks like this: `object_of_some_kind.method()`
 
 If we think of our list object as a car, our data are like the passengers in the interior of the car. Our methods are like the engine, tires, windshield, and brakes: they serve a number of purposes in support of moving the passengers through the world.
 
-(We'll talk more about both functions and methods in a future lesson!)
+
 
 ### The .sort() method
 
-For now, let's see this in action. Let's create a new list, called long_jump_distances, and provide it several values. Then, let's call the **.sort() method** on our values to sort them, lowest to highest. We can also use **print() statements** to check the status of our `long_jump_distances` variable before and after the `sort()` method:
+Let's create a new list, called long_jump_distances, and provide it several values in no particular order. Then, let's sort the values. To do so, we can call the **.sort() method** on our list - the default order is lowest to highest. 
+
+We should use **print() statements** to check the status of our `long_jump_distances` variable before and after the `sort()` method. It's always a good idea to add print() statements to our code to ensure what we *think* is happening is *acutally* happening!
 
 ```{python long_jump_distances, exercise=TRUE, exercise.eval=FALSE}
-# long jump distances, in meters
+# a list of long jump distances (in meters) in no particular order
 long_jump_distances = [3.4, 3.14, 2.99, 1.7, 3.9, 4.1, 4.001, 3.55]
 print(long_jump_distances)
 
 # the .sort() method rearranges our values in ascending order
 long_jump_distances.sort()
+
+# now print the sorted long_jump_distances list
 print(long_jump_distances)
 ```
 
@@ -173,9 +192,9 @@ print(long_jump_distances)
 
 In Python, lists are changeable or **mutable**. This is very important! Some other data types can never change, and instead must be overwritten to be modified. With a list, however, we just need to know the relevant methods to manipulate the data in some way. 
 
-We've already seen one example of list mutation through the `.sort()` method.
+We've already seen one example of list mutation through the `.sort()` method. Our list data transformed into a new sequence of values in descending order.
 
-Another thing we may wish to do is add new items to our list. Consider our grocery list from earlier. Why don't we append a new item to the end of our list? Let's say we wish to append "bananas":
+One common thing we may want to do with a list is add new values to the end of the list. Consider our grocery list from earlier. How would we append a new item to the end of our list? Let's say we wish to append "bananas". Here's what the `.append()` method looks like in action:
 
 ```{python grocery-list-to-append, exercise=TRUE, exercise.eval=FALSE}
 grocery_list = ["cereal", "vegan pizza", "waffle fries", "olive oil", "coffee"]
@@ -193,7 +212,7 @@ Note that, as we desired, we added `bananas"` to the end of `grocery_list`. We d
 question("Why did we not append the phrase item_to_add in this case?",
          answer("item_to_add is the name of a variable. Python looks for whatever object we assigned to the variable, and that's what gets passed along.", correct = TRUE),
          answer("We put a quotation mark in the wrong place."),
-         answer("Python is a weird programming language.),
+         answer("Python is a weird programming language."),
          correct = "Correct!",
          incorrect = "Please try again.",
          random_answer_order = TRUE,
@@ -205,16 +224,133 @@ When we simply include a name in our Python code without any special punctuation
 
 (Pro tip: there are some cases where we may wish to pass along the value of our variable, but instead pass along the location of the variable itself. Then, in the future, if we make changes to that variable, it can actually change other variables by accident. That isn't going to happen with this particular example, but keep an eye out for it in the future -- it's caused countless numbers of programmer headaches!!!)
 
-### Challenge
+### Challenge: Use everything you've learned!
 
 Here is space for a code block to ask for sorting AND appending! TO ADD.
 
 ## Strings
 
-Some things about strings!
+In Python, a string is a single sequence of charaacters such as letters, numbers, punctuation, and symbols. You can think of string as "one line of text", although a more accurate definition would be "one single sequence of characters," for reasons we'll explore below.
+
+By default, Python uses the Unicode international character set to define the realm of all possible characters - which spans everything from hiragana syllables (Japnaese) to mathmatical notation.
+
+### Safely assigning a string
+
+We can use single, double, or even triple quotation marks to define a string - as long as what we use is consistent. Run the code below:
+
+```{python string-defs, exercise=TRUE, exercise.eval=FALSE}
+string_one = 'I am a valid string!'
+
+string_two = "I  am also valid!"
+
+string_three = '''Yes I admit I'm the black sheep of the family, but I TOO am valid!'''
+
+type(string_one)
+type(string_two)
+type(string_three)
+```
+
+Note that choice of quotation marks can be extremely important when the values in our string include something that might prematurely break our code, such as an apostraphe. Try to run the code below:
+
+```{python string-break, exercise=TRUE, exercise.eval=FALSE}
+string_sheep = 'I'm the black sheep! Bahh!'
+
+print(string_sheep)
+```
+
+Your code produced an error. What happened here? Try replacing the quotation mark you used for your `string` into a safer punctuation and re-running the code chunk.
+
+### Pro tip: Strings are essentially just lists!
+
+When I described a string as a **sequence** above, you may have thought "wait, that's just like a list!" Indeed, in the family tree of all possible variable types in Python, strings and lists are close siblings within the Sequence family unit. Sequences have the following properties:
+
+* A set of items
+* In a specific order
+
+Unlike lists, strings specialize in dealing with characters, and include specicial methods designed specifically to work with character data. BUT, they inherit some of the general functionality from strings.
+
+For instance, if you'd like to find the length of a string (the number of characters) and the very first (or 0th) element in our list, run the coe below:
+
+```{python string-list-stuff, exercise=TRUE, exercise.eval=FALSE}
+string_sheep = "I'm the black sheep! Bahh!"
+length = len(string_sheep)
+zeroth = string_sheep[0]
+
+print(length)
+print(zeroth)
+```
+
+How would you learn the very last character in `string_sheep`? (Glance back at "Accessing objects in a list by index" if you need a refresher). Rewrite the code above to store the last character in a `last` variable and print that variable to screen.
+
+You can also use slice syntax, e.g.:
+
+```{python string-list-sheep-sound, exercise=TRUE, exercise.eval=FALSE}
+string_sheep = "I'm the black sheep! Bahh!"
+sheep_sound = string_sheep[-5:]
+
+print(sheep_sound)
+```
 
 ## String methods
 
-Some string methods!
+String methods are where some of the poewrful text functionality in Python really starts to shine. This is actually a pretty extensive topic, so for now let's introduce some of the most frequently-used methods for manipulating string data.
+
+### Case conversion and mutability with the .lower() method
+
+Want to get rid of case-sensitivity in your data? The easiest way to do this is to coerce all strings to lower case, no matter the content:
+
+```{python string-lower, exercise=TRUE, exercise.eval=FALSE}
+python_overview = "Python is a programming language that uses an Object-Oriented paradigm. It was initially developed by Guido Van Rossum."
+
+# run the .lower() method
+python_overview.lower()
+
+# print out the variable at the end, just to make sure it worked out
+print(python_overview)
+
+```
+
+So wait! In this code, `python_overview.lower()` outputted a lower case string as expected. But why did the final print statements seem to show the original strings without lower case conversion?
+
+In Python, there is a distinction between mutable and immutable types. While lists are mutable - meaning a list can change its values - strings are immutable. This means that if we wish to "change" the value of a string, such as making it lowercase, we actually have to create a new string variable and overwrite our original variable to point to this new value.
+
+In this case, the line `python_overview.lower()` did not modify the `python_overview` string itself, but rather produced an output of what that would look like. To modify the python_overview variable itself, we must take this output and use the  assignment operator `=` to reassign our variable, like so:
+
+```{python string-lower-equals, exercise=TRUE, exercise.eval=FALSE}
+python_overview = "Python is a programming language that uses an Object-Oriented paradigm. It was initially developed by Guido Van Rossum."
+
+# run the .lower() method. this time, use the output of this method to reassign the python_overview variable
+python_overview =  python_overview.lower()
+
+# print out the variable at the end, just to make sure it worked out
+print(python_overview)
+
+```
+
+Works better this time! We can use `.upper()` in a similar situation, but to coerce a string to upper-case. Rewrite the code chunk above to convert to all capital letters this time (and my apologies in advance for making this tutorial look like it's YELLING AT YOU!)
+
+### The .strip() method
+
+Need to get rid of leading and trailing whitespace in your string? `.strip()` has you covered! Run the example to try it out quickly:
+
+```{python string-strip, exercise=TRUE, exercise.eval=FALSE}
+clinical_note = '       Patient displaying Shortness of Breath. 30YO. Consider further Labs. 2020-06-04  '
+clinical_note.strip()
+print(clinical_note)
+```
+
+Oh no! Same problem as last time. Fix the code chunk above so that you reassign `clinical_note` correctly.
+
+Note that you can also chain together multiple methods, as such: `your_object.method1().method2()`. These transformations happen left to right, beginning with method1() (this is similar to the concept of "piping" if you're coming from R/the tidyverse!)
+
+Modify the code chunk above to **also** make the clinical note lower-case only.
+
+### The .split() method
+
+Split into list.
+
+### CHALLENGE
 
 ## Review
+
+We've covered a lot of territory! Here are three final questions to answer here.
