@@ -1,5 +1,6 @@
 ---
-title: "Correlation and Linear Regression"
+title: "Introduction to Automated Reporting in R"
+author: "John Ennis PhD, Aigora"
 output: 
  learnr::tutorial:
     progressive: true
