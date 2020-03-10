@@ -14,7 +14,10 @@ Learning event attendees have highly variable goals, from R basics to machine le
 
 To answer this question in a practical way, we created a tool that streamlines the process of matching an individual learner's goals to a curriculum--a learning checklist for achieving those goals.
 
-The software for this tool is in the [Personalized Learning Plan](https://github.research.chop.edu/braunsb/Arcus-Education-Lessons-and-Learning-Plan-Generator/tree/master/Personalized-Learning-Plan) folder. Individual lessons are in [Lessons](https://arcus/ALEx-Lessons). 
+### Use the Arcus Learning Exchange (ALEx)
+
+The ALEx landing page is at https://alex.arcus.chop.edu. From there, you can create a customized curriculum for yourself or another, browse lessons, or add a lesson of your own to make available to learners. 
+
 
 ### Come to a Workshop or to another learning event!
 
