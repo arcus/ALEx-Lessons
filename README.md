@@ -22,19 +22,10 @@ All CHOP and Penn employees are welcome to attend our workshops. Registration is
 
 ### Become a Contributor!
 
-[New Lessons](https://github.research.chop.edu/braunsb/Arcus-Education-Lessons-and-Learning-Plan-Generator/tree/master/New-Lessons) is a folder for you, should you wish to become an ALEx contributor. Please add your educational material to this folder. If you are a genetics expert, teach us about genetics; if you want people to know how to use a package you just created, create a lesson about it and add it. If you want to teach about Python, put your Python lessons there.
+Make a pull request to include your teaching materials in the Arcus Learning Exchange.
 
-NOTE: The New Lessons link works for CHOP employees only at the moment. 
 
-These are our requirements for a lesson:
-
-* Your lesson must be provided in Markdown (.Rmd is our favorite, but you may supply a straight-up .md file instead).
-* You may link out from the .md file to anywhere you like on the web---documents or presentations you have in the cloud, for instance. We just need the .Rmd or .md file as a wrapper for whatever else you have going on. 
-* Your lesson must adhere to CHOP's standards and ethics. 
-
-Our editors will check your lesson and add it to the list of options available to learners. 
-
-## For Instructors: How to Add a Lesson
+## For Instructors: How to Write an Interactive Lesson
 
 [Learn how to write a lesson in `learnr`](https://alex.arcus.chop.edu/learnr-with-alex/)
 
