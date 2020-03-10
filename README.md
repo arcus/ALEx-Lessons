@@ -18,7 +18,7 @@ The software for this tool is in the [Personalized Learning Plan](https://github
 
 ### Come to a Workshop or to another learning event!
 
-All CHOP and Penn employees are welcome to attend our workshops. Registration is required. [Click here to find out more and to register](http://bit.ly/CHOP-ALEx-Registration). 
+All CHOP, Penn, and Drexel employees are welcome to attend our workshops. Registration is required. [Click here to find out more and to register](http://bit.ly/CHOP-ALEx-Registration). 
 
 ### Become a Contributor!
 
