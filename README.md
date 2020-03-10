@@ -1,6 +1,6 @@
 # Arcus Learning Exchange (ALEx)
 
-#### Designer and agile project owner, Sheila Braun; proof of concept, Ian Campbell, MD PhD. Based on ideas formed at the Summer 2019 Arcus Education Retreat attended by Joy Payton and Sheila Braun. The whole team has continued to revise the project. Other team members and contributors are Zoë Wilkinson-Saldaña, Patrick Dibussolo, and Lara Lechtenberg, all of the Children's Hospital of Philadelphia (CHOP).
+#### Designer and agile project owner, Sheila Braun; proof of concept, Ian Campbell, MD PhD. Based on ideas formed at the Summer 2019 Arcus Education Retreat attended by Joy Payton and Sheila Braun. The whole team has continued to revise the project. Other team members and contributors are Zoë Wilkinson-Saldaña, Patrick Dibussolo, Laura McNamara, and Lara Lechtenberg, all of the Children's Hospital of Philadelphia (CHOP).
 
 Many of CHOP’s principle investigators and their teams have become interested in expanding their data science skills. In support of [the Arcus project at CHOP](https://arcus.reskubestage.research.chop.edu), one of our goals at [Arcus Education](https://education.arcus.chop.edu) is to create learning events and experiences in which 100% of attendees spend 100% of their time working towards their own goals at their own pace. We have piloted our approach with R and Statistics workshops, Python workshops, and by making lessons freely available to users via the ALEx website. 
 
@@ -36,13 +36,9 @@ Our editors will check your lesson and add it to the list of options available t
 
 ## For Instructors: How to Add a Lesson
 
-Ian Campbell has provided [documentation in a wiki](https://github.com/ianmcampbell/Arcus-Modular-Education-Support-System/wiki). Check it out!
+[Learn how to write a lesson in `learnr`](https://alex.arcus.chop.edu/learnr-with-alex/)
 
-NOTES
-
-* I found out the hard way that adding any other detritus (files, etc.) to the root directory "Lessons" results in the learning plan generator breaking.     
-* If your lesson has supporting data, just plunk it into the folder that contains the lesson and use the name of the file alone as pathname from within your lesson document. 
-* If what your lesson links to calls supporting data, you may keep that data whereever you like, provided that it is a public link that any leaner-instructor may access even if they don't have CHOP credentials. 
+If you have a complete lesson, whether interactie or not, email [Sheila](braunsb@email.chop.edu) to get your lesson reviewed and included in our library. 
 
 Thank you for adding to the list of lessons we can offer!
 
