@@ -12,17 +12,21 @@ runtime: shiny_prerendered
 ---
 
 ```{r setup, include=FALSE}
-library(learnr)
+library(learnr) 
 library(data.table)
 library(dplyr)
 library(rcompanion)
+library(lattice)
+library(rankFD)
+library(FSA)
 knitr::opts_chunk$set(echo = FALSE)
 tutorial_options(exercise.startover = TRUE,
   exercise.eval = TRUE, 
   exercise.cap = "R Code",
   exercise.completion = TRUE,
   exercise.diagnostics = TRUE)
-  
+Data <- Muco
+names(Data) <- c("Efficiency", "Health")
 ```
 
 ## Background
@@ -46,7 +50,8 @@ question("You might use an exact test of goodness-of-fit to examine which of the
       answer("Height and weight"),
       answer("Height, weight, and age group"),
       answer("Whether a child uses his right hand more frequently than his left hand", correct = TRUE),
-      answer("Height, weight, and season")
+      answer("Height, weight, and season"),
+     allow_retry = TRUE
 )
 ```
 
@@ -62,7 +67,8 @@ question("When might you NOT want to use the exact test of goodness-of-fit despi
       answer("When you your data is normally distributed"),
       answer("When your data is very large", correct = TRUE),
       answer("When your data is NOT normally distributed"),
-      answer("When you have skewed data")
+      answer("When you have skewed data"),
+     allow_retry = TRUE
 )
 ```
 
@@ -73,7 +79,8 @@ question("How do you make ranked data?",
       answer("You rate the data on a scale from poor to excellent"),
       answer("The smallest measurement is 1, the second smallest is 2, and so on through all the values you have", correct = TRUE),
       answer("The largest measurement is 1, the second largest is 2, and so on through all your values"),
-      answer("You submit your data for IRB review in a contest to see which researcher has the best data")
+      answer("You submit your data for IRB review in a contest to see which researcher has the best data"),
+     allow_retry = TRUE
 )
 ```
 
@@ -84,7 +91,8 @@ question("Upon which assumptions does the Kruskal-Wallis test rest?",
       answer("Normality"),
       answer("Inter-related variables"),
       answer("Ranking"),
-      answer("Homoscedasticity and same group distributions", correct = TRUE)
+      answer("Homoscedasticity and same group distributions", correct = TRUE),
+     allow_retry = TRUE
 )
 ```
 
@@ -95,7 +103,8 @@ question("Upon what assumptions does the Kruskal-Wallis test NOT rely?",
       answer("Normality and homoscedasticity"),
       answer("Wechsler test results"),
       answer("Packages like dplyr and base stats"),
-      answer("All of the above", correct = TRUE)
+      answer("All of the above", correct = TRUE),
+     allow_retry = TRUE
 )
 ```
 
@@ -104,7 +113,8 @@ question("What is the BEST situation in which to use a Kruskal-Wallis test?",
       answer("When your data ISN'T normal"),
       answer("When your data is homoscedastic"),
       answer("When your data is actually ranked (a relatively rare occurence)", correct = TRUE),
-      answer("When your data is normal but the data set is very small")
+      answer("When your data is normal but the data set is very small"),
+     allow_retry = TRUE
 )
 ```
 
@@ -116,13 +126,7 @@ question("What is the BEST situation in which to use a Kruskal-Wallis test?",
 The following code checks to see if you have the required packages and, if you don't, installs them to your R environment. You can copy and paste this code into your local copy of RStudio. 
 
 ```{r packages, exercise=FALSE, eval = FALSE}
-if(!require(dplyr)){install.packages("dplyr")}
-if(!require(FSA)){install.packages("FSA")}
-if(!require(DescTools)){install.packages("DescTools")}
-if(!require(rcompanion)){install.packages("rcompanion")}
-if(!require(multcompView)){install.packages("multcompView")}
-if(!require(pwr)){install.packages("pwr")}
-if(!require(lattice)){install.packages("lattice")}
+library(rankFD)
 library(FSA)
 library(dplyr)
 library(DescTools)
@@ -131,6 +135,7 @@ library(multcompView)
 library(pwr)
 library(lattice)
 library(stats)
+
 ```
 
 In this example, we will perform the `kruskal.test` function on a data frame from the native `stats` package. The example data is from Hollander & Wolfe (1973); it is measurements of the mucociliary efficiency in the rate of dust removal among normal subjects, subjects with obstructive airway disease, and subjects with asbestosis. 
@@ -161,8 +166,8 @@ Data <- mutate(Data,
 
 Summarize `Efficiency` by `Health.`
 
-```{r summarize, exercise=TRUE, eval = FALSE}
-Summarize(Efficiency ~ Health,
+```{r summarize, exercise = TRUE, eval = FALSE}
+summary(Efficiency ~ Health,
           data = Data)
 ```
 
@@ -170,7 +175,7 @@ As you can see in the output, `Health` has three groups: Normal, OAD, and Asbest
 
 Let's visualize the same data using the `lattice` plotting package's `histogram` function.
 
-```{r viz, exercise=TRUE, eval = FALSE}
+```{r viz, exercise = TRUE, eval = FALSE}
 histogram(~ Efficiency | Health, 
           data=Data,
           layout=c(1,3))      #Number of columns and rows of individual plots
@@ -180,7 +185,7 @@ The result is stacked histograms for each group we might examine in a Kruskal–
 
 Let's look at the same information using boxplots.
 
-```{r boxplots, exercise=TRUE, eval = FALSE}
+```{r boxplots, exercise = TRUE, eval = FALSE}
 boxplot(Efficiency ~ Health,
         data = Data,
         ylab="Efficiency",
@@ -195,7 +200,7 @@ Interpreting the null and alternative hypotheses for a typical Kruskal-Wallis te
 H<sub>A</sub> is that mean ranks among the three groups are not equal.
 
 
-```{r run_test, exercise=TRUE, eval = FALSE}
+```{r run_test, exercise = TRUE, eval = FALSE}
 kruskal.test(Efficiency ~ Health, 
              data = Data)
 ```
@@ -214,7 +219,7 @@ If there are several values to compare, it can be beneficial to have R convert t
 
 Here is the code for a Dunn test.
 
-```{r dunn, exercise=TRUE, eval = FALSE}
+```{r dunn, exercise = TRUE, eval = FALSE}
 ### Order groups by median
 Data$Health <- factor(Data$Health, 
                       levels=c("OAD", "Normal", "Asbestosis"))
@@ -230,12 +235,12 @@ PT
 
 Now to make the output pretty.
 
-```{r make_it_pretty, exercise=TRUE, eval = FALSE}
+```{r make_it_pretty, exercise = TRUE, eval = FALSE}
 PT <- PT$res
 PT
-cldList(comparison = PT$Comparison,
-        p.value    = PT$P.adj,
-        threshold  = 0.05)
+try(cldList(comparison = PT$Comparison,
+            p.value    = PT$P.adj,
+            threshold  = 0.05))
 ```
 
 Well, we didn't have significant differences, so there was nothing to see. Hence the error.
@@ -283,7 +288,7 @@ kruskal.test(Rank ~ Sex,
 That's more like it: a low _p_ value. Now create a boxplot to see how the groups differ.
 
 
-```{r graph_dog, exercise=TRUE, exercise.setup = "prepare-dog", eval = FALSE}
+```{r graph_dog, exercise = TRUE, exercise.setup = "prepare-dog", eval = FALSE}
 boxplot(Rank ~ Sex,
         data = Data,
         ylab="Rank",
@@ -294,7 +299,7 @@ Female dogs have higher median rank than male dogs in this data set and most lik
 
 Let's look at one final example---concerning oyster DNA.
 
-```{r oysters, exercise=TRUE, eval = FALSE}
+```{r oysters, exercise = TRUE, eval = FALSE}
 ### --------------------------------------------------------------
 ### Kruskal–Wallis test, oyster DNA example, pp. 163–164
 ### --------------------------------------------------------------

@@ -33,8 +33,6 @@ If you haven't already done so, please review [Set Up R](../set-up-r/) to make s
 
 ## Your PowerPoint Template
 
-
-
 ```{r first}
 my_file <- file.path("www","Tutorial Template.pptx") %>% 
   read_pptx()
