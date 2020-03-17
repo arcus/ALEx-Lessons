@@ -1,0 +1,135 @@
+---
+title: "Introduction to Open Source Statistical Languages"
+output: 
+ learnr::tutorial:
+    progressive: true
+    allow_skip: true
+    css:
+      - www/bootstrap.min.css
+      - www/flexdashboard.min.css
+      - www/style.css
+runtime: shiny_prerendered
+---
+
+```{r setup, include=FALSE}
+if(!require(ggplot2)){install.packages("ggplot2")}
+if(!require(coin)){install.packages("coin")}
+if(!require(pwr)){install.packages("pwr")}
+library(learnr)
+library(readr)
+tutorial_options(exercise.startover = TRUE,
+  exercise.eval = TRUE, 
+  exercise.cap = "R Code",
+  exercise.completion = TRUE,
+  exercise.diagnostics = TRUE)
+  
+options(digits = 3, scipen = 9999)
+```
+
+
+## The Benefits of Open Source Statistical Programming
+
+Why should you consider adding an open-source statistical programming language---specifically, R or Python---to your toolkit?
+
+1. R and Python are free. No expense for your lab, and no need to tailor scripts or datasets to meet the needs of collaborators---they too can download these for free. If you’ve ever had to deal with SAS code when all you have is SPSS, or vice versa, you know what a boon this is.    
+1. R and Python are both ecosystems of constantly improving innovative packages, which means that innovation comes more quickly to their users than to the users of commercial software. Whether you’re doing novel tasks (like data mining or network analysis) or using novel statistical methods, it is likely that R and Python will allow you to do so months or perhaps years before commercial programs will.    
+1. Data visualizations in R and Python are infinitely customizable. Need some unusual graphs, or need to annotate them in a specific way? It’s doable in these programming languages, but less so in SPSS, SAS, etc.    
+1. Coding special pipelines and connecting your data processing to your analysis is simple in statistical programming languages.
+
+```{r whyopensource, echo=FALSE}
+question("Please select all of the following that are advantages of open source programming",
+         answer("They are free", correct = TRUE),
+         answer("Innovation thrives in open-source environments", correct = TRUE),
+         answer("Customizable visualizations", correct = TRUE),
+         answer("Greater control over custom pipelines to connect data processing to analysis", correct = TRUE),
+     correct = "That's right: all of the above.",
+     incorrect = "You've missed something.",
+     random_answer_order = TRUE,
+     allow_retry = TRUE
+)
+```
+
+Is there a learning curve associated with learning R or Python? Certainly. Is the reward worth the effort? Absolutely. There is a lot of support out there from other users of R and Python. ALEx and the Arcus Education site are dedicated to helping you learn as well.
+
+## Python Benefits
+
+In a world where you would have to choose between Python and R, here are some reasons for choosing Python. 
+
+1. It's more memory-efficient than R, therefore better for very large datasets.     
+1. It may seem more familiar if you have a background in programming.     
+1. It may be better in your pipeline, if you have to do a lot of file manipulation.     
+1. It easily supports the development of software (not just of scripts).     
+
+```{r pythonbenefits, echo=FALSE}
+question("Python is great because it...",
+         answer("Is more memory-efficient", correct = TRUE),
+         answer("Resembles other object-oriented programming languages", correct = TRUE),
+         answer("Makes file manipulation easier than R does", correct = TRUE),
+         answer("Supports software development, not just script writing", correct = TRUE),
+         answer("Is cheaper than R", message = "R and Python are both free."),
+         correct = "Well done!",
+         incorrect = "Not quite.",
+         random_answer_order = TRUE,
+         allow_retry = TRUE
+)
+```
+
+
+## R Benefits
+
+Here are some advantages of using R, should you have to choose between it and Python:
+
+1. Generally, it's easier to install and get running than Python.     
+1. It has a shorter learning curve than Python for new programmers.     
+1. It has a very good integrated development environment (IDE), RStudio, that is the industry standard.     
+1. There tends to be more consensus about the “right way” to do things among users, as compared to the wild wild west of Python.     
+
+```{r rbenefits, echo=FALSE}
+question("R is great because it...",
+         answer("Is easy to install", correct = TRUE),
+         answer("Has a short learning curve for new programmers", correct = TRUE),
+         answer("Has RStudio, an excellent integrated development environment (IDE)", correct = TRUE),
+         answer("Has more standardized methods about how to do things Python's wild wild west nature", correct = TRUE),
+         answer("Is harder to spell than 'Python'", message = "Really?"),
+         answer("It isn't great. It's not menu-driven, and all non-menu-driven coding languages are bad.", message = "They aren't _all_ bad. Try starting from the beginning with our [Basic Building Blocks](../swirl-basic-building-blocks/) lesson"),
+         correct = "You have excellent discernment!",
+         incorrect = "Incorrect.",
+         random_answer_order = TRUE,
+         allow_retry = TRUE
+)
+```
+
+## Benefits of Both
+
+You really can't go wrong because both Python and R have these advantages:
+
+1. Both languages support literate statistical programming.    
+1. Both languages support REPLs (Read, Evaluate, Print Loops) that allow you to code on the fly instead of writing a whole script and hoping it works.    
+1. Both have strong support communities online such as [Stack Overflow](https://stackoverflow.com), and at CHOP, the [CHOP R User Group](https://dbhi.chop.edu/application-development-events/1048-join-the-r-user-group.html) and the [Python User Group](mailto:wilkinsonz@email.chop.edu)
+
+```{r whatsarepl, echo=FALSE}
+question("What's can you do with a REPL?",
+         answer("Read data", correct = TRUE),
+         answer("Evaluate data", correct = TRUE),
+         answer("Print results", correct = TRUE),
+         answer("Feed and care for it and make it your own.", message = "That would be a pet rock."),
+         correct = "Yes!",
+         incorrect = "No.",
+         random_answer_order = TRUE,
+         allow_retry = TRUE
+)
+```
+
+## In Short
+
+If you have smallish data (files in the hundred thousand rows or fewer, < 500mb scope) and you’re new to programming, try R first. Familiar with programming or have big data? Go for Python.
+
+
+
+
+
+
+## Authors
+
+Joy Payton, Sheila Braun
+
