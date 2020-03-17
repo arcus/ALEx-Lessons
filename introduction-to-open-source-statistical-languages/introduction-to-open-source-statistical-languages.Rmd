@@ -89,7 +89,7 @@ question("R is great because it...",
          answer("Is easy to install", correct = TRUE),
          answer("Has a short learning curve for new programmers", correct = TRUE),
          answer("Has RStudio, an excellent integrated development environment (IDE)", correct = TRUE),
-         answer("Has more standardized methods about how to do things Python's wild wild west nature", correct = TRUE),
+         answer("Has more standardized methods about how to do things than does the wild wild west that is Python, correct = TRUE),
          answer("Is harder to spell than 'Python'", message = "Really?"),
          answer("It isn't great. It's not menu-driven, and all non-menu-driven coding languages are bad.", message = "They aren't _all_ bad. Try starting from the beginning with our [Basic Building Blocks](../swirl-basic-building-blocks/) lesson"),
          correct = "You have excellent discernment!",
@@ -103,12 +103,12 @@ question("R is great because it...",
 
 You really can't go wrong because both Python and R have these advantages:
 
-1. Both languages support literate statistical programming.    
+1. Both languages support [literate statistical programming](https://education.arcus.chop.edu/literate-statistical-programming/).    
 1. Both languages support REPLs (Read, Evaluate, Print Loops) that allow you to code on the fly instead of writing a whole script and hoping it works.    
 1. Both have strong support communities online such as [Stack Overflow](https://stackoverflow.com), and at CHOP, the [CHOP R User Group](https://dbhi.chop.edu/application-development-events/1048-join-the-r-user-group.html) and the [Python User Group](mailto:wilkinsonz@email.chop.edu)
 
 ```{r whatsarepl, echo=FALSE}
-question("What's can you do with a REPL?",
+question("What can you do with a REPL?",
          answer("Read data", correct = TRUE),
          answer("Evaluate data", correct = TRUE),
          answer("Print results", correct = TRUE),
@@ -117,6 +117,19 @@ question("What's can you do with a REPL?",
          incorrect = "No.",
          random_answer_order = TRUE,
          allow_retry = TRUE
+)
+```
+
+```{r bothgreathings, echo=FALSE}
+question("R and Python share this great feature:",
+         answer("They support [literate statistical programming](https://education.arcus.chop.edu/literate-statistical-programming/)", correct = TRUE),
+         answer("second_answer", message = "message_wrong_1"),
+         answer("third_answer", message = "message_wrong_2"),
+         answer("fourth_answer", message = "message_wrong_3"),
+     correct = "correct_feedback",
+     incorrect = "incorrect_feedback",
+     random_answer_order = TRUE,
+     allow_retry = TRUE
 )
 ```
 
