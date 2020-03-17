@@ -12,11 +12,7 @@ runtime: shiny_prerendered
 ---
 
 ```{r setup, include=FALSE}
-if(!require(ggplot2)){install.packages("ggplot2")}
-if(!require(coin)){install.packages("coin")}
-if(!require(pwr)){install.packages("pwr")}
 library(learnr)
-library(readr)
 tutorial_options(exercise.startover = TRUE,
   exercise.eval = TRUE, 
   exercise.cap = "R Code",
@@ -82,14 +78,16 @@ Here are some advantages of using R, should you have to choose between it and Py
 1. Generally, it's easier to install and get running than Python.     
 1. It has a shorter learning curve than Python for new programmers.     
 1. It has a very good integrated development environment (IDE), RStudio, that is the industry standard.     
-1. There tends to be more consensus about the “right way” to do things among users, as compared to the wild wild west of Python.     
+1. There tends to be more consensus about the “right way” to do things among users, as compared to the wild wild west of Python.    
+
 
 ```{r rbenefits, echo=FALSE}
+
 question("R is great because it...",
          answer("Is easy to install", correct = TRUE),
          answer("Has a short learning curve for new programmers", correct = TRUE),
          answer("Has RStudio, an excellent integrated development environment (IDE)", correct = TRUE),
-         answer("Has more standardized methods about how to do things than does the wild wild west that is Python, correct = TRUE),
+         answer("Has more standardized methods about how to do things than does the wild wild west that is Python", correct = TRUE),
          answer("Is harder to spell than 'Python'", message = "Really?"),
          answer("It isn't great. It's not menu-driven, and all non-menu-driven coding languages are bad.", message = "They aren't _all_ bad. Try starting from the beginning with our [Basic Building Blocks](../swirl-basic-building-blocks/) lesson"),
          correct = "You have excellent discernment!",
@@ -97,6 +95,7 @@ question("R is great because it...",
          random_answer_order = TRUE,
          allow_retry = TRUE
 )
+
 ```
 
 ## Benefits of Both
@@ -122,24 +121,20 @@ question("What can you do with a REPL?",
 
 ```{r bothgreathings, echo=FALSE}
 question("R and Python share this great feature:",
-         answer("They support [literate statistical programming](https://education.arcus.chop.edu/literate-statistical-programming/)", correct = TRUE),
-         answer("second_answer", message = "message_wrong_1"),
-         answer("third_answer", message = "message_wrong_2"),
-         answer("fourth_answer", message = "message_wrong_3"),
-     correct = "correct_feedback",
-     incorrect = "incorrect_feedback",
-     random_answer_order = TRUE,
-     allow_retry = TRUE
+         answer("They support [literate statistical programming](https://education.arcus.chop.edu/literate-statistical-programming/).", correct = TRUE),
+         answer("They're the same color."),
+         answer("They cost only $10 per user."),
+         answer("They are both object-oriented."),
+         correct = "Yay you!",
+         incorrect = "Not quite.",
+         random_answer_order = TRUE,
+         allow_retry = TRUE
 )
 ```
 
 ## In Short
 
-If you have smallish data (files in the hundred thousand rows or fewer, < 500mb scope) and you’re new to programming, try R first. Familiar with programming or have big data? Go for Python.
-
-
-
-
+If you have smallish data (files in the hundred thousand rows or fewer, < 500mb scope) or you’re new to programming, try R first. Familiar with programming or have big (like, massively big) data? Go for Python.
 
 
 ## Authors
