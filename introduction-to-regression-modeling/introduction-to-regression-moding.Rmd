@@ -13,6 +13,13 @@ runtime: shiny_prerendered
 
 ```{r setup, include=FALSE}
 library(learnr)
+library(jpeg)
+library(psych)
+library(HistData)
+library(manipulate)
+library(UsingR)
+
+
 tutorial_options(exercise.startover = TRUE,
                  exercise.eval = TRUE, 
                  exercise.cap = "R Code",
@@ -20,59 +27,347 @@ tutorial_options(exercise.startover = TRUE,
                  exercise.diagnostics = TRUE)
 
 options(digits = 3, scipen = 9999)
+
+# For this lesson only
+
+galton <- Galton # comes with the `HistData` package
+(regrline <- lm(child ~ parent, galton))
 ```
 
-## A famous motivating example
+## A Famous Motivating Example
+#### (Perhaps surprisingly, this example is still relevant)
 
-<img class=center src=www/galton.jpg height=150>
+```{r galtonjpg, echo = FALSE}
+knitr::include_graphics("www/Francis_Galton.jpg", 
+                          auto_pdf = getOption("knitr.graphics.auto_pdf", 
+                                                FALSE), dpi = NULL)
+```
 
-### (Perhaps surprisingly, this example is still relevant)
+```{r Galton-height-regress, echo = FALSE}
+knitr::include_graphics("www/Galton-height-regress.png", 
+                          auto_pdf = getOption("knitr.graphics.auto_pdf", 
+                                                FALSE), dpi = NULL)
+```
 
-<img class=center src=fig/height.png height=150>
+This is the first lesson on Regression Models. We'll begin with the concept of "regression toward the mean" and illustrate it with some pioneering work of the father of forensic science (and eugenics, just so we don't get carried away with admiration), Sir Francis Galton. That's his picture at the top, along with a graph he drew of the data we're about to examine. 
 
-[http://www.nature.com/ejhg/journal/v17/n8/full/ejhg20095a.html](http://www.nature.com/ejhg/journal/v17/n8/full/ejhg20095a.html)
+Yeah, computer screens are a lot easier to read than old paper with fountain pen ink duplicated through the ages. 
 
-[Predicting height: the Victorian approach beats modern genomics](http://www.wired.com/wiredscience/2009/03/predicting-height-the-victorian-approach-beats-modern-genomics/)
+Sir Francis studied the relationship between
+heights of parents and their children. His work
+showed that parents who were taller than average
+had children who were also tall but closer to
+the average height. Similarly, parents who were
+shorter than average had children who were also
+shorter than average but less so than mom and
+dad. That is, they were closer to the average
+height. From one generation to the next the
+heights moved closer to the average or regressed
+toward the mean.
 
----
-## Questions for this class
-* Consider trying to answer the following kinds of questions:
-* To use the parents' heights to predict childrens' heights.
-* To try to find a parsimonious, easily described mean 
-relationship between parent and children's heights.
-* To investigate the variation in childrens' heights that appears 
-unrelated to parents' heights (residual variation).
-* To quantify what impact genotype information has beyond parental height in explaining child height.
-* To figure out how/whether and what assumptions are needed to
-generalize findings beyond the data in question.  
-* Why do children of very tall parents tend to be 
-tall, but a little shorter than their parents and why children of very short parents tend to be short, but a little taller than their parents? (This is a famous question called 'Regression to the mean'.)
+For this lesson we'll use Sir Francis's
+parent-child height data which we've taken the
+liberty to load for you as the variable `galton`.
 
----
+So
+let's get started!
+
 ## Galton's Data
 
-* Let's look at the data first, used by Francis Galton in 1885. 
-* Galton was a statistician who invented the term and concepts
-of regression and correlation, founded the journal Biometrika,
-and was the cousin of Charles Darwin.
-* You may need to run `install.packages("UsingR")` if the `UsingR` library is not installed.
-* Let's look at the marginal (parents disregarding children and children disregarding parents) distributions first. 
-* Parent distribution is all heterosexual couples.
-* Correction for gender via multiplying female heights by 1.08.
-* Overplotting is an issue from discretization.
+Loaded for you in memory is Galton's data, a set of 928
+parent-child height pairs. Take a look at it by typing `galton` at the command line. Then click Run Code or press cmd-Enter (for a Mac) or ctrl-Enter (for a PC).
 
----
-## Code
+```{r type-galton, exercise = TRUE, exercise.lines = 5}
 
-```{r galton,fig.height=3.5,fig.width=8}
-library(UsingR); data(galton)
-par(mfrow=c(1,2))
-hist(galton$child,col="blue",breaks=100)
-hist(galton$parent,col="blue",breaks=100)
+```
+```{r type-galton-solution}
+galton
 ```
 
----
-## Finding the middle via least squares
+
+```{r howmanycases, echo=FALSE}
+question("How many cases are there in the `galton` data set?",
+         answer("928", correct = TRUE),
+         answer("932", message = "That's too high."),
+         answer("500", message = "That's too low."),
+         answer("12", message = "That's way too low."),
+         correct = "That's right!",
+         incorrect = "Try looking at the output from when you looked at the `galton` data set.",
+         random_answer_order = TRUE,
+         allow_retry = TRUE
+)
+```
+
+Now try plotting it, using the `plot` command and passing it nothing but `galton`. 
+
+```{r plotgalton, exercise = TRUE, exercise.lines = 5}
+
+```
+```{r plotgalton-hint}
+plot(...)
+```
+```{r plotgalton-solution}
+plot(galton)
+```
+
+Note that base R (the functions available to you if you don't load any packages in the library) has a `plot` function that very cleverly decides which plot makes the most sense given the data you passed it.
+
+```{r numberofdots, echo=FALSE}
+question("True or False: The above plot has 928 dots.",
+         answer("False", correct = TRUE),
+         answer("True", message = "Look again."),
+         correct = "Correct.",
+         incorrect = "No.",
+         random_answer_order = TRUE,
+         allow_retry = TRUE
+)
+```
+
+Moms' and dads' heights were averaged together (after moms' heights were adjusted by a factor of 1.08). Let's use the R function `jitter` on the children's heights to highlight heights that occurred most frequently. To do that, we must explicate the variables we're sending to `plot`.
+
+To specify _exactly_ what to plot, rather than relying on plot to figure it out, you would normally type a formula followed by the name of the dataset. This might look something like `plot(child ~ parent, galton)`, which, in English, is "Plot the child variable across the parent variable, and by the way, those two variables come from the `galton` dataset. 
+
+In order to see values that have a greater number of dots, `jitter` either `child`, `parent`, or both by replacing the variable, say, `child`, with `jitter(child)`. Play around to see which variable or variables you prefer to jitter. You can even jitter both of them.
+
+
+```{r jitterplot, exercise = TRUE, exercise.lines = 5}
+
+```
+```{r jitterplot-hint-1}
+plot(..., galton)
+```
+```{r jitterplot-solution}
+plot(jitter(child) ~ parent, galton)
+```
+
+Now let's add a red 45-degree line of slope 1 and intercept 0 to the plot. This is done using the `abline` function. First plot the data with the jitters, as you did above, then add another line of code: `abline(0, 1, col = "red")`. Just to make sure you can see the dots clear, let's set the jitter value manually, to 4.
+
+```{r addabline, exercise = TRUE, exercise.lines = 8}
+
+```
+```{r addabline-hint-1}
+plot(..., galton)
+abline(..., ...)
+```
+```{r addabline-hint-2}
+plot(jitter(child, ...) ~ parent, galton)
+abline(..., ...)
+```
+```{r addabline-hint-3}
+plot(jitter(child, 4) ~ parent, galton)
+abline(0, 1, ...)
+```
+```{r addabline-solution}
+plot(jitter(child, 4) ~ parent, galton)
+abline(0, 1, col = "red")
+```
+
+If children tended to be the same heights as their parents, we would expect the data to vary evenly about the red line. But that happens only at around the middle of the data set.
+
+```{r rpdense, echo=FALSE}
+question("What is the relationship of the density of the dots to the 45-degree line?",
+         answer("To the left, children's heights tend to be above the line, whereas to the right, they tend to be below the line.", correct = TRUE),
+         answer("The children's heights vary evenly about the line."),
+         answer("To the right, children's heights tend to be below the line, whereas to the right, they tend to be above the line."),
+         correct = "You got it!",
+         incorrect = "Not quite. Try counting and comparing the number of dots above and below the lowest and highest parent height values.",
+         random_answer_order = TRUE,
+         allow_retry = TRUE
+)
+```
+
+## Your First Regression Line
+
+Now let's make a linear (straight) regression line. That's the line which has the minimum variation of the data around it. To put it another way, it's the line that goes the closest to the most dots.
+
+For now, we'll stick with a straight line (you can get fancy about the shapes of your lines---and should, sometimes---but that's a lesson for another day).
+
+Making a regression line is quite easy in R. The
+function `lm` (linear model) makes one for you. It needs a `formula` and `dataset`. You can type `?formula` for more information, but, in simple
+terms, we just need to specify the dependent variable
+(children's heights, or `child`) `~` the independent variable (parents'
+heights, or `parent`). Then tell `lm` that you're working with the `galton` data set.
+
+That will put all the information we need about the line into memory. We'll draw it in the next step.
+
+```{r regrline, exercise = TRUE, exercise.lines = 5}
+
+```
+```{r regrline-hint-1}
+regrline <- ?
+```
+```{r regrline-hint-2}
+regrline <- lm(...)
+```
+```{r regrline-hint-3}
+regrline <- lm(..., galton)
+```
+```{r regrline-solution}
+(regrline <- lm(child ~ parent, galton))
+```
+
+You won't see any information about the line unless you surround the statement with parentheses. If you do, you will see that we have an intercept and a slope---like our earlier intercept (0) and slope (1), only different, because this line was calculated from the data rather than from an idea in our heads.
+
+Now we add `regrline` to the plot using the same method we used before, `abline`. Type `abline(regrline, lwd = 3, col = "red")`. `lwd` is the line width, and `col`, as you probably already figured out, is color. You can copy your previous plotting code from above and substitute the correct values.
+
+```{r plotregrline, exercise = TRUE, exercise.lines = 15}
+
+```
+```{r plotregrline-hint-1}
+plot(...)
+abline(...)
+abline(...)
+```
+```{r plotregrline-hint-2}
+plot(jitter(...) ~ parent, galton)
+abline(...)
+abline(...)
+```
+```{r plotregrline-hint-3}
+plot(jitter(child, 4) ~ parent, galton)
+abline(...)
+abline(...)
+```
+```{r plotregrline-hint-4}
+plot(jitter(child, 4) ~ parent, galton)
+abline(0, 1, col = "red")
+abline(...)
+```
+```{r plotregrline-solution}
+plot(jitter(child, 4) ~ parent, galton)
+abline(0, 1, col = "red")
+abline(regrline, lwd = 3, col = "blue")
+```
+
+Note that the blue line seems to find the middle of each parent-child height relationship fairly accurately. Any deviation is due to the fact that we haven't allowed it to stop being a straight line. (It's tempting to start playing around here with line types, but I'll refrain. Another day, another lesson!)
+
+The blue line's slope is greater than zero (which would be horizontal), which means that parents' heights _relate_ to their children's. The slope is also less than 1 (which would be the 45-degree angle we already drew), as would have been the case if children tended to be the _same_ height as their parents. 
+
+The regression line will have a slope and intercept which are
+estimated from data. Estimates are not exact. Their accuracy
+is gauged by theoretical techniques and expressed in terms of
+"standard error." You can use `summary(regrline)` to examine
+the Galton regression line. Do this now.
+
+```{r summaryregrline, exercise = TRUE, exercise.lines = 5}
+
+```
+```{r summaryregrline-solution}
+summary(regrline)
+```
+
+The slope of the line is the estimate of the coefficient, or multiplier, of `parent`, and the independent variable of our data (in this case, the parents' heights).
+
+What this means is that if you take a child's height and multiply it by the coefficient of parent, you have the best possible (not perfect) chance of getting close to the child's height. This will be true for the largest possible number of children in your data set. 
+
+Obviously, it's not perfect. If we cacluated each child's height using parents' heights and the correlation coefficient, almost every one of our estimates would be wrong. That's a flaw in regression that we forget at our peril. But the regression line does the best job possible given the data. Remember,
+
+>All models are wrong. Some are useful.
+
+```{r summaryoutput, echo=FALSE}
+question("From the output of `summary`, what is the slope of the regression line?",
+         answer(".64629", correct = TRUE),
+         answer("0.4114", message = "That's the standard error for `parent`."),
+         answer("23.94153", message = "That's the line's intercept with 0 on the y axis."),
+         correct = "You're the best!",
+         incorrect = "Not quite.",
+         random_answer_order = TRUE,
+         allow_retry = TRUE
+)
+```
+```{r summaryoutput2, echo=FALSE}
+question("From the output of `summary`, what is the standard error of the slope?",
+         answer(".64629", message = "That's the correlation coefficient."),
+         answer("0.4114", correct = TRUE),
+         answer("23.94153", message = "That's the line's intercept with 0 on the y axis."),
+         correct = "You are amazing!",
+         incorrect = "Not quite.",
+         random_answer_order = TRUE,
+         allow_retry = TRUE
+)
+```
+```{r summaryoutput3, echo=FALSE}
+question("From the output of `summary`, what is the intercept?",
+         answer(".64629", message = "That's the correlation coefficient."),
+         answer("0.4114", message = "That's the standard error for `parent`."),
+         answer("23.94153", correct = TRUE),
+         correct = "All that practice is paying off!",
+         incorrect = "Not quite.",
+         random_answer_order = TRUE,
+         allow_retry = TRUE
+)
+```
+
+>Random fact: Charles Darwina and Francis Galton were cousins.
+
+
+The slope of a line shows how much of a change in the
+vertical direction is produced by a change in the horizontal
+direction. So, parents "1 inch" above the mean in height tend
+to have children who are only .65 inches above the mean. The
+green triangle illustrates this point. From the mean, moving
+a "1 inch distance" horizontally to the right (increasing the
+parents' height) produces a ".65 inch" increase in the
+vertical direction (children's height).
+
+A coefficient will be within 2 standard errors of its
+estimate about 95% of the time. This means the slope of our
+regression is significantly different than either 0 or 1
+since `(.64629) +/- (2 * .04114)` is near neither 0 nor 1.
+
+Nuff said. Let's do some more code.
+
+See if you can figure out how to add two cyan lines to indicate the means of the
+children's heights (horizontal) and the parents' (vertical).
+Note that these lines and the regression line all intersect
+in a point. Pretty cool, huh? We'll talk more about this in a
+later lesson. (Something you can look forward to.) Copy your plot from above and use `?abline` for help to figure out how to make these lines. Here are some hints:
+
+* `mean(galton$child)` will give you mean chidren's heights.    
+* `mean(galton$parent)` will do the obvious---give you mean parents' heights.    
+* Tell `abline`, `v = ` for where you want a vertical line and `h = ` for where you want a horizontal line.
+
+```{r alllines, exercise = TRUE, exercise.lines = 15}
+
+```
+```{r alllines-hint-1}
+plot(jitter(child, 4) ~ parent, galton)
+abline(0, 1, col = "red")
+abline(regrline, lwd = 3, col = "blue")
+abline(..., lwd = 3, col = "cyan")
+abline(..., lwd = 3, col = "cyan")
+```
+```{r alllines-solution}
+plot(jitter(child, 4) ~ parent, galton)
+abline(0, 1, col = "red")
+abline(regrline, lwd = 3, col = "blue")
+abline(v = mean(galton$parent), lwd = 3, col = "cyan")
+abline(h = mean(galton$child), lwd = 3, col = "cyan")
+```
+
+
+Similarly, parents who are 1 inch below average in height
+have children who are only .65 inches below average height.
+The purple triangle illustrates this. From the mean, moving a
+"1 inch distance" horizontally to the left (decreasing the
+parents' height) produces a ".65 inch" decrease in the
+vertical direction (children's height).
+
+
+
+
+## But I like Math. Where's the Math?
+
+Here are some fun facts and exercises related to Galton's data. First, a couple of histograms.
+
+```{r galton,fig.height=3.5,fig.width=8}
+par(mfrow=c(1,2))
+hist(galton$child, col = "blue", breaks = 100)
+hist(galton$parent, col = "blue", breaks = 100)
+```
+
+### Finding the middle via least squares
+
 * Consider only the children's heights. 
 * How could one describe the "middle"?
 * One definition, let $Y_i$ be the height of child $i$ for $i = 1, \ldots, n = 928$, then define the middle as the value of $\mu$
@@ -81,32 +376,14 @@ that minimizes $$\sum_{i=1}^n (Y_i - \mu)^2$$
 * You might have guessed that the answer $\mu = \bar X$.
 
 
----
-## Experiment
-### Use R studio's manipulate to see what value of $\mu$ minimizes the sum of the squared deviations.
-
-```
-library(manipulate)
-myHist <- function(mu){
-hist(galton$child,col="blue",breaks=100)
-lines(c(mu, mu), c(0, 150),col="red",lwd=5)
-mse <- mean((galton$child - mu)^2)
-text(63, 150, paste("mu = ", mu))
-text(63, 140, paste("MSE = ", round(mse, 2)))
-}
-manipulate(myHist(mu), mu = slider(62, 74, step = 0.5))
-```
-
----
-## The least squares estimate is the empirical mean
+### The least squares estimate is the empirical mean
 ```{r lsm, dependson="galton",fig.height=4,fig.width=4}
-hist(galton$child,col="blue",breaks=100)
+hist(galton$child, col = "blue", breaks = 100)
 meanChild <- mean(galton$child)
-lines(rep(meanChild,100),seq(0,150,length=100),col="red",lwd=5)
+lines(rep(meanChild,100), seq(0, 150, length = 100), col = "red",lwd = 5)
 ```
 
----
-### The math follows as:
+### The math follows as
 $$ 
 \begin{align} 
 \sum_{i=1}^n (Y_i - \mu)^2 & = \
@@ -125,17 +402,16 @@ $$
 \end{align} 
 $$
 
----
-## Comparing childrens' heights and their parents' heights
+
+### Comparing childrens' heights and their parents' heights
 
 ```{r, dependson="galton",fig.height=4,fig.width=4}
-plot(galton$parent,galton$child,pch=19,col="blue")
+plot(galton$parent, jitter(galton$child, 4), pch = 19, col = "blue")
 ```
 
----
-Size of point represents number of points at that (X, Y) combination (See the Rmd file for the code).
+Since that's a little hard to read, let's use the following code, in which the size of each point represents number of points at that (X, Y) combination.
 
-```{r freqGalton, dependson="galton",fig.height=6,fig.width=6,echo=FALSE}
+```{r freqGalton, dependson="galton",fig.height=6,fig.width=6,echo=TRUE}
 freqData <- as.data.frame(table(galton$child, galton$parent))
 names(freqData) <- c("child", "parent", "freq")
 plot(as.numeric(as.vector(freqData$parent)), 
@@ -145,50 +421,10 @@ plot(as.numeric(as.vector(freqData$parent)),
      xlab = "parent", ylab = "child")
 ```
 
----
-## Regression through the origin
-* Suppose that $X_i$ are the parents' heights.
-* Consider picking the slope $\beta$ that minimizes $$\sum_{i=1}^n (Y_i - X_i \beta)^2$$
-* This is exactly using the origin as a pivot point picking the
-line that minimizes the sum of the squared vertical distances
-of the points to the line
-* Use R studio's  manipulate function to experiment
-* Subtract the means so that the origin is the mean of the parent
-and children's heights
 
----
-```
-myPlot <- function(beta){
-y <- galton$child - mean(galton$child)
-x <- galton$parent - mean(galton$parent)
-freqData <- as.data.frame(table(x, y))
-names(freqData) <- c("child", "parent", "freq")
-plot(
-as.numeric(as.vector(freqData$parent)), 
-as.numeric(as.vector(freqData$child)),
-pch = 21, col = "black", bg = "lightblue",
-cex = .15 * freqData$freq, 
-xlab = "parent", 
-ylab = "child"
-)
-abline(0, beta, lwd = 3)
-points(0, 0, cex = 2, pch = 19)
-mse <- mean( (y - beta * x)^2 )
-title(paste("beta = ", beta, "mse = ", round(mse, 3)))
-}
-manipulate(myPlot(beta), beta = slider(0.6, 1.2, step = 0.02))
-```
+### Visualizing the best fit line
+The sizes of the points indicate frequencies at each X, Y combination.
 
----
-## The solution 
-### In the next few lectures we'll talk about why this is the solution
-```{r}
-lm(I(child - mean(child))~ I(parent - mean(parent)) - 1, data = galton)
-```
-
----
-## Visualizing the best fit line
-### Size of points are frequencies at that X, Y combination
 ```{r, fig.height=5,fig.width=5,echo=FALSE}
 freqData <- as.data.frame(table(galton$child, galton$parent))
 names(freqData) <- c("child", "parent", "freq")
@@ -204,6 +440,13 @@ lines(galton$parent,lm1$fitted,col="red",lwd=3)
 ## Contributors
 
 [Brian Caffo, Jeff Leek, Roger Peng, Nick Carchedi, Sean Kross,](https://github.com/DataScienceSpecialization/courses#contributors) and Sheila Braun
+
+Galton F : Regression towards mediocrity in hereditary stature. Journal of the anthropological institute 1886; 15: 246–263.
+
+[http://www.nature.com/ejhg/journal/v17/n8/full/ejhg20095a.html](http://www.nature.com/ejhg/journal/v17/n8/full/ejhg20095a.html)
+
+[Predicting height: the Victorian approach beats modern genomics](http://www.wired.com/wiredscience/2009/03/predicting-height-the-victorian-approach-beats-modern-genomics/)
+
 
 ## License
 
