@@ -31,13 +31,41 @@ options(digits = 3, scipen = 9999)
 # For this lesson only
 
 galton <- Galton # comes with the `HistData` package
+(fit <- lm(child ~ parent, galton))
 ```
 
 ## Prep
 
-If you haven't already, please review the lesson [Introduction to Regression Models](../introduction-to-regression-models/) so you don't feel lost.
+If you haven't already, please review the lesson [Introduction to Regression Models](../introduction-to-regression-models/) so you don't feel lost among some of the terms we'll use here.
 
 ## What are residuals?
+
+In the graphic below, you have two variables, $\displaystyle X$ and $\displaystyle Y$. 
+
+Let's say $\displaystyle Y$ is one's parents' average heights, and $\displaystyle X$ is one's own height. Each red dot shows the relationship between those two heights for a single case. 
+
+The purple line is "best" straight line that describes the relationship between the two variables in this graph. It is calculated to go right through the middle of the dots. That's the *regression* or *best fit* line.
+
+Each dot has a vertical distance from that line (those distances are drawn for you in the graph). Those distances are called _residuals_. 
+
+```{r residuals, echo = FALSE}
+knitr::include_graphics("www/residuals.png", 
+                          auto_pdf = getOption("knitr.graphics.auto_pdf", 
+                                                FALSE), dpi = NULL)
+```
+
+```{r orientation, echo=FALSE}
+question("What is the orientation of the best fit line in the graphic above?",
+         answer("Slanted", correct = TRUE),
+         answer("Horizontal"),
+         answer("Vertical", message = "The vertical lines indicate the residuals."),
+         answer("It's not there.", message = "It is there."),
+         correct = "You are amazing!",
+         incorrect = "No.",
+         random_answer_order = TRUE,
+         allow_retry = TRUE
+)
+```
 
 In the `galton` data set, we calculate residuals as the distances between actual children's heights and the estimates given by the regression line (which, if you did [the previous lesson](../introduction-to-residuals/), you will already know is accurate only generally, not necessarily for specific children of specific parents).
 
@@ -51,7 +79,7 @@ This just means we're going to get clever and figure out how to find the slope a
 question("Knowing all about the line means we'll know all about the data.",
          answer("False", correct = TRUE),
          answer("True", message = "A line in this context only approximates a relationship between two scalar variables. We lose a lot of information when we reduce rich data points to a line."),
-         correct = "You are amazing!",
+         correct = "Excellent!",
          incorrect = "Bzzzzt!",
          random_answer_order = TRUE,
          allow_retry = TRUE
@@ -60,14 +88,55 @@ question("Knowing all about the line means we'll know all about the data.",
 
 ## Equations? What equations?
 
-The first equation says that the "errors" in our estimates, the residuals, have mean zero. In other words, the residuals are "balanced" among the data points; they're just as likely to be positive as negative. The second equation says that our residuals must be uncorrelated with our predictors, the parents’ height. This makes sense - if the residuals and predictors were correlated then you could make a better prediction and reduce the distances (residuals) between the actual outcomes and the predictions.
+
+```{r residuals2, echo = FALSE}
+knitr::include_graphics("www/miniresiduals.png", 
+                          auto_pdf = getOption("knitr.graphics.auto_pdf", 
+                                                FALSE), dpi = NULL)
+```
+
+>The first equation says that the "errors" in our estimates, the residuals, have mean zero. 
+
+In other words, the residuals are "balanced" among the data points; they're just as likely to be positive as negative. 
+
+If you added up all the distances of the vertical lines from the regression line in the graph in the previous section, where distances below the regression line are negative and the distances above the regression line are positive, the total would be zero. That's because the regression line was created _so that_ this would be true. That's how to make it the best fit line.
+
+```{r whyisitzero, echo=FALSE}
+question("Why is the mean of all the residuals around a best fit line 0?",
+         answer("Because if the mean wasn't zero, it would be proof that we don't have a true best fit line.", correct = TRUE),
+         answer("Because the predictors correlate with the best fit line.", message = "In fact, the predictors do _not_ correlate with the best fit line."),
+         answer("Because otherwise, the line might be curved.", message = "You can also make a curved best fit line for which the residuals are 0. We won't cover that here."),
+         correct = "Excellent!",
+         incorrect = "No.",
+         random_answer_order = TRUE,
+         allow_retry = TRUE
+)
+```
 
 
+>The second equation says that our residuals must be uncorrelated with our predictors, the parents’ height. 
 
-We'll demonstrate these concepts now. First regenerate the regression line and call it fit. Use the R function lm. Recall that by default its first argument is a formula such as "child ~ parent" and its second is the dataset, in this case galton. 
-  CorrectAnswer: fit <- lm(child ~ parent, galton)
-  AnswerTests: creates_lm_model('fit <- lm(child ~ parent, galton)')
-  Hint: Type "fit <- lm(child ~ parent, galton)" at the R prompt.
+This makes sense - if the residuals and predictor (in this case, parents' heights) were correlated, then you could make a *better* prediction and reduce the distances (residuals) between the actual outcomes and the predictions. But we already have the best line, right? So there can'te be a correlation between the residuals and the predictor, parent's heights: or, more generally, between predictors and the best fit line. 
+
+## Equations in Action
+
+Let's write some code to check these concepts. First, generate the regression line of `child` across `parent` and call it `fit`. Use the R function `lm`. Recall that, by default, its first argument is a formula (such as `child ~ parent`) and its second argument is the dataset, in this case, `galton`. 
+
+```{r generateregrline, exercise = TRUE, exercise.lines = 8}
+
+```
+```{r generateregrline-hint-1}
+fit <- ?
+```
+```{r generateregrline-hint-2}
+fit <- lm(...)
+```
+```{r generateregrline-hint-3}
+fit <- lm(..., galton)
+```
+```{r generateregrline-solution}
+fit <- lm(child ~ parent, galton)
+```
 
 
 Now we'll examine fit to see its slope and intercept. The residuals we're interested in are stored in the  928-long vector fit$residuals. If you type fit$residuals you'll see a lot of numbers scroll by which isn't very useful; however if you  type "summary(fit)" you will see a more concise display of the regression data. Do this now.
