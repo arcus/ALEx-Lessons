@@ -36,13 +36,25 @@ galton <- Galton # comes with the `HistData` package
 
 ## Prep
 
-If you haven't already, please review the lesson [Introduction to Regression Models](../introduction-to-regression-models/) so you don't feel lost among some of the terms we'll use here.
+First, take a deep breath and get ready to find the game in all of this.
+
+
+```{r xkcdlm, echo = FALSE}
+knitr::include_graphics("www/xkcdlm.png", 
+                          auto_pdf = getOption("knitr.graphics.auto_pdf", 
+                                                FALSE), dpi = NULL)
+```
+
+
+Then, if you haven't already, please review the lesson [Introduction to Regression Models](../introduction-to-regression-models/) so you don't feel lost among some of the terms we'll use here.
+
+
 
 ## What are residuals?
 
 In the graphic below, you have two variables, $\displaystyle X$ and $\displaystyle Y$. 
 
-Let's say $\displaystyle Y$ is one's parents' average heights, and $\displaystyle X$ is one's own height. Each red dot shows the relationship between those two heights for a single case. 
+Let's say $\displaystyle Y$ is parents' average heights, and $\displaystyle X$ is children's heights. Each red dot shows the relationship between those two heights for a single case. 
 
 The purple line is "best" straight line that describes the relationship between the two variables in this graph. It is calculated to go right through the middle of the dots. That's the *regression* or *best fit* line.
 
@@ -87,7 +99,6 @@ question("Knowing all about the line means we'll know all about the data.",
 ```
 
 ## Equations? What equations?
-
 
 ```{r residuals2, echo = FALSE}
 knitr::include_graphics("www/miniresiduals.png", 
@@ -153,25 +164,21 @@ summary(fit)
 
 So `lm` calculated the residual for every data point, and `summary` provides us with information about this particular group of residuals, which we stored in `fit`. 
 
-What else is in `fit`? The easiest way to find out is to examine its structure, then list the names of its various elements. Try that.
+What else is in `fit`? Try typing `names(fit)` to find out.
 
 ```{r whatinfit, exercise = TRUE, exercise.lines = 8}
 
 ```
 ```{r whatinfit-hint-1}
-str(...)
-...
-```
-```{r whatinfit-hint-2}
-str(fit)
 names(...)
 ```
 ```{r whatinfit-solution}
-str(fit)
 names(fit)
 ```
 
 That's a lot of information! But we aren't going to concern ourselves with all of it right now. We're just interested in the residuals. But isn't it cool how R creates a data set (`fit`) out of running `lm` on a dataset? It's one of the reasons so many people like R. 
+
+Back to the residuals. 
 
 First check the mean of `fit$residuals` to see if it's close to 0.
 
@@ -187,12 +194,26 @@ mean(fit$residuals)
 
 That's close enough to be due to rounding errors. 
 
+Now we'll use the `cov` function to check the correlation between the residuals and the predictor (to find out more about `cov`, type `?cov` at the command prompt in any code box). 
 
-Now check the correlation between the residuals and the predictors. Type "cov(fit$residuals, galton$parent)" to see if it's close to 0.
-  CorrectAnswer: cov(fit$residuals,galton$parent)
-  AnswerTests: ANY_of_exprs('cov(fit$residuals,galton$parent)','cov(galton$parent,fit$residuals)')
-  Hint: Type "cov(fit$residuals, galton$parent)" at the R prompt.
+Remember, we said above that there should be no correlation between predictor and residuals. That means that the result should be close to 0.
 
+Pass `cov` two arguments: the residuals that are stored in `fit` and the predictor variable that is in the `galton` dataset. 
+
+```{r covrespred, exercise = TRUE, exercise.lines = 8}
+
+```
+```{r covrespred-hint-1}
+cov(..., ...)
+```
+```{r covrespred-hint-2}
+cov(fit$residuals, ...)
+```
+```{r covrespred-solution}
+cov(fit$residuals, galton$parent)
+```
+
+Again, close enough to 0 to be due to rounding. 
 
 As shown algebraically in the slides, the equations for the intercept and slope are found by supposing a change is made to the intercept and slope. Squaring out the resulting expressions produces three summations. The first sum is the original term squared, before the slope and intercept were changed. The third sum totals the squared changes themselves. For instance, if we had changed fit’s intercept by adding 2, the third sum would be the total of 928 4’s. The middle sum is guaranteed to be zero precisely when the two equations (the conditions on the residuals) are satisfied.
 
