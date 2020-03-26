@@ -153,6 +153,26 @@ summary(fit)
 
 So `lm` calculated the residual for every data point, and `summary` provides us with information about this particular group of residuals, which we stored in `fit`. 
 
+What else is in `fit`? The easiest way to find out is to examine its structure, then list the names of its various elements. Try that.
+
+```{r whatinfit, exercise = TRUE, exercise.lines = 8}
+
+```
+```{r whatinfit-hint-1}
+str(...)
+...
+```
+```{r whatinfit-hint-2}
+str(fit)
+names(...)
+```
+```{r whatinfit-solution}
+str(fit)
+names(fit)
+```
+
+That's a lot of information! But we aren't going to concern ourselves with all of it right now. We're just interested in the residuals. But isn't it cool how R creates a data set (`fit`) out of running `lm` on a dataset? It's one of the reasons so many people like R. 
+
 First check the mean of `fit$residuals` to see if it's close to 0.
 
 ```{r checkmeanfit, exercise = TRUE, exercise.lines = 5}
@@ -165,10 +185,7 @@ mean(...)
 mean(fit$residuals)
 ```
 
-
-  CorrectAnswer: mean(fit$residuals)
-  AnswerTests: omnitest(correctExpr='mean(fit$residuals)')
-  Hint: Type "mean(fit$residuals)" at the R prompt.
+That's close enough to be due to rounding errors. 
 
 
 Now check the correlation between the residuals and the predictors. Type "cov(fit$residuals, galton$parent)" to see if it's close to 0.
