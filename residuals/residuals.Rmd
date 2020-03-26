@@ -139,13 +139,33 @@ fit <- lm(child ~ parent, galton)
 ```
 
 
-Now we'll examine fit to see its slope and intercept. The residuals we're interested in are stored in the  928-long vector fit$residuals. If you type fit$residuals you'll see a lot of numbers scroll by which isn't very useful; however if you  type "summary(fit)" you will see a more concise display of the regression data. Do this now.
-  CorrectAnswer: summary(fit)
-  AnswerTests: omnitest(correctExpr='summary(fit)')
-  Hint: Type "summary(fit)" at the R prompt.
+Now we'll examine `fit` to see its slope and intercept. The residuals we're interested in are stored in the  928-long vector `fit$residuals`. If you type `fit$residuals` (which you can do in the box below, if you like), you'll see a lot of numbers scroll by, which isn't very useful; however if you  type `summary(fit)` you will see a more concise display of the regression data. Do this now.
+
+```{r seefit, exercise = TRUE, exercise.lines = 5}
+
+```
+```{r seefit-hint}
+summary(...)
+```
+```{r seefit-solution}
+summary(fit)
+```
+
+So `lm` calculated the residual for every data point, and `summary` provides us with information about this particular group of residuals, which we stored in `fit`. 
+
+First check the mean of `fit$residuals` to see if it's close to 0.
+
+```{r checkmeanfit, exercise = TRUE, exercise.lines = 5}
+
+```
+```{r checkmeanfit-hint}
+mean(...)
+```
+```{r checkmeanfit-solution}
+mean(fit$residuals)
+```
 
 
-First check the mean of fit$residuals to see if it's close to 0.
   CorrectAnswer: mean(fit$residuals)
   AnswerTests: omnitest(correctExpr='mean(fit$residuals)')
   Hint: Type "mean(fit$residuals)" at the R prompt.
