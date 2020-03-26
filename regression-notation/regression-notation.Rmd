@@ -32,27 +32,40 @@ options(digits = 3, scipen = 9999)
 
 ## Some Basic Definitions
 
-* In this lesson, we'll cover some basic definitions and notation used throughout the ALEx lessons about regression.    
-* We will try to minimize the amount of mathematics required for this class.
-* No caclculus is required. 
+It is a good idea to have some agreement about notation. 
+
+```{r notation, echo = FALSE}
+knitr::include_graphics("www/notation.png", 
+                          auto_pdf = getOption("knitr.graphics.auto_pdf", 
+                                                FALSE), dpi = NULL)
+```
 
 
+Therefore, in this lesson, we'll cover some basic definitions and notation used throughout the ALEx lessons about regression. 
 
-## Notation for data
+We will try to minimize the amount of mathematics required for this class.
+
+No caclculus is required. 
+
+
+## Notation for Data
 
 * We write $X_1, X_2, \ldots, X_n$ to describe $n$ data points.
-* As an example, consider the data set $\{1, 2, 5\}$ then 
-  * $X_1 = 1$, $X_2 = 2$, $X_3 = 5$ and $n = 3$.
+* As an example, consider the data set $\{1, 2, 5\}$. Then 
+  * $X_1 = 1$
+  * $X_2 = 2$
+  * $X_3 = 5$
+  * $n = 3$
 * We often use a different letter than $X$, such as $Y_1, \ldots , Y_n$.
-* We will typically use Greek letters for things we don't know. 
-  Such as, $\mu$ is a mean that we'd like to estimate.
-* We will use capital letters for conceptual values of the variables and lowercase letters for realized values.
-  * So this way we can write $P(X_i > x)$. 
+* We will typically use **Greek letters** for things we don't know. 
+  For instance, $\mu$ is a mean that we'd like to estimate.
+* We will use **capital letters** for conceptual values of the variables and **lowercase letters** for realized values.
+  * So this way we can write $P(X_i > x)$ ("the probability of a variable $\displaystyle X$ being greater than an $\displaystyle x$ that we are looking at right now)
   * $X_i$ is a conceptual random variable.
-  * $x$ is a number that we plug into.
+  * $x$ is a number that we plug in. It might be a 2, or a -100. But it is specific.
 
 
-## The empirical mean 
+## The Empirical Mean
 
 * Define the empirical mean as
 $$
@@ -73,7 +86,7 @@ The the mean of the $\tilde X_i$ is 0.
 
 
 
-## The emprical standard deviation and variance
+## The Empirical Standard Deviation and the Variance
 
 * Define the empirical variance as 
 $$
@@ -101,7 +114,7 @@ have empirical mean zero and empirical standard deviation 1.
 was two standard deviations larger than the mean.
 
 
-## The empirical covariance
+## The Empirical Covariance
 * Consider now when we have pairs of data, $(X_i, Y_i)$.
 * Their empirical covariance is 
 $$
@@ -119,7 +132,7 @@ where $S_x$ and $S_y$ are the estimates of standard deviations
 for the $X$ observations and $Y$ observations, respectively.
 
 
-## Some facts about correlation
+## Some Facts about Correlation
 * $Cor(X, Y) = Cor(Y, X)$
 * $-1 \leq Cor(X, Y) \leq 1$
 * $Cor(X,Y) = 1$ and $Cor(X, Y) = -1$ only when the $X$ or $Y$ observations fall perfectly on a positive or negative sloped line, respectively.
@@ -128,15 +141,9 @@ for the $X$ observations and $Y$ observations, respectively.
 
 ## Contributions
 
-Slides to accompany this and other Data Science courses may be found at github https://github.com/DataScienceSpecialization/courses. If you care to use them, they must be downloaded as a zip file and viewed locally. This lesson is based on Regression_Models/01_03_ols. Galton data is from John Verzani's website, [http://wiener.math.csi.cuny.edu/UsingR/](http://wiener.math.csi.cuny.edu/UsingR/).
+Slides to accompany this and other Data Science courses may be found at github https://github.com/DataScienceSpecialization/courses.
 
 [Brian Caffo, Jeff Leek, Roger Peng, Nick Carchedi, Sean Kross,](https://github.com/DataScienceSpecialization/courses#contributors) and Sheila Braun
-
-Galton F : Regression towards mediocrity in hereditary stature. Journal of the anthropological institute 1886; 15: 246–263.
-
-[http://www.nature.com/ejhg/journal/v17/n8/full/ejhg20095a.html](http://www.nature.com/ejhg/journal/v17/n8/full/ejhg20095a.html)
-
-[Predicting height: the Victorian approach beats modern genomics](http://www.wired.com/wiredscience/2009/03/predicting-height-the-victorian-approach-beats-modern-genomics/)
 
 
 ## License
