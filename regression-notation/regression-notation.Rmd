@@ -65,12 +65,15 @@ No caclculus is required.
   * $x$ is a number that we plug in. It might be a 2, or a -100. But it is specific.
 
 
-## The Empirical Mean
+## The Mean
 
 * Define the empirical mean as
 $$
 \bar X = \frac{1}{n}\sum_{i=1}^n X_i. 
 $$
+
+* The giant sigma indicates to sum all values from what's under it to what's above it. Here, that means that x-bar, or the mean, is the summation of each element of the variable $\displaystyle X$ (all elements from the first, where $\displaystyle n = 1$, to the last, where $\displaystyle n = n$ or the total number of elements in the variable), divided by $\displaystyle n$. 
+
 * Notice if we subtract the mean from data points, we get data that has mean 0. That is, if we define
 $$
 \tilde X_i = X_i - \bar X.
@@ -78,7 +81,7 @@ $$
 The the mean of the $\tilde X_i$ is 0.
 * This process is called "centering" the random variables.
 * The mean is a measure of central tendancy of the data.
-* Recall from the previous lecture that the mean is 
+* The mean is 
   the least squares solution for minimizing
   $$
   \sum_{i=1}^n (X_i - \mu)^2
