@@ -27,7 +27,11 @@ library('dplyr'); library('ggplot2'); library('tibble'); library('purrr'); libra
 
 ## Introduction to this Series of Lessons
 
-Effective communication of results is among the essential duties of an analyst, but the sometimes tedious mechanics of report production together with the sheer volume of data that many analysts now must process combine to make reporting design an afterthought in too many cases. In this series of lessons, we review recent advances in automated report production that liberate resources for analysts to focus on the interpretation and communication of results, while simultaneously reducing errors and increasing consistency of analyses. This series of lessons involves an extended example, cumulatively building an R script that takes an example dataset to a beautifully-designed and nearly completed PowerPoint presentation automatically, using freely available, open-source R packages. These lessons also cover details of how to customize the final presentation to incorporate corporate branding such as logos, font choices, and color palettes.
+Effective communication of results is among the essential duties of an analyst, but the sometimes tedious mechanics of report production together with the sheer volume of data that many analysts now must process combine to make reporting design an afterthought in too many cases. 
+
+In this series of lessons, we review recent advances in automated report production that liberate resources for analysts to focus on the **interpretation** and **communication** of results, while simultaneously reducing errors and increasing **consistency** of analyses. 
+
+This series of lessons involves an extended example, cumulatively building an R script that takes an example dataset to a beautifully-designed and nearly completed PowerPoint presentation automatically, using freely available, open-source R packages. These lessons also cover details of how to customize the final presentation to incorporate corporate branding such as logos, font choices, and color palettes.
 
 If you haven't already done so, please review [Set Up R](../set-up-r/) to make sure you have the latest versions, [our `dplyr` lesson](../dplyr/), and another excellent lesson about `tidyverse` basics, [Piping and Summarizing](../piping-and-summarizing/). You'll also need to have PowerPoint installed on your system if you want to do this yourself. 
 

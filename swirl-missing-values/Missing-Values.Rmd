@@ -23,11 +23,18 @@ tutorial_options(exercise.startover = TRUE,
   exercise.cap = "R Code",
   exercise.completion = TRUE,
   exercise.diagnostics = TRUE)
+x <- c(44, NA, 5, NA)
+set.seed(10)
+y <- rnorm(1000)
+set.seed(8)
+z <- rep(NA, 1000)
+my_data <- sample(c(y, z), 100)
+my_na <- is.na(my_data)
 ```
 
 # Missing Values
 
-Missing values play an important role in statistics and data analysis. Often, missing values must not be ignored, but rather they should carefully be studied to see if ]an underlying pattern exists, or some cause for their missingness that provides significant information.
+Missing values play an important role in statistics and data analysis. Often, missing values must not be ignored, but rather they should carefully be studied to see if an underlying pattern exists, or some cause for their missingness that provides significant information.
 
 In R, `NA` is used to represent any value that is ‘not available’ or ‘missing’ (in the statistical sense). In this lesson, we’ll explore missing values further.
 
@@ -42,9 +49,6 @@ x <- c(44, NA, 5, NA)
 
 Now, let’s multiply `x` by 3.
 
-```{r prepare-b}
-x <- c(44, NA, 5, NA)
-```
 ```{r b, exercise=TRUE}
 
 ```
@@ -56,38 +60,31 @@ Notice that the elements of the resulting vector that correspond with the `NA` v
 
 To make things a little more interesting, lets create a vector containing 1000 draws from a standard normal distribution with `y <- rnorm(1000)`.
 
-```{r prepare-c}
-set.seed(10)
-```
+To make sure we all get the same random variables, let's first set the seed, or the starting point for the randomization, to 10 using the command `set.seed(10)`. 
+
+
 ```{r c, exercise=TRUE}
 
 ```
 ```{r c-solution}
-y <- rnorm(1000)
-```
-
-Next, let’s create a vector containing 1000 `NA`s with `z <- rep(NA, 1000)`.
-
-```{r prepare-d}
 set.seed(10)
 y <- rnorm(1000)
-set.seed(8)
 ```
+
+Next, let’s create a vector containing 1000 `NA`s with `z <- rep(NA, 1000)`. Please set the seed first to 8.
+
+
 ```{r d, exercise=TRUE}
 
 ```
 ```{r d-solution}
+set.seed(8)
 z <- rep(NA, 1000)
 ```
 
 Finally, let’s select 100 elements at random from these 2000 values (combining y and z) such that we don’t know how many `NA`s we’ll wind up with or what positions they’ll occupy in our final vector – `my_data <- sample(c(y, z), 100)`.
 
-```{r prepare-e}
-set.seed(10)
-y <- rnorm(1000)
-set.seed(8)
-z <- rep(NA, 1000)
-```
+
 ```{r e, exercise=TRUE}
 
 ```
@@ -97,13 +94,7 @@ my_data <- sample(c(y, z), 100)
 
 Let’s first ask the question of where our `NA`s are located in our data. The `is.na()` function tells us whether each element of a vector is `NA`. Call `is.na()` on `my_data` and assign the result to `my_na`. Then, print `my_na` to see what you came up with.
 
-```{r prepare-f}
-set.seed(10)
-y <- rnorm(1000)
-set.seed(8)
-z <- rep(NA, 1000)
-my_data <- sample(c(y, z), 100)
-```
+
 ```{r f, exercise=TRUE}
 
 ```
@@ -116,14 +107,7 @@ Everywhere you see a `TRUE`, you know the corresponding element of `my_data` is 
 
 In our previous discussion of logical operators, we introduced the `==` operator as a method of testing for equality between two objects. So, you might think the expression `my_data == NA` yields the same results as `is.na()`. Give it a try.
 
-```{r prepare-g}
-set.seed(10)
-y <- rnorm(1000)
-set.seed(8)
-z <- rep(NA, 1000)
-my_data <- sample(c(y, z), 100)
-my_na <- is.na(my_data)
-```
+
 ```{r g, exercise=TRUE}
 
 ```

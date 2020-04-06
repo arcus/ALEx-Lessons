@@ -293,9 +293,9 @@ question("Which of the following commands do you think would give us the second 
          answer("vect[bar]",
                 message = "You'll get `Error: object 'bar' not found` if you try that."),
          answer("vect[“2”]",
-                message = "R doesn't get along nicely with auto-formatted quotation marks."),
+                message = "If you look very closely, you will see that the quotation marks are curled. R does not recognize curly quotes as quotation marks. You end up with curly quotation marks sometimes when you copy things from Word."),
          answer("vect[“bar”]", 
-                message = "R doesn't get along nicely with auto-formatted quotation marks."),
+                message = "If you look very closely, you will see that the quotation marks are curled. R does not recognize curly quotes as quotation marks. You end up with curly quotation marks sometimes when you copy things from Word."),
          random_answer_order = TRUE,
          allow_retry = TRUE
 )
