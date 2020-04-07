@@ -387,30 +387,3 @@ question("Which of the following evaluates to `TRUE`?",
 ```
 
 That's all for this introduction to logic in R. If you really want to see what you can do with logic, check out the control flow lesson (coming soon)!
-
-
-```{r newlabel, echo=FALSE}
-question("What is the meaning of life?",
-         answer("42", correct = TRUE),
-         answer("To eat drink and be merry", message = "You're a hedonist"),
-         answer("nothing", message = "Nihilist"),
-         answer("to serve others", message = "Altruist"),
-         correct = "You read Douglas Adams",
-         incorrect = "You haven't read Douglas Adams",
-         random_answer_order = TRUE,
-         allow_retry = TRUE
-)
-```
-
-```{r newlagel2, echo=FALSE}
-question("question",
-         answer("first_answer", correct = TRUE),
-         answer("second_answer"),
-         answer("third_answer"),
-         answer("fourth_answer"),
-     correct = "correct_feedback",
-     incorrect = "incorrect_feedback",
-     random_answer_order = TRUE,
-     allow_retry = TRUE
-)
-```
