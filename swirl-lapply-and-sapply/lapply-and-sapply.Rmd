@@ -150,7 +150,7 @@ You may remember from a previous lesson that lists are most helpful for storing 
 as.character(cls_list)
 ```
 
-`sapply` allows you to automate this process by calling `lapply` behind the scenes, but the attempting to simplify (hence the `s` in `sapply`) the result for you. Use `sapply` the same way you used `lapply` to get the class of each column of the flags dataset and store the result in `cls_vect`. If you need help, type `?sapply` to bring up the documentation.
+`sapply` allows you to automate this process by calling `lapply` behind the scenes, but then attempting to simplify (hence the `s` in `sapply`) the result for you. Use `sapply` the same way you used `lapply` to get the class of each column of the flags dataset and store the result in `cls_vect`. If you need help, type `?sapply` to bring up the documentation.
 
 ```{r h, exercise = TRUE}
 

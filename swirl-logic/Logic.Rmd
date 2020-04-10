@@ -22,6 +22,8 @@ tutorial_options(exercise.startover = TRUE,
   exercise.cap = "R Code",
   exercise.completion = TRUE,
   exercise.diagnostics = TRUE)
+set.seed(1)
+ints <- sample(10)
 ```
 
 ## Logic
@@ -256,7 +258,7 @@ isTRUE(6>4)
 ```
 
 ```{r v, echo=FALSE}
-question("Which of the following evaluates to `TRUE`?",
+question("Which of the following evaluates to `TRUE`? Select all that apply.",
          answer("`isTRUE(NA)`", correct = TRUE),
          answer("`!isTRUE(8 != 5)`"),
          answer("`isTRUE(!TRUE)`"),
@@ -324,12 +326,13 @@ ints <- sample(10)
 ints
 ```
 
-The vector `ints` is a random sampling of integers from 1 to 10 without replacement. Let's say we wanted to ask some logical questions about contents of `ints`. If we type `ints > 5`, we will get a logical vector corresponding to whether each element(s) of `ints` is greater than 5. Try typing `ints > 5`.
+The vector `ints` is a random sampling of integers from 1 to 10 without replacement. Let's say we wanted to ask some logical questions about contents of `ints`. If we type `ints > 5`, we will get a logical vector corresponding to whether each element(s) of `ints` is greater than 5. Try typing `ints > 5`. Don't forget to use `set.seed(1)`.
 
 ```{r ab, exercise=TRUE}
 
 ```
 ```{r ab-solution}
+set.seed(1)
 ints > 5
 ```
 
@@ -388,29 +391,3 @@ question("Which of the following evaluates to `TRUE`?",
 
 That's all for this introduction to logic in R. If you really want to see what you can do with logic, check out the control flow lesson (coming soon)!
 
-
-```{r newlabel, echo=FALSE}
-question("What is the meaning of life?",
-         answer("42", correct = TRUE),
-         answer("To eat drink and be merry", message = "You're a hedonist"),
-         answer("nothing", message = "Nihilist"),
-         answer("to serve others", message = "Altruist"),
-         correct = "You read Douglas Adams",
-         incorrect = "You haven't read Douglas Adams",
-         random_answer_order = TRUE,
-         allow_retry = TRUE
-)
-```
-
-```{r newlagel2, echo=FALSE}
-question("question",
-         answer("first_answer", correct = TRUE),
-         answer("second_answer"),
-         answer("third_answer"),
-         answer("fourth_answer"),
-     correct = "correct_feedback",
-     incorrect = "incorrect_feedback",
-     random_answer_order = TRUE,
-     allow_retry = TRUE
-)
-```

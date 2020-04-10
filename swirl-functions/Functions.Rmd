@@ -53,6 +53,9 @@ evaluate <- function(func, dat){
 boring_function <- function(x) {
 	x
 }
+"%p%" <- function(left, right){ 
+  paste(left, right)
+}
 ```
 
 **Hint**: Use the Solution buttons to check your work or to get help if you can't figure out what the solution is.     
@@ -468,7 +471,7 @@ mad_libs <- function(...){
 }
 ```
 
-Equally important to your function code is your calling syntax. This is how you call the function you just created.
+Equally important to your function code is your calling syntax. Fill in your own place, adjective and noun to create a unique Mad Lib.  This is how you call the function you just created.
 
 ```{r prepare-z}
 mad_libs <- function(...){
