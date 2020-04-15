@@ -391,3 +391,5 @@ question("Which of the following evaluates to `TRUE`?",
 
 That's all for this introduction to logic in R. If you really want to see what you can do with logic, check out the control flow lesson (coming soon)!
 
+
+
