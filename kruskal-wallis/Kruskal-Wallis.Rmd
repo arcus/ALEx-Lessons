@@ -12,13 +12,13 @@ runtime: shiny_prerendered
 ---
 
 ```{r setup, include=FALSE}
-if(!require(learnr)){install.packages("learnr")}
-if(!require(data.table)){install.packages("data.table")}
-if(!require(doBy)){install.packages("doBy")}
-if(!require(FSA)){install.packages("FSA")}
-if(!require(lattice)){install.packages("lattice")}
-if(!require(dplyr)){install.packages("dplyr")}
-if(!require(rcompanion)){install.packages("rcompanion")}
+if(!require(learnr)){install.packages("learnr",repos = "http://cran.us.r-project.org")}
+if(!require(data.table)){install.packages("data.table",repos = "http://cran.us.r-project.org")}
+if(!require(doBy)){install.packages("doBy",repos = "http://cran.us.r-project.org")}
+if(!require(FSA)){install.packages("FSA",repos = "http://cran.us.r-project.org")}
+if(!require(lattice)){install.packages("lattice",repos = "http://cran.us.r-project.org")}
+if(!require(dplyr)){install.packages("dplyr",repos = "http://cran.us.r-project.org")}
+if(!require(rcompanion)){install.packages("rcompanion",repos = "http://cran.us.r-project.org")}
 options(scipen = 9999, digits = 3)
 tutorial_options(exercise.startover = TRUE,
   exercise.eval = TRUE, 
