@@ -185,7 +185,7 @@ question("Which variables do we actually want to analyze?",
 
 ## How to Prepare your Data for a one-way ANOVA in R
 
-You should, before any call to a statistical function, ensure that the data is in the correct format for running the analysis. For an ANOVA, remember, you should have one [nominal (a.k.a. "categorical") variable](http://www.biostathandbook.com/variabletypes.html#nominal) variable with 2 or more categories and one [measurement (a.k.a. "scalar")](http://www.biostathandbook.com/variabletypes.html#measurement) variable. 
+You should, before any call to a statistical function, ensure that the data are in the correct format for running the analysis. For an ANOVA, remember, you should have one [nominal (a.k.a. "categorical") variable](http://www.biostathandbook.com/variabletypes.html#nominal) variable with 2 or more categories and one [measurement (a.k.a. "scalar")](http://www.biostathandbook.com/variabletypes.html#measurement) variable. 
 
 Start by looking at the data again.
 
@@ -475,7 +475,7 @@ question("Which of these can be used to transform scalar data points?",
 )
 ```
 
-Just for fun, try transformating `long_mussels$aam` in various ways in the sandbox that follows. Send your transformationed data, as well as the non-transformed data, to `qplot` (see our [swirl `ggplot2` Part 1 lesson](../swirl-ggplot2-part-1/) to learn about `qplot`) to find out whether any of your transformations normalize your data. HINT: To take the natural log of a scalar variable, use `log(a_scalar_variable)`. `log` is in the base stats package. Type `?log` in the sandbox to learn how to play with other logarithms and with exponents. 
+Just for fun, try transforming `long_mussels$aam` in various ways in the sandbox that follows. Send your transformed data, as well as the non-transformed data, to `qplot` (see our [swirl `ggplot2` Part 1 lesson](../swirl-ggplot2-part-1/) to learn about `qplot`) to find out whether any of your transformations normalize your data. HINT: To take the natural log of a scalar variable, use `log(a_scalar_variable)`. `log` is in the base stats package. Type `?log` in the sandbox to learn how to play with other logarithms and with exponents. 
 
 You can use your own ideas or follow the code in the hints. The code I wrote includes what you can (or already did) learn in [swirl Part 4 - Vectors](../swirl-vectors/), [swirl Part 9 - Functions](../swirl-functions), [swirl Part 10 - `lapply` and `sapply`](../swirl-lapply-and-sapply/) and  [`ggplot2` Part 1](../swirl-ggplot2-part-1/). If my code doesn't make sense to you, try revisiting those lessons. 
 
@@ -681,17 +681,17 @@ Don't. Delete. Outliers. (Unless they are wrong. Dead wrong. As in input wrong.)
 ### If no Transformations Produce Normally Distributed Residuals
 
 If none of the transformations you tried made the data look _normal_ _enough_, you have a couple of choices: run the ANOVA anyway or use
-the [Kruskal-Wallis test](../kruskal-wallis/). Be aware of these factors if you decide to performa a Kruskal-Wallis test:
+the [Kruskal-Wallis test](../kruskal-wallis/). Be aware of these factors if you decide to perform a Kruskal-Wallis test:
 
 * the Krusal-Wallis test makes the assumption that the different groups
 have the same shaped distributions (which we know already isn't true because we did a density plot earlier in this lesson that showed that the shapes of the distributions for each level of `location` are different)    
 * the Krusal-Wallis test doesn’t test the same null hypothesis as
 the one-way ANOVA    
 
-Personally, we don’t like the Kruskal-Wallis test; We recommend that if you
+Personally, we don’t like the Kruskal-Wallis test; we recommend that if you
 have non-normal data that can’t be fixed by transformation, you go ahead and use one-way
-ANOVA; but be cautious about rejecting the null hypothesis if the _p_ value is not very far
-below 0.05 and if your data is extremely non-normal. You may even want to set alpha to something besides .05, say, .005 (see [Reassessing p Values](../reassessing-p-values/) for why this particular number might be a good choice).
+ANOVA, but be cautious about rejecting the null hypothesis if the _p_ value is not very far
+below 0.05 and if your data are extremely non-normal. You may even want to set alpha to something besides .05, say, .005 (see [Reassessing p Values](../reassessing-p-values/) for why this particular number might be a good choice).
 
 ```{r whynot-kw, echo=FALSE}
 question("Why might the Kruskal-Wallis test NOT be a good non-parametric substitute for a one-way ANOVA?",
@@ -1013,7 +1013,7 @@ question("Which differences have _p_ < .05?",
 
 If the data show a lot of heteroscedasticity (different groups have different standard
 deviations), the one-way ANOVA can yield an inaccurate _p_ value; the probability of a false
-positive may be much higher than 5%. In that case, you could use Welch’s ANOVA. If, in addition, the different groups have different _n_s, you _should_ use a [Welch's ANOVA](https://reslnarcusedu01.research.chop.edu/sb-one-way-anova/#section-welchs-anova) instead of a one-way.  
+positive may be much higher than 5%. In that case, you could use Welch’s ANOVA. If, in addition, the different groups have different _n_s, you _should_ use a [Welch's ANOVA](https://reslnarcusedu01.research.chop.edu/sb-one-way-anova/#section-welchs-anova) instead of a one-way ANOVA.  
 
 ```{r when-to-use-welches, echo=FALSE}
 question("Under what conditions should you use a Welch's ANOVA instead of a classic one-way ANOVA?",
@@ -1167,7 +1167,7 @@ Benjamin and Berger wrote
 
 [Find out more!](https://amstat.tandfonline.com/doi/full/10.1080/00031305.2018.1543135#.XfPzni3MzOR)
 
-Perform an analysis with the `power.anova.test` function from the `stats` package. You need to specify the number of groups with the `groups` argument, *within group variance (`experiment_var`)* with the `within.var` argument, *between group variance `var(group_means)`* with the `between.var` argument, the signficiance value with `sig.level` (use a level of .005) and power with `power`. Recall that standard deviation is the square root of variance. 
+Perform an analysis with the `power.anova.test` function from the `stats` package. You need to specify the number of groups with the `groups` argument, *within group variance (`experiment_var`)* with the `within.var` argument, *between group variance `var(group_means)`* with the `between.var` argument, the significance value with `sig.level` (use a level of .005) and power with `power`. Recall that standard deviation is the square root of variance. 
 
 Store the results of `power.anova.test` in `pwr_results` and surround the entire statement with parentheses so you can see the results as they are stored in the variable. On the next line, type `str(pwr_results)` so you can see the structure of the results and the variable names you can use to access them. 
 
