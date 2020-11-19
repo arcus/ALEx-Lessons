@@ -1,5 +1,5 @@
 ---
-title: "Introduction to Automated Reporting in R"
+title: "Correlation and Linear Regression"
 author: "John Ennis PhD, Aigora"
 output: 
  learnr::tutorial:
@@ -14,15 +14,15 @@ runtime: shiny_prerendered
 
 ```{r setup, include=FALSE}
 options(digits = 3, scipen = 9999)
-if(!require(learnr)){install.packages("learnr")}
-if(!require(psych)){install.packages("psych")}
-if(!require(gvlma)){install.packages("gvlma")}
-if(!require(PerformanceAnalytics)){install.packages("PerformanceAnalytics")}
-if(!require(ggplot2)){install.packages("ggplot2")}
-if(!require(rcompanion)){install.packages("rcompanion")}
-if(!require(pwr)){install.packages("pwr")}
-if(!require(Hmisc)){install.packages("Hmisc")}
-if(!require(corrgram)){install.packages("corrgram")}
+if(!require(learnr)){install.packages("learnr", repos = "http://cran.us.r-project.org")}
+if(!require(psych)){install.packages("psych", repos = "http://cran.us.r-project.org")}
+if(!require(gvlma)){install.packages("gvlma", repos = "http://cran.us.r-project.org")}
+if(!require(PerformanceAnalytics)){install.packages("PerformanceAnalytics", repos = "http://cran.us.r-project.org")}
+if(!require(ggplot2)){install.packages("ggplot2", repos = "http://cran.us.r-project.org")}
+if(!require(rcompanion)){install.packages("rcompanion", repos = "http://cran.us.r-project.org")}
+if(!require(pwr)){install.packages("pwr", repos = "http://cran.us.r-project.org")}
+if(!require(Hmisc)){install.packages("Hmisc", repos = "http://cran.us.r-project.org")}
+if(!require(corrgram)){install.packages("corrgram", repos = "http://cran.us.r-project.org")}
 ### --------------------------------------------------------------
 ### Correlation and linear regression, species diversity example
 ### pp. 207–208 from Biostats Handbook
@@ -206,7 +206,7 @@ You can also learn to understand and perform a correlation and linear regression
 
 >* Two or more [scalar (a.k.a. "measurement") variables](http://www.biostathandbook.com/variabletypes.html#measurement). A proportion (as with binary variables) operates as a scalar variable in correlations and linear regressions. 
 
-Use linear regression or correlation when you want to know whether one measurement variable is associated with another measurement variable; where you want to measure the strength of an association (_r_<sup>2</sup>); or you want an equation that decribes the relationship and (with caution) can be used to predict unknown values.
+Use linear regression or correlation when you want to know whether one measurement variable is associated with another measurement variable, where you want to measure the strength of an association (_r_<sup>2</sup>), or you want an equation that describes the relationship and (with caution) can be used to predict unknown values.
 
 ```{r nolinregorcor, echo=FALSE}
 question("Select any questions that can be answered using correlation or linear regression",
@@ -314,7 +314,7 @@ Does the number of species vary with latitude? You would use a hypothesis test t
 ?cor.test
 ```
 
-Using the instructions in the help, perform a correlation analysis between the number of `Species` and `Latitude` using `~` to create a formula including the two variables (it's a bit of an odd constuction for a formula, so I'll give it to you: `~ Species + Latitude`). Set the parameter `data` equal to `diversity`, of course, then choose a method. There are a number of different methods for performing a correlation analysis, the most common of which is "pearson". Use that. then ask for a confidence level of 0.95. If you don't know how to set that, look at the help under `conf.level`. Lastly, assign the output to the variable `cor` and put parentheses around the entire call so you can see the output and store it in a variable at the same time. 
+Using the instructions in the help, perform a correlation analysis between the number of `Species` and `Latitude` using `~` to create a formula including the two variables (it's a bit of an odd construction for a formula, so I'll give it to you: `~ Species + Latitude`). Set the parameter `data` equal to `diversity`, of course, then choose a method. There are a number of different methods for performing a correlation analysis, the most common of which is "pearson". Use that, then ask for a confidence level of 0.95. If you don't know how to set that, look at the help under `conf.level`. Lastly, assign the output to the variable `cor` and put parentheses around the entire call so you can see the output and store it in a variable at the same time. 
 
 >Tip: There are certain types of characters, like `'`, `"`, `_`, `[`, and `(` that appear with their matched characters on both sides of blocked text. Try that here to put parentheses around the command: After constructing your function call and the assignment to the variable, select everything in the code box, then press `(` and see what happens.
 
@@ -379,7 +379,7 @@ lm(formula = Pulse ~ Speed,
    data = exercise)
 ```
 
-The equation is $\displaystyle \hat{Y} =$ `r ex_fit$coefficients[1]` $\displaystyle +$ `r ex_fit$coefficients[2]` . This predicts that McDonald's pulse would be 63.5 when the speed of the elliptical machine was 0 kph, and his pulse would go up by 3.75 beats per minute for every 1 kph increase in speed. 
+The equation is $\displaystyle \hat{Y} =$ `r ex_fit$coefficients[1]` $\displaystyle +$ `r ex_fit$coefficients[2]`$\displaystyle X$. This predicts that McDonald's pulse would be 63.5 when the speed of the elliptical machine was 0 kph, and his pulse would go up by 3.75 beats per minute for every 1 kph increase in speed. 
 
 This is probably the most useful part of the analysis for the `exercise` data; if McDonald wants to exercise with a particular level of effort, as measured by pulse rate, he can use the equation to predict the speed he should use. 
 
@@ -415,7 +415,7 @@ egg_fit <- lm(Eggs ~ Weight,
 summary(egg_fit)
 ```
 
-For the egg data, the equation is $\displaystyle \hat{Y} =$ `r egg_sum$coefficients[1]` + `r egg_sum$coefficients[2]`. For most purposes, knowing that a mother is heavier allows you to predict more eggs (the hypothesis test) is more interesting than knowing the equation of the line; but it depends on the goals of your experiment. You can find $\displaystyle p$, as usual, in the summary of the fit.
+For the egg data, the equation is $\displaystyle \hat{Y} =$ `r egg_sum$coefficients[1]` + `r egg_sum$coefficients[2]`$\displaystyle X$. For most purposes, knowing that a mother is heavier allows you to predict more eggs (the hypothesis test) is more interesting than knowing the equation of the line; but it depends on the goals of your experiment. You can find $\displaystyle p$, as usual, in the summary of the fit.
 
 ```{r q-cor-form, echo=FALSE}
 question("What is the intercept for the correlation between Weight and Eggs?",
@@ -601,7 +601,7 @@ question("Should we dismiss correlations without further evidence?",
 )
 ```
 
-You'd want to test the hypothesis about fruit and vegetables reducing blood pressure further by looking for the correlation in samples of people with similar socioeconomic status and levels of exercise; by statistically controlling for possible confounding variables using techniques such as multiple regression; by doing animal studies; or by giving human volunteers controlled diets with different amounts of fruits and vegetables. If your initial correlation study hadn't found an association of blood pressure with fruits and vegetables, you wouldn't have a reason to do these further studies. Correlation may not imply causation, but it tells you that something interesting is going on.
+You'd want to test the hypothesis about fruit and vegetables reducing blood pressure further by looking for the correlation in samples of people with similar socioeconomic status and levels of exercise, by statistically controlling for possible confounding variables using techniques such as multiple regression, by doing animal studies, or by giving human volunteers controlled diets with different amounts of fruits and vegetables. If your initial correlation study hadn't found an association of blood pressure with fruits and vegetables, you wouldn't have a reason to do these further studies. Correlation may not imply causation, but it tells you that something interesting is going on.
 
 ```{r selectallhelpfulthings, echo=FALSE}
 question("Which strategies help to prevent misunderstanding the fruit & veg leading to lower blood pressure hypothesis?",
@@ -629,9 +629,9 @@ question("Which of the following elements are part of a good regression design?"
 
 ## Assumptions
 
-Every statistical test relies upon assumptions about the data you give it. Fortunately, there are at least three ways to calculate correlation (Pearson's, Kendall's, and Spearman's) and ways to make a linear regression more robust. Use this list to decide which analysis your data requires:
+Every statistical test relies upon assumptions about the data you give it. Fortunately, there are at least three ways to calculate correlation (Pearson's, Kendall's, and Spearman's) and ways to make a linear regression more robust. Use this list to decide which analysis your data require:
 
-* For a **Pearson correlation**, two interval (a.k.a. "measurement" a.k.a. "scalar") or ratio (ratio of one value for a binary variable) variables. Together the data in the variables is [bivariate normal](https://www.statisticshowto.datasciencecentral.com/bivariate-normal-distribution/). The relationship between the two variables is linear. Outliers can detrimentally affect results.    
+* For a **Pearson correlation**, two interval (a.k.a. "measurement" a.k.a. "scalar") or ratio (ratio of one value for a binary variable) variables. Together the data in the variables are [bivariate normal](https://www.statisticshowto.datasciencecentral.com/bivariate-normal-distribution/). The relationship between the two variables is linear. Outliers can detrimentally affect results.    
 * For a **Kendall correlation**, two variables of scalar or ordinal type.    
 * For a **Spearman correlation**, two variables of scalar or ordinal type.    
 * For a **linear regression**, two scalar or ratio variables. The relationship between the two variables is linear. Residuals are normal, independent, and homoscedastic.  Outliers can affect the results unless robust methods are used.
@@ -646,7 +646,7 @@ question("Which of the following need to be true for accurate results from a Pea
 )
 ```
 ```{r good_kendall, echo=FALSE}
-question("Which of the following need to be true for accurate results from a Kendall correlation? (Please select ALL that apply)",
+question("Which of the following needs to be true for accurate results from a Kendall correlation?",
          answer("The variables must be either scalar or ordinal", correct = TRUE),
          answer("The two variables, taken together, must be bivariate normal"),
          answer("No outliers"),
@@ -655,7 +655,7 @@ question("Which of the following need to be true for accurate results from a Ken
 )
 ```
 ```{r good_spearman, echo=FALSE}
-question("Which of the following need to be true for accurate results from a Spearman correlation? (Please select ALL that apply)",
+question("Which of the following need to be true for accurate results from a Spearman correlation?",
          answer("The variables must be either scalar or ordinal", correct = TRUE),
          answer("The two variables, taken together, must be bivariate normal"),
          answer("No outliers"),
@@ -681,7 +681,7 @@ question("Which of the following need to be true for accurate results in a linea
 
 ## Independent vs. Dependent Variables
 
-When you test a cause-effect relationship, the variable that causes the relationship is called the _independent variable_ and you plot it on the $\displaystyle X$ axis, while the effect is called the _dependent variable_ and you plot it on the $\displaystyle Y$ axis. In some experiments, you set the independent variable to values that you have chosen; for example, if you're interested in the effect of temperature on the calling rate of frogs, you might put frogs in temperature chambers set to 10°C, 15°C, 20°C, etc. In other cases, both variables exhibit natural variation, but any cause-effect relationship would be in one way; if you measure the air temperature and frog calling rate at a pond on several different nights, both the air temperature and the calling rate would display natural variation, but if there's a cause-effect relationship, it's temperature affecting calling rate; the rate at which frogs call does not affect the air temperature.
+When you test a cause-effect relationship, the variable that causes the relationship is called the _independent variable_ and you plot it on the $\displaystyle X$ axis, while the effect is called the _dependent variable_ and you plot it on the $\displaystyle Y$ axis. In some experiments, you set the independent variable to values that you have chosen; for example, if you're interested in the effect of temperature on the calling rate of frogs, you might put frogs in temperature chambers set to 10°C, 15°C, 20°C, etc. In other cases, both variables exhibit natural variation, but any cause-effect relationship would be in one way. If you measure the air temperature and frog calling rate at a pond on several different nights, both the air temperature and the calling rate would display natural variation, but if there's a cause-effect relationship, it's temperature affecting calling rate; the rate at which frogs call does not affect the air temperature.
 
 ```{r xaxis, echo=FALSE}
 question("Which goes on the X axis?",
@@ -781,9 +781,9 @@ If you cranked a whole lot of data through the model expressed in `egg_fit`, you
 
 >All models are wrong. Some models are useful.
 
-## Effect Size: How much of a Difference do we Care About?
+## Effect Size: How Much of a Difference Do We Care About?
 
-In correlation and regression, effect size is represented by $\displaystyle r^2$ (or, in some cases, just plain $\displaystyle r$). Different areas of study will have different standards for meaningful effect sizes. If you are a research psychologist, a correlation of $\displaystyle r = .80$ between variables such as `daily_laughter_frequency` and `job_satisfaction` might be reason for a party; but if you are an engineer and you correlate a drill bit sizes with the sizes of the holes they make, $\displaystyle r = .80$ would cause concern. You, the content expert, must decide what is an interesting result and what is not. 
+In correlation and regression, effect size is represented by $\displaystyle r^2$ (or, in some cases, just plain $\displaystyle r$). Different areas of study will have different standards for meaningful effect sizes. If you are a research psychologist, a correlation of $\displaystyle r = .80$ between variables such as `daily_laughter_frequency` and `job_satisfaction` might be reason for a party; if you are an engineer and you correlate a drill bit sizes with the sizes of the holes they make, $\displaystyle r = .80$ would cause concern. You, the content expert, must decide what is an interesting result and what is not. 
 
 ## Power Analysis
 
@@ -1021,13 +1021,13 @@ splom(~iris[1:4], groups = Species, data = iris,
                  text = list(c("Setosa", "Versicolor", "Virginica"))))
 ```
 
-This plot uses color to divide the scatterplots by iris varieties, providing an information-dense representation of the correlations among varibles in the `iris` data set. 
+This plot uses color to divide the scatterplots by iris varieties, providing an information-dense representation of the correlations among variables in the `iris` data set. 
 
 We could create an entire detailed lesson about `splom`, but for now, it's good that you know it exists and have some example code to follow should you ever want to use it. 
 
 ### Linear Regression
 
-We have done a number of liinear regressions in earlier sections. Let's perform another linear regression analysis and add an additional step. As before, call `lm` and pass it the formula `Eggs ~ Weight` (which is $\displaystyle Y$ ~ $\displaystyle X$) and the data, `egg`. Save it to the variable `egg_fit`, then pass `egg_fit` to `summary`. 
+We have done a number of linear regressions in earlier sections. Let's perform another linear regression analysis and add an additional step. As before, call `lm` and pass it the formula `Eggs ~ Weight` (which is $\displaystyle Y$ ~ $\displaystyle X$) and the data, `egg`. Save it to the variable `egg_fit`, then pass `egg_fit` to `summary`. 
 
 ```{r egg_fit_again, exercise = TRUE, exercise.lines = 8}
 
@@ -1046,7 +1046,7 @@ Now, to get a little more information, pass the best-fit model (`egg_fit`) to `a
 anova(egg_fit)
 ```
 
-As you can see from the output, we now have a different test statistic, $\displaystyle F$. We can see how many degrees of freedom there were and we have a different $\displaystyle p$ value. If you want to know more about this output, download [Arcus's one-way ANOVA lesson](../one-way-anova/). Then just open it in RStudio and click "Run Document" in the top bar of the tab. Get tea, because as a relatively non-interactive stats lesson, it can put you to sleep. We will fix that as soon as we have the rest of the more interactive stats lessons available for your use. 
+As you can see from the output, we now have a different test statistic, $\displaystyle F$. We can see how many degrees of freedom there were and we have a different $\displaystyle p$ value. If you want to know more about this output, check out [Arcus's one-way ANOVA lesson](../one-way-anova/). 
 
 ## Interpret the `lm` Output
 
@@ -1092,7 +1092,7 @@ However, there is much more that you can find out about the fit if you wish to t
 str(egg_fit)
 ```
 
-What looked like paragraphs of output when we originally ran the functions was actually lists! Let's compare the ouputs of the two functions by passing each object to `names`. 
+What looked like paragraphs of output when we originally ran the functions were actually lists! Let's compare the ouputs of the two functions by passing each object to `names`. 
 
 ```{r access_method, exercise = TRUE, exercise.setup = "prepare-height_ttest"}
 
@@ -1107,7 +1107,7 @@ So after we run an `lm`, R gives us an object that contains the details of the a
 
 We will look at the details in a minute, but first note that you can use output very nicely in your [reproducible Markdown text](https://education.arcus.chop.edu/scripted-analysis/) by calling it within text while you write a Markdown document. 
 
-For instance, outside of an R code chunk you might write, "My statistic is " or "My residuals are " and then type a tic-mark ("`", likely your lowercase "~", in the upper left corner of your keyboard, not to be confused with a single quote), then the text "r coregg\$statistic" (or "r egg_fit\$residuals") without quotation marks, and finally, a closing tic-mark. The rendered (knitted) output would be 
+For instance, outside of an R code chunk you might write, "My statistic is " or "My residuals are " and then type a tic-mark ("`", likely your lowercase "~" in the upper left corner of your keyboard, not to be confused with a single quote), then the text "r coregg\$statistic" (or "r egg_fit\$residuals") without quotation marks, and finally, a closing tic-mark. The rendered (knitted) output would be 
 
 >My statistic is `r coregg$statistic`. My residuals are `r egg_fit$residuals`. 
 
@@ -1126,7 +1126,7 @@ Plain old `plot` is a great way to start looking at a data set. You can look at 
 
 Of course you can do many and varied things with plots. Rather than trying to do something better than has already been done excellently, I recommend you start with our three `ggplot` tutorials ([ggplot2 Part 1](../swirl-ggplot2-part-1/), [ggplot2 Part 2](../swirl-ggplot2-part-2/), [ggplot2 Extras](../ggplot2-extras/)) followed by [this wonderful `ggplot2` tutorial](http://r-statistics.co/ggplot2-Tutorial-With-R.html) that has content about plotting in layers.
 
-## Ilike Math. Where's the Math? How Correlations and Linear Regressions Work
+## I like Math. Where's the Math? How Correlations and Linear Regressions Work
 
 ```{r best-fit-line, echo = FALSE}
 knitr::include_graphics("www/best-fit-line.png", 
@@ -1202,7 +1202,7 @@ question("When might you choose inverse estimation rather than classical estimat
 )
 ```
 
-### When you'd rather Describe than Predict
+### When You'd Rather Describe than Predict
 
 Sometimes your goal in drawing a regression line is not predicting $\displaystyle Y$ from $\displaystyle X$, or predicting $\displaystyle X$ from $\displaystyle Y$, but instead describing the relationship between two variables. If one variable is the independent variable and the other is the dependent variable, you should use the least-squares regression line. However, if there is no cause-and-effect relationship between the two variables, the least-squares regression line is inappropriate. This is because you will get two different lines, depending on which variable you pick to be the independent variable. 
 
@@ -1244,8 +1244,8 @@ Here are explanations and formulae that explain certain concepts upon which we t
 
 Not all statisticians agree on a definition for the bivariate normal distribution. Here are some aspects upon which most agree, taken from [Statistics How To](https://www.statisticshowto.datasciencecentral.com/bivariate-normal-distribution/):
 
-* Random variables $\displaystyle X$ & $\displaystyle Y$ are bivariate normal if $\displaystyle aX + bY$ has a normal distribution for all $\displaystyle a, b \in R$ (e.g., where $\displaystyle a$ $\displaystyle b$ are within the set of real numbers.
-* From [Bertsikas and TsiTsikles (2002)](https://vfu.bg/en/e-Learning/Math--Bertsekas_Tsitsiklis_Introduction_to_probability.pdf), we say that two random variables X and Y have a bivariate normal distribution if there are two independent normal random variables $\displaystyle U$ and $\displaystyle V$ and some scalars $\displaystyle a, b, c, d,$, such that $\displaystyle X = aU + bV, Y = cU+dV$.    
+* Random variables $\displaystyle X$ & $\displaystyle Y$ are bivariate normal if $\displaystyle aX + bY$ has a normal distribution for all $\displaystyle a, b \in R$ (e.g., where $\displaystyle a$ $\displaystyle b$ are within the set of real numbers).
+* From [Bertsikas and TsiTsikles (2002)](https://vfu.bg/en/e-Learning/Math--Bertsekas_Tsitsiklis_Introduction_to_probability.pdf), we say that two random variables $\displaystyle X$ and $\displaystyle Y$ have a bivariate normal distribution if there are two independent normal random variables $\displaystyle U$ and $\displaystyle V$ and some scalars $\displaystyle a, b, c, d,$, such that $\displaystyle X = aU + bV, Y = cU+dV$.    
 * If $\displaystyle a$ and $\displaystyle b$ are non-zero constants, $\displaystyle aX + bY$ has a normal distribution (Johnson & Kotz, 1972).
 * If $\displaystyle X – aY$ and $\displaystyle Y$ are independent and if $\displaystyle Y – bx$ and $\displaystyle X$ are independent for all $\displaystyle a,b$ (such that $\displaystyle ab ≠ 0$ or $\displaystyle 1$), then $\displaystyle (X,Y)$ has a normal distribution (Rao, 1975).
 
