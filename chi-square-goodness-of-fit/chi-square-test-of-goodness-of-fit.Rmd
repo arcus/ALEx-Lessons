@@ -126,7 +126,9 @@ question("You might use a chi-square goodness-of-fit test to examine which of th
       answer("The number of people from various countries represented at a conference in comparison with the proportion of people from those countries expected to be represented at the conference", correct = TRUE),
       answer("Number of people from two countries"),
       answer("The relationships among age groups"),
-      answer("Height, weight, and season")
+      answer("Height, weight, and season"),
+      random_answer_order = TRUE,
+      allow_retry = TRUE
 )
 ```
 
@@ -134,10 +136,8 @@ question("You might use a chi-square goodness-of-fit test to examine which of th
 question("What is an extrinsic hypothesis",
          answer("One based on previously known expected proportions", correct = TRUE),
          answer("One based on proportions estimated by collecting the data", message = "Oops, no."),
-         answer("One you can state explicitly", message = "No---that would be silly."),
-         answer("One you keep to yourself", message = "message_wrong_3"),
-     correct = "correct_feedback",
-     incorrect = "incorrect_feedback",
+         answer("One you can state explicitly", message = "That would be silly."),
+         answer("One you keep to yourself"),
      random_answer_order = TRUE,
      allow_retry = TRUE
 )
@@ -165,7 +165,9 @@ question("When would you NOT use a chi-square goodness-of-fit test?",
       answer("When your data is very large"),
       answer("When the count per category is less than 5", correct = TRUE),
       answer("Now, because there is always a quiz"),
-      correct = "Yes! Have a look at the other answers. You _can_ use a chi square test even when you can't prove your data is normally distributed."
+      correct = "Yes! Have a look at the other answers. You _can_ use a chi square test even when you can't prove your data is normally distributed.",
+      random_answer_order = TRUE,
+      allow_retry = TRUE
 )
 ```
 
@@ -292,7 +294,9 @@ question("Why?",
          answer("It's not wrong, it's right."),
          answer("Because there is a typo in the expected proportions"),
          answer("Because the degrees of freedom should number 3 to account for the fact that one calculation is already done before running `chisq.test`."),
-         answer("`chisq.test` assumes that the degrees of freedom in this case number 2 (*k* = 2 groups = 2 df). In fact they number 1 (*k* = 2 groups - 1 df for the calculation = 1 df), because a degree of freedom was eliminated by calculating the expected proportions based on the observed allele counts", correct = TRUE)
+         answer("`chisq.test` assumes that the degrees of freedom in this case number 2 (*k* = 2 groups = 2 df). In fact they number 1 (*k* = 2 groups - 1 df for the calculation = 1 df), because a degree of freedom was eliminated by calculating the expected proportions based on the observed allele counts", correct = TRUE),
+         random_answer_order = TRUE,
+         allow_retry = TRUE
 )
 ```
 
@@ -304,7 +308,7 @@ where O = observed and E = expected.
 
 It looks complicated, but it isn't. It's a fairly simple series of statements in R. You will need 3 variables: `observed`, a concatenation of the 3 previously mentioned observed counts; `expected_prop`, a concatenation of the 3 previously mentioned expected proportions, and `expected_count`, the sum of the observations multiplied by `expected_prop`. 
 
-Have set up those three values, you can now calculate `chi2` to be the sum of the quantity `observed - expected_count` (which is what `∑(O - E)` means), square it, then that quantity divided by the expected count. To get you started, this is the sum of the differences between `observed` and `expected` squared:
+Having set up those three values, you can now calculate `chi2` to be the sum of the quantity `observed - expected_count` (which is what `∑(O - E)` means), square it, then that quantity divided by the expected count. To get you started, this is the sum of the differences between `observed` and `expected` squared:
 
 >sum((observed - expected_count)^2).
 
@@ -359,7 +363,7 @@ Some people use a "stacked bar graph" to show proportions, especially if there a
 
 ### Simple Bar Plot with `barplot`
 
-First, set up the input data. This is very similar to what we have done before, but we will also use raw data thatI have  loaded for you in a matrix called `trees`. Our observed and expected values are the same as before:
+First, set up the input data. This is very similar to what we have done before, but we will also use raw data that I have  loaded for you in a matrix called `trees`. Our observed and expected values are the same as before:
 
 >observed_trees <- c(70, 79, 3, 4)    
 expected_trees <- c(0.54, 0.40, 0.05, 0.01)    
@@ -522,7 +526,7 @@ Each statistical methodology has slightly different calculations for power.
 
 ### Using G*Power
 
-To do a power analysis using the G*Power program, choose "Goodness-of-fit tests: Contingency tables" from the Statistical Test menu, then choose "Chi-squared tests" from the Test Family menu. To calculate effect size, click on the Determine button and enter the null hypothesis proportions in the first column and the proportions you hope to see in the second column. Then click on the Calculate and Transfer to Main Window button. Set your alpha and power, and be sure to set the degrees of freedom (Df); for an extrinsic null hypothesis, that will be the number of rows minus one.
+To do a power analysis using the G*Power program (free software you can download), choose "Goodness-of-fit tests: Contingency tables" from the Statistical Test menu, then choose "Chi-squared tests" from the Test Family menu. To calculate effect size, click on the Determine button and enter the null hypothesis proportions in the first column and the proportions you hope to see in the second column. Then click on the Calculate and Transfer to Main Window button. Set your alpha and power, and be sure to set the degrees of freedom (Df); for an extrinsic null hypothesis, that will be the number of rows minus one.
 
 ### Using R's `pwr` Function
 
@@ -559,14 +563,16 @@ If you got `N = 963.4689` or thereabouts, you did it right!
 
 Unlike the [exact test of goodness-of-fit](http://www.biostathandbook.com/exactgof.html), when you do a chi-square test you do not directly calculate the probability of obtaining the observed results or something more extreme. Instead, like almost all statistical tests, the chi-square test has an intermediate step: it uses the data to calculate a test statistic that measures how far the observed data is from the null _expectation_. You then use a mathematical relationship, in this case the chi-square distribution, to estimate the probability of obtaining that value of the test statistic (i.e., that value for chi squared).
 
-You calculate chi squared by taking the cateogory's observed count (O for "Observed"), subtracting its theoretical or "expected" count (E), then squaring this difference. The larger the deviation from the null hypothesis, the larger is the difference between observed and expected. You square the differences to make them all positive. 
+You calculate chi squared by taking the category's observed count (O for "Observed"), subtracting its theoretical or "expected" count (E), then squaring this difference. The larger the deviation from the null hypothesis, the larger is the difference between observed and expected. You square the differences to make them all positive. 
 
 ```{r a-2, echo=FALSE}
 question("You square the difference between what and what when you calculate a chi-square test statistic?",
          answer("The first category and the second category, then the first and the third categories, and so on"),
          answer("What you hoped to have for dinner and what was actually on offer"),
          answer("The value of a scalar variable for one group and for another group"),
-         answer("The observed and the expected numbers", correct = TRUE)
+         answer("The observed and the expected numbers", correct = TRUE),
+         random_answer_order = TRUE,
+         allow_retry = TRUE
 )
 ```
 
@@ -586,7 +592,9 @@ question("Which leads to a rejected null hypothesis for a chi-square calculation
          answer("A large difference between the observed and expected values", correct = TRUE),
          answer("A small or no difference between the observed and expected values"),
          answer("A large number of categories in the variable being examined"),
-         answer("A low value for p")
+         answer("A low value for p"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE
 )
 ```
 
@@ -599,7 +607,9 @@ question("For an extrinsic null hypothesis analysis, how many degrees of freedom
          answer("199 + 49 - 1 = 247 because for an extrinsic null, you want n - 1 as the degrees of freedom"),
          answer("2 - 1 = 1 because for an extrinsic null, you want n - 1 (groups) as the degrees of freedom", correct = TRUE),
          answer("199 + 49 - 2 groups = 246 because for an extrinsic null, you want n - 1 (per group) as the degrees of freedom"),
-         answer("You can't measure freedom")
+         answer("You can't measure freedom"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE
 )
 ```
 
