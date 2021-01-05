@@ -39,7 +39,7 @@ conditional_probability <- (sensitivity * prevalence) / all_pos
 
 The following example shows why a Bayesian approach to probability might be interesting to a medical researcher.
 
-Let's look at a common probability question in medicine. Let's say that a child is discovered to have elevated immunoreactive tryspinogen, or IRT, a marker for cystic fibrosis, in blood smears hospital staff acquired on the first day of her life.
+Let's look at a common probability question in medicine. Let's say that a child is discovered to have elevated immunoreactive trypsinogen, or IRT, a marker for cystic fibrosis, in blood smears hospital staff acquired on the first day of her life.
 
 What is the probability that she actually has cystic fibrosis given that she tested positive for it? For the purpose of this analysis, we will not consider possible interaction variables or other predictors besides the positive test result.
 
@@ -87,14 +87,16 @@ question("Given the fact that a baby tested positive for elevated RTF, what is t
          answer("The same as sensitivity, which is .962"),
          answer(".038"),
          answer("1"),
-         answer("These answers are all wrong (except this one)", correct = TRUE)
+         answer("These answers are all wrong (except this one)", correct = TRUE),
+         allow_retry = TRUE
 )
 ```
 ```{r e, echo=FALSE}
 question("What variable was missing in all of the possible answers in the previous question?",
          answer("prevalence", correct = TRUE),
          answer("I have no idea"),
-         answer("the fact that you're tired")
+         answer("the fact that you're tired"),
+         allow_retry = TRUE
 )
 ```
 
@@ -124,14 +126,16 @@ Let's map these variables to the concepts we have been discussing.
 question("What is P(A)",
       answer("the unconditional probability of having the disease, or prevalence", correct = TRUE),
       answer("the likelihood of having a positive test result"),
-      answer("the likelihood of not having a disease given a negative test result")
+      answer("the likelihood of not having a disease given a negative test result"),
+      allow_retry = TRUE
 )
 ```
 ```{r g, echo=FALSE}
 question("Getting back to what we really want to know, what is `P(A|B)`?",
       answer("the likelihood of having a positive test result"),
       answer("the conditional probability of having a disease given a positive test result", correct = TRUE),
-      answer("the likelihood of not having a disease given a negative test result")
+      answer("the likelihood of not having a disease given a negative test result"),
+      allow_retry = TRUE
 )
 ```
 ```{r h, echo=FALSE}
@@ -139,13 +143,15 @@ question("What is `P(B)`?",
       answer("the probability of a positive test", correct = TRUE),
       answer("the probability of not having the disease"),
       answer("the probability of having the disease"),
-      answer("the false positive rate")
+      answer("the false positive rate"),
+      allow_retry = TRUE
 )
 ```
 ```{r i, echo=FALSE}
 question("Have we figured out yet how many babies have positive tests for IRT? This would be `P(B)` in Bayes's Theorem.",
       answer("No", correct = TRUE),
-      answer("Yes")
+      answer("Yes"),
+      allow_retry = TRUE
 )
 ```
 
@@ -158,7 +164,8 @@ question("Let's look at those WITHOUT cystic fibrosis who have elevated IRT. Wha
       answer("the false positive rate", correct = TRUE),
       answer("specificity"),
       answer("prevalence"),
-      answer("sensitivity")
+      answer("sensitivity"),
+      allow_retry = TRUE
 )
 ```
 
@@ -244,7 +251,7 @@ Now find the answer. How likely is a newborn with elevated IRT to have cystic fi
 (conditional_probability <- (sensitivity * prevalence) / all_pos)
 ```
 
-Call percentage() and pass it one argument, the variable `conditional_probability`.
+Call `percentage()` and pass it one argument, the variable `conditional_probability`.
 
 ```{r q, exercise = TRUE}
 
@@ -257,7 +264,8 @@ percentage(conditional_probability)
 question("So elevated IRT levels tell you what, exactly, about the child in your care?",
       answer("that she has a 96% chance of having cystic fibrosis"),
       answer("that she has a 99% chance of having cystic fibrosis"),
-      answer("that she has an approximately 16% chance of having cystic fibrosis", correct = TRUE)
+      answer("that she has an approximately 16% chance of having cystic fibrosis", correct = TRUE),
+      allow_retry = TRUE
 )
 ```
 ```{r s, echo=FALSE}
@@ -265,7 +273,8 @@ question("What does this mean?",
       answer("The odds of the baby having the disease are much lower than the sensitivity of the test", correct = TRUE),
       answer("The test is no good"),
       answer("The odds of the baby having the disease are the same as the sensitivity of the test"),
-      answer("The odds of the baby having the disease are much higher than the specificity of the test")
+      answer("The odds of the baby having the disease are much higher than the specificity of the test"),
+      allow_retry = TRUE
 )
 ```
 
@@ -284,7 +293,8 @@ So Bayes's theorem can actually be expressed very simply.
 question(" How can Bayes's Theorem be expressed more simply than the formula we started out with?",
       answer("true_pos / all_pos", correct = TRUE),
       answer("all_pos / true_pos"),
-      answer("sensitivity / all_pos")
+      answer("sensitivity / all_pos"),
+      allow_retry = TRUE
 )
 ```
 
@@ -295,5 +305,3 @@ The important thing to remember is that there is a difference between the true p
 That's the end of this introduction to conditional probability using Bayesian analysis. We used Bayes's theorem to interpret the meaning of testing positive for a relatively rare illness and found out that, since prevalence is such a small number, testing positive on a screening test isn't as scary as one might think. One should always wait for a gold standard test to validate the findings of a screening test that has a false positive rate that is higher than 0.
 
 For more fun, look for more equivalences among the variables you created for this lesson. There is at least one more. Think about why it might be an equivalence---by chance, or will these two numbers always be equivalent? Will this make it easier for you to calculate conditional probability in the future?
-
-Email me at braunsb@email.chop.edu for a printable version of this lesson.

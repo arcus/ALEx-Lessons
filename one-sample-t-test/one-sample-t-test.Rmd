@@ -101,7 +101,8 @@ question("What might have been one of Student's favorite pasttimes?",
       answer("Drinking beer", correct = TRUE),
       answer("Working as a hairdresser"),
       answer("Flying to Jupiter's moons"),
-      answer("Going to school full time")
+      answer("Going to school full time"),
+      allow_retry = TRUE
 )
 ```
 
@@ -123,7 +124,8 @@ question("What is NOT an example of a 1-sided null hypothesis?",
          answer("It usually takes less than one hour to make pie dough"),
          answer("The average monthly electric bill in Philadelphia, PA is $92", correct = TRUE),
          answer("The average monthly electric bill in Philadelphia, PA is less than $100"),
-         answer("The average monthly electric bill in Philadelphia, PA is more than $100")
+         answer("The average monthly electric bill in Philadelphia, PA is more than $100"), 
+         allow_retry = TRUE
 )
 ```
 
@@ -172,7 +174,8 @@ question("Why not?",
          answer("We don't have a big enough sample"),
          answer("We don't know how likely it is that we got this result--or would get a more extreme result--by chance", correct = TRUE),
          answer("We need to repeat the experiment many times over"),
-         answer("It's too much fun doing stats to be happy when anything is that simple")
+         answer("It's too much fun doing stats to be happy when anything is that simple"),
+         allow_retry = TRUE
 )
 ```
 
@@ -189,7 +192,8 @@ question("Which situation will not result in reliable results of a one-sample _t
          answer("large sample size"),
          answer("skewed data"),
          answer("small sample size"),
-         answer("skewed data and a small sample size", correct = TRUE)
+         answer("skewed data and a small sample size", correct = TRUE),
+         allow_retry = TRUE
 )
 ```
 
@@ -293,7 +297,7 @@ You will find a dataset called `wpm` in memory. Let's perform a _t_ test using t
 
 ### Prepare the Coding Environment
 
-Our prepations for this example analysis are the same as for the previous example: we'll use the same packages. Use the same code as for the previous _t_ test to make sure all the necessary packages have been loaded.
+Our preparations for this example analysis are the same as for the previous example: we'll use the same packages. Use the same code as for the previous _t_ test to make sure all the necessary packages have been loaded.
 
 ```{r j, exercise = TRUE}
 

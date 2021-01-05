@@ -57,16 +57,9 @@ question("How has the ASA been communicating with members and the public about t
 )
 ```
 
+## Check out this video
 
-### And by the Way
- 
-The research affinity group METACHOP (Math, Engineering, and Technology at CHOP), in cooperation with [Arcus Education](https://education.arcus.chop.edu)'s Sheila Braun, is hosting an 8-part series _Reassessing p values_. The series is based on the ASA’s [webinars](https://youtu.be/Cw8BRNN1p8E). At each meeting, we spend roughly 20 minutes watching one recorded webinar speaker and the remaining time in small groups discussing that speaker’s position and reflecting on our own.
- 
-The ASA speakers hold widely divergent, carefully considered positions. We hope to follow the their lead by promoting careful, honest, respectful conversation among participants, with the goal of cultivating innovative excellence in our own research.
-
-## Watch the First Webinar Video
-
-Can't wait for the METACHOP _Reassessing p values_ series? Prefer to watch the webinar on your own time? Don't particularly want to engage in discussion about the matter? You're in luck, because here is the first video.
+Here's a webinar from the ASA about alternatives to the traditional _p_-value. 
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/Cw8BRNN1p8E" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 

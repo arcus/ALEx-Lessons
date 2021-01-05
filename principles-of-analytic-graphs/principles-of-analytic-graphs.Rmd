@@ -19,14 +19,15 @@ library(learnr)
 
 (Slides for this and other Data Science courses may be found at the GitHub repo [https://github.com/DataScienceSpecialization/courses/](https://github.com/DataScienceSpecialization/courses/). If you care to use them, they must be downloaded as a zip file and viewed locally. This lesson corresponds to "04_ExploratoryAnalysis/Principles_of_Analytic_Graphics".)
 
-In this lesson, we'll discuss some basic principles of presenting data effectively. These will illustrate some fundamental concepts of displaying results in order to make them more meaningful and convincing. These principles are cribbed from Edward Tufte's great 2006 book, *Beautiful Evidence*. You can read more about them at the www.edwardtufte.com website.
+In this lesson, we'll discuss some basic principles of presenting data effectively. These will illustrate some fundamental concepts of displaying results in order to make them more meaningful and convincing. These principles are cribbed from Edward Tufte's great 2006 book, *Beautiful Evidence*. You can read more about them at the [www.edwardtufte.com](www.edwardtufte.com) website.
 
 ```{r a, echo=FALSE}
 question("As a warm-up, which of the following would NOT be a good use of analytic graphing?",
          answer("To show comparisons"),
          answer("To show causality, mechanism, explanation"),
          answer("To show multivariate data"),
-         answer("To decide which horse to bet on at the track", correct = TRUE)
+         answer("To decide which horse to bet on at the track", correct = TRUE),
+         allow_retry = TRUE
 )
 ```
 
@@ -47,7 +48,8 @@ question("To how may days of improvement does the median correspond?",
          answer("-2"),
          answer("1", correct = TRUE),
          answer("4"),
-         answer("12")
+         answer("12"),
+         allow_retry = TRUE
 )
 ```
 
@@ -64,7 +66,8 @@ question("",
          answer("75% of the children using the air cleaner had at most 3 symptom-free days"),
          answer("Using the air cleaner makes asthmatic children sicker", correct = TRUE),
          answer("Half the chidren in the control group had no improvement"),
-         answer("Children in the control group had at most 3 symptom-free days")
+         answer("Children in the control group had at most 3 symptom-free days"),
+         allow_retry = TRUE
 )
 ```
 
@@ -85,7 +88,8 @@ question("What mechanism does the graph imply?",
          answer("That the air cleaner increases pollution"),
          answer("That the air cleaner reduces pollution", correct = TRUE),
          answer("That the children in the control group are healthier"),
-         answer("That the air in the control group is cleaner than the air in the other group")
+         answer("That the air in the control group is cleaner than the air in the other group"),
+         allow_retry = TRUE
 )
 ```
 
@@ -109,7 +113,8 @@ question("What does the blue regression line indicate?",
          answer("Pollution doesn't really increase, it just gets reported more"),
          answer("As pollution increases, more people die"),
          answer("As pollution increases, the number of deaths doesn't change"),
-         answer("As pollution increases, fewer people die", correct = TRUE)
+         answer("As pollution increases, fewer people die", correct = TRUE),
+         allow_retry = TRUE
 )
 ```
 
@@ -128,7 +133,8 @@ question("What does the new plot indicate?",
          answer("Pollution doesn't really increase, it just gets reported more"),
          answer("As pollution increases, more people die in all seasons", correct = TRUE),
          answer("As pollution increases, the seasons change"),
-         answer("As pollution increases, fewer people die in all seasons")
+         answer("As pollution increases, fewer people die in all seasons"),
+         allow_retry = TRUE
 )
 ```
 
@@ -160,7 +166,8 @@ question("Which of the following is NOT a good principle of graphing?",
          answer("To integrate multiple modes of evidence"),
          answer("Having unreadable labels", correct = TRUE),
          answer("Content is king"),
-         aswer("To describe and document evidence")
+         answer("To describe and document evidence"),
+         allow_retry = TRUE
 )
 ```
 ```{r k, echo=FALSE}
@@ -168,7 +175,8 @@ question("Which of the following is NOT a good principle of graphing?",
          answer("To demonstrate a causative mechanism underlying a correlation"),
          answer("To prove you're always right", correct = TRUE),
          answer("To show two competing hypotheses"),
-         answer("Content is king")
+         answer("Content is king"),
+         allow_retry = TRUE
 )
 ```
 ```{r l, echo=FALSE}
@@ -176,13 +184,15 @@ question("Which of the following is NOT a good principle of graphing?",
          answer("Content is king"),
          answer("To show that some fonts are better than others", correct = TRUE),
          answer("To show good labels and scales"),
-         answer("To integrate different types of evidence")
+         answer("To integrate different types of evidence"),
+         allow_retry = TRUE
 )
 ```
 ```{r m, echo=FALSE}
-question("True or False? Color is kig",
+question("True or False? Color is king",
          answer("True"),
-         answer("False", correct = TRUE)
+         answer("False", correct = TRUE),
+         allow_retry = TRUE
 )
 ```
 
