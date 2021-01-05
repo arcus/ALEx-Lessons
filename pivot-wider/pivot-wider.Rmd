@@ -253,7 +253,7 @@ The two pivot functions, [`pivot_longer`](../pivot-longer/) and `pivot_wider`, a
 
 Data is tidy when
 
-1. Every column is variable    
+1. Every column is a variable    
 1. Every row is an observation    
 1. Every cell is a single value
 
@@ -270,17 +270,17 @@ The `fish_encounters` dataset, contributed by [Myfanwy Johnston](https://fishsci
 fish_encounters
 ```
 
-Many tools used to analyse this data need it in a form in which each station is a column. The basic `pivot_wider` syntax is this:
+Many tools used to analyze these data need it in a form in which each station is a column. The basic `pivot_wider` syntax is this:
 
 >`pivot_wider(names_from = var1, values_from = var2)`
 
 This process is a bit like creating dummy variables with 1s & 0s when you want all your regression input to be scalar in one form or another (see our [Correlation and Regression lesson](../correlation-and-regression/) to learn more). 
 
-Basically, you figure out which new variables you want from the _levels_ of varibles that are already present in the data set. That's where you get your new variables _names from_. Then you figure out where the values for those new variables are stored before the pivot, and you tell `pivot_wider` that's where you want the _values from_. `pivot_wider` creates new variables and populates them with data from the variable you told it to take the values from.
+Basically, you figure out which new variables you want from the _levels_ of variables that are already present in the data set. That's where you get your new variables _names from_. Then you figure out where the values for those new variables are stored before the pivot, and you tell `pivot_wider` that's where you want the _values from_. `pivot_wider` creates new variables and populates them with data from the variable you told it to take the values from.
 
 You'll end up with more columns and fewer rows in the data set.
 
-Let's try it with the `fish_encounters` data set. [Pipe][../piping-and-summarizing/] the data set to `pivot_wider` and tell it to take the `names_from` the `station` variable and the `values_from` `seen`. Use the hints if you have trouble.
+Let's try it with the `fish_encounters` data set. [Pipe](../piping-and-summarizing/) the data set to `pivot_wider` and tell it to take the `names_from` the `station` variable and the `values_from` `seen`. Use the hints if you have trouble.
 
 First, though, change all the names to lowercase using the statement `names(fish_encounters) <- tolower(names(fish_encounters))`. 
 
@@ -397,7 +397,7 @@ Now that you understand the basics of `pivot_wider`, you can do some more explor
 
 ## See Also
 
-[Hadley Wickham, et al.'s](https://tidyr.tidyverse.org/articles/pivot.html) for even more examples of pivoting, including how to use `pivot_wider` to do aggregation. 
+[Hadley Wickham, et al.](https://tidyr.tidyverse.org/articles/pivot.html) for even more examples of pivoting, including how to use `pivot_wider` to do aggregation. 
 
 [`pivot_longer`](../pivot-longer/), an interactive lesson by Sheila Braun.
 

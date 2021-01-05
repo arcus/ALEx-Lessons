@@ -37,7 +37,7 @@ names(Data) <- c("Efficiency", "Health")
 
 #### Null and Alternative Hypotheses
 
-> H<sub>0</sub> For a [two-tailed test](http://www.biostathandbook.com/hypothesistesting.html#tails), which is what you almost always should use, is that the number of observations in each category is equal to that predicted by a biological theory.    
+> H<sub>0</sub> for a [two-tailed test](http://www.biostathandbook.com/hypothesistesting.html#tails), which is what you almost always should use, is that the number of observations in each category is equal to that predicted by a biological theory.    
 H<sub>A</sub> is that the observed data are different from the expected.
 
 >H<sub>0</sub> for a one-tailed test is that the observed number for one category is equal to or less than the expected.
