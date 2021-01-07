@@ -53,7 +53,7 @@ my_vector <- 1:20
 dim(my_vector)
 ```
 
-Clearly, that’s not very helpful! Since `my_vector` is a vector, it doesn’t have a `dim` attribute (so it’s just `NULL`), but we can find its length using the `length` function. Try that now.
+Clearly, that’s not very helpful! Since `my_vector` is a vector, it doesn't have a `dim` attribute (so it’s just `NULL`), but we can find its length using the `length` function. Try that now.
 
 ```{r c, exercise=TRUE, exercise.setup = "prepare-b"}
 

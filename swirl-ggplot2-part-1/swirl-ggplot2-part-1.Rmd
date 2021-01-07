@@ -252,7 +252,7 @@ We've created the vector `myhigh` for you which contains the hwy data from the `
 myhigh
 ```
 
-Comparing the values of `myhigh` with the plot, we see the first entries in the vector (29, 29, 31, 30,...) correspond to the leftmost points in the the plot (in order), and the last entries in myhigh (28, 29, 26, 26, 26) correspond to the rightmost plotted points. So, specifying the `y` parameter only, without an `x` argument, plots the values of the `y` argument in the order in which they occur in the data.
+Comparing the values of `myhigh` with the plot, we see the first entries in the vector (29, 29, 31, 30,...) correspond to the leftmost points in the the plot (in order), and the last entries in `myhigh` (28, 29, 26, 26, 26) correspond to the rightmost plotted points. So, specifying the `y` parameter only, without an `x` argument, plots the values of the `y` argument in the order in which they occur in the data.
 
 ## `qplot` Boxplot
 

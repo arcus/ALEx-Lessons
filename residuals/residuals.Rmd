@@ -127,7 +127,7 @@ question("Why is the mean of all the residuals around a best fit line 0?",
 
 >The second equation says that our residuals must be uncorrelated with our predictors, the parents’ height. 
 
-This makes sense - if the residuals and predictor (in this case, parents' heights) were correlated, then you could make a *better* prediction and reduce the distances (residuals) between the actual outcomes and the predictions. But we already have the best line, right? So there can'te be a correlation between the residuals and the predictor, parent's heights: or, more generally, between predictors and the best fit line. 
+This makes sense - if the residuals and predictor (in this case, parents' heights) were correlated, then you could make a *better* prediction and reduce the distances (residuals) between the actual outcomes and the predictions. But we already have the best line, right? So there can't be a correlation between the residuals and the predictor, parent's heights: or, more generally, between predictors and the best fit line. 
 
 ## Equations in Action
 
@@ -220,31 +220,43 @@ As shown algebraically in the slides, the equations for the intercept and slope 
 
 We'll verify these claims now. We've defined for you two R functions, est and sqe. Both take two inputs, a slope and an intercept. The function est calculates a child's height (y-coordinate) using the line defined by the two parameters, (slope and intercept), and the parents' heights in the Galton data as x-coordinates.  
 
-- Class: mult_question
-Let "mch" represent the mean of the galton childrens' heights and "mph" the mean of the galton parents' heights. Let "ic" and "slope" represent the intercept and slope of the regression line respectively. As shown in the slides and past lessons, the point (mph,mch) lies on the regression line. This means
-  AnswerChoices: mch = ic + slope*mph; mph = ic + slope*mch; I haven't the slightest idea.
-  CorrectAnswer: mch = ic + slope*mph
-  AnswerTests: omnitest(correctVal='mch = ic + slope*mph')
-  Hint: A line is the set of all points (x,y) satisfying the equation y = mx + b, where m is the slope of the line and b is its intercept. Remember that the point (mph,mch) lies on the regression line with intercept ic and slope "slope".
-
+```{r linearequation, echo = FALSE}
+question("Let 'mch' represent the mean of the galton childrens' heights and 'mph' the mean of the galton parents' heights. Let 'ic' and 'slope' represent the intercept and slope of the regression line respectively. As shown in the slides and past lessons, the point (mph,mch) lies on the regression line. This means:", 
+         answer("mch = ic + slope*mph", correct = TRUE),
+         answer("mph = ic + slope*mch"),
+         answer("I haven't the slightest idea."),
+         correct = "Awesome!",
+         incorrect = "Hint: A line is the set of all points (x,y) satisfying the equation y = mx + b, where m is the slope of the line and b is its intercept. Remember that the point (mph,mch) lies on the regression line with intercept ic and slope 'slope'.",
+         random_answer_order = TRUE,
+         allow_retry = TRUE
+         )
+```
 
 The function sqe calculates the sum of the squared residuals, the differences between the actual children's heights and the estimated heights specified by the line defined by the given parameters (slope and intercept).  R provides the function deviance to do exactly this using a fitted model (e.g., fit) as its argument. However, we provide sqe because we'll use it to test regression lines different from fit. 
 
 
 We'll see that when we vary or tweak the slope and intercept values of the regression line which are stored in fit$coef, the resulting squared residuals are approximately equal to the sum of two sums of squares - that of the original regression residuals and that of the tweaks themselves. More precisely, up to numerical error, 
 
-
+$$
 sqe(ols.slope+sl,ols.intercept+ic) == deviance(fit) + sum(est(sl,ic)ˆ2 )
+$$
 
-
-Equivalently, sqe(ols.slope+sl,ols.intercept+ic) == sqe(ols.slope, ols.intercept) + sum(est(sl,ic)ˆ2 )
-
+Equivalently, 
+$$
+sqe(ols.slope+sl,ols.intercept+ic) == sqe(ols.slope, ols.intercept) + sum(est(sl,ic)ˆ2 )
+$$
 
 
 The left side of the equation represents the squared residuals of a new line, the "tweaked" regression line. The terms "sl" and "ic" represent the variations in the slope and intercept respectively. The right side has two terms. The first represents the squared residuals of the original regression line and the second is the sum of squares of the variations themselves. 
 
 
-We'll demonstrate this now. First extract the intercept from fit$coef and put it in a variable called ols.ic . The intercept is the first element in the fit$coef vector, that is fit$coef[1].
+We'll demonstrate this now. First extract the intercept from `fit$coef` and put it in a variable called ols.ic . The intercept is the first element in the `fit$coef` vector, that is `fit$coef[1]`.
+```{r fit$coef, exercise = TRUE, exercise.lines = 5}
+
+```
+```{r fit$coef-solution}
+ols.ic <- fit$coef
+```
   CorrectAnswer: ols.ic <- fit$coef[1]
   AnswerTests: omnitest(correctExpr='ols.ic <- fit$coef[1]')
   Hint: Type "ols.ic <- fit$coef[1]" at the R prompt.
