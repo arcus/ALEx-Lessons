@@ -1,41 +1,21 @@
 # Arcus Learning Exchange (ALEx)
 
-#### Designer and agile project owner, Sheila Braun; proof of concept, Ian Campbell, MD PhD. Based on ideas formed at the Summer 2019 Arcus Education Retreat attended by Joy Payton and Sheila Braun. The whole team has continued to revise the project. Other team members and contributors are Zoë Wilkinson-Saldaña, Patrick Dibussolo, Laura McNamara, and Lara Lechtenberg, all of the Children's Hospital of Philadelphia (CHOP).
+## Intent of this Repo
 
-Many of CHOP’s principle investigators and their teams have become interested in expanding their data science skills. In support of the Arcus project at CHOP, one of our goals at [Arcus Education](https://education.arcus.chop.edu) is to create learning events and experiences in which 100% of attendees spend 100% of their time working towards their own goals at their own pace. We have piloted our approach with R and Statistics workshops, Python workshops, and by making lessons freely available to users via the ALEx website. 
+This repo contains Shiny applications in the form of `learnr` tutorials.  It also contains instructions for deploying these applications once they are updated.
 
-In our workshops, 
+To add a new lesson, create a new top-level directory with a lower-case-and-dashes naming convention that describes the lesson topic or aim.  The lesson will contain the following:
 
-* Each learner sets their own goals.    
-* Each learner receives an individualized curriculum based on their goals.   
-* Success is measured by the extent to which each learner perceives themselves to have met their own goals.
+* An R Markdown file that constitutes the `learnr` tutorial
+* Any required files (e.g. data in the form of a .csv)
+* A folder with .css styling (copy the `www` directory from an existing lesson)
 
-Learning event attendees have highly variable goals, from R basics to machine learning algorithms for genetic data to report writing for monthly metrics. We experimented with RStudio's R packages `shiny` and `learnr` to answer the question, “How can an instructor who has _N_ attendees at a workshop create _N_ different curricula based on _N_ different sets of learning goals, while still treating the class not so much as a single entity, but as _N_ individuals?” 
+When you work in this repo on your own computer, additional types of files may appear, such as the `rsconnect` directory or `.DS_Store`.  Do not commit these to the repository (they should be successfully in the `.gitignore`, but just in case).
 
-To answer this question in a practical way, we created a tool that streamlines the process of matching an individual learner's goals to a curriculum--a learning checklist for achieving those goals.
+In order to deploy to Shinyapps, you have to connect your RStudio to the chop-arcus account.  See a member of the Arcus Data Education team for more details or to be added.
 
-### Use the Arcus Learning Exchange (ALEx)
+To deploy an app (new or updated), it is highly recommended to do the following:
 
-The ALEx landing page is at https://alex.arcus.chop.edu. From there, you can create a customized curriculum for yourself or another, browse lessons, or add a lesson of your own to make available to learners. 
-
-
-### Come to a Workshop or to another learning event!
-
-All CHOP, Penn, and Drexel employees are welcome to attend our workshops. Registration is required. [Click here to find out more and to register](http://bit.ly/CHOP-ALEx-Registration). 
-
-### Become a Contributor!
-
-Make a pull request to include your teaching materials in the Arcus Learning Exchange.
-
-
-## For Instructors: How to Write an Interactive Lesson
-
-[Learn how to write a lesson in `learnr`](https://alex.arcus.chop.edu/learnr-with-alex/)
-
-If you have a complete lesson, whether interactie or not, email [Sheila](braunsb@email.chop.edu) to get your lesson reviewed and included in our library. 
-
-Thank you for adding to the list of lessons we can offer!
-
-### Note about this Repo's History
-
-Related to the repo inside CHOP's enterprise GitHub. 
+* Run the app locally to ensure it works
+* Run the `deploy_script.R` file, which includes helper functions.
+* Then issue the command `deploy(directory_name)`, substituting the directory name of the app you want to deploy.
