@@ -399,8 +399,8 @@ Now that you understand the basics of `pivot_wider`, you can do some more explor
 
 [Hadley Wickham, et al.](https://tidyr.tidyverse.org/articles/pivot.html) for even more examples of pivoting, including how to use `pivot_wider` to do aggregation. 
 
-[`pivot_longer`](../pivot-longer/), an interactive lesson by Sheila Braun.
+[`pivot_longer`](../pivot-longer/), an interactive lesson that discusses the basic of pivoting.
 
-[`dplyr`](../dplyr), an interactive lesson by Sheila Braun based on the `tidyverse`.
+[`dplyr`](../dplyr), an interactive lesson based on the `tidyverse`.
 
-[Piping and Summarizing](../piping-and-summarizing/), an interactive lesson by Sheila Braun that uses `dplyr` and `magrittr`, both of which are part of the `tidyverse`.
+[Piping and Summarizing](../piping-and-summarizing/), an interactive lesson that uses `dplyr` and `magrittr`, both of which are part of the `tidyverse`.

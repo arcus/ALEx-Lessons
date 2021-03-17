@@ -21,7 +21,7 @@ knitr::opts_chunk$set(echo = FALSE)
 options(digits = 3, scipen = 9999)
 ```
 
-# Basic Building Blocks
+## Basic Building Blocks
 
 In this lesson, we will explore some basic building blocks of the R programming language.
 

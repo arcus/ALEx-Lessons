@@ -27,6 +27,8 @@ t3 <- "October 17, 1986 08:24"
 t4 <- strptime(t3, "%B %d, %Y %H:%M")
 ```
 
+## Dates and Times
+
 R has a special way of representing dates and times, which can be helpful if you're working with data that shows how something changes over time (i.e. time-series data) or if your data contains some other temporal information, like dates of birth.
 
 Dates are represented by the `Date` class and times are represented by the `POSIXct` and `POSIXlt` classes. Internally, dates are stored as **the number of days since 1970-01-01** and times are stored as either **the number of seconds since 1970-01-01** (for `POSIXct`) or a list of seconds, minutes, hours, etc. (for `POSIXlt`).

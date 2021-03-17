@@ -1,7 +1,5 @@
 ---
 title: "Flipping Coins and Other Things"
-author: "Sheila Braun, CHOP"
-date: "1/14/2020"
 output: 
  learnr::tutorial:
     progressive: true

@@ -30,6 +30,8 @@ plants <- plants %>%
   select(-X1)
 ```
 
+## Looking at Data
+
 Whenever you're working with a new dataset, the first thing you should do is look at it to get answers to these questions: 
 
 * What is the format of the data?     

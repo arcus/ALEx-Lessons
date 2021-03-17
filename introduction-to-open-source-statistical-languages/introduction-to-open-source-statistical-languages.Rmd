@@ -136,8 +136,3 @@ question("R and Python share this great feature:",
 
 If you have smallish data (files in the hundred thousand rows or fewer, < 500mb scope) or you’re new to programming, try R first. Familiar with programming or have big (like, massively big) data? Go for Python.
 
-
-## Authors
-
-Joy Payton, Sheila Braun
-
