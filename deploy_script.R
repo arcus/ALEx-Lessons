@@ -8,6 +8,11 @@ whoops <- function() {
 }
 
 deploy <- function(folder) {
+  # To do: check if folder exists!
+  folder_match <- dir(pattern = paste("^",folder,"$", sep = ""))
+  if (length(folder_match) != 1) {
+    return("Hoo boy, can't find that one!")
+  } 
   # what's my R Markdown here?  I assume just one.
   md <- list.files(path=folder, pattern = "\\.[Rr][Mm][Dd]$",
                    full.names = TRUE)
