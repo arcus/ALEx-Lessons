@@ -3,8 +3,8 @@ library(rsconnect)
 library(rmarkdown)
 
 # not sure if this will work but at least catch errors...
-whoops <- function(input) {
-  print(input)
+whoops <- function() {
+  print("Whoops!")
 }
 
 deploy <- function(folder) {
