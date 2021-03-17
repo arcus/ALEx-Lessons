@@ -555,9 +555,7 @@ GitKraken's videos build on vocabulary you already know even if you know nothing
 
 ## References 
 
-Main author and content wrangler: Sheila Braun ([CHOP](http://www.chop.edu)). 
-
-Portions of this lesson were wrenched wholesale, or copied and somewhat altered to match my own particular je ne sais quoi, from [Happy Git and GitHub for the useR](https://happygitwithr.com/), which was the work of [Jenny Bryan](http://www.jennybryan.org), Software Engineer at [RStudio](https://www.rstudio.com/) on the [tidyverse](https://www.tidyverse.org/)/[r-lib](https://github.com/r-lib/) team. 
+Portions of this lesson were wrenched wholesale, or copied and somewhat altered from [Happy Git and GitHub for the useR](https://happygitwithr.com/), which was the work of [Jenny Bryan](http://www.jennybryan.org), Software Engineer at [RStudio](https://www.rstudio.com/) on the [tidyverse](https://www.tidyverse.org/)/[r-lib](https://github.com/r-lib/) team. 
 
 The development and delivery of [Happy Git and GitHub for the useR](https://happygitwithr.com/) also benefited greatly from contributions by
 

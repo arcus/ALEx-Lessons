@@ -64,7 +64,7 @@ On that same page, you will likely find a link to __Zotero Connector__ that matc
 knitr::include_graphics("www/Fig1.png")
 ```
 
-You may receive a warning that instillation cannot continue due to lack of permissions, but it may successfully install anyway. 
+You may receive a warning that installation cannot continue due to lack of permissions, but it may successfully install anyway. 
 
 ```{r echo=FALSE}
 knitr::include_graphics("www/Fig2.png")

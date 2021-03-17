@@ -33,10 +33,10 @@ plants <- plants %>%
 Whenever you're working with a new dataset, the first thing you should do is look at it to get answers to these questions: 
 
 * What is the format of the data?     
-* What are its dimensions?    
+* What are the dimensions?    
 * What are the variable names?    
 * How are the variables stored?    
-* Is data missing? Where?    
+* Are data missing? Where?    
 * Are there any flaws in the data?
 
 This lesson will teach you how to answer these questions (and more) using R's built-in functions. We'll be using a dataset constructed from the United States Department of Agriculture's PLANTS Database (http://plants.usda.gov/adv_search.html).
@@ -47,7 +47,7 @@ I've stored the data for you in a tibble (a type of data frame) called `plants`.
 
 ```
 ```{r a-solution}
-ls()
+plants
 ```
 
 Let's begin by checking the class of the plants variable with `class(plants)`. This will give us a clue as to the overall structure of the data.
@@ -59,9 +59,9 @@ Let's begin by checking the class of the plants variable with `class(plants)`. T
 class(plants)
 ```
 
-It's very common for data to be stored in a data frame. It is the default class for data read into R using functions like `read.csv` and `read.table`, both of which you'll learn about in another lesson.
+It's very common for data to be stored in a dataframe. It is the default class for data read into R using functions like `read.csv` and `read.table`, both of which you'll learn about in another lesson.
 
-Since the dataset is stored in a data frame, we know it is rectangular. In other words, it has two dimensions (rows and columns) and fits neatly into a table or spreadsheet. Use `dim(plants)` to see exactly how many rows and columns we're dealing with.
+Since the dataset is stored in a dataframe, we know it is rectangular. In other words, it has two dimensions (rows and columns) and fits neatly into a table or spreadsheet. Use `dim(plants)` to see exactly how many rows and columns we're dealing with.
 
 ```{r c, exercise = TRUE}
 
