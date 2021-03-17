@@ -260,7 +260,7 @@ The slope of the line is the estimate of the coefficient, or multiplier, of `par
 
 What this means is that if you take a child's height and multiply it by the coefficient of parent, you have the best possible (not perfect) chance of getting close to the child's height. This will be true for the largest possible number of children in your data set. 
 
-Obviously, it's not perfect. If we cacluated each child's height using parents' heights and the correlation coefficient, almost every one of our estimates would be wrong. That's a flaw in regression that we forget at our peril. But the regression line does the best job possible given the data. Remember,
+Obviously, it's not perfect. If we calculated each child's height using parents' heights and the correlation coefficient, almost every one of our estimates would be wrong. That's a flaw in regression that we forget at our peril. But the regression line does the best job possible given the data. Remember,
 
 >All models are wrong. Some are useful.
 
@@ -298,7 +298,7 @@ question("From the output of `summary`, what is the intercept?",
 )
 ```
 
->Random fact: Charles Darwina and Francis Galton were cousins.
+>Random fact: Charles Darwin and Francis Galton were cousins.
 
 
 The slope of a line shows how much of a change in the

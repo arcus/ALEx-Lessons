@@ -10,10 +10,9 @@ output:
       - www/style.css
 runtime: shiny_prerendered
 ---
-
-```{r, echo=FALSE}
-library(rmarkdown)
-library(shiny)
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+options(digits = 3, scipen = 9999)
 library(knitr)
 ```
 
@@ -121,7 +120,7 @@ tabix -p vcf Sample1.vcf.gz
 The `bcftools` program can be used to manipulate `.vcf.gz` files. 
 
 ### Merging BCF Files into Multisample BCF Files
-Initially, variants are often called independently on separate samples. It can often be helpful to merge these samples into a single file to be analyzed together. Use the `bcftools merge` command to combine files from separate samples. The samples receive their name from the file name. For speed, the files should have been previously indexed with `tabix` (see above). See the [[SAMtools manual `bcftools` `merge` section](http://samtools.github.io/bcftools/bcftools.html#merge) for more details. 
+Initially, variants are often called independently on separate samples. It can often be helpful to merge these samples into a single file to be analyzed together. Use the `bcftools merge` command to combine files from separate samples. The samples receive their name from the file name. For speed, the files should have been previously indexed with `tabix` (see above). See the [SAMtools manual `bcftools` `merge` section](http://samtools.github.io/bcftools/bcftools.html#merge) for more details. 
 
 ```{r, engine = 'bash', eval = FALSE}
 module load sam-bcf-tools/

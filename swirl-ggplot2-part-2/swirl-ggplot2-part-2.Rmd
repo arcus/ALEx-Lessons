@@ -163,7 +163,7 @@ You didn't have to pass any arguments to the function `geom_point`. That's becau
 
 ## `ggplot` Scatterplot with Smoothed Regression Line
 
-Use the expression you just typed (`g + geom_point()`) and add to it another layer, a call to `geom_smooth()`. Notice the messge R gives you.
+Use the expression you just typed (`g + geom_point()`) and add to it another layer, a call to `geom_smooth()`. Notice the message R gives you.
 
 
 ```{r geom-point-smooth, exercise = TRUE, exercise.lines = 5}
@@ -242,7 +242,7 @@ g + geom_point() + geom_smooth(method = "lm") + facet_grid(. ~ drv)
 
 Each panel is labeled with the appropriate factor. 
 
-All the data associated with 4-wheel drive cars is in the leftmost panel; front-wheel drive data is shown in the middle panel; and rear-wheel drive data in the rightmost. 
+All the data associated with 4-wheel drive cars is in the leftmost panel, front-wheel drive data is shown in the middle panel, and rear-wheel drive data in the rightmost. 
 
 This is similar to the plot you created at the start of the lesson using `qplot`, although we used a different smoothing function than previously.
 
@@ -299,7 +299,7 @@ question("Which of the following are customization options you can use with `ggp
 
 Let's practice modifying aesthetics now. We'll use the graphic object `g` that we already filled with `mpg` data and add a call to the function `geom_point`, but this time we'll give `geom_point` 3 arguments. Set the argument `color` equal to "pink", the argument `size` to 4, and the argument `alpha` to 1/2. You'll see what `alpha` does when you run the plot.
 
-All three of these aesthetic arguments are set equal to _constants_ _inside_ calls to `geom`s. We are not setting the aesthetics for the entire plot, but rather for the objects under the control of the `geom` call. And because they are constants, they can be passed directy to the `geom` function without being passed first to `aes`. More about that later.
+All three of these aesthetic arguments are set equal to _constants_ _inside_ calls to `geom`s. We are not setting the aesthetics for the entire plot, but rather for the objects under the control of the `geom` call. And because they are constants, they can be passed directly to the `geom` function without being passed first to `aes`. More about that later.
 
 Go ahead and create the plot.
 

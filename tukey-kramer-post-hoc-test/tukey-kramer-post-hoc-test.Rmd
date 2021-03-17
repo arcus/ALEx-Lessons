@@ -1,6 +1,6 @@
 ---
 title: "Tukey-Kramer Post Hoc Test"
-output: 
+output:
  learnr::tutorial:
     progressive: true
     allow_skip: true
@@ -27,7 +27,7 @@ library(ggplot2)
 knitr::opts_chunk$set(echo = TRUE)
 options(scipen = 9999, digits = 3)
 tutorial_options(exercise.startover = TRUE,
-  exercise.eval = TRUE, 
+  exercise.eval = TRUE,
   exercise.cap = "R Code",
   exercise.completion = TRUE,
   exercise.diagnostics = TRUE)
@@ -56,11 +56,11 @@ long_mussels$location <- as.factor(long_mussels$location)
 
 ## Background
 
-One common way to look at the data in more detail after performing an [ANOVA](../one-way-anova/) is to compare different pairs of means and see which are significantly different from each other. For the mussel shell example in [our ANOVA lesson](../one-way-anova/), the overall _p_ value (.0036) piques our interest. We therefore want to follow up by asking whether the mean in Tillamook is different from the mean in Newport, whether Newport is different from Petersburg, and so on.
+One common way to look at the data in more detail after performing an [ANOVA](/one-way-anova/) is to compare different pairs of means and see which are significantly different from each other. For the mussel shell example in [our ANOVA lesson](/one-way-anova/), the overall _p_ value (.0036) piques our interest. We therefore want to follow up by asking whether the mean in Tillamook is different from the mean in Newport, whether Newport is different from Petersburg, and so on.
 
 ## What kinds of Variables work with a Tukey-Kramer _Post Hoc_ Test
 
-You use the same variables for a Tukey-Kramer test that you used for the ANOVA test you're curious about. 
+You use the same variables for a Tukey-Kramer test that you used for the ANOVA test you're curious about.
 
 >One [scalar (a.k.a. "measurement") variable](http://www.biostathandbook.com/variabletypes.html#measurement).     
 One [nominal (a.k.a. "categorical") variable](http://www.biostathandbook.com/variabletypes.html#nominal)   
@@ -72,7 +72,7 @@ The nominal variable divides the measurements into two or more groups. The one-w
 >* **H<sub>0</sub>**: The observed difference between a pair of means is less than or equal to the minimum significant difference (MSD).     
 * **H<sub>A</sub>**: The observed difference between a pair of means is greater than the minimum significant difference.
 
-For a balanced design, all of the minimum significant differences will be the same; for an unbalanced design, pairs of groups with smaller sample sizes will have bigger minimum significant differences. 
+For a balanced design, all of the minimum significant differences will be the same; for an unbalanced design, pairs of groups with smaller sample sizes will have bigger minimum significant differences.
 
 ## When to use Tukey-Kramer Test
 

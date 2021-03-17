@@ -71,7 +71,7 @@ library(dplyr)
 
 The `msleep` (mammals sleep) data set contains the sleep times and weights for a set of mammals and is available in the dagdata repository on GitHub. This data set contains 83 rows and 11 variables.  
 
-We've loaded some data for you in a data frame called `msleep`.  Type `head(msleep)` in f the code box here, then run the code to see the top of the data. 
+We've loaded some data for you in a data frame called `msleep`.  Type `head(msleep)` in the code box here, then run the code to see the top of the data. 
 
 ```{r c, exercise = TRUE, exercise.lines = 10}
 

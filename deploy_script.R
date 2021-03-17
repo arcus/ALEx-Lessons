@@ -21,6 +21,7 @@ deploy <- function(folder) {
             appTitle = title,
             appFiles = NULL, # include all by specifying NULL
             account = "chop-arcus",
+            forceUpdate = TRUE,
             on.failure = whoops())
   
 }

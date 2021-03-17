@@ -351,7 +351,7 @@ Occasionally, you may need to apply a function that is not yet defined, thus req
 
 Pretend you are interested in only the second item from each element of the `unique_vals` list that you just created. Since each element of `unique_vals` is a vector and we're not aware of any built-in function in R that returns the second element of a vector, we will construct our own function.
 
-`lapply(unique_vals, function(elem) elem[2])` will return a list containing the second item from each element of the unique_vals list. Note that our function takes one argument, `elem`, which is just a 'dummy variable' that takes on the value of each element of `unique_vals`, in turn.
+`lapply(unique_vals, function(elem) elem[2])` will return a list containing the second item from each element of the `unique_vals` list. Note that our function takes one argument, `elem`, which is just a 'dummy variable' that takes on the value of each element of `unique_vals`, in turn.
 
 ```{r z, exercise = TRUE}
 

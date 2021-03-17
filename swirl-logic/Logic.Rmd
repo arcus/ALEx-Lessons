@@ -188,7 +188,7 @@ In this case, the left operand is evaluated only with the first member of the ri
 
 The `OR` operator follows a similar set of rules. The `|` version of `OR` evaluates `OR` across an entire vector, while the `||` version of `OR` evaluates only the first member of a vector.
 
-An expression using the OR operator will evaluate to TRUE if the left operand or the right operand is `TRUE`. If both are `TRUE`, the expression will evaluate to `TRUE`, however if neither are `TRUE`, then the expression will be `FALSE`.
+An expression using the OR operator will evaluate to TRUE if the left operand or the right operand is `TRUE`. If both are `TRUE`, the expression will evaluate to `TRUE`; however, if neither are `TRUE`, then the expression will be `FALSE`.
 
 Let's test out the vectorized version of the `OR` operator. Type the expression `TRUE | c(TRUE, FALSE, FALSE)`.
 
