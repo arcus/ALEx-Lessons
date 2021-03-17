@@ -32,7 +32,7 @@ knitr::opts_chunk$set(echo = FALSE)
 
 ## More Loop Functions in R: `vapply()` and `tapply()`
 
-In this lesson, you'll learn how to use `vapply()` and `tapply()`, each of which serves a very specific purpose within the Split-Apply-Combine methodology mentioned in [the previous lesson](/lapply-and-sapply/lapply-and-sapply. For consistency, we'll use the same dataset we used in the '`lapply` and `sapply`' lesson.
+In this lesson, you'll learn how to use `vapply()` and `tapply()`, each of which serves a very specific purpose within the Split-Apply-Combine methodology mentioned in [the previous lesson](/lapply-and-sapply). For consistency, we'll use the same dataset we used in the '`lapply` and `sapply`' lesson.
 
 The Flags dataset from the UCI Machine Learning Repository contains details of various nations and their flags. More information may be found at http://archive.ics.uci.edu/ml/datasets/Flags.
 

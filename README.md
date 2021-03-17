@@ -18,4 +18,4 @@ To deploy an app (new or updated), it is highly recommended to do the following:
 
 * Run the app locally to ensure it works
 * Run the `deploy_script.R` file, which includes helper functions.
-* Then issue the command `deploy(directory_name)`, substituting the directory name of the app you want to deploy.
+* Then issue the command `deploy("directory_name")`, substituting the directory name of the app you want to deploy.
