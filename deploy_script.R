@@ -13,12 +13,20 @@ deploy <- function(folder) {
   if (length(folder_match) != 1) {
     return("Hoo boy, can't find that one!")
   } 
-  # what's my R Markdown here?  I assume just one.
-  md <- list.files(path=folder, pattern = "\\.[Rr][Mm][Dd]$",
-                   full.names = TRUE)
-  # Look in the yaml at the top to get the title
-  title <- yaml_front_matter(md)$title
-  # remove old preferences in the rsconnect folder
+  # there are two possibilities: an R Markdown learnr tutorial,
+  # or a traditional shiny app.R file.
+  if (length(list.files(path=folder, pattern = "\\.[Rr][Mm][Dd]$")) > 0 )
+  {
+    # what's my R Markdown here?  I assume just one.
+    md <- list.files(path=folder, pattern = "\\.[Rr][Mm][Dd]$",
+                     full.names = TRUE)
+    # Look in the yaml at the top to get the title
+    title <- yaml_front_matter(md)$title
+    # remove old preferences in the rsconnect folder
+  }
+  else if (length(list.files(path=folder, pattern = "app\\.R")) > 0) {
+    title = folder
+  }
   unlink(paste(folder,"/rsconnect", sep=""), recursive = TRUE)
   # deploy to shinyapps.  We assume the connection is already set up.
   deployApp(appDir = folder, 
@@ -28,21 +36,20 @@ deploy <- function(folder) {
             account = "chop-arcus",
             forceUpdate = TRUE,
             on.failure = whoops())
-  
 }
 
 
 deploy_all <- function() {
   # look in each folder.
   for (folder in (list.dirs(full.names = FALSE, recursive = FALSE))) {
-  # If there's an R Markdown, deploy it, 
- if (length(list.files(path=folder, pattern = "\\.[Rr][Mm][Dd]$")) > 0 ) 
-   {
-deploy(folder)
- }
-  # otherwise, skip ahead.
-  else next
+    # If there's an R Markdown or an app.R, deploy it, 
+    if (length(list.files(path=folder, pattern = "\\.[Rr][Mm][Dd]$")) > 0 |
+        length(list.files(path=folder, pattern = "app\\.R")) > 0) 
+    {
+      deploy(folder)
+    }
+    
+    # otherwise, skip ahead.
+    else next
   }
 }
-
-
