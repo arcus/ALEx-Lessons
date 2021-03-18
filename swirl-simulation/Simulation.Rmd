@@ -29,6 +29,8 @@ my_pois <- replicate(100, rpois(5, 10))
 cm <- colMeans(my_pois)
 ```
 
+## Simulation
+
 One of the great advantages of using a statistical programming language like R is its vast collection of tools for simulating random numbers.
 
 This lesson assumes familiarity with a few common probability distributions, but these topics will only be discussed with respect to random number generation. Even if you have no prior experience with these concepts, you should be able to complete the lesson and understand the main ideas.

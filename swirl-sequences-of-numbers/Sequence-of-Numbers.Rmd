@@ -25,7 +25,7 @@ tutorial_options(exercise.startover = TRUE,
   exercise.diagnostics = TRUE)
 ```
 
-# Sequences of Numbers
+## Sequences of Numbers
 In this lesson, you’ll learn how to create sequences of numbers in R.
 
 The simplest way to create a sequence of numbers in R is by using the `:` operator. Type `1:20` to see how it works.

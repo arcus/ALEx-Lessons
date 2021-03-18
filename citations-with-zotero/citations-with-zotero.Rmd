@@ -20,13 +20,13 @@ library(knitr)
 library(learnr)
 ```
 
-## __Introduction__
+## Introduction
 
 Many software solutions have been developed for citation management. You may have heard of one of the most popular commercial solutions, EndNote.
 
 __Zotero__ is a free and open source alternative which can be installed without administrator privileges.
 
-### __Why Do I Need a Reference Manager?__
+### Why Do I Need a Reference Manager?
 
 __Zotero__ offers a number of advantages:
  
@@ -50,7 +50,8 @@ question("Which of the following is NOT a potential benefit of Zotero discussed 
 )
 ```
 
-## __Installing Zotero__
+## Installing Zotero
+
 __Zotero__ comes in two main parts:
 
 1. The main reference manager program, `Zotero`
@@ -76,7 +77,8 @@ Once __Zotero__ is installed, you can also install __Zotero Connector__.
 knitr::include_graphics("www/Fig3.png")
 ```
 
-## __Importing a Zotero Library__
+## Importing a Zotero Library
+
 Now that __Zotero__ has been installed, your organization may have a common library of publications to get you started. 
 
 ```{r echo=FALSE}
@@ -103,7 +105,7 @@ knitr::include_graphics("www/Fig9.png")
 
 Once the importation process is complete, you will see the papers in your Zotero library.
 
-## __Inserting Citations in Microsoft Word__
+## Inserting Citations in Microsoft Word
 
 Once __Zotero__ is installed, you will find a `Zotero` section of the Microsoft Word ribbon.
 
@@ -111,7 +113,7 @@ Once __Zotero__ is installed, you will find a `Zotero` section of the Microsoft 
 knitr::include_graphics("www/Fig10a.png")
 ```
 
-### __Selecting a Citation Style in Zotero__
+### Selecting a Citation Style in Zotero
 
 Before you get started, you must select a format for your citations and bibliography. Click `Document Preferences` to get started.
 
@@ -149,7 +151,7 @@ Return to Microsoft Word and press the `Document Preferences` button again if ne
 
 __Note that the style can be changed at any time using the same procedure.__
 
-### __Inserting a Citation in Microsoft Word__
+### Inserting a Citation in Microsoft Word
 
 ```{r echo=FALSE, out.width="90%"}
 knitr::include_graphics("www/Fig15.png")
@@ -173,7 +175,7 @@ knitr::include_graphics("www/Fig16.png")
 
 Whenever new citations are added, all other citations in the document are automatically reformatted to have the appropriate order. 
 
-## __Inserting a Bibliography in Microsoft Word__
+## Inserting a Bibliography in Microsoft Word
 
 ```{r echo=FALSE, out.width="90%"}
 knitr::include_graphics("www/Fig17.png")

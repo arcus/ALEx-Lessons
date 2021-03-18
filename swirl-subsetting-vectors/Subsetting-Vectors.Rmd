@@ -24,9 +24,9 @@ names(vect2) <- c("foo", "bar", "norf")
 ```
 
 TIP: If you can't figure out what to type, click on the "Hints" or "Solution" buttons at the top of a code input chunk.    
-OTHER TIP: If you have a red "x" next to your code and you submit it anyway, the lesson might freeeze. If that happens to you, use your browser to reload it and try again. 
+OTHER TIP: If you have a red "x" next to your code and you submit it anyway, the lesson might freeze. If that happens to you, use your browser to reload it and try again. 
 
-# Subsetting Vectors
+## Subsetting Vectors
 
 In this lesson, we’ll see how to extract elements from a vector based on some conditions that we specify.
 

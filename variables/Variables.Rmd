@@ -15,6 +15,8 @@ runtime: shiny_prerendered
 library(learnr)
 ```
 
+## Variables
+
 This video is about 5 and a half minutes long and contains an explanation of what a variable is and why it might be useful (it is also colorful and somewhat fascinating to watch the narrator, Sal, write with his colorful pens on the black background). I'll ask a question or two about variables next, and the answers are in the video.
 
 ![Variables explained by Sal Khan](https://www.youtube.com/watch?v=3v9w79NhsfI)

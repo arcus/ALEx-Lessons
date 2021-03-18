@@ -24,7 +24,7 @@ tutorial_options(exercise.startover = TRUE,
   exercise.diagnostics = TRUE)
 ```
 
-# Matrices and Data Frames
+## Matrices and Data Frames
 
 In this lesson, we’ll cover matrices and data frames. Both represent ‘rectangular’ data types, meaning that they are used to store tabular data, with rows and columns.
 

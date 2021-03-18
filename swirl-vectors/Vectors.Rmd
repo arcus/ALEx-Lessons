@@ -33,7 +33,8 @@ my_greeting <- c(my_char, "you")
 Hint: As always, if this window hangs, simply use your browser's reload function and check your code for errors. 
 
 
-# Vectors
+## Vectors
+
 The simplest and most common data structure in R is the vector.
 
 Vectors come in two different flavors: atomic vectors and lists. An atomic vector contains exactly one data type, whereas a list may contain multiple data types. We’ll explore atomic vectors further before we get to lists.
