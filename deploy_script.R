@@ -7,6 +7,8 @@ whoops <- function() {
   print("Whoops!")
 }
 
+# Consider adding shiny functionality for split files (UI / server)
+# error check folder name or do URL encode
 deploy <- function(folder) {
   # To do: check if folder exists!
   folder_match <- dir(pattern = paste("^",folder,"$", sep = ""))
