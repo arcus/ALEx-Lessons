@@ -21,6 +21,15 @@ tutorial_options(exercise.startover = TRUE,
   
 ```
 
+
+#### ALEx
+
+Welcome to the <a href="../../index" target="_blank">**A**rcus **L**earning **Ex**change</a>, or <a href="../../index" target="_blank">ALEx</a>, a service of Children's Hospital of Philadelphia. 
+
+Check out our <a href="../../catalog" target="_blank">catalog</a> for more lessons! 
+
+## Base Graphics
+
 One of the greatest strengths of R relative to other programming languages, is the ease with which we can create publication-quality graphics. In this lesson, you'll learn about base graphics in R.
 
 We do not cover the more advanced portions of graphics in R in this lesson. For now, we're excluding `lattice`, `ggplot2` and `ggvis`. They will appear later, though. 

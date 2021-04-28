@@ -24,6 +24,12 @@ tutorial_options(exercise.completion = FALSE,
 
 ```
 
+#### ALEx
+
+Welcome to the <a href="../../index" target="_blank">**A**rcus **L**earning **Ex**change</a>, or <a href="../../index" target="_blank">ALEx</a>, a service of Children's Hospital of Philadelphia. 
+
+Check out our <a href="../../catalog" target="_blank">catalog</a> for more lessons! 
+
 ## Why are we even talking about this?
 
 Since its founding in 1839 (180 years ago—making it the oldest professional organization in the United States as well as one of the most influential) the American Statistical Association (ASA) has had a policy of remaining neutral about statistical methods. 

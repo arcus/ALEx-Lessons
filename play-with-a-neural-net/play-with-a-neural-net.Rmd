@@ -30,6 +30,12 @@ options(digits = 3, scipen = 9999)
 #                  exercise.diagnostics = TRUE)
 ```
 
+#### ALEx
+
+Welcome to the <a href="../../index" target="_blank">**A**rcus **L**earning **Ex**change</a>, or <a href="../../index" target="_blank">ALEx</a>, a service of Children's Hospital of Philadelphia. 
+
+Check out our <a href="../../catalog" target="_blank">catalog</a> for more lessons! 
+
 ## We Shamelessly Link you to Someone Else's Work
 
 Daniel Smilkov and Shan Carter continued many people’s previous work (most notably Andrej Karpathy’s convnet.js demo and [Chris Olah’s articles about neural networks](http://colah.github.io)) to create **an online playground** where you can learn about and play with neural nets. 

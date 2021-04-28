@@ -27,6 +27,12 @@ t3 <- "October 17, 1986 08:24"
 t4 <- strptime(t3, "%B %d, %Y %H:%M")
 ```
 
+#### ALEx
+
+Welcome to the <a href="../../index" target="_blank">**A**rcus **L**earning **Ex**change</a>, or <a href="../../index" target="_blank">ALEx</a>, a service of Children's Hospital of Philadelphia. 
+
+Check out our <a href="../../catalog" target="_blank">catalog</a> for more lessons! 
+
 ## Dates and Times
 
 R has a special way of representing dates and times, which can be helpful if you're working with data that shows how something changes over time (i.e. time-series data) or if your data contains some other temporal information, like dates of birth.

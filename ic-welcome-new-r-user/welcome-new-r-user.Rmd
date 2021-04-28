@@ -9,6 +9,12 @@ output:
       - https://github.research.chop.edu/pages/CQI/flexdashboard-theme/css/flexdashboard.min.css
 ---
 
+#### ALEx
+
+Welcome to the <a href="../../index" target="_blank">**A**rcus **L**earning **Ex**change</a>, or <a href="../../index" target="_blank">ALEx</a>, a service of Children's Hospital of Philadelphia. 
+
+Check out our <a href="../../catalog" target="_blank">catalog</a> for more lessons! 
+
 ## Welcome!
 
 This curriculum takes you from basic R syntax all the way to visual representations of your data and beyond. By following the steps outlined below, you can become very good at syntactical rules that are consistent no matter what you do down the line.

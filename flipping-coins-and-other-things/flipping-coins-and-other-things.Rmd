@@ -24,6 +24,12 @@ tutorial_options(exercise.completion = FALSE,
 
 ```
 
+#### ALEx
+
+Welcome to the <a href="../../index" target="_blank">**A**rcus **L**earning **Ex**change</a>, or <a href="../../index" target="_blank">ALEx</a>, a service of Children's Hospital of Philadelphia. 
+
+Check out our <a href="../../catalog" target="_blank">catalog</a> for more lessons! 
+
 ## We should Probably start with Probability
 
 The best lesson on flipping coins that I have ever seen is at Khan Academy's website. Have a look, then come back here for some interaction about flipping coins. 

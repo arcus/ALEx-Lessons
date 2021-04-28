@@ -30,6 +30,12 @@ plants <- plants %>%
   select(-X1)
 ```
 
+#### ALEx
+
+Welcome to the <a href="../../index" target="_blank">**A**rcus **L**earning **Ex**change</a>, or <a href="../../index" target="_blank">ALEx</a>, a service of Children's Hospital of Philadelphia. 
+
+Check out our <a href="../../catalog" target="_blank">catalog</a> for more lessons! 
+
 ## Looking at Data
 
 Whenever you're working with a new dataset, the first thing you should do is look at it to get answers to these questions: 

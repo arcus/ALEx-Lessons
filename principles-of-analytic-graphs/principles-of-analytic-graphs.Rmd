@@ -15,6 +15,12 @@ runtime: shiny_prerendered
 library(learnr)
 ```
 
+#### ALEx
+
+Welcome to the <a href="../../index" target="_blank">**A**rcus **L**earning **Ex**change</a>, or <a href="../../index" target="_blank">ALEx</a>, a service of Children's Hospital of Philadelphia. 
+
+Check out our <a href="../../catalog" target="_blank">catalog</a> for more lessons! 
+
 # Principles of Analytic Graphs
 
 (Slides for this and other Data Science courses may be found at the GitHub repo [https://github.com/DataScienceSpecialization/courses/](https://github.com/DataScienceSpecialization/courses/). If you care to use them, they must be downloaded as a zip file and viewed locally. This lesson corresponds to "04_ExploratoryAnalysis/Principles_of_Analytic_Graphics".)

@@ -32,6 +32,12 @@ tutorial_options(exercise.completion = FALSE,
 
 ```
 
+#### ALEx
+
+Welcome to the <a href="../../index" target="_blank">**A**rcus **L**earning **Ex**change</a>, or <a href="../../index" target="_blank">ALEx</a>, a service of Children's Hospital of Philadelphia. 
+
+Check out our <a href="../../catalog" target="_blank">catalog</a> for more lessons! 
+
 ## What is machine learning?
 
 **Machine learning** refers to the development of algorithms that perform a specific task without explicit direction or rules, but instead by identifying patterns in data. You can think of machine learning as a subset of **artificial intelligence**: the endeavor to develop computational systems that take actions towards a meaningful goal within real-world environments.

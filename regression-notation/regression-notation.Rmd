@@ -30,6 +30,12 @@ options(digits = 3, scipen = 9999)
 
 ```
 
+#### ALEx
+
+Welcome to the <a href="../../index" target="_blank">**A**rcus **L**earning **Ex**change</a>, or <a href="../../index" target="_blank">ALEx</a>, a service of Children's Hospital of Philadelphia. 
+
+Check out our <a href="../../catalog" target="_blank">catalog</a> for more lessons! 
+
 ## Some Basic Definitions
 
 It is a good idea to have some agreement about notation. 

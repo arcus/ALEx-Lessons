@@ -74,6 +74,12 @@ forage$upper.ci[forage$ Value == "Expected"] = 0
 
 ```
 
+#### ALEx
+
+Welcome to the <a href="../../index" target="_blank">**A**rcus **L**earning **Ex**change</a>, or <a href="../../index" target="_blank">ALEx</a>, a service of Children's Hospital of Philadelphia. 
+
+Check out our <a href="../../catalog" target="_blank">catalog</a> for more lessons! 
+
 ## The Purpose of this Lesson
 
 This lesson is both a reference and a tutorial. It contains all the code samples you need to perform a chi square test of goodness-of-fit. Use the headings to the left to find what you need. You can also learn to understand and perform a chi square test of goodness-of-fit by working through the lesson from start to finish. 

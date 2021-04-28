@@ -68,6 +68,12 @@ tt_height <- t.test(inches ~ section,
 p_height <- round(tt_height$p.value, 2)
 ```
 
+#### ALEx
+
+Welcome to the <a href="../../index" target="_blank">**A**rcus **L**earning **Ex**change</a>, or <a href="../../index" target="_blank">ALEx</a>, a service of Children's Hospital of Philadelphia. 
+
+Check out our <a href="../../catalog" target="_blank">catalog</a> for more lessons! 
+
 ## Piping and Summarizing with `dplyr`
 
 Let's pipe and summarize using simple example data. It's already loaded for you: a dataset called `ht` with two variables, `section` and `inches`, that contains the heights of undergraduates in two of John McDonald's Biostatics sections, the 2 pm one and the 5 pm one. Use `head(ht)` to see the top of this data file.

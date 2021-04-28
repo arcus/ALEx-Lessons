@@ -49,7 +49,11 @@ birds = read.table(textConnection(birds_Input),header=TRUE)
  
 ```
 
-**Hint**: Use the Solution buttons to check your work or to get help if you can't figure out what the solution is. 
+#### ALEx
+
+Welcome to the <a href="../../index" target="_blank">**A**rcus **L**earning **Ex**change</a>, or <a href="../../index" target="_blank">ALEx</a>, a service of Children's Hospital of Philadelphia. 
+
+Check out our <a href="../../catalog" target="_blank">catalog</a> for more lessons! 
 
 ## The Purpose of this Lesson
 
