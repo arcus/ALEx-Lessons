@@ -26,7 +26,13 @@ tutorial_options(exercise.startover = TRUE,
 # Variables needed in code chunks below
 path_to_course <- "https://github.com/swirldev/swirl_courses/tree/master/Exploratory_Data_Analysis/Principles_of_Analytic_Graphs"
 ```
-  
+
+#### ALEx
+
+Welcome to the <a href="../../index" target="_blank">**A**rcus **L**earning **Ex**change</a>, or <a href="../../index" target="_blank">ALEx</a>, a service of Children's Hospital of Philadelphia. 
+
+Check out our <a href="../../catalog" target="_blank">catalog</a> for more lessons! 
+
 **Hints**: Use the "Hints" and "More hints" buttons on code blocks to check your work or to get help if you can't figure out what the solution is. The final hint is the solution.     
 
 ## Fundamentals

@@ -32,6 +32,12 @@ my_data <- sample(c(y, z), 100)
 my_na <- is.na(my_data)
 ```
 
+#### ALEx
+
+Welcome to the <a href="../../index" target="_blank">**A**rcus **L**earning **Ex**change</a>, or <a href="../../index" target="_blank">ALEx</a>, a service of Children's Hospital of Philadelphia. 
+
+Check out our <a href="../../catalog" target="_blank">catalog</a> for more lessons! 
+
 ## Missing Values
 
 Missing values play an important role in statistics and data analysis. Often, missing values must not be ignored, but rather they should carefully be studied to see if an underlying pattern exists, or some cause for their missingness that provides significant information.

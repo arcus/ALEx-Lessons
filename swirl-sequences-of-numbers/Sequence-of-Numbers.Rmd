@@ -25,7 +25,14 @@ tutorial_options(exercise.startover = TRUE,
   exercise.diagnostics = TRUE)
 ```
 
+#### ALEx
+
+Welcome to the <a href="../../index" target="_blank">**A**rcus **L**earning **Ex**change</a>, or <a href="../../index" target="_blank">ALEx</a>, a service of Children's Hospital of Philadelphia. 
+
+Check out our <a href="../../catalog" target="_blank">catalog</a> for more lessons! 
+
 ## Sequences of Numbers
+
 In this lesson, you’ll learn how to create sequences of numbers in R.
 
 The simplest way to create a sequence of numbers in R is by using the `:` operator. Type `1:20` to see how it works.

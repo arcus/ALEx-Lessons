@@ -271,6 +271,6 @@ question("What does the blue line represent in the plot you just made?",
 
 ## See Also
 
-[One-sample _t_ Test](../one-sample-t-test/)
-[Two-sample _t_ Test](../two-sample-t-test/)
+[One-sample _t_ Test](../../one-sample-t-test/)
+[Two-sample _t_ Test](../../two-sample-t-test/)
 
