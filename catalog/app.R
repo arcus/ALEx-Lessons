@@ -31,7 +31,7 @@ server <- function(input, output) {
 
     output$page_output <- renderUI({
           list(
-              fluidRow(column(titlePanel("ALEx Lesson Catalog"),width=12, style='padding-left:40px;')),
+              fluidRow(tags$div(class = "chop_logo"),column(titlePanel("ALEx Lesson Catalog"),width=12, style='padding-left:70px; padding-bottom: 3em; width:70%;')),
           fluidRow(column(tags$h4("Filter by Group:"),checkboxGroupInput(inputId = "group", label = NULL, choices = LessonGroups, selected = FALSE, inline = FALSE, width="100%"),width=3, style='padding-left:40px'),column(
             #Place the title
             DT::renderDataTable({

@@ -23,6 +23,14 @@ vect2 <- c(11, 2, NA)
 names(vect2) <- c("foo", "bar", "norf")
 ```
 
+#### ALEx
+
+Welcome to the <a href="../../index" target="_blank">**A**rcus **L**earning **Ex**change</a>, or <a href="../../index" target="_blank">ALEx</a>, a service of Children's Hospital of Philadelphia. 
+
+Check out our <a href="../../catalog" target="_blank">catalog</a> for more lessons! 
+
+## Getting Started
+
 TIP: If you can't figure out what to type, click on the "Hints" or "Solution" buttons at the top of a code input chunk.    
 OTHER TIP: If you have a red "x" next to your code and you submit it anyway, the lesson might freeze. If that happens to you, use your browser to reload it and try again. 
 
